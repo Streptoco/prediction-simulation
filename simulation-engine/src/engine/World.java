@@ -5,6 +5,7 @@ package engine;
 * The list of rules, we'll go by them and for every iteration in the loop we'll see if it can be invoked.
 * */
 
+//TODO: in the loop, when it ends, return why it ended.
 
 import java.util.ArrayList;
 
