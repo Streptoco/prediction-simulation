@@ -10,6 +10,7 @@ public class Rule {
 
     public boolean activation(int currentTickCount) {
         //TODO: add timing and probability generator so that we could see if it should be activated.
+        //TODO: add "isActive" method?
         return true;
     }
 }
