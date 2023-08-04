@@ -13,6 +13,8 @@ enum LogicalOperator {
 public class ConditionAction extends Action {
     Singularity singularity;
     LogicalOperator operator;
+    Action thenAction;
+    Action elseAction;
 
     public ConditionAction(Entity entity, byte singularity, byte operator) {
         super(entity);
