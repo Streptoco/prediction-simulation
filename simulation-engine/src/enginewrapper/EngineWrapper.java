@@ -24,7 +24,7 @@ public class EngineWrapper {
         Rule rule1 = new Rule("Aging", 1, 1);
         Rule rule2 = new Rule("PullingGun", 4, 0.75);
         Rule rule3 = new Rule("FindingAWoman", 6, 0.24);
-        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"), );
+        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"), new Expression(entity, "11"));
         Action action2 = new DecreaseAction(entity,entity.getPropertyByName("AimAmount"), );
         Action action3 = new IncreaseAction(entity,);
         Action action4 = new MultiplyAction(entity,);

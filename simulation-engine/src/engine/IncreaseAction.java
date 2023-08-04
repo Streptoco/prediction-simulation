@@ -4,11 +4,21 @@ package engine;
 
 public class IncreaseAction extends Action {
     Property propertyToIncrease;
-    Expression IncreaseBy;
+    Expression increaseBy;
 
     IncreaseAction(Entity entity, Property property, Expression increaseBy) {
         super(entity);
         this.propertyToIncrease = property;
-        this.IncreaseBy = increaseBy;
+        this.increaseBy = increaseBy;
+    }
+
+    public void invokeAction() {
+        if (increaseBy.type.equals(Type.FREE)) {
+            try {
+                int additionToProperty = Integer.parseInt(increaseBy.name);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
