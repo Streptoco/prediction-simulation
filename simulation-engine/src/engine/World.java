@@ -13,4 +13,12 @@ public class World {
     private int tickCounter;
     private ArrayList<Entity> entities;
     private ArrayList<Rule> rules;
+
+    //Constructors
+
+    public World(int tickCounter, ArrayList<Entity> entities, ArrayList<Rule> rules) {
+        this.tickCounter = tickCounter;
+        this.entities = entities;
+        this.rules = rules;
+    }
 }
