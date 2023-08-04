@@ -3,8 +3,10 @@ package engine;
 public class IntProperty extends Property {
     private int value;
 
-    public IntProperty(int value, String name, int range, boolean isRandomlyGenerated) {
-        super(name,range,isRandomlyGenerated);
+    public IntProperty(int value, String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
+        super(name,rangeFrom,rangeTo,isRandomlyGenerated);
         this.value = value;
     }
+
+    public int getValue() { return value; }
 }

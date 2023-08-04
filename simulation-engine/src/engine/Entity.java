@@ -15,4 +15,13 @@ public class Entity {
     public void setProperties(ArrayList<Property> propertyList) {
         this.propertyList = propertyList;
     }
+
+    public Property getPropertyByName(String propertyName) {
+        for (Property property : propertyList) {
+            if (property.getName().equals(propertyName)) {
+                return property;
+            }
+        }
+        return null;
+    }
 }
