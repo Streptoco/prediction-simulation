@@ -25,9 +25,9 @@ public class EngineWrapper {
         Rule rule2 = new Rule("PullingGun", 4, 0.75);
         Rule rule3 = new Rule("FindingAWoman", 6, 0.24);
 
-        Expression expression1 = new Expression(entity, "11");
-        Expression expression2 = new Expression(entity, "LifeLeft");
-        Expression expression3 = new Expression(entity, "random(5)");
+        Expression expression1 = new Expression(entity, "11"); // free expression
+        Expression expression2 = new Expression(entity, "LifeLeft"); // property expression
+        Expression expression3 = new Expression(entity, "random(5)"); // environment function expression
 
         Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"),expression1);
         //Action action2 = new DecreaseAction(entity,entity.getPropertyByName("AimAmount"), new Expression(entity, "23.12"));
