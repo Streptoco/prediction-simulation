@@ -6,4 +6,6 @@ public class StringProperty extends Property {
     public StringProperty(String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
         super(name, rangeFrom, rangeTo, isRandomlyGenerated);
     }
+
+    public String getValue() { return this.value; }
 }

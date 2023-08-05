@@ -25,9 +25,11 @@ public class EngineWrapper {
         Rule rule2 = new Rule("PullingGun", 4, 0.75);
         Rule rule3 = new Rule("FindingAWoman", 6, 0.24);
 
-        Expression expression = new Expression(entity, "11");
+        Expression expression1 = new Expression(entity, "11");
+        Expression expression2 = new Expression(entity, "LifeLeft");
+        Expression expression3 = new Expression(entity, "random(5)");
 
-        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"),expression);
+        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"),expression1);
         //Action action2 = new DecreaseAction(entity,entity.getPropertyByName("AimAmount"), new Expression(entity, "23.12"));
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);

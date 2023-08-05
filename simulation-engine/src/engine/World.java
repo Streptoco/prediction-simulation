@@ -8,12 +8,13 @@ package engine;
 //TODO: in the loop, when it ends, return why it ended.
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class World {
     private int tickCounter;
     private ArrayList<Entity> entities;
     private ArrayList<Rule> rules;
-
+    private ArrayList<Property> environmentProperties;
     //Constructors
 
     public World(int tickCounter, ArrayList<Entity> entities, ArrayList<Rule> rules) {
@@ -28,5 +29,34 @@ public class World {
                 rule.invokeAction();
             }
         }
+    }
+
+    public Object environmentGetter(String propertyName) {
+        for (Property property : environmentProperties) {
+            if (property.getName().equals(propertyName)) {
+                if (property.getClass().equals(IntProperty.class)) {
+                    IntProperty convertProperty = (IntProperty) property;
+                    return convertProperty.getValue();
+                }
+                else if (property.getClass().equals(DecimalProperty.class)) {
+                    DecimalProperty convertProperty = (DecimalProperty) property;
+                    return convertProperty.getValue();
+                }
+                else if (property.getClass().equals(BooleanProperty.class)) {
+                    BooleanProperty convertProperty = (BooleanProperty) property;
+                    return convertProperty.getValue();
+                }
+                else if (property.getClass().equals(StringProperty.class)) {
+                    StringProperty convertProperty = (StringProperty) property;
+                    return convertProperty.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    public int randomGetter(int randomNumberUpperBound) {
+        Random random = new Random();
+        return random.nextInt(randomNumberUpperBound);
     }
 }
