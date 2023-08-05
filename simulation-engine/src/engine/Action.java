@@ -4,7 +4,6 @@ package engine;
 
 public class Action {
     Entity entity;
-
     public Action(Entity entity) {
         this.entity = entity;
     }

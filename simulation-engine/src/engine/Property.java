@@ -16,4 +16,8 @@ public class Property {
     }
 
     public String getName() { return name; }
+
+    public int getFrom() { return rangeFrom; }
+
+    public int getTo() { return rangeTo; }
 }
