@@ -13,9 +13,8 @@ public class IncreaseAction extends Action {
     }
 
     public void invokeAction() {
-        System.out.println(increaseBy.toString());
         if (increaseBy.type.equals(Type.FREE)) {
-            int numberToConserve;
+            Object numberToConserve;
             try {
                 if (propertyToIncrease.getClass().equals(IntProperty.class)) {
                     IntProperty superProperty = (IntProperty) propertyToIncrease;
@@ -25,8 +24,22 @@ public class IncreaseAction extends Action {
                         throw new RuntimeException(e);
                     }
                     System.out.printf("the value to be put in string: %s, the value to be converted: %d and the new value" +
-                            "is %d\n", increaseBy.name, numberToConserve, superProperty.getValue());
-                    superProperty.increaseValue(numberToConserve);
+                            " is %d\n", increaseBy.name, numberToConserve, superProperty.getValue());
+                    superProperty.increaseValue((int)numberToConserve);
+                }
+                else if (propertyToIncrease.getClass().equals(DecimalProperty.class)) {
+                    DecimalProperty superProperty = (DecimalProperty) propertyToIncrease;
+                    try {
+                        numberToConserve = Double.parseDouble(increaseBy.name);
+                    } catch (NumberFormatException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.printf("Value of %s before the increment: %.2f, value after: %.2f\n",
+                            superProperty.getName(), superProperty.getValue(), superProperty.getValue() + (double)numberToConserve);
+                    superProperty.increaseValue((double)numberToConserve);
+                }
+                else {
+                    // TODO: add exception handling.
                 }
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();

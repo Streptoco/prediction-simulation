@@ -30,12 +30,13 @@ public class EngineWrapper {
         Expression expression3 = new Expression(entity, "random(5)"); // environment function expression
 
         Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"),expression1);
-        //Action action2 = new DecreaseAction(entity,entity.getPropertyByName("AimAmount"), new Expression(entity, "23.12"));
+        Action action2 = new IncreaseAction(entity,entity.getPropertyByName("AimAmount"), new Expression(entity, "23.12"));
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
 
         // add actions to rules
         rule1.addAction(action1);
+        rule1.addAction(action2);
 
         // add rules to lists
         rules.add(rule1);
