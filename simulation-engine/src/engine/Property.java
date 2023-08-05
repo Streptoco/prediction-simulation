@@ -2,8 +2,11 @@ package engine;
 
 // TODO: make interface
 
-enum TypeProperty {
-
+enum PropertyType {
+    INT,
+    DECIMAL,
+    STRING,
+    BOOLEAN
 }
 
 public class Property {
@@ -11,6 +14,7 @@ public class Property {
     private int rangeFrom;
     private int rangeTo;
     private boolean isRandomlyGenerated;
+    private PropertyType propertyType;
 
     public Property(String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
         this.name = name;
