@@ -6,7 +6,7 @@ public class IncreaseAction extends Action {
     Property propertyToIncrease;
     Expression increaseBy;
 
-    IncreaseAction(Entity entity, Property property, Expression increaseBy) {
+    public IncreaseAction(Entity entity, Property property, Expression increaseBy) {
         super(entity);
         this.propertyToIncrease = property;
         this.increaseBy = increaseBy;
@@ -15,7 +15,10 @@ public class IncreaseAction extends Action {
     public void invokeAction() {
         if (increaseBy.type.equals(Type.FREE)) {
             try {
-                if (propertyToIncrease.)
+                if (propertyToIncrease.getClass().equals(IntProperty.class)) {
+                    IntProperty superProperty = (IntProperty) propertyToIncrease;
+                    superProperty.setValue((int)increaseBy.castedValueOfExpression);
+                }
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
             }

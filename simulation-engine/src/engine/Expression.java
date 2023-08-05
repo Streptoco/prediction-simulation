@@ -17,7 +17,6 @@ public class Expression {
     Type type;
     Entity entity;
     Property propertyMatch;
-
     Object castedValueOfExpression;
 
     public Expression (Entity entity, String name) {
