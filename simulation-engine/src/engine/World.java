@@ -21,4 +21,12 @@ public class World {
         this.entities = entities;
         this.rules = rules;
     }
+
+    public void Run() {
+        for (int i = 0; i < tickCounter; i++) {
+            for (Rule rule : rules) {
+                rule.invokeAction();
+            }
+        }
+    }
 }

@@ -24,7 +24,10 @@ public class EngineWrapper {
         Rule rule1 = new Rule("Aging", 1, 1);
         Rule rule2 = new Rule("PullingGun", 4, 0.75);
         Rule rule3 = new Rule("FindingAWoman", 6, 0.24);
-        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"), new Expression(entity, "11"));
+
+        Expression expression = new Expression(entity, "11");
+
+        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"),expression);
         //Action action2 = new DecreaseAction(entity,entity.getPropertyByName("AimAmount"), new Expression(entity, "23.12"));
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
@@ -41,6 +44,7 @@ public class EngineWrapper {
         World world = new World(300, entities, rules);
         Engine engine = new Engine();
 
+        world.Run();
         System.out.println("finished building");
         //
 

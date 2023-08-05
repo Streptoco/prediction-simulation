@@ -24,4 +24,12 @@ public class Rule {
         //TODO: add "isActive" method?
         return true;
     }
+
+    public void invokeAction() {
+        for (Action action : actions) {
+            if (action.getClass().equals(IncreaseAction.class)) {
+                ((IncreaseAction) action).invokeAction();
+            }
+        }
+    }
 }

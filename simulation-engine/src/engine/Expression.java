@@ -23,6 +23,7 @@ public class Expression {
         this.name = name;
         this.entity = entity;
         evaluateExpression();
+        //propertyParsing();
     }
 
     public void evaluateExpression() {
@@ -41,7 +42,7 @@ public class Expression {
     }
 
     public void propertyParsing() {
-        String objectType = Arrays.toString(propertyMatch.getName().split("^(?=.*[A-Z])(?!.*[^A-Z]).*$\n")); //TODO: check regex.
+        String objectType = Arrays.toString(propertyMatch.getClass().getName().split("^(?=.*[A-Z])(?!.*[^A-Z]).*$\n")); //TODO: check regex.
 
         if (objectType.equalsIgnoreCase("int")) {
             castedValueOfExpression = Integer.parseInt(name); //TODO: add try.
