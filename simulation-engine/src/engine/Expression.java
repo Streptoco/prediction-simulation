@@ -4,6 +4,8 @@ package engine;
 //TODO: error handling.
 //TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
 
+import java.util.Arrays;
+
 enum Type {
     FUNCTION,
     PROPERTY,
@@ -15,6 +17,8 @@ public class Expression {
     Type type;
     Entity entity;
     Property propertyMatch;
+
+    Object castedValueOfExpression;
 
     public Expression (Entity entity, String name) {
         this.name = name;
@@ -34,6 +38,30 @@ public class Expression {
         }
         else {
             type = Type.FREE;
+        }
+    }
+
+    public void propertyParsing() {
+        String objectType = Arrays.toString(propertyMatch.getName().split("^(?=.*[A-Z])(?!.*[^A-Z]).*$\n")); //TODO: check regex.
+
+        if (objectType.equalsIgnoreCase("int")) {
+            castedValueOfExpression = Integer.parseInt(name); //TODO: add try.
+        }
+        else if(objectType.equalsIgnoreCase("decimal")) {
+            castedValueOfExpression = Double.parseDouble(name);
+        }
+        else {
+            if (objectType.equalsIgnoreCase("boolean")) {
+                if (name.equalsIgnoreCase("true")) {
+                    castedValueOfExpression = true;
+                }
+                else if (name.equalsIgnoreCase("false")) {
+                    castedValueOfExpression = false;
+                }
+            }
+            else {
+                // TODO: throw exception.
+            }
         }
     }
 }

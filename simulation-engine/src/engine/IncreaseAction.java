@@ -15,7 +15,7 @@ public class IncreaseAction extends Action {
     public void invokeAction() {
         if (increaseBy.type.equals(Type.FREE)) {
             try {
-                int additionToProperty = Integer.parseInt(increaseBy.name);
+                if (propertyToIncrease.)
             } catch (NumberFormatException ex) {
                 ex.printStackTrace();
             }

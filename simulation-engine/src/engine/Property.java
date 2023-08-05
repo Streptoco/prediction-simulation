@@ -2,6 +2,10 @@ package engine;
 
 // TODO: make interface
 
+enum TypeProperty {
+
+}
+
 public class Property {
     private String name;
     private int rangeFrom;
