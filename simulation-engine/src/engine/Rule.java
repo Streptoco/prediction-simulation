@@ -12,6 +12,7 @@ public class Rule {
         this.name = name;
         this.tickIntervals = tickIntervals;
         this.probability = probability;
+        this.actions = new ArrayList<Action>();
     }
 
     public void addAction(Action action) {

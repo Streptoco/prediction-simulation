@@ -5,7 +5,7 @@ import engine.*;
 import java.util.ArrayList;
 
 public class EngineWrapper {
-    public static void main() {
+    public static void main(String[] args) {
 
         // initialize lists
         ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -41,7 +41,7 @@ public class EngineWrapper {
         World world = new World(300, entities, rules);
         Engine engine = new Engine();
 
-
+        System.out.println("finished building");
         //
 
     }
