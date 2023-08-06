@@ -54,6 +54,6 @@ public class EngineWrapper {
         Engine engine = new Engine();
 
         world.Run();
-        System.out.println("finished building");
+        System.out.println("finished building!");
     }
 }
