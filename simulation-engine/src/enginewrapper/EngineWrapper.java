@@ -1,11 +1,17 @@
 package enginewrapper;
 
 import engine.*;
+import engine.actions.Action;
+import engine.actions.Expression;
+import engine.actions.IncreaseAction;
+import engine.properties.DecimalProperty;
+import engine.properties.IntProperty;
+import engine.properties.Property;
 
 import java.util.ArrayList;
 
 public class EngineWrapper {
-    public static void main() {
+    public static void main(String[] args) {
 
         // initialize lists
         ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -24,14 +30,30 @@ public class EngineWrapper {
         Rule rule1 = new Rule("Aging", 1, 1);
         Rule rule2 = new Rule("PullingGun", 4, 0.75);
         Rule rule3 = new Rule("FindingAWoman", 6, 0.24);
-        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"), new Expression(entity, "11"));
-        Action action2 = new DecreaseAction(entity,entity.getPropertyByName("AimAmount"), );
-        Action action3 = new IncreaseAction(entity,);
-        Action action4 = new MultiplyAction(entity,);
+
+        Expression expression1 = new Expression(entity, "11"); // free expression
+        Expression expression2 = new Expression(entity, "LifeLeft"); // property expression
+        Expression expression3 = new Expression(entity, "random(5)"); // environment function expression
+
+        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"),expression1);
+        Action action2 = new IncreaseAction(entity,entity.getPropertyByName("AimAmount"), new Expression(entity, "23.12"));
+        //Action action3 = new IncreaseAction(entity,);
+        //Action action4 = new MultiplyAction(entity,);
+
+        // add actions to rules
+        rule1.addAction(action1);
+        rule1.addAction(action2);
+
+        // add rules to lists
+        rules.add(rule1);
+
+        // add entities to lists
+        entities.add(entity);
+
+        World world = new World(5, entities, rules);
         Engine engine = new Engine();
-        World world = new World(300, );
 
-        //
-
+        world.Run();
+        System.out.println("finished building");
     }
 }

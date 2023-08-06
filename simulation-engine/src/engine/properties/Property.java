@@ -1,10 +1,6 @@
-package engine;
+package engine.properties;
 
 // TODO: make interface
-
-enum TypeProperty {
-
-}
 
 public class Property {
     private String name;
@@ -20,4 +16,8 @@ public class Property {
     }
 
     public String getName() { return name; }
+
+    public int getFrom() { return rangeFrom; }
+
+    public int getTo() { return rangeTo; }
 }

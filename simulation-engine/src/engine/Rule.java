@@ -1,5 +1,8 @@
 package engine;
 
+import engine.actions.Action;
+import engine.actions.IncreaseAction;
+
 import java.util.ArrayList;
 
 public class Rule {
@@ -12,6 +15,7 @@ public class Rule {
         this.name = name;
         this.tickIntervals = tickIntervals;
         this.probability = probability;
+        this.actions = new ArrayList<Action>();
     }
 
     public void addAction(Action action) {
@@ -22,5 +26,13 @@ public class Rule {
         //TODO: add timing and probability generator so that we could see if it should be activated.
         //TODO: add "isActive" method?
         return true;
+    }
+
+    public void invokeAction() {
+        for (Action action : actions) {
+            if (action.getClass().equals(IncreaseAction.class)) {
+                ((IncreaseAction) action).invokeAction();
+            }
+        }
     }
 }

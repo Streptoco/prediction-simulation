@@ -1,4 +1,4 @@
-package engine;
+package engine.properties;
 
 public class DecimalProperty extends Property {
     private double value;
@@ -9,4 +9,10 @@ public class DecimalProperty extends Property {
     }
 
     public double getValue() { return value; }
+
+    public void increaseValue(double value) {
+        if (super.getFrom() < (this.value + value) && super.getTo() < (this.value + value)) {
+            this.value += value;
+        }
+    }
 }
