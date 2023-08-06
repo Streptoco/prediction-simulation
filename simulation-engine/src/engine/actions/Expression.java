@@ -33,7 +33,7 @@ public class Expression {
         propertyMatch = entity.getPropertyByName(name);
 
         if (name.equals("environment") || name.equals("random")) {
-            // TODO: segment to functions.
+            // TODO: segment to functions. it should be up to the parentheses... and then evaluate.
             type = Type.FUNCTION;
         }
         else if (propertyMatch != null) {
@@ -65,6 +65,12 @@ public class Expression {
             else {
                 // TODO: throw exception.
             }
+        }
+    }
+
+    public Object getCastedValueOfExpression() {
+        if (type.equals(Type.FREE)) {
+
         }
     }
 }

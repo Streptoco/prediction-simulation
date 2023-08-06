@@ -16,7 +16,7 @@ public class World {
     private int tickCounter;
     private ArrayList<Entity> entities;
     private ArrayList<Rule> rules;
-    private ArrayList<Property> environmentProperties;
+    private static ArrayList<Property> environmentProperties;
     //Constructors
 
     public World(int tickCounter, ArrayList<Entity> entities, ArrayList<Rule> rules) {
@@ -33,7 +33,7 @@ public class World {
         }
     }
 
-    public Object environmentGetter(String propertyName) {
+    public static Object environmentGetter(String propertyName) {
         for (Property property : environmentProperties) {
             if (property.getName().equals(propertyName)) {
                 if (property.getClass().equals(IntProperty.class)) {
@@ -57,7 +57,7 @@ public class World {
         return null;
     }
 
-    public int randomGetter(int randomNumberUpperBound) {
+    public static int randomGetter(int randomNumberUpperBound) {
         Random random = new Random();
         return random.nextInt(randomNumberUpperBound);
     }
