@@ -1,4 +1,4 @@
-package engine;
+package engine.properties;
 
 public class EntityProperty extends Property {
     public EntityProperty(String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {

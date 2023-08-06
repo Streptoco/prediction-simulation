@@ -1,5 +1,7 @@
 package engine;
 
+import engine.properties.Property;
+
 import java.util.ArrayList;
 
 public class Entity {

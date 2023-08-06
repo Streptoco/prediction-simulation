@@ -1,4 +1,6 @@
-package engine;
+package engine.actions;
+
+import engine.Entity;
 
 enum Singularity {
     SINGLE,

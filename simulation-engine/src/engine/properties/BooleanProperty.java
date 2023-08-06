@@ -1,4 +1,4 @@
-package engine;
+package engine.properties;
 
 public class BooleanProperty extends Property {
     private boolean value;

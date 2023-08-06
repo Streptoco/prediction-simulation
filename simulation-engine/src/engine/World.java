@@ -7,6 +7,8 @@ package engine;
 
 //TODO: in the loop, when it ends, return why it ended.
 
+import engine.properties.*;
+
 import java.util.ArrayList;
 import java.util.Random;
 

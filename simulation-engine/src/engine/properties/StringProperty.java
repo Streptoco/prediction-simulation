@@ -1,4 +1,4 @@
-package engine;
+package engine.properties;
 
 public class StringProperty extends Property {
     private String value;

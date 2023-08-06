@@ -1,5 +1,8 @@
 package engine;
 
+import engine.actions.Action;
+import engine.actions.IncreaseAction;
+
 import java.util.ArrayList;
 
 public class Rule {

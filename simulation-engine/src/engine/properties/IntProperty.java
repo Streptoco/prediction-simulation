@@ -1,4 +1,4 @@
-package engine;
+package engine.properties;
 
 public class IntProperty extends Property {
     private int value;
