@@ -68,9 +68,9 @@ public class Expression {
         }
     }
 
-    public Object getCastedValueOfExpression() {
-        if (type.equals(Type.FREE)) {
-
-        }
-    }
+//    public Object getCastedValueOfExpression() {
+//        if (type.equals(Type.FREE)) {
+//
+//        }
+//    }
 }
