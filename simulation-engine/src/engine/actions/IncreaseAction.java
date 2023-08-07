@@ -51,5 +51,8 @@ public class IncreaseAction extends Action {
                 ex.printStackTrace();
             }
         }
+        else if (increaseBy.type.equals(Type.FUNCTION)) {
+            // TODO: fill in what happens with random and environment when called.
+        }
     }
 }

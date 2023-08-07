@@ -9,4 +9,6 @@ public class Action {
     public Action(Entity entity) {
         this.entity = entity;
     }
+
+    public Entity getEntity() { return this.entity; }
 }

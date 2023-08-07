@@ -1,6 +1,7 @@
-package engine.actions;
+package engine.actions.calculation;
 
 import engine.Entity;
+import engine.actions.Action;
 import engine.properties.DecimalProperty;
 import engine.properties.IntProperty;
 import engine.properties.Property;
