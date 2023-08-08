@@ -26,7 +26,7 @@ public class Expression {
         this.name = name;
         this.entity = entity;
         evaluateExpression();
-        //propertyParsing();
+        propertyParsing();
     }
 
     public void evaluateExpression() {
@@ -68,9 +68,9 @@ public class Expression {
         }
     }
 
-//    public Object getCastedValueOfExpression() {
-//        if (type.equals(Type.FREE)) {
-//
-//        }
-//    }
+    public Object getValue() { return castedValueOfExpression; }
+
+    public Object getCastedValueOfExpression() {
+        return castedValueOfExpression;
+    }
 }

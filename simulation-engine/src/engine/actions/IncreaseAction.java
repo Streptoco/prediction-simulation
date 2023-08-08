@@ -8,12 +8,13 @@ import engine.Entity;
 import engine.properties.IntProperty;
 import engine.properties.Property;
 
-public class IncreaseAction extends Action {
+public class IncreaseAction extends Action implements ActionInterface {
     Property propertyToIncrease;
     Expression increaseBy;
 
     public IncreaseAction(Entity entity, Property property, Expression increaseBy) {
         super(entity);
+        super.setActionType(ActionType.INCREASE);
         this.propertyToIncrease = property;
         this.increaseBy = increaseBy;
     }
