@@ -8,21 +8,22 @@ import engine.actions.Type;
 import engine.actions.api.AbstractAction;
 import engine.actions.api.ActionType;
 import engine.context.Context;
+import engine.properties.api.PropertyInterface;
 import engine.properties.impl.DecimalProperty;
 import engine.entity.EntityDefinition;
 import engine.properties.impl.IntProperty;
 
 public class IncreaseAction extends AbstractAction {
-    Property propertyToIncrease;
+    PropertyInterface propertyToIncrease;
     Expression increaseBy;
 
-    public IncreaseAction(EntityDefinition entityDefinition, Property property, Expression increaseBy) {
+    public IncreaseAction(EntityDefinition entityDefinition, PropertyInterface property, Expression increaseBy) {
         super(ActionType.INCREASE,entityDefinition);
         this.propertyToIncrease = property;
         this.increaseBy = increaseBy;
     }
 
-    public void invoke(Context context) {
+    public void invoke(Context context) { // why not first get the property type and then work from there. if it's increase it can't be boolean or string.
         if (increaseBy.type.equals(Type.FREE)) {
             Object numberToConserve;
             try {

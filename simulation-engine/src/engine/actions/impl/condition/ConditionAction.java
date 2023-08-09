@@ -1,8 +1,8 @@
-package engine.actions.condition;
+package engine.actions.impl.condition;
 
 import engine.entity.EntityDefinition;
 import engine.actions.api.ActionType;
-import engine.actions.calculation.CalculationAction;
+import engine.actions.impl.calculation.CalculationAction;
 import engine.actions.expression.Expression;
 import engine.actions.impl.IncreaseAction;
 import engine.properties.impl.DecimalProperty;

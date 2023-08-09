@@ -1,4 +1,4 @@
-package engine.actions.calculation;
+package engine.actions.impl.calculation;
 
 import engine.entity.EntityDefinition;
 import engine.properties.impl.DecimalProperty;

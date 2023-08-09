@@ -5,6 +5,7 @@ package engine.actions.expression;
 //TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
 
 import engine.entity.EntityDefinition;
+import engine.properties.api.PropertyInterface;
 
 import java.util.Arrays;
 
@@ -18,7 +19,7 @@ public class Expression {
     String name;
     Type type;
     EntityDefinition entityDefinition;
-    Property propertyMatch;
+    PropertyInterface propertyMatch;
     Object castedValueOfExpression;
 
     public Expression (EntityDefinition entityDefinition, String name) {
