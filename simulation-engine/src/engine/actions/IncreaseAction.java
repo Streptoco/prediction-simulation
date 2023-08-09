@@ -17,8 +17,7 @@ public class IncreaseAction extends AbstractAction {
     Expression increaseBy;
 
     public IncreaseAction(EntityDefinition entityDefinition, Property property, Expression increaseBy) {
-        super(entityDefinition);
-        super.setActionType(ActionType.INCREASE);
+        super(ActionType.INCREASE,entityDefinition);
         this.propertyToIncrease = property;
         this.increaseBy = increaseBy;
     }
