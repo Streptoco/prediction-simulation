@@ -1,6 +1,4 @@
-package engine;
-
-import engine.properties.Property;
+package engine.entity;
 
 import java.util.ArrayList;
 

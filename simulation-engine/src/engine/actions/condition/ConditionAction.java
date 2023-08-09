@@ -1,13 +1,12 @@
 package engine.actions.condition;
 
-import engine.EntityDefinition;
-import engine.actions.*;
-import engine.actions.api.Action;
+import engine.entity.EntityDefinition;
 import engine.actions.api.ActionType;
 import engine.actions.calculation.CalculationAction;
+import engine.actions.expression.Expression;
+import engine.actions.impl.IncreaseAction;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
-import engine.properties.Property;
 
 import java.util.ArrayList;
 

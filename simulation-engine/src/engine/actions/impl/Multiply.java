@@ -1,4 +1,6 @@
-package engine.actions;
+package engine.actions.impl;
+
+import engine.actions.expression.Expression;
 
 public class Multiply {
     private Expression argument1;

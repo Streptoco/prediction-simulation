@@ -7,7 +7,7 @@ package engine;
 
 //TODO: in the loop, when it ends, return why it ended.
 
-import engine.properties.*;
+import engine.entity.EntityDefinition;
 import engine.properties.impl.BooleanProperty;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;

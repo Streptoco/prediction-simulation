@@ -1,6 +1,6 @@
 package engine.actions.api;
 
-import engine.EntityDefinition;
+import engine.entity.EntityDefinition;
 
 import engine.context.Context;
 

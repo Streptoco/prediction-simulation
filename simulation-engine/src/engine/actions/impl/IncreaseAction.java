@@ -1,15 +1,16 @@
-package engine.actions;
+package engine.actions.impl;
 
 // TODO: this and decrease are very similar, might as well make them inherit from a common ancestor
 // TODO: error handling
 
+import engine.actions.expression.Expression;
+import engine.actions.Type;
 import engine.actions.api.AbstractAction;
 import engine.actions.api.ActionType;
 import engine.context.Context;
 import engine.properties.impl.DecimalProperty;
-import engine.EntityDefinition;
+import engine.entity.EntityDefinition;
 import engine.properties.impl.IntProperty;
-import engine.properties.Property;
 
 public class IncreaseAction extends AbstractAction {
     Property propertyToIncrease;

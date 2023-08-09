@@ -1,7 +1,7 @@
 package engine.properties.impl;
 
-import engine.properties.Property;
 import engine.properties.api.AbstractProperty;
+import engine.properties.api.PropertyType;
 
 // TODO: change range to an actual object.
 
@@ -9,7 +9,7 @@ public class IntProperty extends AbstractProperty {
     private int value;
 
     public IntProperty(int value, String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
-        super(name,rangeFrom,rangeTo,isRandomlyGenerated);
+        super(name,rangeFrom,rangeTo,isRandomlyGenerated, PropertyType.INT);
         this.value = value;
     }
 
