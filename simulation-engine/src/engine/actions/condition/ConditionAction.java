@@ -3,6 +3,9 @@ package engine.actions.condition;
 import engine.Entity;
 import engine.actions.*;
 import engine.actions.calculation.CalculationAction;
+import engine.properties.BooleanProperty;
+import engine.properties.DecimalProperty;
+import engine.properties.IntProperty;
 import engine.properties.Property;
 
 import java.util.ArrayList;
@@ -101,5 +104,33 @@ public class ConditionAction extends Action {
                 }
             }
         }
+    }
+    private void ParseInformationForEvaluation() {
+        if (this.singularity.equals(Singularity.SINGLE)) {
+            // TODO: handle single type cast.
+            SingularityEvaluation();
+        }
+        else {
+            // TODO: handle multiple
+            MultipleEvaluation();
+        }
+    }
+
+    private void SingularityEvaluation() {
+        if (propertyInstance.getClass().equals(IntProperty.class)) {
+            IntProperty intProperty = (IntProperty)propertyInstance;
+            int intValue = intProperty.getValue();
+        }
+        else if (propertyInstance.getClass().equals(DecimalProperty.class)) {
+            DecimalProperty decimalProperty = (DecimalProperty)propertyInstance;
+            double doubleValue = decimalProperty.getValue();
+        }
+        else {
+            // TODO: should string and boolean be part of this?
+        }
+    }
+
+    private void MultipleEvaluation() {
+        // TODO: handle
     }
 }
