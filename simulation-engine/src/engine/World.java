@@ -8,6 +8,10 @@ package engine;
 //TODO: in the loop, when it ends, return why it ended.
 
 import engine.properties.*;
+import engine.properties.impl.BooleanProperty;
+import engine.properties.impl.DecimalProperty;
+import engine.properties.impl.IntProperty;
+import engine.properties.impl.StringProperty;
 
 import java.util.ArrayList;
 import java.util.Random;

@@ -1,4 +1,6 @@
-package engine.properties;
+package engine.properties.impl;
+
+import engine.properties.Property;
 
 public class DecimalProperty extends Property {
     private double value;

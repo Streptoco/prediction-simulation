@@ -1,4 +1,6 @@
-package engine.properties;
+package engine.properties.impl;
+
+import engine.properties.Property;
 
 public class BooleanProperty extends Property {
     private boolean value;

@@ -4,13 +4,11 @@ package engine.actions;
 // TODO: error handling
 
 import engine.actions.api.AbstractAction;
-import engine.actions.api.Action;
-import engine.actions.api.ActionInterface;
 import engine.actions.api.ActionType;
 import engine.context.Context;
-import engine.properties.DecimalProperty;
+import engine.properties.impl.DecimalProperty;
 import engine.EntityDefinition;
-import engine.properties.IntProperty;
+import engine.properties.impl.IntProperty;
 import engine.properties.Property;
 
 public class IncreaseAction extends AbstractAction {

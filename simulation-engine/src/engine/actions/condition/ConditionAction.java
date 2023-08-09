@@ -5,8 +5,8 @@ import engine.actions.*;
 import engine.actions.api.Action;
 import engine.actions.api.ActionType;
 import engine.actions.calculation.CalculationAction;
-import engine.properties.DecimalProperty;
-import engine.properties.IntProperty;
+import engine.properties.impl.DecimalProperty;
+import engine.properties.impl.IntProperty;
 import engine.properties.Property;
 
 import java.util.ArrayList;

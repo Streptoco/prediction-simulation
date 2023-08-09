@@ -2,7 +2,9 @@ package engine.properties;
 
 // TODO: make interface
 
-public class Property {
+import engine.properties.api.AbstractProperty;
+
+public class Property extends AbstractProperty {
     private String name;
     private int rangeFrom;
     private int rangeTo;
@@ -15,9 +17,5 @@ public class Property {
         this.isRandomlyGenerated = isRandomlyGenerated;
     }
 
-    public String getName() { return name; }
 
-    public int getFrom() { return rangeFrom; }
-
-    public int getTo() { return rangeTo; }
 }
