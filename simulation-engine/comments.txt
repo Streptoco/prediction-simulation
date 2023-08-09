@@ -16,7 +16,7 @@ https://github.com/the-shultz/predictions-draft-design
 
 
 
-2. entity
+2. entityDefinition
     -
 
 

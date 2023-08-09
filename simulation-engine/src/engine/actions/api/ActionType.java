@@ -1,4 +1,4 @@
-package engine.actions;
+package engine.actions.api;
 
 public enum ActionType {
     INCREASE,

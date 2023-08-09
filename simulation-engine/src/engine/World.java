@@ -14,12 +14,12 @@ import java.util.Random;
 
 public class World {
     private int tickCounter;
-    private ArrayList<Entity> entities;
+    private ArrayList<EntityDefinition> entities;
     private ArrayList<Rule> rules;
     private static ArrayList<Property> environmentProperties;
     //Constructors
 
-    public World(int tickCounter, ArrayList<Entity> entities, ArrayList<Rule> rules) {
+    public World(int tickCounter, ArrayList<EntityDefinition> entities, ArrayList<Rule> rules) {
         this.tickCounter = tickCounter;
         this.entities = entities;
         this.rules = rules;

@@ -3,23 +3,27 @@ package engine.actions;
 // TODO: this and decrease are very similar, might as well make them inherit from a common ancestor
 // TODO: error handling
 
+import engine.actions.api.AbstractAction;
+import engine.actions.api.Action;
+import engine.actions.api.ActionInterface;
+import engine.actions.api.ActionType;
 import engine.properties.DecimalProperty;
-import engine.Entity;
+import engine.EntityDefinition;
 import engine.properties.IntProperty;
 import engine.properties.Property;
 
-public class IncreaseAction extends Action implements ActionInterface {
+public class IncreaseAction extends AbstractAction {
     Property propertyToIncrease;
     Expression increaseBy;
 
-    public IncreaseAction(Entity entity, Property property, Expression increaseBy) {
-        super(entity);
+    public IncreaseAction(EntityDefinition entityDefinition, Property property, Expression increaseBy) {
+        super(entityDefinition);
         super.setActionType(ActionType.INCREASE);
         this.propertyToIncrease = property;
         this.increaseBy = increaseBy;
     }
 
-    public void invokeAction() {
+    public void invoke(Context context) {
         if (increaseBy.type.equals(Type.FREE)) {
             Object numberToConserve;
             try {

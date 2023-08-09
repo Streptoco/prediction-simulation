@@ -4,12 +4,12 @@ import engine.properties.Property;
 
 import java.util.ArrayList;
 
-public class Entity {
+public class EntityDefinition {
     private String name;
     private int population;
     private ArrayList<Property> propertyList;
 
-    public Entity(String name, int population){
+    public EntityDefinition(String name, int population){
         this.name = name;
         this.population = population;
     }

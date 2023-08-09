@@ -1,7 +1,7 @@
 package enginewrapper;
 
 import engine.*;
-import engine.actions.Action;
+import engine.actions.api.Action;
 import engine.actions.Expression;
 import engine.actions.IncreaseAction;
 import engine.properties.DecimalProperty;
@@ -14,29 +14,29 @@ public class EngineWrapper {
     public static void main(String[] args) {
 
         // initialize lists
-        ArrayList<Entity> entities = new ArrayList<Entity>();
+        ArrayList<EntityDefinition> entities = new ArrayList<EntityDefinition>();
         ArrayList<Rule> rules = new ArrayList<Rule>();
         ArrayList<Property> properties = new ArrayList<Property>();
 
         // initialize entity
-        Entity entity = new Entity("Gunslinger", 30);
+        EntityDefinition entityDefinition = new EntityDefinition("Gunslinger", 30);
         Property entityProperty1 = new IntProperty(21, "LifeLeft", 0,50, false);
         Property entityProperty2 = new DecimalProperty(3.14, "AimAmount", 10,60, false);
         properties.add(entityProperty1);
         properties.add(entityProperty2);
-        entity.setProperties(properties);
+        entityDefinition.setProperties(properties);
 
         // initialize world
         Rule rule1 = new Rule("Aging", 1, 1);
         Rule rule2 = new Rule("PullingGun", 4, 0.75);
         Rule rule3 = new Rule("FindingAWoman", 6, 0.24);
 
-        Expression expression1 = new Expression(entity, "11"); // free expression
-        Expression expression2 = new Expression(entity, "LifeLeft"); // property expression
-        Expression expression3 = new Expression(entity, "random(5)"); // environment function expression
+        Expression expression1 = new Expression(entityDefinition, "11"); // free expression
+        Expression expression2 = new Expression(entityDefinition, "LifeLeft"); // property expression
+        Expression expression3 = new Expression(entityDefinition, "random(5)"); // environment function expression
 
-        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"),expression1);
-        Action action2 = new IncreaseAction(entity,entity.getPropertyByName("AimAmount"), new Expression(entity, "23.12"));
+        Action action1 = new IncreaseAction(entityDefinition, entityDefinition.getPropertyByName("LifeLeft"),expression1);
+        Action action2 = new IncreaseAction(entityDefinition, entityDefinition.getPropertyByName("AimAmount"), new Expression(entityDefinition, "23.12"));
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
 
@@ -48,7 +48,7 @@ public class EngineWrapper {
         rules.add(rule1);
 
         // add entities to lists
-        entities.add(entity);
+        entities.add(entityDefinition);
 
         World world = new World(5, entities, rules);
         Engine engine = new Engine();

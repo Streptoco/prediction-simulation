@@ -4,7 +4,7 @@ package engine.actions;
 //TODO: error handling.
 //TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
 
-import engine.Entity;
+import engine.EntityDefinition;
 import engine.properties.Property;
 
 import java.util.Arrays;
@@ -18,19 +18,19 @@ enum Type {
 public class Expression {
     String name;
     Type type;
-    Entity entity;
+    EntityDefinition entityDefinition;
     Property propertyMatch;
     Object castedValueOfExpression;
 
-    public Expression (Entity entity, String name) {
+    public Expression (EntityDefinition entityDefinition, String name) {
         this.name = name;
-        this.entity = entity;
+        this.entityDefinition = entityDefinition;
         evaluateExpression();
         propertyParsing();
     }
 
     public void evaluateExpression() {
-        propertyMatch = entity.getPropertyByName(name);
+        propertyMatch = entityDefinition.getPropertyByName(name);
 
         if (name.equals("environment") || name.equals("random")) {
             // TODO: segment to functions. it should be up to the parentheses... and then evaluate.

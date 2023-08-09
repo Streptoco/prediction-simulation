@@ -1,9 +1,10 @@
 package engine.actions.condition;
 
-import engine.Entity;
+import engine.EntityDefinition;
 import engine.actions.*;
+import engine.actions.api.Action;
+import engine.actions.api.ActionType;
 import engine.actions.calculation.CalculationAction;
-import engine.properties.BooleanProperty;
 import engine.properties.DecimalProperty;
 import engine.properties.IntProperty;
 import engine.properties.Property;
@@ -30,9 +31,9 @@ public class ConditionAction extends Action {
     Action elseAction;
     Expression byExpression;
 
-    public ConditionAction(Entity entity, byte singularity, byte operator, String propertyName, Action thenAction, Action elseAction, Expression byExpression,
+    public ConditionAction(EntityDefinition entityDefinition, byte singularity, byte operator, String propertyName, Action thenAction, Action elseAction, Expression byExpression,
                            String valueOperator) {
-        super(entity);
+        super(entityDefinition);
         super.setActionType(ActionType.CONDITION);
         this.singularity = Singularity.values()[singularity];
         this.operator = LogicalOperatorForSingularity.values()[operator];
