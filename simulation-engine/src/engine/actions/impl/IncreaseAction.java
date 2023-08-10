@@ -9,55 +9,63 @@ import engine.actions.api.AbstractAction;
 import engine.actions.api.ActionType;
 import engine.context.Context;
 import engine.properties.api.PropertyInterface;
+import engine.properties.api.PropertyType;
 import engine.properties.impl.DecimalProperty;
 import engine.entity.EntityDefinition;
 import engine.properties.impl.IntProperty;
+import sun.security.util.math.intpoly.IntegerPolynomial;
+
+enum IncreaseDecrease {
+    INCREASE,
+    DECREASE
+}
 
 public class IncreaseAction extends AbstractAction {
     PropertyInterface propertyToIncrease;
     Expression increaseBy;
+    IncreaseDecrease increaseDecrease;
 
-    public IncreaseAction(EntityDefinition entityDefinition, PropertyInterface property, Expression increaseBy) {
+    public IncreaseAction(EntityDefinition entityDefinition, PropertyInterface property, Expression increaseBy, String type) {
         super(ActionType.INCREASE,entityDefinition);
         this.propertyToIncrease = property;
         this.increaseBy = increaseBy;
+        if (type.equalsIgnoreCase("increase")) {
+            this.increaseDecrease = IncreaseDecrease.INCREASE;
+        }
+        else if (type.equalsIgnoreCase("decrease")) {
+            this.increaseDecrease = IncreaseDecrease.DECREASE;
+        }
+        else {
+            // TODO: handle exception
+        }
     }
 
     public void invoke(Context context) { // why not first get the property type and then work from there. if it's increase it can't be boolean or string.
-        if (increaseBy.type.equals(Type.FREE)) {
-            Object numberToConserve;
-            try {
-                if (propertyToIncrease.getClass().equals(IntProperty.class)) {
-                    IntProperty superProperty = (IntProperty) propertyToIncrease;
-                    try {
-                        numberToConserve = Integer.parseInt(increaseBy.name);
-                    } catch (NumberFormatException e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.printf("the value to be put in string: %s, the value to be converted: %d and the new value" +
-                            " is %d\n", increaseBy.name, numberToConserve, superProperty.getValue());
-                    superProperty.increaseValue((int)numberToConserve);
-                }
-                else if (propertyToIncrease.getClass().equals(DecimalProperty.class)) {
-                    DecimalProperty superProperty = (DecimalProperty) propertyToIncrease;
-                    try {
-                        numberToConserve = Double.parseDouble(increaseBy.name);
-                    } catch (NumberFormatException e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.printf("Value of %s before the increment: %.2f, value after: %.2f\n",
-                            superProperty.getName(), superProperty.getValue(), superProperty.getValue() + (double)numberToConserve);
-                    superProperty.increaseValue((double)numberToConserve);
-                }
-                else {
-                    // TODO: add exception handling.
-                }
-            } catch (NumberFormatException ex) {
-                ex.printStackTrace();
+        if (this.increaseDecrease.equals(IncreaseDecrease.INCREASE)) {
+            if (propertyToIncrease.getPropertyType().equals(PropertyType.INT)) {
+                IntProperty intProperty = (IntProperty)propertyToIncrease;
+                intProperty.increaseValue((int)increaseBy.getValue());
+            }
+            else if (propertyToIncrease.getPropertyType().equals(PropertyType.DECIMAL)) {
+                DecimalProperty decimalProperty = (DecimalProperty)propertyToIncrease;
+                decimalProperty.increaseValue((double)increaseBy.getValue());
+            }
+            else {
+                //TODO: handle exception.
             }
         }
-        else if (increaseBy.type.equals(Type.FUNCTION)) {
-            // TODO: fill in what happens with random and environment when called.
+        else {
+            if (propertyToIncrease.getPropertyType().equals(PropertyType.INT)) {
+                IntProperty intProperty = (IntProperty)propertyToIncrease;
+                intProperty.decreaseValue((int)increaseBy.getValue());
+            }
+            else if (propertyToIncrease.getPropertyType().equals(PropertyType.DECIMAL)) {
+                DecimalProperty decimalProperty = (DecimalProperty)propertyToIncrease;
+                decimalProperty.decreaseValue((double)increaseBy.getValue());
+            }
+            else {
+                //TODO: handle exception.
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package engine;
 
+import engine.actions.api.AbstractAction;
 import engine.actions.impl.IncreaseAction;
 
 import java.util.ArrayList;
@@ -8,16 +9,16 @@ public class Rule {
     private String name;
     private int tickIntervals;
     private double probability;
-    private ArrayList<Action> actions;
+    private ArrayList<AbstractAction> actions;
 
     public Rule(String name, int tickIntervals, double probability) {
         this.name = name;
         this.tickIntervals = tickIntervals;
         this.probability = probability;
-        this.actions = new ArrayList<Action>();
+        this.actions = new ArrayList<AbstractAction>();
     }
 
-    public void addAction(Action action) {
+    public void addAction(AbstractAction action) {
         actions.add(action);
     }
 
@@ -28,7 +29,7 @@ public class Rule {
     }
 
     public void invokeAction() {
-        for (Action action : actions) {
+        for (AbstractAction action : actions) {
             if (action.getClass().equals(IncreaseAction.class)) {
                 ((IncreaseAction) action).invokeAction();
             }

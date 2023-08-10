@@ -19,4 +19,10 @@ public class IntProperty extends AbstractProperty {
             this.value += value;
         }
     }
+
+    public void decreaseValue(int value) {
+        if (super.getFrom() < (this.value + value) && super.getTo() > (this.value + value)) {
+            this.value -= value;
+        }
+    }
 }
