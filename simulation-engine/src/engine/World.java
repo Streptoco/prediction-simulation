@@ -8,9 +8,8 @@ package engine;
 //TODO: in the loop, when it ends, return why it ended.
 
 import engine.actions.expression.ReturnType;
-import engine.entity.EntityDefinition;
+import engine.entity.impl.EntityDefinition;
 import engine.properties.api.AbstractProperty;
-import engine.properties.api.PropertyType;
 import engine.properties.impl.BooleanProperty;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;

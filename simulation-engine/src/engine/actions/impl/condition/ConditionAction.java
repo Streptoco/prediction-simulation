@@ -1,6 +1,6 @@
 package engine.actions.impl.condition;
 
-import engine.entity.EntityDefinition;
+import engine.entity.impl.EntityDefinition;
 import engine.actions.api.ActionType;
 import engine.actions.impl.calculation.CalculationAction;
 import engine.actions.expression.Expression;

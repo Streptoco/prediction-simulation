@@ -1,6 +1,6 @@
 package engine.actions.api;
 
-import engine.entity.EntityDefinition;
+import engine.entity.impl.EntityDefinition;
 
 public abstract class AbstractAction implements ActionInterface {
 

@@ -4,14 +4,8 @@ package engine.actions.expression;
 //TODO: error handling.
 //TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
 
-import engine.entity.EntityDefinition;
+import engine.entity.impl.EntityDefinition;
 import engine.properties.api.PropertyInterface;
-import engine.properties.api.PropertyType;
-import engine.properties.impl.BooleanProperty;
-import engine.properties.impl.DecimalProperty;
-import engine.properties.impl.IntProperty;
-
-import java.util.Arrays;
 
 import static engine.World.*;
 

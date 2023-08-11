@@ -1,6 +1,6 @@
 package engine.actions.impl.calculation;
 
-import engine.entity.EntityDefinition;
+import engine.entity.impl.EntityDefinition;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
 

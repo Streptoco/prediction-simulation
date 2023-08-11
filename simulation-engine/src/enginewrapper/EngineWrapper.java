@@ -3,7 +3,7 @@ package enginewrapper;
 import engine.*;
 import engine.actions.expression.Expression;
 import engine.actions.impl.IncreaseDecreaseAction;
-import engine.entity.EntityDefinition;
+import engine.entity.impl.EntityDefinition;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
 

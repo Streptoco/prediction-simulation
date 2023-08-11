@@ -10,7 +10,7 @@ import engine.context.Context;
 import engine.properties.api.PropertyInterface;
 import engine.properties.api.PropertyType;
 import engine.properties.impl.DecimalProperty;
-import engine.entity.EntityDefinition;
+import engine.entity.impl.EntityDefinition;
 import engine.properties.impl.IntProperty;
 
 enum IncreaseDecrease {
