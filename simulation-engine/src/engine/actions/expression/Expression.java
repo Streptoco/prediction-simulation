@@ -11,10 +11,8 @@ import engine.properties.impl.BooleanProperty;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
 
-import java.util.Arrays;
+import java.util.Arrays;import static engine.World.environmentGetter;
 
-import static engine.World.environmentGetter;
-import static engine.World.randomGetter;
 
 enum Type {
     FUNCTION,
@@ -121,7 +119,7 @@ public class Expression {
         }
         try {
             castedValueOfExpression = Boolean.parseBoolean(name);
-            this.returnType = ReturnType.BOOLEAN;
+            this.returnType = ReturnType.BOOLEAN
             return;
         } catch (NumberFormatException e) {
             //

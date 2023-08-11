@@ -13,7 +13,7 @@ public class IntProperty extends AbstractProperty {
         this.value = value;
     }
 
-    public int getValue() { return value; }
+    public Object getValue() { return value; }
     public void increaseValue(int value) {
         if (super.getFrom() < (this.value + value) && super.getTo() > (this.value + value)) {
             this.value += value;

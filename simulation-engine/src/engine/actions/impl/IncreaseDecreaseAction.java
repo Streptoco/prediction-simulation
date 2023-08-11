@@ -4,7 +4,6 @@ package engine.actions.impl;
 // TODO: error handling
 
 import engine.actions.expression.Expression;
-import engine.actions.Type;
 import engine.actions.api.AbstractAction;
 import engine.actions.api.ActionType;
 import engine.context.Context;
@@ -13,19 +12,18 @@ import engine.properties.api.PropertyType;
 import engine.properties.impl.DecimalProperty;
 import engine.entity.EntityDefinition;
 import engine.properties.impl.IntProperty;
-import sun.security.util.math.intpoly.IntegerPolynomial;
 
 enum IncreaseDecrease {
     INCREASE,
     DECREASE
 }
 
-public class IncreaseAction extends AbstractAction {
+public class IncreaseDecreaseAction extends AbstractAction {
     PropertyInterface propertyToIncrease;
     Expression increaseBy;
     IncreaseDecrease increaseDecrease;
 
-    public IncreaseAction(EntityDefinition entityDefinition, PropertyInterface property, Expression increaseBy, String type) {
+    public IncreaseDecreaseAction(EntityDefinition entityDefinition, PropertyInterface property, Expression increaseBy, String type) {
         super(ActionType.INCREASE,entityDefinition);
         this.propertyToIncrease = property;
         this.increaseBy = increaseBy;

@@ -11,7 +11,7 @@ public class DecimalProperty extends AbstractProperty {
         this.value = value;
     }
 
-    public double getValue() { return value; }
+    public Object getValue() { return value; }
 
     public void increaseValue(double value) {
         if (super.getFrom() < (this.value + value) && super.getTo() < (this.value + value)) {

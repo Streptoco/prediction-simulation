@@ -2,7 +2,7 @@ package enginewrapper;
 
 import engine.*;
 import engine.actions.expression.Expression;
-import engine.actions.impl.IncreaseAction;
+import engine.actions.impl.IncreaseDecreaseAction;
 import engine.entity.EntityDefinition;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
@@ -34,8 +34,8 @@ public class EngineWrapper {
         Expression expression2 = new Expression(entityDefinition, "LifeLeft"); // property expression
         Expression expression3 = new Expression(entityDefinition, "random(5)"); // environment function expression
 
-        Action action1 = new IncreaseAction(entityDefinition, entityDefinition.getPropertyByName("LifeLeft"),expression1);
-        Action action2 = new IncreaseAction(entityDefinition, entityDefinition.getPropertyByName("AimAmount"), new Expression(entityDefinition, "23.12"));
+        Action action1 = new IncreaseDecreaseAction(entityDefinition, entityDefinition.getPropertyByName("LifeLeft"),expression1);
+        Action action2 = new IncreaseDecreaseAction(entityDefinition, entityDefinition.getPropertyByName("AimAmount"), new Expression(entityDefinition, "23.12"));
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
 

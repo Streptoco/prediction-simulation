@@ -10,4 +10,6 @@ public interface PropertyInterface {
     public int getTo();
 
     public PropertyType getPropertyType();
+
+    public Object getValue();
 }

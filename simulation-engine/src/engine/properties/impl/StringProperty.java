@@ -10,7 +10,7 @@ public class StringProperty extends AbstractProperty {
         super(name, rangeFrom, rangeTo, isRandomlyGenerated, PropertyType.STRING);
     }
 
-    public String getValue() { return this.value; }
+    public Object getValue() { return this.value; }
 
     // TODO: a way to change it maybe through interface.
 }

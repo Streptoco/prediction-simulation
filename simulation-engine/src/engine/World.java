@@ -8,6 +8,8 @@ package engine;
 //TODO: in the loop, when it ends, return why it ended.
 
 import engine.entity.EntityDefinition;
+import engine.properties.api.AbstractProperty;
+import engine.properties.api.PropertyType;
 import engine.properties.impl.BooleanProperty;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
@@ -20,7 +22,7 @@ public class World {
     private int tickCounter;
     private ArrayList<EntityDefinition> entities;
     private ArrayList<Rule> rules;
-    private static ArrayList<Property> environmentProperties;
+    private static ArrayList<AbstractProperty> environmentProperties;
     //Constructors
 
     public World(int tickCounter, ArrayList<EntityDefinition> entities, ArrayList<Rule> rules) {
@@ -37,8 +39,20 @@ public class World {
         }
     }
 
+    public static PropertyType propertyTypeGetter (String propertyName) {
+        for (AbstractProperty property : environmentProperties) {
+            if (property.getName().equals(propertyName)) {
+                return property.getPropertyType();
+            }
+            else {
+                // TODO: handle error: no such property
+            }
+        }
+        return null;
+    }
+
     public static Object environmentGetter(String propertyName) {
-        for (Property property : environmentProperties) {
+        for (AbstractProperty property : environmentProperties) {
             if (property.getName().equals(propertyName)) {
                 if (property.getClass().equals(IntProperty.class)) {
                     IntProperty convertProperty = (IntProperty) property;
@@ -56,6 +70,9 @@ public class World {
                     StringProperty convertProperty = (StringProperty) property;
                     return convertProperty.getValue();
                 }
+            }
+            else {
+                // TODO: Handle expection : no such property
             }
         }
         return null;

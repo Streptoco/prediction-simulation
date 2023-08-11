@@ -10,7 +10,7 @@ public class BooleanProperty extends AbstractProperty {
         super(name, rangeFrom, rangeTo, isRandomlyGenerated, PropertyType.BOOLEAN);
     }
 
-    public boolean getValue() { return this.value; }
+    public Object getValue() { return this.value; }
 
     // TODO: we'll probably need a way to change this value, maybe implement it in the interface?
 }

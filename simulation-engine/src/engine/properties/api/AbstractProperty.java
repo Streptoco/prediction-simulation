@@ -1,6 +1,6 @@
 package engine.properties.api;
 
-public class AbstractProperty implements PropertyInterface {
+public abstract class AbstractProperty implements PropertyInterface {
     private String name;
     private int rangeFrom;
     private int rangeTo;
@@ -23,4 +23,6 @@ public class AbstractProperty implements PropertyInterface {
     public int getTo() { return rangeTo; }
 
     public PropertyType getPropertyType() { return propertyType; }
+
+    public abstract Object getValue();
 }
