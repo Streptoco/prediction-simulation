@@ -2,6 +2,8 @@ package engine.properties.api;
 
 // TODO: manage the range better. maybe create a class for the range.
 
+import engine.actions.expression.ReturnType;
+
 public interface PropertyInterface {
     public String getName();
 
@@ -9,7 +11,7 @@ public interface PropertyInterface {
 
     public int getTo();
 
-    public PropertyType getPropertyType();
+    public ReturnType getPropertyType();
 
     public Object getValue();
 }

@@ -11,20 +11,15 @@ import engine.properties.impl.BooleanProperty;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
 
-import java.util.Arrays;import static engine.World.environmentGetter;
+import java.util.Arrays;
+
+import static engine.World.*;
 
 
 enum Type {
     FUNCTION,
     PROPERTY,
     FREE
-}
-
-enum ReturnType {
-    INT,
-    BOOLEAN,
-    DECIMAL,
-    STRING
 }
 
 public class Expression {
@@ -39,7 +34,6 @@ public class Expression {
         this.name = name;
         this.entityDefinition = entityDefinition;
         evaluateExpression();
-        propertyParsing();
     }
 
     public void evaluateExpression() {
@@ -52,54 +46,13 @@ public class Expression {
         else if (propertyMatch != null) {
             // we need to know the property type and then return the value
             type = Type.PROPERTY;
-            if (propertyMatch.getPropertyType().equals(PropertyType.INT)) {
-                this.returnType = ReturnType.INT;
-                IntProperty intProperty = (IntProperty)propertyMatch;
-                castedValueOfExpression = intProperty.getValue();
-            }
-            else if (propertyMatch.getPropertyType().equals(PropertyType.DECIMAL)) {
-                this.returnType = ReturnType.DECIMAL;
-                DecimalProperty decimalProperty = (DecimalProperty)propertyMatch;
-                castedValueOfExpression = decimalProperty.getValue();
-            }
-            else if (propertyMatch.getPropertyType().equals(PropertyType.BOOLEAN)) {
-                this.returnType = ReturnType.BOOLEAN;
-                BooleanProperty booleanProperty = (BooleanProperty)propertyMatch;
-                castedValueOfExpression = booleanProperty.getValue();
-            }
-            else {
-                // TODO: handle error (no casting available)
-            }
+            this.returnType = propertyMatch.getPropertyType();
+            castedValueOfExpression = propertyMatch.getValue();
         }
         else {
             type = Type.FREE;
             FreeValuePositioning();
         }
-    }
-
-    public void propertyParsing() {
-        String objectType = Arrays.toString(propertyMatch.getClass().getName().split("^(?=.*[A-Z])(?!.*[^A-Z]).*$\n")); //TODO: check regex. // IntProperty cigarettes-amount
-
-        if (objectType.equalsIgnoreCase("int")) {
-            int castedValueOfExpression = Integer.parseInt(name); //TODO: add try.
-        }
-        else if(objectType.equalsIgnoreCase("decimal")) {
-            double castedValueOfExpression = Double.parseDouble(name);
-        }
-        else {
-            if (objectType.equalsIgnoreCase("boolean")) {
-                if (name.equalsIgnoreCase("true")) {
-                    boolean castedValueOfExpression = true;
-                }
-                else if (name.equalsIgnoreCase("false")) {
-                    boolean castedValueOfExpression = false;
-                }
-            }
-            else {
-                // TODO: throw exception.
-            }
-        }
-
     }
 
     public void FreeValuePositioning() {
@@ -119,7 +72,7 @@ public class Expression {
         }
         try {
             castedValueOfExpression = Boolean.parseBoolean(name);
-            this.returnType = ReturnType.BOOLEAN
+            this.returnType = ReturnType.BOOLEAN;
             return;
         } catch (NumberFormatException e) {
             //

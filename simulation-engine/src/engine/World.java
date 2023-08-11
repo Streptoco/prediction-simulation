@@ -7,6 +7,7 @@ package engine;
 
 //TODO: in the loop, when it ends, return why it ended.
 
+import engine.actions.expression.ReturnType;
 import engine.entity.EntityDefinition;
 import engine.properties.api.AbstractProperty;
 import engine.properties.api.PropertyType;
@@ -39,7 +40,7 @@ public class World {
         }
     }
 
-    public static PropertyType propertyTypeGetter (String propertyName) {
+    public static ReturnType propertyTypeGetter (String propertyName) {
         for (AbstractProperty property : environmentProperties) {
             if (property.getName().equals(propertyName)) {
                 return property.getPropertyType();
