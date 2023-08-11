@@ -98,6 +98,8 @@ public class Expression {
 
     public Object getValue() { return castedValueOfExpression; }
 
+    public ReturnType getReturnType() { return this.returnType; }
+
     public Object getCastedValueOfExpression() {
         return castedValueOfExpression;
     }
