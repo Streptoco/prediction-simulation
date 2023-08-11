@@ -6,7 +6,6 @@ import engine.actions.impl.IncreaseDecreaseAction;
 import engine.entity.impl.EntityDefinition;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
-
 import java.util.ArrayList;
 
 public class EngineWrapper {
@@ -49,7 +48,6 @@ public class EngineWrapper {
 
         // add entities to lists
 
-        World world = new World(5, manager, rules);
         Engine engine = new Engine();
 
         world.Run();

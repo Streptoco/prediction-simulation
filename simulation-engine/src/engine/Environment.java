@@ -20,4 +20,8 @@ public class Environment {
     public PropertyInterface getProperty(String name) {
         return envVariables.get(name);
     }
+
+    public void setProperty(PropertyInterface property) {
+        envVariables.put(property.getName(), property);
+    }
 }

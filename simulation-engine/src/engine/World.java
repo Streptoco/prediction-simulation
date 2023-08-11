@@ -23,13 +23,14 @@ public class World {
     private int tickCounter;
     private EntityInstanceManager manager;
     private ArrayList<Rule> rules;
-    private static Environment activeEnvironment;
+    private Environment activeEnvironment;
     //Constructors
 
     public World(int tickCounter, EntityInstanceManager manager, ArrayList<Rule> rules) {
         this.tickCounter = tickCounter;
         this.manager = manager;
         this.rules = rules;
+        this.activeEnvironment = new Environment();
     }
 
     public void Run() {
