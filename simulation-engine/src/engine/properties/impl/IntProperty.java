@@ -22,7 +22,7 @@ public class IntProperty extends AbstractProperty {
     }
 
     public void decreaseValue(int value) {
-        if (super.getFrom() < (this.value + value) && super.getTo() > (this.value + value)) {
+        if (super.getFrom() < (this.value - value) && super.getTo() > (this.value - value)) {
             this.value -= value;
         }
     }

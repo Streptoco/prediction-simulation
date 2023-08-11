@@ -15,13 +15,13 @@ public class DecimalProperty extends AbstractProperty {
     public Object getValue() { return value; }
 
     public void increaseValue(double value) {
-        if (super.getFrom() < (this.value + value) && super.getTo() < (this.value + value)) {
+        if (super.getFrom() < (this.value + value) && super.getTo() > (this.value + value)) {
             this.value += value;
         }
     }
 
     public void decreaseValue(double value) {
-        if (super.getFrom() < (this.value + value) && super.getTo() < (this.value + value)) {
+        if (super.getFrom() < (this.value - value) && super.getTo() > (this.value - value)) { // from: 10 to: 60 // 32 - 11.25
             this.value -= value;
         }
     }
