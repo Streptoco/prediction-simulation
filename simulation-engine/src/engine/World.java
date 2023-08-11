@@ -8,7 +8,9 @@ package engine;
 //TODO: in the loop, when it ends, return why it ended.
 
 import engine.actions.expression.ReturnType;
+import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
+import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.properties.api.AbstractProperty;
 import engine.properties.impl.BooleanProperty;
@@ -35,9 +37,13 @@ public class World {
 
     public void Run() {
         for (int i = 0; i < tickCounter; i++) {
-            for (Rule rule : rules) {
-                rule.invokeAction();
+            for(EntityInstance currentInstance : manager.getInstances()) {
+                ContextImpl context = new ContextImpl(currentInstance, manager, activeEnvironment);
+                for (Rule rule : rules) {
+                    rule.invokeAction(context);
+                }
             }
+
         }
     }
 
@@ -45,4 +51,6 @@ public class World {
         Random random = new Random();
         return random.nextInt(randomNumberUpperBound);
     }
+
+    public Environment getEnvironment() { return activeEnvironment; }
 }

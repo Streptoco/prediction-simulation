@@ -24,6 +24,8 @@ public abstract class AbstractProperty implements PropertyInterface {
 
     public int getTo() { return rangeTo; }
 
+    public boolean getRandomStatus() { return isRandomlyGenerated; }
+
     public ReturnType getPropertyType() { return propertyType; }
 
     public abstract Object getValue();

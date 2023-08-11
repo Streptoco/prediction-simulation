@@ -1,7 +1,7 @@
 package engine;
 
-import engine.actions.api.AbstractAction;
-import engine.actions.impl.IncreaseAction;
+import engine.actions.api.ActionInterface;
+import engine.context.api.Context;
 
 import java.util.ArrayList;
 
@@ -28,9 +28,9 @@ public class Rule {
         return true;
     }
 
-    public void invokeAction() {
+    public void invokeAction(Context context) {
         for (ActionInterface action : actions) {
-            action.invoke();
+            action.invoke(context);
         }
     }
 }

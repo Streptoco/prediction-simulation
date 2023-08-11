@@ -4,6 +4,7 @@ package engine.actions.expression;
 //TODO: error handling.
 //TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
 
+import engine.Environment;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.properties.api.PropertyInterface;
@@ -36,9 +37,26 @@ public class Expression {
     public void evaluateExpression() {
         propertyMatch = entityInstance.getPropertyByName(name);
 
-        if (name.equals("environment") || name.equals("random")) {
+        if (name.startsWith("random(")) {
             // TODO: segment to functions. it should be up to the parentheses... and then evaluate.
             type = Type.FUNCTION;
+            this.returnType = ReturnType.INT;
+            int stringValue = Integer.parseInt(name.replaceAll("[^0-9]", ""));
+            castedValueOfExpression = randomGetter(stringValue);
+            this.returnType = ReturnType.INT;
+        }
+
+        else if (name.startsWith("environment")) {
+            String envVariableName = "";
+            int startIndex = name.indexOf("(");
+            int endIndex = name.indexOf(")");
+
+            if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+                envVariableName = name.substring(startIndex + 1, endIndex);
+            }
+
+            castedValueOfExpression = environmentGetter(envVariableName);
+            this.returnType = propertyTypeGetter(envVariableName);
         }
         else if (propertyMatch != null) {
             // we need to know the property type and then return the value

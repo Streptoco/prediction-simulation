@@ -11,6 +11,8 @@ public interface PropertyInterface {
 
     public int getTo();
 
+    public boolean getRandomStatus();
+
     public ReturnType getPropertyType();
 
     public Object getValue();

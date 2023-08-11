@@ -1,40 +1,71 @@
 package enginewrapper;
 
 import engine.*;
+import engine.actions.api.ActionInterface;
 import engine.actions.expression.Expression;
 import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
+import engine.context.api.Context;
+import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
+import engine.entity.impl.EntityInstance;
+import engine.entity.impl.EntityInstanceManager;
+import engine.properties.api.PropertyInterface;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EngineWrapper {
     public static void main(String[] args) {
 
         // initialize lists
-        ArrayList<EntityDefinition> entities = new ArrayList<EntityDefinition>();
         ArrayList<Rule> rules = new ArrayList<Rule>();
-        ArrayList<Property> properties = new ArrayList<Property>();
+        List<Context> contextList = new ArrayList<>();
 
-        // initialize entity
+
+
+        // create entity
+        EntityInstanceManager manager = new EntityInstanceManager();
         EntityDefinition entityDefinition = new EntityDefinition("Gunslinger", 30);
-        Property entityProperty1 = new IntProperty(21, "LifeLeft", 0,50, false);
-        Property entityProperty2 = new DecimalProperty(3.14, "AimAmount", 10,60, false);
-        properties.add(entityProperty1);
-        properties.add(entityProperty2);
-        entityDefinition.setProperties(properties);
+        manager.create(entityDefinition); // Arthur
+        manager.create(entityDefinition); // Dutch
+        manager.create(entityDefinition); // Micah
+        List<EntityInstance> entities = manager.getInstances();
+
+        // create properties
+        PropertyInterface entityProperty1 = new IntProperty(21, "LifeLeft", 0,50, false);
+        PropertyInterface entityProperty2 = new DecimalProperty(32.45, "AimAmount", 10,60, false);
+
+        // create env properties
+        PropertyInterface envProperty1 = new IntProperty(15,"miss-target-chances", 0,100,false);
+
+        // World
+        World world = new World(5, manager, rules);
+        world.getEnvironment().setProperty(envProperty1);
+
+        // insert properties to specific entity
+        entities.get(0).addProperty(entityProperty1);
+        entities.get(0).addProperty(entityProperty2);
+
+        contextList.add(new ContextImpl(entities.get(0), manager, world.getEnvironment()));
+        contextList.add(new ContextImpl(entities.get(1), manager, world.getEnvironment()));
+        contextList.add(new ContextImpl(entities.get(2), manager, world.getEnvironment()));
 
         // initialize world
         Rule rule1 = new Rule("Aging", 1, 1);
         Rule rule2 = new Rule("PullingGun", 4, 0.75);
         Rule rule3 = new Rule("FindingAWoman", 6, 0.24);
 
-        Expression expression1 = new Expression(entityDefinition, "11"); // free expression
-        Expression expression2 = new Expression(entityDefinition, "LifeLeft"); // property expression
-        Expression expression3 = new Expression(entityDefinition, "random(5)"); // environment function expression
+        Expression expression1 = new Expression(entities.get(0), "11"); // free expression
+        Expression expression2 = new Expression(entities.get(0), "LifeLeft"); // property expression
+        Expression expression3 = new Expression(entities.get(0), "random(5)"); // environment function expression
+        Expression expression4 = new Expression(entities.get(0), "environment(miss-target-chances)"); // environment function expression
 
-        Action action1 = new IncreaseDecreaseAction(entityDefinition, entityDefinition.getPropertyByName("LifeLeft"),expression1);
-        Action action2 = new IncreaseDecreaseAction(entityDefinition, entityDefinition.getPropertyByName("AimAmount"), new Expression(entityDefinition, "23.12"));
+
+
+        ActionInterface action1 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression4, "increase");
+        ActionInterface action2 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression3, "INCreaSE");
+        ActionInterface action3 = new IncreaseDecreaseAction(entityDefinition, "AimAmount", new Expression(entities.get(0), "11.25"), "decrease");
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
 
@@ -46,7 +77,8 @@ public class EngineWrapper {
         // add rules to lists
         rules.add(rule1);
 
-        // add entities to lists
+
+
 
         Engine engine = new Engine();
 
