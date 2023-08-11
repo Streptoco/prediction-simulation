@@ -1,5 +1,6 @@
 package engine.properties.impl;
 
+import engine.actions.expression.ReturnType;
 import engine.properties.api.AbstractProperty;
 import engine.properties.api.PropertyType;
 

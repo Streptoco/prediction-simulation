@@ -1,5 +1,6 @@
 package engine.properties.impl;
 
+import engine.actions.expression.ReturnType;
 import engine.properties.api.AbstractProperty;
 import engine.properties.api.PropertyType;
 
@@ -7,7 +8,8 @@ public class StringProperty extends AbstractProperty {
     private String value;
 
     public StringProperty(String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
-        super(name, rangeFrom, rangeTo, isRandomlyGenerated, PropertyType.STRING);
+        super(name, rangeFrom, rangeTo, isRandomlyGenerated, ReturnType.STRING);
+        this.value = name;
     }
 
     public Object getValue() { return this.value; }

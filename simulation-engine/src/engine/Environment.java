@@ -16,4 +16,8 @@ public class Environment {
     public static ReturnType propertyTypeGetter (String propertyName) {
         return envVariables.get(propertyName).getPropertyType();
     }
+
+    public PropertyInterface getProperty(String name) {
+        return envVariables.get(name);
+    }
 }
