@@ -1,11 +1,15 @@
-package engine.context;
+package engine.context.impl;
+
+import engine.Environment;
+import engine.context.api.Context;
+import engine.entity.impl.EntityInstance;
 
 public class ContextImpl implements Context {
     private EntityInstance primaryEntityInstance;
     private EntityInstanceManager entityInstanceManager;
-    private ActiveEnvironment activeEnvironment;
+    private Environment activeEnvironment;
 
-    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstanceManager entityInstanceManager, ActiveEnvironment activeEnvironment) {
+    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstanceManager entityInstanceManager, Environment activeEnvironment) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.activeEnvironment = activeEnvironment;
@@ -22,7 +26,7 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public PropertyInstance getEnvironmentVariable(String name) {
+    public PropertyInterface getEnvironmentVariable(String name) {
         return activeEnvironment.getProperty(name);
     }
 }

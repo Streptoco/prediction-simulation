@@ -22,7 +22,7 @@ public class World {
     private int tickCounter;
     private ArrayList<EntityDefinition> entities;
     private ArrayList<Rule> rules;
-    private static ArrayList<AbstractProperty> environmentProperties;
+    private static Environment activeEnvironment;
     //Constructors
 
     public World(int tickCounter, ArrayList<EntityDefinition> entities, ArrayList<Rule> rules) {
@@ -37,45 +37,6 @@ public class World {
                 rule.invokeAction();
             }
         }
-    }
-
-    public static ReturnType propertyTypeGetter (String propertyName) {
-        for (AbstractProperty property : environmentProperties) {
-            if (property.getName().equals(propertyName)) {
-                return property.getPropertyType();
-            }
-            else {
-                // TODO: handle error: no such property
-            }
-        }
-        return null;
-    }
-
-    public static Object environmentGetter(String propertyName) {
-        for (AbstractProperty property : environmentProperties) {
-            if (property.getName().equals(propertyName)) {
-                if (property.getClass().equals(IntProperty.class)) {
-                    IntProperty convertProperty = (IntProperty) property;
-                    return convertProperty.getValue();
-                }
-                else if (property.getClass().equals(DecimalProperty.class)) {
-                    DecimalProperty convertProperty = (DecimalProperty) property;
-                    return convertProperty.getValue();
-                }
-                else if (property.getClass().equals(BooleanProperty.class)) {
-                    BooleanProperty convertProperty = (BooleanProperty) property;
-                    return convertProperty.getValue();
-                }
-                else if (property.getClass().equals(StringProperty.class)) {
-                    StringProperty convertProperty = (StringProperty) property;
-                    return convertProperty.getValue();
-                }
-            }
-            else {
-                // TODO: Handle expection : no such property
-            }
-        }
-        return null;
     }
 
     public static int randomGetter(int randomNumberUpperBound) {

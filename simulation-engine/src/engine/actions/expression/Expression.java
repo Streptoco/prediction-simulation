@@ -7,6 +7,8 @@ package engine.actions.expression;
 import engine.entity.impl.EntityDefinition;
 import engine.properties.api.PropertyInterface;
 
+import static engine.Environment.environmentGetter;
+import static engine.Environment.propertyTypeGetter;
 import static engine.World.*;
 
 
