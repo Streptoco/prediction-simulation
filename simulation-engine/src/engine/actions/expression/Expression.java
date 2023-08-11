@@ -5,6 +5,7 @@ package engine.actions.expression;
 //TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
 
 import engine.entity.impl.EntityDefinition;
+import engine.entity.impl.EntityInstance;
 import engine.properties.api.PropertyInterface;
 
 import static engine.Environment.environmentGetter;
@@ -21,19 +22,19 @@ enum Type {
 public class Expression {
     String name;
     Type type;
-    EntityDefinition entityDefinition;
+    EntityInstance entityInstance;
     PropertyInterface propertyMatch;
     Object castedValueOfExpression;
     ReturnType returnType;
 
-    public Expression (EntityDefinition entityDefinition, String name) { // random(5), "11", "true"
+    public Expression (EntityInstance entityInstance, String name) { // random(5), "11", "true"
         this.name = name;
-        this.entityDefinition = entityDefinition;
+        this.entityInstance = entityInstance;
         evaluateExpression();
     }
 
     public void evaluateExpression() {
-        propertyMatch = entityDefinition.getPropertyByName(name);
+        propertyMatch = entityInstance.getPropertyByName(name);
 
         if (name.equals("environment") || name.equals("random")) {
             // TODO: segment to functions. it should be up to the parentheses... and then evaluate.
