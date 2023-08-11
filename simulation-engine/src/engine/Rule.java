@@ -3,22 +3,23 @@ package engine;
 import engine.actions.api.AbstractAction;
 import engine.actions.impl.IncreaseAction;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Rule {
     private String name;
     private int tickIntervals;
     private double probability;
-    private ArrayList<AbstractAction> actions;
+    private ArrayList<ActionInterface> actions;
 
     public Rule(String name, int tickIntervals, double probability) {
         this.name = name;
         this.tickIntervals = tickIntervals;
         this.probability = probability;
-        this.actions = new ArrayList<AbstractAction>();
+        this.actions = new ArrayList<ActionInterface>();
     }
 
-    public void addAction(AbstractAction action) {
+    public void addAction(ActionInterface action) {
         actions.add(action);
     }
 
@@ -29,10 +30,8 @@ public class Rule {
     }
 
     public void invokeAction() {
-        for (AbstractAction action : actions) {
-            if (action.getClass().equals(IncreaseAction.class)) {
-                ((IncreaseAction) action).invokeAction();
-            }
+        for (ActionInterface action : actions) {
+            action.invoke();
         }
     }
 }

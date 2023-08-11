@@ -9,6 +9,7 @@ package engine;
 
 import engine.actions.expression.ReturnType;
 import engine.entity.impl.EntityDefinition;
+import engine.entity.impl.EntityInstanceManager;
 import engine.properties.api.AbstractProperty;
 import engine.properties.impl.BooleanProperty;
 import engine.properties.impl.DecimalProperty;
@@ -20,14 +21,14 @@ import java.util.Random;
 
 public class World {
     private int tickCounter;
-    private ArrayList<EntityDefinition> entities;
+    private EntityInstanceManager manager;
     private ArrayList<Rule> rules;
     private static Environment activeEnvironment;
     //Constructors
 
-    public World(int tickCounter, ArrayList<EntityDefinition> entities, ArrayList<Rule> rules) {
+    public World(int tickCounter, EntityInstanceManager manager, ArrayList<Rule> rules) {
         this.tickCounter = tickCounter;
-        this.entities = entities;
+        this.manager = manager;
         this.rules = rules;
     }
 

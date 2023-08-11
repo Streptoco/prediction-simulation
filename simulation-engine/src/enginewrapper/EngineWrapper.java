@@ -47,9 +47,8 @@ public class EngineWrapper {
         rules.add(rule1);
 
         // add entities to lists
-        entities.add(entityDefinition);
 
-        World world = new World(5, entities, rules);
+        World world = new World(5, manager, rules);
         Engine engine = new Engine();
 
         world.Run();
