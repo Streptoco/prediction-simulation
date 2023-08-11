@@ -5,7 +5,7 @@
 //import engine.actions.api.ActionType;
 //import engine.actions.impl.calculation.CalculationAction;
 //import engine.actions.expression.Expression;
-//import engine.actions.impl.IncreaseDecreaseAction;
+//import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
 //import engine.properties.api.PropertyInterface;
 //import engine.properties.impl.DecimalProperty;
 //import engine.properties.impl.IntProperty;

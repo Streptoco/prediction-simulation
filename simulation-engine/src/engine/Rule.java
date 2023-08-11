@@ -3,7 +3,6 @@ package engine;
 import engine.actions.api.AbstractAction;
 import engine.actions.impl.IncreaseAction;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class Rule {

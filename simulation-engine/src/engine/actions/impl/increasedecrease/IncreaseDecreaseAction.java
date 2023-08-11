@@ -1,4 +1,4 @@
-package engine.actions.impl;
+package engine.actions.impl.increasedecrease;
 
 // TODO: this and decrease are very similar, might as well make them inherit from a common ancestor
 // TODO: error handling
@@ -7,9 +7,7 @@ import engine.actions.expression.Expression;
 import engine.actions.api.AbstractAction;
 import engine.actions.api.ActionType;
 import engine.actions.expression.ReturnType;
-import engine.context.api.Context;
 import engine.properties.api.PropertyInterface;
-import engine.properties.api.PropertyType;
 import engine.properties.impl.DecimalProperty;
 import engine.entity.impl.EntityDefinition;
 import engine.properties.impl.IntProperty;
