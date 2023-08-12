@@ -26,6 +26,8 @@ public class DecimalProperty extends AbstractProperty {
         }
     }
     public void setValue(double value) {
-        this.value = value;
+        if (super.getFrom() < value && super.getTo() > value) {
+            this.value = value;
+        }
     }
 }

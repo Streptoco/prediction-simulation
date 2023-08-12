@@ -28,6 +28,8 @@ public class IntProperty extends AbstractProperty {
     }
 
     public void setValue(int value) {
-        this.value = value;
+        if (super.getFrom() < value && super.getTo() > value) {
+            this.value = value;
+        }
     }
 }
