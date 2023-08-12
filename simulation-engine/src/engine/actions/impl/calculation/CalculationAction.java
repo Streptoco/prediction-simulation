@@ -9,6 +9,7 @@ import engine.entity.impl.EntityDefinition;
 import engine.properties.api.PropertyInterface;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
+import engine.value.generator.FixedValueGenerator;
 
 // TODO: check if given property is indeed decimal/integer
 
@@ -43,20 +44,34 @@ public class CalculationAction extends AbstractAction {
     @Override
     public void invoke(Context context) {
         resultProp = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        boolean isMultiply = (this.calculationType.equals(CalculationType.MULTIPLY));
         if (checkValidityOfExpressions()) {
             if (resultProp != null) {
-                if (this.calculationType.equals(CalculationType.MULTIPLY)) {
                     switch (resultProp.getPropertyType()) {
                         case INT:
-                            ((IntProperty) resultProp).setValue((int) firstArgument.getValue() * (int) secondArgument.getValue());
+                            if(isMultiply) {
+                                ((IntProperty) resultProp).setValue((int) firstArgument.getValue() * (int) secondArgument.getValue());
+                            }
+                            else {
+                                if (!((int) secondArgument.getValue() == 0)) {
+                                    ((IntProperty) resultProp).setValue((int) firstArgument.getValue() / (int) secondArgument.getValue());
+                                }
+                            }
                             break;
                         case DECIMAL:
-                            ((DecimalProperty) resultProp).setValue((double) firstArgument.getValue() * (double) secondArgument.getValue());
+                            if(isMultiply) {
+                                ((DecimalProperty) resultProp).setValue((double) firstArgument.getValue() * (double) secondArgument.getValue());
+                            }
+                            else {
+                                if (!((double) secondArgument.getValue() == 0)) {
+                                    ((DecimalProperty) resultProp).setValue((double) firstArgument.getValue() / (double) secondArgument.getValue());
+                                }
+                            }
                             break;
                         default:
                             //TODO: handle error
                             break;
-                    }
+
                 }
             }
         }
