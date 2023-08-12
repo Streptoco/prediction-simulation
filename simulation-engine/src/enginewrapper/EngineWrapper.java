@@ -20,9 +20,6 @@ public class EngineWrapper {
 
         // initialize lists
         ArrayList<Rule> rules = new ArrayList<Rule>();
-        List<Context> contextList = new ArrayList<>();
-
-
 
         // create entity
         EntityInstanceManager manager = new EntityInstanceManager();
@@ -46,10 +43,10 @@ public class EngineWrapper {
         // insert properties to specific entity
         entities.get(0).addProperty(entityProperty1);
         entities.get(0).addProperty(entityProperty2);
-
-        contextList.add(new ContextImpl(entities.get(0), manager, world.getEnvironment()));
-        contextList.add(new ContextImpl(entities.get(1), manager, world.getEnvironment()));
-        contextList.add(new ContextImpl(entities.get(2), manager, world.getEnvironment()));
+        entities.get(1).addProperty(entityProperty1);
+        entities.get(1).addProperty(entityProperty2);
+        entities.get(2).addProperty(entityProperty1);
+        entities.get(2).addProperty(entityProperty2);
 
         // initialize world
         Rule rule1 = new Rule("Aging", 1, 1);

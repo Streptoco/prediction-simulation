@@ -26,4 +26,8 @@ public class IntProperty extends AbstractProperty {
             this.value -= value;
         }
     }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
 }

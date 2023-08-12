@@ -25,4 +25,7 @@ public class DecimalProperty extends AbstractProperty {
             this.value -= value;
         }
     }
+    public void setValue(double value) {
+        this.value = value;
+    }
 }
