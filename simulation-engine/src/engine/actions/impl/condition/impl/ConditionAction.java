@@ -6,13 +6,8 @@ import engine.actions.impl.condition.api.PropertyExpressionEvaluation;
 import engine.context.api.Context;
 import engine.entity.impl.EntityDefinition;
 import engine.actions.api.ActionType;
-import engine.actions.impl.calculation.CalculationAction;
 import engine.actions.expression.Expression;
-import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.properties.api.PropertyInterface;
-import engine.properties.impl.DecimalProperty;
-import engine.properties.impl.IntProperty;
-
 import java.util.ArrayList;
 
 public class ConditionAction extends AbstractAction {
@@ -38,13 +33,16 @@ public class ConditionAction extends AbstractAction {
         this.propertyName = propertyName;
     }
 
-    public void invoke(Context context) {
-        if (this.singularity.equals(Singularity.SINGLE)) {
-            // TODO: fill what happens if it's a singular occurrence.
-            // TODO: cut the fat
-            // TODO: figure out a way to cast the object returning from expression (would be ugly as well)
-        }
+    public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression, ActionInterface thenAction, ActionInterface elseAction) {
+        super(ActionType.CONDITION, entityDefinition);
+        this.propertyName = propertyName;
+        this.valueOperator = operator;
+        this.valueExpression = valueExpression;
+        this.thenAction = thenAction;
+        this.elseAction = elseAction;
+    }
 
+    public void invoke(Context context) {
         propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName); // TODO: need to pass the string
         PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
 

@@ -5,11 +5,7 @@ import engine.actions.api.ActionInterface;
 import engine.actions.expression.Expression;
 import engine.actions.impl.calculation.CalculationAction;
 import engine.actions.impl.condition.impl.ConditionAction;
-import engine.actions.impl.condition.impl.LogicalOperatorForSingularity;
-import engine.actions.impl.condition.impl.Singularity;
 import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
-import engine.context.api.Context;
-import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
@@ -61,6 +57,7 @@ public class EngineWrapper {
         Expression expression2 = new Expression(entities.get(0), "LifeLeft"); // property expression
         Expression expression3 = new Expression(entities.get(0), "0"); // environment function expression
         Expression expression4 = new Expression(entities.get(0), "environment(miss-target-chances)"); // environment function expression
+        Expression expression5 = new Expression(entities.get(0), "32.45"); // free expression
 
 
 
@@ -68,8 +65,7 @@ public class EngineWrapper {
         ActionInterface action2 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression3, "INCreaSE");
         ActionInterface action3 = new IncreaseDecreaseAction(entityDefinition, "AimAmount", new Expression(entities.get(0), "11.25"), "decrease");
         ActionInterface action4 = new CalculationAction(entityDefinition, "LifeLeft", "divide", expression1, expression3);
-        ActionInterface action5 = new ConditionAction(entityDefinition, Singularity.SINGLE, LogicalOperatorForSingularity.AND,"AimAmount", new IncreaseDecreaseAction(entityDefinition, "AimAmount",
-                expression1, "increase"), action3 , new Expression(entities.get(0), "32.45"), "=" );
+        ActionInterface action5 = new ConditionAction(entityDefinition, "AimAmount", "=", expression5, action1, action3);
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
 
