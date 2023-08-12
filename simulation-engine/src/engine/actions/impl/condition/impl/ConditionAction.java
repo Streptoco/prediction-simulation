@@ -8,6 +8,7 @@ import engine.entity.impl.EntityDefinition;
 import engine.actions.api.ActionType;
 import engine.actions.expression.Expression;
 import engine.properties.api.PropertyInterface;
+
 import java.util.ArrayList;
 
 public class ConditionAction extends AbstractAction {
@@ -21,6 +22,7 @@ public class ConditionAction extends AbstractAction {
     Expression valueExpression;
     String valueOperator;
     String propertyName;
+
     public ConditionAction(EntityDefinition entityDefinition, Singularity singularity, LogicalOperatorForSingularity operator, String propertyName, ActionInterface thenAction, ActionInterface elseAction, Expression valueExpression,
                            String valueOperator) {
         super(ActionType.CONDITION, entityDefinition);
@@ -48,20 +50,19 @@ public class ConditionAction extends AbstractAction {
 
         if (EvaluateExpression(result)) {
             thenAction.invoke(context);
+        } else {
+            elseAction.invoke(context);
         }
     }
 
     public boolean EvaluateExpression(PropertyExpressionEvaluation result) {
         if (valueOperator.equals("=")) {
             return result.isEqual();
-        }
-        else if (valueOperator.equals("!=")) {
+        } else if (valueOperator.equals("!=")) {
             return !result.isEqual();
-        }
-        else if (valueOperator.equalsIgnoreCase("bt")) {
+        } else if (valueOperator.equalsIgnoreCase("bt")) {
             return result.isGreater();
-        }
-        else {
+        } else {
             return !result.isGreater();
         }
     }
