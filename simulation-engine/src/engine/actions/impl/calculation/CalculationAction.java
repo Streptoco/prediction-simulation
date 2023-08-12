@@ -64,16 +64,14 @@ public class CalculationAction extends AbstractAction {
 
     private boolean checkValidityOfExpressions() {
         //TODO: is it possible to multiply integer by decimal? or all the 3 arguments should be from the same kind
-//        return ((!firstArgument.getReturnType().equals(ReturnType.INT) || !firstArgument.getReturnType().equals(ReturnType.DECIMAL)) ||
-//                (!secondArgument.getReturnType().equals(ReturnType.INT) || !secondArgument.getReturnType().equals(ReturnType.DECIMAL)));
-        if(resultProp.getPropertyType() == firstArgument.getReturnType() && resultProp.getPropertyType() == secondArgument.getReturnType()) {
-            return true;
+        if (this.resultProp.getPropertyType().equals(ReturnType.DECIMAL)) {
+            return ((!firstArgument.getReturnType().equals(ReturnType.INT) || !firstArgument.getReturnType().equals(ReturnType.DECIMAL)) ||
+                    (!secondArgument.getReturnType().equals(ReturnType.INT) || !secondArgument.getReturnType().equals(ReturnType.DECIMAL)));
+        } else {
+            if (this.resultProp.getPropertyType().equals(ReturnType.INT)) {
+                return firstArgument.getReturnType().equals(ReturnType.INT) && secondArgument.getReturnType().equals(ReturnType.INT);
+            }
         }
-        else {
-            return false;
-        }
-
+        return false;
     }
-
-
 }
