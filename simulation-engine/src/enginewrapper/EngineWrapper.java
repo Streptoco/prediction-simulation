@@ -4,6 +4,9 @@ import engine.*;
 import engine.actions.api.ActionInterface;
 import engine.actions.expression.Expression;
 import engine.actions.impl.calculation.CalculationAction;
+import engine.actions.impl.condition.impl.ConditionAction;
+import engine.actions.impl.condition.impl.LogicalOperatorForSingularity;
+import engine.actions.impl.condition.impl.Singularity;
 import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.context.api.Context;
 import engine.context.impl.ContextImpl;
@@ -56,7 +59,7 @@ public class EngineWrapper {
 
         Expression expression1 = new Expression(entities.get(0), "11"); // free expression
         Expression expression2 = new Expression(entities.get(0), "LifeLeft"); // property expression
-        Expression expression3 = new Expression(entities.get(0), "random(14)"); // environment function expression
+        Expression expression3 = new Expression(entities.get(0), "0"); // environment function expression
         Expression expression4 = new Expression(entities.get(0), "environment(miss-target-chances)"); // environment function expression
 
 
@@ -64,12 +67,14 @@ public class EngineWrapper {
         ActionInterface action1 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression4, "increase");
         ActionInterface action2 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression3, "INCreaSE");
         ActionInterface action3 = new IncreaseDecreaseAction(entityDefinition, "AimAmount", new Expression(entities.get(0), "11.25"), "decrease");
-        ActionInterface action4 = new CalculationAction(entityDefinition, "LifeLeft", "multiply", expression1, expression3);
+        ActionInterface action4 = new CalculationAction(entityDefinition, "LifeLeft", "divide", expression1, expression3);
+        ActionInterface action5 = new ConditionAction(entityDefinition, Singularity.SINGLE, LogicalOperatorForSingularity.AND,"AimAmount", new IncreaseDecreaseAction(entityDefinition, "AimAmount",
+                expression1, "increase"), action3 , new Expression(entities.get(0), "32.45"), "=" );
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
 
         // add actions to rules
-        rule1.addAction(action4);
+        rule1.addAction(action5);
 
         // add rules to lists
         rules.add(rule1);

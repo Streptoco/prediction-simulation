@@ -1,6 +1,8 @@
 package engine.properties.impl;
 
+import engine.actions.expression.Expression;
 import engine.actions.expression.ReturnType;
+import engine.actions.impl.condition.api.PropertyExpressionEvaluation;
 import engine.properties.api.AbstractProperty;
 import engine.properties.api.PropertyType;
 
@@ -15,4 +17,7 @@ public class BooleanProperty extends AbstractProperty {
     public Object getValue() { return this.value; }
 
     // TODO: we'll probably need a way to change this value, maybe implement it in the interface?
+    public PropertyExpressionEvaluation evaluate(Expression expression) {
+        return null;
+    }
 }
