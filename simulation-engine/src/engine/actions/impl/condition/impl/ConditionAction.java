@@ -13,12 +13,13 @@ import java.util.ArrayList;
 
 public class ConditionAction extends AbstractAction {
 
-    PropertyInterface propertyInstance;
-    ActionInterface thenAction;
-    ActionInterface elseAction;
-    Expression valueExpression;
-    String valueOperator;
-    String propertyName;
+    private PropertyInterface propertyInstance;
+    private ActionInterface thenAction;
+    private ActionInterface elseAction;
+    private Expression valueExpression;
+    private String valueOperator;
+    private String propertyName;
+    private boolean isConditionHappening;
 
     public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression, ActionInterface thenAction, ActionInterface elseAction) {
         super(ActionType.CONDITION, entityDefinition);
@@ -36,7 +37,9 @@ public class ConditionAction extends AbstractAction {
         if (EvaluateExpression(result)) {
             thenAction.invoke(context);
         } else {
-            elseAction.invoke(context);
+            if (elseAction != null) {
+                elseAction.invoke(context);
+            }
         }
     }
 
@@ -55,4 +58,6 @@ public class ConditionAction extends AbstractAction {
     private void MultipleEvaluation() {
         // TODO: handle
     }
+
+    public boolean getIsConditionHappening() { return isConditionHappening; }
 }
