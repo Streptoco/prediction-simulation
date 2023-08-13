@@ -14,26 +14,11 @@ import java.util.ArrayList;
 public class ConditionAction extends AbstractAction {
 
     PropertyInterface propertyInstance;
-    Singularity singularity;
-    LogicalOperatorForSingularity operator;
-    ArrayList<AbstractAction> actionList;
     ActionInterface thenAction;
     ActionInterface elseAction;
     Expression valueExpression;
     String valueOperator;
     String propertyName;
-
-    public ConditionAction(EntityDefinition entityDefinition, Singularity singularity, LogicalOperatorForSingularity operator, String propertyName, ActionInterface thenAction, ActionInterface elseAction, Expression valueExpression,
-                           String valueOperator) {
-        super(ActionType.CONDITION, entityDefinition);
-        this.singularity = singularity;
-        this.operator = operator;
-        this.thenAction = thenAction;
-        this.elseAction = elseAction;
-        this.valueExpression = valueExpression;
-        this.valueOperator = valueOperator;
-        this.propertyName = propertyName;
-    }
 
     public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression, ActionInterface thenAction, ActionInterface elseAction) {
         super(ActionType.CONDITION, entityDefinition);
@@ -45,7 +30,7 @@ public class ConditionAction extends AbstractAction {
     }
 
     public void invoke(Context context) {
-        propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName); // TODO: need to pass the string
+        propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
 
         if (EvaluateExpression(result)) {
