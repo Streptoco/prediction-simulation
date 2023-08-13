@@ -75,6 +75,9 @@ public class EngineWrapper {
 
         // add actions to rules
         rule1.addAction(action5);
+//        rule1.addAction(action1);
+//        rule1.addAction(action2);
+//        rule1.addAction(action3);
 
         // add rules to lists
         rules.add(rule1);

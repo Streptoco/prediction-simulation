@@ -72,7 +72,7 @@ public class Expression {
 
     public void FreeValuePositioning() {
         try {
-            castedValueOfExpression = Integer.parseInt(name);
+            castedValueOfExpression = Double.parseDouble(name);
             this.returnType = ReturnType.INT;
             return;
         } catch (NumberFormatException e) {
