@@ -34,7 +34,7 @@ public class MultipleConditionAction extends AbstractAction {
         switch (logicalOperator) {
             case OR:
                 for (ConditionAction condition : conditionActionList) {
-                    if (condition.getIsConditionHappening()) {
+                    if (condition.getIsConditionHappening(context)) {
                         thenAction.invoke(context);
                         wasInvoked = true;
                         break;
@@ -46,7 +46,7 @@ public class MultipleConditionAction extends AbstractAction {
                 break;
             case AND:
                 for (ConditionAction condition : conditionActionList) {
-                    if (!condition.getIsConditionHappening()) {
+                    if (!condition.getIsConditionHappening(context)) {
                         if(elseAction != null) {
                             elseAction.invoke(context);
                         }

@@ -27,19 +27,14 @@ public class ConditionAction extends AbstractAction {
         this.valueOperator = operator;
         this.valueExpression = valueExpression;
         this.thenAction = thenAction;
-        this.elseAction = elseAction;
+        if(elseAction != null) {
+            this.elseAction = elseAction;
+        } else {
+            this.elseAction = null;
+        }
     }
 
-    public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression, ActionInterface thenAction) {
-        super(ActionType.CONDITION, entityDefinition);
-        this.propertyName = propertyName;
-        this.valueOperator = operator;
-        this.valueExpression = valueExpression;
-        this.thenAction = thenAction;
-        this.elseAction = null;
-    }
-
-    public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression, Context context) {
+    public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression) {
         super(ActionType.CONDITION, entityDefinition);
         propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         isConditionHappening = EvaluateExpression(propertyInstance.evaluate(valueExpression));
@@ -74,5 +69,10 @@ public class ConditionAction extends AbstractAction {
         // TODO: handle
     }
 
-    public boolean getIsConditionHappening() { return isConditionHappening; }
+    public boolean getIsConditionHappening(Context context) {
+        propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
+
+        return EvaluateExpression(result);
+    }
 }

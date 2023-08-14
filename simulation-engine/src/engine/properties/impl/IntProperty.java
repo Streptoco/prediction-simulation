@@ -37,13 +37,14 @@ public class IntProperty extends AbstractProperty {
 
     @Override
     public PropertyExpressionEvaluation evaluate(Expression expression) {
-        int expresionValue = (int) expression.getValue();
+        //int expressionValue = (int)expression.getValue();
+        int expressionValue = expression.getCastedNumber().intValue();
         PropertyExpressionEvaluation result;
-        if(this.value == expresionValue) {
+        if(this.value == expressionValue) {
             result = new PropertyExpressionEvaluation(true, false);
         }
         else {
-            if(this.value > expresionValue) {
+            if(this.value > expressionValue) {
                 result = new PropertyExpressionEvaluation(false, true);
             }
             else {

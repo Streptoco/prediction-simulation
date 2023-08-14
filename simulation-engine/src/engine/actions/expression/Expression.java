@@ -41,8 +41,8 @@ public class Expression {
             // TODO: segment to functions. it should be up to the parentheses... and then evaluate.
             type = Type.FUNCTION;
             this.returnType = ReturnType.INT;
-            int stringValue = Integer.parseInt(name.replaceAll("[^0-9]", ""));
-            castedValueOfExpression = randomGetter(stringValue);
+            double stringValue = Double.parseDouble(name.replaceAll("[^0-9]", ""));
+            castedNumber = randomGetter((int)stringValue);
             this.returnType = ReturnType.INT;
         }
 
@@ -80,6 +80,7 @@ public class Expression {
         }
         try {
             castedValueOfExpression = Double.parseDouble(name);
+            castedNumber = Double.parseDouble(name);
             this.returnType = ReturnType.DECIMAL;
             return;
         } catch (NumberFormatException e) {

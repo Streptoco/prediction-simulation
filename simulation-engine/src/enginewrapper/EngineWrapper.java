@@ -6,6 +6,7 @@ import engine.actions.expression.Expression;
 import engine.actions.impl.calculation.CalculationAction;
 import engine.actions.impl.condition.impl.ConditionAction;
 import engine.actions.impl.condition.impl.LogicalOperatorForSingularity;
+import engine.actions.impl.condition.impl.MultipleConditionAction;
 import engine.actions.impl.condition.impl.Singularity;
 import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.entity.impl.EntityDefinition;
@@ -63,21 +64,25 @@ public class EngineWrapper {
 
 
 
-        ActionInterface action1 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression4, "increase");
+        ActionInterface action1 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression2, "increase");
         ActionInterface action2 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression3, "INCreaSE");
         ActionInterface action3 = new IncreaseDecreaseAction(entityDefinition, "AimAmount", new Expression(entities.get(0), "11.25"), "decrease");
         ActionInterface action4 = new CalculationAction(entityDefinition, "LifeLeft", "divide", expression1, expression3);
         ActionInterface action5 = new ConditionAction(entityDefinition, "AimAmount", "=",  new Expression(entities.get(0), "32.45"), new IncreaseDecreaseAction(entityDefinition, "AimAmount",
                 expression1, "increase"), action3);
         ActionInterface action6 = new IncreaseDecreaseAction(entityDefinition, "AimAmount", expression1, "increase");
+
+        ActionInterface action7 = new ConditionAction(entityDefinition, "AimAmount", "bt", new Expression(entities.get(0),"22.11"));
+        ActionInterface action8 = new ConditionAction(entityDefinition,"LifeLeft", "lt", new Expression(entities.get(0), "random(50)"));
+        ActionInterface action9 = new MultipleConditionAction(entityDefinition,action1,action2, LogicalOperatorForSingularity.AND, (ConditionAction) action5, (ConditionAction) action7, (ConditionAction)action8);
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
 
         // add actions to rules
-        rule1.addAction(action5);
-//        rule1.addAction(action1);
+//        rule1.addAction(action9);
+        rule1.addAction(action1);
 //        rule1.addAction(action2);
-//        rule1.addAction(action3);
+        rule1.addAction(action3);
 
         // add rules to lists
         rules.add(rule1);
