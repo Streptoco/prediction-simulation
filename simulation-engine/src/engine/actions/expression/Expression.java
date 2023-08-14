@@ -27,6 +27,7 @@ public class Expression {
     PropertyInterface propertyMatch;
     Object castedValueOfExpression;
     ReturnType returnType;
+    Number castedNumber;
 
     public Expression (EntityInstance entityInstance, String name) { // random(5), "11", "true"
         this.name = name;
@@ -56,6 +57,7 @@ public class Expression {
             }
 
             castedValueOfExpression = environmentGetter(envVariableName);
+            castedNumber = (Number) castedValueOfExpression;
             this.returnType = propertyTypeGetter(envVariableName);
         }
         else if (propertyMatch != null) {
@@ -63,6 +65,7 @@ public class Expression {
             type = Type.PROPERTY;
             this.returnType = propertyMatch.getPropertyType();
             castedValueOfExpression = propertyMatch.getValue();
+            castedNumber = (Number) propertyMatch.getValue();
         }
         else {
             type = Type.FREE;
@@ -73,6 +76,7 @@ public class Expression {
     public void FreeValuePositioning() {
         try {
             castedValueOfExpression = Double.parseDouble(name);
+            castedNumber = Double.parseDouble(name); //TODO: need to do it cross class
             this.returnType = ReturnType.INT;
             return;
         } catch (NumberFormatException e) {
@@ -101,7 +105,5 @@ public class Expression {
 
     public ReturnType getReturnType() { return this.returnType; }
 
-    public Object getCastedValueOfExpression() {
-        return castedValueOfExpression;
-    }
+    public Number getCastedNumber() { return castedNumber; }
 }

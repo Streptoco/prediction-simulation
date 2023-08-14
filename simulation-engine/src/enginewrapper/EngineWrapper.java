@@ -9,6 +9,8 @@ import engine.actions.impl.condition.impl.LogicalOperatorForSingularity;
 import engine.actions.impl.condition.impl.MultipleConditionAction;
 import engine.actions.impl.condition.impl.Singularity;
 import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
+import engine.context.api.Context;
+import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
@@ -61,6 +63,7 @@ public class EngineWrapper {
         Expression expression3 = new Expression(entities.get(0), "random(20)"); // environment function expression
         Expression expression4 = new Expression(entities.get(0), "environment(miss-target-chances)"); // environment function expression
         Expression expression5 = new Expression(entities.get(0), "32.45"); // free expression
+
 
 
 

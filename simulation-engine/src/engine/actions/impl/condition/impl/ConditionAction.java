@@ -36,8 +36,9 @@ public class ConditionAction extends AbstractAction {
 
     public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression) {
         super(ActionType.CONDITION, entityDefinition);
-        propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
-        isConditionHappening = EvaluateExpression(propertyInstance.evaluate(valueExpression));
+        this.valueExpression = valueExpression;
+        this.valueOperator = operator;
+        this.propertyName = propertyName;
     }
 
     public void invoke(Context context) {
