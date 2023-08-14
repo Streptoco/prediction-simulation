@@ -1,0 +1,31 @@
+comments from aviad on the design of the projects
+
+draft of the design:
+https://github.com/the-shultz/predictions-draft-design
+
+
+1. properties and definitions
+    - divide to API and implementation in the packages.
+    - abstract class for the API, and then implement to the implementation.
+    - there is a place for generics
+    - factory - a class that creates objects.
+    - making instances from classes (segregation)
+    - using map instead of arraylist
+    -
+
+
+
+
+2. entityDefinition
+    -
+
+
+
+
+3. actions & rules
+    - the rule is only a wrapper for the activation and the actions
+    -
+
+
+
+

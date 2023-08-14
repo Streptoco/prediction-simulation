@@ -7,58 +7,50 @@ package engine;
 
 //TODO: in the loop, when it ends, return why it ended.
 
-import engine.properties.*;
+import engine.actions.expression.ReturnType;
+import engine.context.impl.ContextImpl;
+import engine.entity.impl.EntityDefinition;
+import engine.entity.impl.EntityInstance;
+import engine.entity.impl.EntityInstanceManager;
+import engine.properties.api.AbstractProperty;
+import engine.properties.impl.BooleanProperty;
+import engine.properties.impl.DecimalProperty;
+import engine.properties.impl.IntProperty;
+import engine.properties.impl.StringProperty;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class World {
     private int tickCounter;
-    private ArrayList<Entity> entities;
+    private EntityInstanceManager manager;
     private ArrayList<Rule> rules;
-    private ArrayList<Property> environmentProperties;
+    private Environment activeEnvironment;
     //Constructors
 
-    public World(int tickCounter, ArrayList<Entity> entities, ArrayList<Rule> rules) {
+    public World(int tickCounter, EntityInstanceManager manager, ArrayList<Rule> rules) {
         this.tickCounter = tickCounter;
-        this.entities = entities;
+        this.manager = manager;
         this.rules = rules;
+        this.activeEnvironment = new Environment();
     }
 
     public void Run() {
         for (int i = 0; i < tickCounter; i++) {
-            for (Rule rule : rules) {
-                rule.invokeAction();
+            for(EntityInstance currentInstance : manager.getInstances()) {
+                ContextImpl context = new ContextImpl(currentInstance, manager, activeEnvironment);
+                for (Rule rule : rules) {
+                    rule.invokeAction(context);
+                }
             }
+
         }
     }
 
-    public Object environmentGetter(String propertyName) {
-        for (Property property : environmentProperties) {
-            if (property.getName().equals(propertyName)) {
-                if (property.getClass().equals(IntProperty.class)) {
-                    IntProperty convertProperty = (IntProperty) property;
-                    return convertProperty.getValue();
-                }
-                else if (property.getClass().equals(DecimalProperty.class)) {
-                    DecimalProperty convertProperty = (DecimalProperty) property;
-                    return convertProperty.getValue();
-                }
-                else if (property.getClass().equals(BooleanProperty.class)) {
-                    BooleanProperty convertProperty = (BooleanProperty) property;
-                    return convertProperty.getValue();
-                }
-                else if (property.getClass().equals(StringProperty.class)) {
-                    StringProperty convertProperty = (StringProperty) property;
-                    return convertProperty.getValue();
-                }
-            }
-        }
-        return null;
-    }
-
-    public int randomGetter(int randomNumberUpperBound) {
+    public static int randomGetter(int randomNumberUpperBound) {
         Random random = new Random();
         return random.nextInt(randomNumberUpperBound);
     }
+
+    public Environment getEnvironment() { return activeEnvironment; }
 }

@@ -1,59 +1,101 @@
 package enginewrapper;
 
 import engine.*;
-import engine.actions.Action;
-import engine.actions.Expression;
-import engine.actions.IncreaseAction;
-import engine.properties.DecimalProperty;
-import engine.properties.IntProperty;
-import engine.properties.Property;
-
+import engine.actions.api.ActionInterface;
+import engine.actions.expression.Expression;
+import engine.actions.impl.calculation.CalculationAction;
+import engine.actions.impl.condition.impl.ConditionAction;
+import engine.actions.impl.condition.impl.LogicalOperatorForSingularity;
+import engine.actions.impl.condition.impl.MultipleConditionAction;
+import engine.actions.impl.condition.impl.Singularity;
+import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
+import engine.context.api.Context;
+import engine.context.impl.ContextImpl;
+import engine.entity.impl.EntityDefinition;
+import engine.entity.impl.EntityInstance;
+import engine.entity.impl.EntityInstanceManager;
+import engine.properties.api.PropertyInterface;
+import engine.properties.impl.DecimalProperty;
+import engine.properties.impl.IntProperty;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EngineWrapper {
     public static void main(String[] args) {
 
         // initialize lists
-        ArrayList<Entity> entities = new ArrayList<Entity>();
         ArrayList<Rule> rules = new ArrayList<Rule>();
-        ArrayList<Property> properties = new ArrayList<Property>();
 
-        // initialize entity
-        Entity entity = new Entity("Gunslinger", 30);
-        Property entityProperty1 = new IntProperty(21, "LifeLeft", 0,50, false);
-        Property entityProperty2 = new DecimalProperty(3.14, "AimAmount", 10,60, false);
-        properties.add(entityProperty1);
-        properties.add(entityProperty2);
-        entity.setProperties(properties);
+        // create entity
+        EntityInstanceManager manager = new EntityInstanceManager();
+        EntityDefinition entityDefinition = new EntityDefinition("Gunslinger", 30);
+        manager.create(entityDefinition); // Arthur
+        manager.create(entityDefinition); // Dutch
+        manager.create(entityDefinition); // Micah
+        List<EntityInstance> entities = manager.getInstances();
+
+        // create properties
+        PropertyInterface entityProperty1 = new IntProperty(21, "LifeLeft", 0,50, false);
+        PropertyInterface entityProperty2 = new DecimalProperty(32.45, "AimAmount", 10,60, false);
+
+        // create env properties
+        PropertyInterface envProperty1 = new IntProperty(15,"miss-target-chances", 0,100,false);
+
+        // World
+        World world = new World(5, manager, rules);
+        world.getEnvironment().setProperty(envProperty1);
+
+        // insert properties to specific entity
+        entities.get(0).addProperty(entityProperty1);
+        entities.get(0).addProperty(entityProperty2);
+        entities.get(1).addProperty(entityProperty1);
+        entities.get(1).addProperty(entityProperty2);
+        entities.get(2).addProperty(entityProperty1);
+        entities.get(2).addProperty(entityProperty2);
 
         // initialize world
         Rule rule1 = new Rule("Aging", 1, 1);
         Rule rule2 = new Rule("PullingGun", 4, 0.75);
         Rule rule3 = new Rule("FindingAWoman", 6, 0.24);
 
-        Expression expression1 = new Expression(entity, "11"); // free expression
-        Expression expression2 = new Expression(entity, "LifeLeft"); // property expression
-        Expression expression3 = new Expression(entity, "random(5)"); // environment function expression
+        Expression expression1 = new Expression(entities.get(0), "11"); // free expression
+        Expression expression2 = new Expression(entities.get(0), "LifeLeft"); // property expression
+        Expression expression3 = new Expression(entities.get(0), "random(20)"); // environment function expression
+        Expression expression4 = new Expression(entities.get(0), "environment(miss-target-chances)"); // environment function expression
+        Expression expression5 = new Expression(entities.get(0), "32.45"); // free expression
 
-        Action action1 = new IncreaseAction(entity,entity.getPropertyByName("LifeLeft"),expression1);
-        Action action2 = new IncreaseAction(entity,entity.getPropertyByName("AimAmount"), new Expression(entity, "23.12"));
+
+
+
+        ActionInterface action1 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression2, "increase");
+        ActionInterface action2 = new IncreaseDecreaseAction(entityDefinition, "LifeLeft", expression3, "INCreaSE");
+        ActionInterface action3 = new IncreaseDecreaseAction(entityDefinition, "AimAmount", new Expression(entities.get(0), "11.25"), "decrease");
+        ActionInterface action4 = new CalculationAction(entityDefinition, "LifeLeft", "divide", expression1, expression3);
+        ActionInterface action5 = new ConditionAction(entityDefinition, "AimAmount", "=",  new Expression(entities.get(0), "32.45"), new IncreaseDecreaseAction(entityDefinition, "AimAmount",
+                expression1, "increase"), action3);
+        ActionInterface action6 = new IncreaseDecreaseAction(entityDefinition, "AimAmount", expression1, "increase");
+
+        ActionInterface action7 = new ConditionAction(entityDefinition, "AimAmount", "bt", new Expression(entities.get(0),"22.11"));
+        ActionInterface action8 = new ConditionAction(entityDefinition,"LifeLeft", "lt", new Expression(entities.get(0), "random(50)"));
+        ActionInterface action9 = new MultipleConditionAction(entityDefinition,action1,action2, LogicalOperatorForSingularity.AND, (ConditionAction) action5, (ConditionAction) action7, (ConditionAction)action8);
         //Action action3 = new IncreaseAction(entity,);
         //Action action4 = new MultiplyAction(entity,);
 
         // add actions to rules
+//        rule1.addAction(action9);
         rule1.addAction(action1);
-        rule1.addAction(action2);
+//        rule1.addAction(action2);
+        rule1.addAction(action3);
 
         // add rules to lists
         rules.add(rule1);
 
-        // add entities to lists
-        entities.add(entity);
 
-        World world = new World(5, entities, rules);
+
+
         Engine engine = new Engine();
 
         world.Run();
-        System.out.println("finished building");
+        System.out.println("finished building!");
     }
 }
