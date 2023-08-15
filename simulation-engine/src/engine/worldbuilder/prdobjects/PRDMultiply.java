@@ -6,7 +6,7 @@
 //
 
 
-package engine.xml.handling;
+package engine.worldbuilder.prdobjects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,8 +24,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="random-initialize" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="init" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="arg2" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="arg1" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,52 +35,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "PRD-value")
-public class PRDValue {
+@XmlRootElement(name = "PRD-multiply")
+public class PRDMultiply {
 
-    @XmlAttribute(name = "random-initialize", required = true)
-    protected boolean randomInitialize;
-    @XmlAttribute(name = "init")
-    protected String init;
-
-    /**
-     * Gets the value of the randomInitialize property.
-     * 
-     */
-    public boolean isRandomInitialize() {
-        return randomInitialize;
-    }
+    @XmlAttribute(name = "arg2", required = true)
+    protected String arg2;
+    @XmlAttribute(name = "arg1", required = true)
+    protected String arg1;
 
     /**
-     * Sets the value of the randomInitialize property.
-     * 
-     */
-    public void setRandomInitialize(boolean value) {
-        this.randomInitialize = value;
-    }
-
-    /**
-     * Gets the value of the init property.
+     * Gets the value of the arg2 property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getInit() {
-        return init;
+    public String getArg2() {
+        return arg2;
     }
 
     /**
-     * Sets the value of the init property.
+     * Sets the value of the arg2 property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setInit(String value) {
-        this.init = value;
+    public void setArg2(String value) {
+        this.arg2 = value;
+    }
+
+    /**
+     * Gets the value of the arg1 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getArg1() {
+        return arg1;
+    }
+
+    /**
+     * Sets the value of the arg1 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setArg1(String value) {
+        this.arg1 = value;
     }
 
 }

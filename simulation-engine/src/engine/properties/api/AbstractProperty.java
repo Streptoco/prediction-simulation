@@ -20,9 +20,9 @@ public abstract class AbstractProperty implements PropertyInterface {
 
     public String getName() { return name; }
 
-    public int getFrom() { return rangeFrom; }
+    public double getFrom() { return rangeFrom; }
 
-    public int getTo() { return rangeTo; }
+    public double getTo() { return rangeTo; }
 
     public boolean getRandomStatus() { return isRandomlyGenerated; }
 

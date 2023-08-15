@@ -9,7 +9,6 @@ import engine.entity.impl.EntityDefinition;
 import engine.properties.api.PropertyInterface;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
-import engine.value.generator.FixedValueGenerator;
 
 // TODO: check if given property is indeed decimal/integer
 

@@ -13,26 +13,39 @@ import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.properties.api.AbstractProperty;
+import engine.properties.api.PropertyInterface;
 import engine.properties.impl.BooleanProperty;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
 import engine.properties.impl.StringProperty;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class World {
-    private int tickCounter;
-    private EntityInstanceManager manager;
-    private ArrayList<Rule> rules;
+    private Termination termination;
+    private Map<String, EntityInstanceManager> managers;
+    private List<Rule> rules;
+    private List<EntityDefinition> entities;
     private Environment activeEnvironment;
     //Constructors
 
-    public World(int tickCounter, EntityInstanceManager manager, ArrayList<Rule> rules) {
-        this.tickCounter = tickCounter;
-        this.manager = manager;
+    public World(Termination termination, List<EntityDefinition> entities, List<PropertyInterface> properties,
+                 List<Rule> rules) {
+        this.termination = termination;
+        this.entities = entities;
         this.rules = rules;
         this.activeEnvironment = new Environment();
+        for (PropertyInterface property : properties) {
+            activeEnvironment.setProperty(property);
+        }
+        managers = new HashMap<>();
+        for (EntityDefinition entity : entities) {
+            managers.put(entity.getName(), new EntityInstanceManager());
+            for (int i = 0; i < entity.getPopulation(); i++) {
+                managers.get(entity.getName()).create(entity);
+            }
+        }
+
     }
 
     public void Run() {
@@ -43,7 +56,7 @@ public class World {
                     rule.invokeAction(context);
                 }
             }
-
+            // TODO: make by termination...
         }
     }
 

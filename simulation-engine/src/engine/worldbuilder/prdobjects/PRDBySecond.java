@@ -6,7 +6,7 @@
 //
 
 
-package engine.xml.handling;
+package engine.worldbuilder.prdobjects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "PRD-by-ticks")
-public class PRDByTicks {
+@XmlRootElement(name = "PRD-by-second")
+public class PRDBySecond {
 
     @XmlAttribute(name = "count", required = true)
     protected int count;

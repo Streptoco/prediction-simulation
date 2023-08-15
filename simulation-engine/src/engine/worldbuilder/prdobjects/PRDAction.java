@@ -6,7 +6,7 @@
 //
 
 
-package engine.xml.handling;
+package engine.worldbuilder.prdobjects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -70,27 +70,27 @@ import javax.xml.bind.annotation.XmlType;
 public class PRDAction {
 
     @XmlElement(name = "PRD-divide")
-    protected PRDDivide prdDivide;
+    protected PRDDivide prdDivide; // method
     @XmlElement(name = "PRD-multiply")
-    protected PRDMultiply prdMultiply;
+    protected PRDMultiply prdMultiply; // method
     @XmlElement(name = "PRD-condition")
-    protected PRDCondition prdCondition;
+    protected PRDCondition prdCondition; // sug shel action
     @XmlElement(name = "PRD-then")
-    protected PRDThen prdThen;
+    protected PRDThen prdThen; // sug shel action
     @XmlElement(name = "PRD-else")
-    protected PRDElse prdElse;
+    protected PRDElse prdElse; // sug shel action
     @XmlAttribute(name = "value")
-    protected String value;
+    protected String value; // all
     @XmlAttribute(name = "type", required = true)
-    protected String type;
+    protected String type; // all
     @XmlAttribute(name = "result-prop")
-    protected String resultProp;
+    protected String resultProp; // calculation
     @XmlAttribute(name = "property")
-    protected String property;
+    protected String property; // increasedecrease
     @XmlAttribute(name = "entity", required = true)
-    protected String entity;
+    protected String entity; // increasedecrease
     @XmlAttribute(name = "by")
-    protected String by;
+    protected String by; // increasedecrease
 
     /**
      * Gets the value of the prdDivide property.

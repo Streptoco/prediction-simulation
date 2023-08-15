@@ -6,7 +6,7 @@
 //
 
 
-package engine.xml.handling;
+package engine.worldbuilder.prdobjects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

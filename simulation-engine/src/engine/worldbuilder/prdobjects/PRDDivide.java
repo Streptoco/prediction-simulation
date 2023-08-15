@@ -6,7 +6,7 @@
 //
 
 
-package engine.xml.handling;
+package engine.worldbuilder.prdobjects;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,8 +24,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="ticks" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="probability" type="{http://www.w3.org/2001/XMLSchema}double" />
+ *       &lt;attribute name="arg2" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="arg1" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,60 +35,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "PRD-activation")
-public class PRDActivation {
+@XmlRootElement(name = "PRD-divide")
+public class PRDDivide {
 
-    @XmlAttribute(name = "ticks")
-    protected Integer ticks;
-    @XmlAttribute(name = "probability")
-    protected Double probability;
+    @XmlAttribute(name = "arg2", required = true)
+    protected String arg2;
+    @XmlAttribute(name = "arg1", required = true)
+    protected String arg1;
 
     /**
-     * Gets the value of the ticks property.
+     * Gets the value of the arg2 property.
      * 
      * @return
      *     possible object is
-     *     {@link Integer }
+     *     {@link String }
      *     
      */
-    public Integer getTicks() {
-        return ticks;
+    public String getArg2() {
+        return arg2;
     }
 
     /**
-     * Sets the value of the ticks property.
+     * Sets the value of the arg2 property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Integer }
+     *     {@link String }
      *     
      */
-    public void setTicks(Integer value) {
-        this.ticks = value;
+    public void setArg2(String value) {
+        this.arg2 = value;
     }
 
     /**
-     * Gets the value of the probability property.
+     * Gets the value of the arg1 property.
      * 
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link String }
      *     
      */
-    public Double getProbability() {
-        return probability;
+    public String getArg1() {
+        return arg1;
     }
 
     /**
-     * Sets the value of the probability property.
+     * Sets the value of the arg1 property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link String }
      *     
      */
-    public void setProbability(Double value) {
-        this.probability = value;
+    public void setArg1(String value) {
+        this.arg1 = value;
     }
 
 }
