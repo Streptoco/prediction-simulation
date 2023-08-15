@@ -21,8 +21,8 @@ public class ConditionAction extends AbstractAction {
     private String propertyName;
     private boolean isConditionHappening;
 
-    public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression, ActionInterface thenAction, ActionInterface elseAction) {
-        super(ActionType.CONDITION, entityDefinition);
+    public ConditionAction(String propertyName, String operator, Expression valueExpression, ActionInterface thenAction, ActionInterface elseAction) {
+        super(ActionType.CONDITION);
         this.propertyName = propertyName;
         this.valueOperator = operator;
         this.valueExpression = valueExpression;

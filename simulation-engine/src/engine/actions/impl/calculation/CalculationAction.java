@@ -25,8 +25,8 @@ public class CalculationAction extends AbstractAction {
     private String propertyName;
     private CalculationType calculationType;
 
-    public CalculationAction(EntityDefinition entityDefinition, String propertyName, String calculationType, Expression firstArgument, Expression secondArgument) {
-        super(ActionType.CALCULATION, entityDefinition);
+    public CalculationAction(String propertyName, String calculationType, Expression firstArgument, Expression secondArgument) {
+        super(ActionType.CALCULATION);
         this.propertyName = propertyName;
         this.firstArgument = firstArgument;
         this.secondArgument = secondArgument;
