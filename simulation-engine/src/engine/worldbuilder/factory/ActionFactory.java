@@ -9,9 +9,12 @@ import engine.actions.impl.condition.impl.MultipleConditionAction;
 import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.entity.impl.EntityDefinition;
 import engine.worldbuilder.prdobjects.PRDAction;
+import engine.worldbuilder.prdobjects.PRDCondition;
 import engine.worldbuilder.prdobjects.PRDDivide;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActionFactory {
     public static ActionInterface BuildAction(PRDAction prdAction) {
@@ -40,7 +43,7 @@ public class ActionFactory {
                     arg1 = prdAction.getPRDDivide().getArg1();
                     arg2 = prdAction.getPRDDivide().getArg2();
                 }
-                resultAction = new CalculationAction(prdAction.getProperty(), calculationType, new Expression(arg1), new Expression(arg2));
+                resultAction = new CalculationAction(prdAction.getResultProp(), calculationType, new Expression(arg1), new Expression(arg2));
                 break;
             case CONDITION:
                 List<ActionInterface> thenList = new ArrayList<>();
