@@ -4,6 +4,8 @@ import engine.actions.api.ActionInterface;
 import engine.actions.api.ActionType;
 import engine.actions.expression.Expression;
 import engine.actions.impl.calculation.CalculationAction;
+import engine.actions.impl.condition.impl.ConditionAction;
+import engine.actions.impl.condition.impl.MultipleConditionAction;
 import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.entity.impl.EntityDefinition;
 import engine.worldbuilder.prdobjects.PRDAction;
@@ -12,7 +14,7 @@ import engine.worldbuilder.prdobjects.PRDDivide;
 import javax.swing.*;
 
 public class ActionFactory {
-    public static ActionInterface ActionFactory(PRDAction prdAction) {
+    public static ActionInterface BuildAction(PRDAction prdAction) {
         ActionType actionType = ActionType.convert(prdAction.getType());
         ActionInterface resultAction = null;
         switch (actionType) {
@@ -41,7 +43,29 @@ public class ActionFactory {
                 resultAction = new CalculationAction(prdAction.getProperty(), calculationType, new Expression(arg1), new Expression(arg2));
                 break;
             case CONDITION:
+                List<ActionInterface> thenList = new ArrayList<>();
+                List<ActionInterface> elseList = new ArrayList<>();
+                List<PRDAction> prdThenList = prdAction.getPRDThen().getPRDAction();
+                List<PRDAction> prdElseList = prdAction.getPRDElse().getPRDAction();
+                for(PRDAction currentAction : prdThenList) {
+                    thenList.add(ActionFactory.BuildAction(currentAction));
+                }
 
+                for(PRDAction currentAction : prdElseList) {
+                    elseList.add(ActionFactory.BuildAction(currentAction));
+                }
+
+                if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
+                    resultAction = new ConditionAction(prdAction.getProperty(), prdAction.getPRDCondition().getOperator(),
+                            new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList);
+                }
+                else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
+                    List<ActionInterface> conditionList = new ArrayList<>();
+                    for(PRDCondition condition : prdAction.getPRDCondition().getPRDCondition()) {
+
+                    }
+                    resultAction = new MultipleConditionAction(thenList,elseList, prdAction.getPRDCondition().getLogical(), prdAction.getPRDCondition().getPRDCondition())
+                }
         }
 
     }

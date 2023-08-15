@@ -15,13 +15,13 @@ public class MultipleConditionAction extends AbstractAction {
 
     private List<ConditionAction> conditionActionList;
     private LogicalOperatorForSingularity logicalOperator;
-    private ActionInterface thenAction;
-    private ActionInterface elseAction;
+    private List<ActionInterface> thenAction;
+    private List<ActionInterface> elseAction;
     private boolean wasInvoked;
-    public MultipleConditionAction(EntityDefinition entityDefinition, ActionInterface thenAction, ActionInterface elseAction,
-                                   LogicalOperatorForSingularity logicalOperator, ConditionAction... conditions) {
-        super(ActionType.CONDITION, entityDefinition);
-        this.logicalOperator = logicalOperator;
+    public MultipleConditionAction(List<ActionInterface> thenAction, List<ActionInterface> elseAction,
+                                   String logicalOperator, ConditionAction... conditions) {
+        super(ActionType.CONDITION);
+        this.logicalOperator = logicalOperator.equalsIgnoreCase("and") ? LogicalOperatorForSingularity.AND : logicalOperator.equalsIgnoreCase("or") ? LogicalOperatorForSingularity.OR : null;
         this.thenAction = thenAction;
         if (elseAction != null) {
             this.elseAction = elseAction;
@@ -35,27 +35,35 @@ public class MultipleConditionAction extends AbstractAction {
             case OR:
                 for (ConditionAction condition : conditionActionList) {
                     if (condition.getIsConditionHappening(context)) {
-                        thenAction.invoke(context);
+                        for (ActionInterface action : thenAction) {
+                            action.invoke(context);
+                        }
                         wasInvoked = true;
                         break;
                     }
                 }
                 if (!wasInvoked && (elseAction != null)) {
-                    elseAction.invoke(context);
+                    for (ActionInterface action : elseAction) {
+                        action.invoke(context);
+                    }
                 }
                 break;
             case AND:
                 for (ConditionAction condition : conditionActionList) {
                     if (!condition.getIsConditionHappening(context)) {
                         if(elseAction != null) {
-                            elseAction.invoke(context);
+                            for (ActionInterface action : elseAction) {
+                                action.invoke(context);
+                            }
                         }
                         wasInvoked = true;
                         break;
                     }
                 }
                 if (!wasInvoked && (thenAction != null)) {
-                    thenAction.invoke(context);
+                    for (ActionInterface action : thenAction) {
+                        action.invoke(context);
+                    }
                 }
                 break;
         }

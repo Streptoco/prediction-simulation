@@ -10,24 +10,25 @@ import engine.actions.expression.Expression;
 import engine.properties.api.PropertyInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ConditionAction extends AbstractAction {
 
     private PropertyInterface propertyInstance;
-    private ActionInterface thenAction;
-    private ActionInterface elseAction;
+    private List<ActionInterface> thenAction;
+    private List<ActionInterface> elseAction;
     private Expression valueExpression;
     private String valueOperator;
     private String propertyName;
     private boolean isConditionHappening;
 
-    public ConditionAction(String propertyName, String operator, Expression valueExpression, ActionInterface thenAction, ActionInterface elseAction) {
+    public ConditionAction(String propertyName, String operator, Expression valueExpression, List<ActionInterface> thenAction, List<ActionInterface> elseAction) {
         super(ActionType.CONDITION);
         this.propertyName = propertyName;
         this.valueOperator = operator;
         this.valueExpression = valueExpression;
         this.thenAction = thenAction;
-        if(elseAction != null) {
+        if(elseAction.size() != 0) {
             this.elseAction = elseAction;
         } else {
             this.elseAction = null;
@@ -46,10 +47,14 @@ public class ConditionAction extends AbstractAction {
         PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
 
         if (EvaluateExpression(result)) {
-            thenAction.invoke(context);
+            for (ActionInterface action : thenAction) {
+                action.invoke(context);
+            }
         } else {
             if (elseAction != null) {
-                elseAction.invoke(context);
+                for (ActionInterface action: elseAction) {
+                    action.invoke(context);
+                }
             }
         }
     }
