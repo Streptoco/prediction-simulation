@@ -4,13 +4,13 @@ import engine.actions.expression.ReturnType;
 
 public abstract class AbstractProperty implements PropertyInterface {
     private String name;
-    private int rangeFrom;
-    private int rangeTo;
+    private double rangeFrom;
+    private double rangeTo;
     private boolean isRandomlyGenerated;
 
     private ReturnType propertyType;
 
-    public AbstractProperty(String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated, ReturnType propertyType) {
+    public AbstractProperty(String name, double rangeFrom, double rangeTo, boolean isRandomlyGenerated, ReturnType propertyType) {
         this.name = name;
         this.rangeFrom = rangeFrom;
         this.rangeTo = rangeTo;

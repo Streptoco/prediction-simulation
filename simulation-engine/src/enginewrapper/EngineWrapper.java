@@ -1,6 +1,7 @@
 package enginewrapper;
 
 import engine.*;
+import engine.actions.api.AbstractAction;
 import engine.actions.api.ActionInterface;
 import engine.actions.expression.Expression;
 import engine.actions.impl.calculation.CalculationAction;
@@ -17,6 +18,12 @@ import engine.entity.impl.EntityInstanceManager;
 import engine.properties.api.PropertyInterface;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
+import engine.worldbuilder.prdobjects.PRDWorld;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,7 +97,17 @@ public class EngineWrapper {
         // add rules to lists
         rules.add(rule1);
 
+        try {
+            File file = new File("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\src\\engine\\ex1-cigarets.xml");
+            JAXBContext jaxbContext = JAXBContext.newInstance(PRDWorld.class);
+            Unmarshaller u = jaxbContext.createUnmarshaller();
+            PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
+            engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
+            System.out.println("lol hey");
 
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
 
 
         Engine engine = new Engine();
