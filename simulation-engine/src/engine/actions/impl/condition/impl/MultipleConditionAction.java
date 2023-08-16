@@ -13,33 +13,28 @@ import java.util.List;
 
 public class MultipleConditionAction extends AbstractAction {
 
-    private List<ConditionAction> conditionActionList;
+    private List<Condition> conditionList;
     private LogicalOperatorForSingularity logicalOperator;
     private List<ActionInterface> thenAction;
     private List<ActionInterface> elseAction;
     private boolean wasInvoked;
     public MultipleConditionAction(List<ActionInterface> thenAction, List<ActionInterface> elseAction,
-                                   String logicalOperator, ConditionAction... conditions) {
+                                   String logicalOperator, List<Condition> conditions) {
         super(ActionType.CONDITION);
         this.logicalOperator = logicalOperator.equalsIgnoreCase("and") ? LogicalOperatorForSingularity.AND : logicalOperator.equalsIgnoreCase("or") ? LogicalOperatorForSingularity.OR : null;
         this.thenAction = thenAction;
         if (elseAction != null) {
             this.elseAction = elseAction;
         }
-        conditionActionList = Arrays.asList(conditions);
-    }
-    public MultipleConditionAction(String logicalOperator, ConditionAction... conditions) {
-        super(ActionType.CONDITION);
-        this.logicalOperator = logicalOperator.equalsIgnoreCase("and") ? LogicalOperatorForSingularity.AND : logicalOperator.equalsIgnoreCase("or") ? LogicalOperatorForSingularity.OR : null;
-        conditionActionList = Arrays.asList(conditions);
+        conditionList = conditions;
     }
 
     public void invoke(Context context) {
         this.wasInvoked = false;
         switch (logicalOperator) {
             case OR:
-                for (ConditionAction condition : conditionActionList) {
-                    if (condition.getIsConditionHappening(context)) {
+                for (Condition condition : conditionList) {
+                    if (condition.evaluate(context)) {
                         for (ActionInterface action : thenAction) {
                             action.invoke(context);
                         }
@@ -54,8 +49,8 @@ public class MultipleConditionAction extends AbstractAction {
                 }
                 break;
             case AND:
-                for (ConditionAction condition : conditionActionList) {
-                    if (!condition.getIsConditionHappening(context)) {
+                for (Condition condition : conditionList) {
+                    if (!condition.evaluate(context)) {
                         if(elseAction != null) {
                             for (ActionInterface action : elseAction) {
                                 action.invoke(context);
