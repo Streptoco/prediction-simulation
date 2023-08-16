@@ -17,6 +17,6 @@ public class RuleFactory {
         for (PRDAction action : rule.getPRDActions().getPRDAction()) {
             actionList.add(ActionFactory.BuildAction(action));
         }
-        Rule newRule = new Rule(ruleName, actionList, new RuleActivation(rule.getPRDActivation().getTicks(), rule.getPRDActivation().getProbability()));
+        return new Rule(ruleName, actionList, new RuleActivation(rule.getPRDActivation().getTicks(), rule.getPRDActivation().getProbability()));
     }
 }

@@ -45,7 +45,6 @@ public class World {
                 managers.get(entity.getName()).create(entity);
             }
         }
-
     }
 
     public void Run() {
