@@ -63,13 +63,33 @@ public class ActionFactory {
                             new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList);
                 }
                 else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
-                    List<ActionInterface> conditionList = new ArrayList<>();
+                    List<ConditionAction> conditionList = new ArrayList<>();
                     for(PRDCondition condition : prdAction.getPRDCondition().getPRDCondition()) {
-
+                        if (condition.getSingularity().equalsIgnoreCase("single")) {
+                            conditionList.add(new ConditionAction(prdAction.getProperty(), prdAction.getPRDCondition().getOperator(),
+                                    new Expression(prdAction.getPRDCondition().getValue())));
+                        }
+                        else if (condition.getSingularity().equalsIgnoreCase("multiple")) {
+                            conditionList.add()
+                        }
                     }
                     resultAction = new MultipleConditionAction(thenList,elseList, prdAction.getPRDCondition().getLogical(), prdAction.getPRDCondition().getPRDCondition())
                 }
         }
+    }
+    public static ActionInterface BuildMultipleConditionWithoutAction(PRDCondition condition) {
+        List<ActionInterface> thenList = new ArrayList<>();
+        List<ActionInterface> elseList = new ArrayList<>();
+        List<PRDAction> prdThenList = condition.getPRDThen().getPRDAction();
+        List<PRDAction> prdElseList = condition.getPRDElse().getPRDAction();
+        for(PRDAction currentAction : prdThenList) {
+            thenList.add(ActionFactory.BuildAction(currentAction));
+        }
 
+        for(PRDAction currentAction : prdElseList) {
+            elseList.add(ActionFactory.BuildAction(currentAction));
+        }
+        ActionInterface resultAction = new ConditionAction(condition.getProperty(), condition.getPRDCondition().get(0).getOperator(),
+                new Expression(condition.getPRDCondition().get(0).getValue()), thenList, elseList);
     }
 }

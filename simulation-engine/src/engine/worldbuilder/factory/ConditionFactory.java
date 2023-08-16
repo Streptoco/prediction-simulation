@@ -5,6 +5,6 @@ import engine.worldbuilder.prdobjects.PRDCondition;
 
 public class ConditionFactory{
     public ActionInterface BuildCondition (PRDCondition prdCondition) {
-        
+
     }
 }
