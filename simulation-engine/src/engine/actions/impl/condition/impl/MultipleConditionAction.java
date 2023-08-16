@@ -28,6 +28,11 @@ public class MultipleConditionAction extends AbstractAction {
         }
         conditionActionList = Arrays.asList(conditions);
     }
+    public MultipleConditionAction(String logicalOperator, ConditionAction... conditions) {
+        super(ActionType.CONDITION);
+        this.logicalOperator = logicalOperator.equalsIgnoreCase("and") ? LogicalOperatorForSingularity.AND : logicalOperator.equalsIgnoreCase("or") ? LogicalOperatorForSingularity.OR : null;
+        conditionActionList = Arrays.asList(conditions);
+    }
 
     public void invoke(Context context) {
         this.wasInvoked = false;

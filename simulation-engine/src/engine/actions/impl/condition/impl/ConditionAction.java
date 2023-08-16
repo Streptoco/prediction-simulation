@@ -59,18 +59,6 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
-    public boolean EvaluateExpression(PropertyExpressionEvaluation result) {
-        if (valueOperator.equals("=")) {
-            return result.isEqual();
-        } else if (valueOperator.equals("!=")) {
-            return !result.isEqual();
-        } else if (valueOperator.equalsIgnoreCase("bt")) {
-            return result.isGreater();
-        } else {
-            return !result.isGreater();
-        }
-    }
-
     private void MultipleEvaluation() {
         // TODO: handle
     }
