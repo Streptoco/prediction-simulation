@@ -59,14 +59,15 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
-    private void MultipleEvaluation() {
-        // TODO: handle
-    }
-
-    public boolean getIsConditionHappening(Context context) {
-        propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
-        PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
-
-        return EvaluateExpression(result);
+    public boolean EvaluateExpression(PropertyExpressionEvaluation result) {
+        if (valueOperator.equals("=")) {
+            return result.isEqual();
+        } else if (valueOperator.equals("!=")) {
+            return !result.isEqual();
+        } else if (valueOperator.equalsIgnoreCase("bt")) {
+            return result.isGreater();
+        } else {
+            return !result.isGreater();
+        }
     }
 }

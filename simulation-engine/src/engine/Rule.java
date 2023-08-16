@@ -4,18 +4,17 @@ import engine.actions.api.ActionInterface;
 import engine.context.api.Context;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Rule {
     private String name;
-    private int tickIntervals;
-    private double probability;
-    private ArrayList<ActionInterface> actions;
+    RuleActivation activation;
+    private List<ActionInterface> actions;
 
-    public Rule(String name, int tickIntervals, double probability) {
+    public Rule(String name, List<ActionInterface> actions, RuleActivation activation) {
         this.name = name;
-        this.tickIntervals = tickIntervals;
-        this.probability = probability;
-        this.actions = new ArrayList<ActionInterface>();
+        this.activation = activation;
+        this.actions = actions;
     }
 
     public void addAction(ActionInterface action) {
@@ -23,9 +22,7 @@ public class Rule {
     }
 
     public boolean activation(int currentTickCount) {
-        //TODO: add timing and probability generator so that we could see if it should be activated.
-        //TODO: add "isActive" method?
-        return true;
+        return activation.checkActivation(currentTickCount);
     }
 
     public void invokeAction(Context context) {
