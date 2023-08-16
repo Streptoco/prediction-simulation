@@ -1,7 +1,4 @@
 package engine.worldbuilder.factory;
-        property.setPRDValue();
-        return BuildProperty(property);
-    }
 
         import engine.actions.expression.ReturnType;
         import engine.properties.api.PropertyInterface;
