@@ -42,7 +42,7 @@ public class Expression {
             type = Type.FUNCTION;
             this.returnType = ReturnType.INT;
             double stringValue = Double.parseDouble(name.replaceAll("[^0-9]", ""));
-            castedNumber = randomGetter((int)stringValue);
+            castedNumber = NumberRandomGetter(0,stringValue);
             this.returnType = ReturnType.INT;
         }
 

@@ -17,6 +17,21 @@ public class RuleFactory {
         for (PRDAction action : rule.getPRDActions().getPRDAction()) {
             actionList.add(ActionFactory.BuildAction(action));
         }
-        return new Rule(ruleName, actionList, new RuleActivation(rule.getPRDActivation().getTicks(), rule.getPRDActivation().getProbability()));
+        RuleActivation activation = null;
+        if (rule.getPRDActivation() != null) {
+            if (rule.getPRDActivation().getTicks() != null && rule.getPRDActivation().getProbability() != null) {
+                activation = new RuleActivation(rule.getPRDActivation().getTicks(), rule.getPRDActivation().getProbability());
+            } else if (rule.getPRDActivation().getProbability() != null) {
+                activation = new RuleActivation(rule.getPRDActivation().getProbability());
+            } else if (rule.getPRDActivation().getTicks() != null) {
+                activation = new RuleActivation(rule.getPRDActivation().getTicks());
+            } else {
+                // TODO: handle exception
+            }
+            return new Rule(ruleName, actionList, activation);
+        }
+        else {
+            return new Rule(ruleName,actionList, new RuleActivation());
+        }
     }
 }

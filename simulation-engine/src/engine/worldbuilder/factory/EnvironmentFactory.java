@@ -23,12 +23,16 @@ public class EnvironmentFactory {
             switch (propertyType) {
                 case INT:
                     envProperties.add((IntProperty)PropertyFactory.BuildProperty(prdEnvProperty));
+                    break;
                 case DECIMAL:
                     envProperties.add((DecimalProperty)PropertyFactory.BuildProperty(prdEnvProperty));
+                    break;
                 case BOOLEAN:
                     envProperties.add((BooleanProperty)PropertyFactory.BuildProperty(prdEnvProperty));
+                    break;
                 case STRING:
                     envProperties.add((StringProperty)PropertyFactory.BuildProperty(prdEnvProperty));
+                    break;
             }
         }
 

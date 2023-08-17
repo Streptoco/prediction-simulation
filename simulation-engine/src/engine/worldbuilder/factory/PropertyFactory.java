@@ -1,5 +1,6 @@
 package engine.worldbuilder.factory;
 
+        import engine.World;
         import engine.actions.expression.ReturnType;
         import engine.properties.api.PropertyInterface;
         import engine.properties.impl.BooleanProperty;
@@ -9,6 +10,8 @@ package engine.worldbuilder.factory;
         import engine.worldbuilder.prdobjects.PRDEnvProperty;
         import engine.worldbuilder.prdobjects.PRDProperty;
         import engine.worldbuilder.prdobjects.PRDValue;
+
+        import java.util.Random;
 
 public class PropertyFactory {
     public static PropertyInterface BuildProperty(PRDProperty prdProperty) {
@@ -21,16 +24,34 @@ public class PropertyFactory {
         PropertyInterface resultProperty = null;
         switch (returnType) {
             case INT:
-                int intFromValue = Integer.parseInt(prdProperty.getPRDValue().getInit());
-                resultProperty = new IntProperty(intFromValue, propertyName, from, to, isRandom);
+                if (isRandom) {
+                    double randomValue = World.NumberRandomGetter(from, to);
+                    resultProperty = new IntProperty((int) randomValue, propertyName, from, to, isRandom);
+                }
+                else {
+                    int intFromValue = Integer.parseInt(prdProperty.getPRDValue().getInit());
+                    resultProperty = new IntProperty(intFromValue, propertyName, from, to, isRandom);
+                }
                 break;
             case DECIMAL:
-                double doubleFromValue = Double.parseDouble(prdProperty.getPRDValue().getInit());
-                resultProperty = new DecimalProperty(doubleFromValue, propertyName, from, to, isRandom);
+                if (isRandom) {
+                    double randomValue = World.NumberRandomGetter(from, to);
+                    resultProperty = new DecimalProperty(randomValue, propertyName, from, to, isRandom);
+                }
+                else {
+                    double doubleFromValue = Double.parseDouble(prdProperty.getPRDValue().getInit());
+                    resultProperty = new DecimalProperty(doubleFromValue, propertyName, from, to, isRandom);
+                }
                 break;
             case BOOLEAN:
-                boolean booleanFromValue = Boolean.parseBoolean(prdProperty.getPRDValue().getInit());
-                resultProperty = new BooleanProperty(booleanFromValue, propertyName, from, to, isRandom);
+                if (isRandom) {
+                    boolean randomValue = World.BooleanRandomGetter();
+                    resultProperty = new BooleanProperty(randomValue,propertyName,from,to,isRandom);
+                }
+                else {
+                    boolean booleanFromValue = Boolean.parseBoolean(prdProperty.getPRDValue().getInit());
+                    resultProperty = new BooleanProperty(booleanFromValue, propertyName, from, to, isRandom);
+                }
                 break;
             case STRING:
                 resultProperty = new StringProperty(prdProperty.getPRDValue().getInit(), from, to, isRandom);

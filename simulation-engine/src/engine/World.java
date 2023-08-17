@@ -62,9 +62,14 @@ public class    World {
         }
     }
 
-    public static int randomGetter(int randomNumberUpperBound) {
+    public static double NumberRandomGetter(double rangeMin, double rangeMax) {
         Random random = new Random();
-        return random.nextInt(randomNumberUpperBound);
+        return rangeMin + (rangeMax - rangeMin) * random.nextDouble();
+    }
+
+    public static boolean BooleanRandomGetter() {
+        Random random = new Random();
+        return random.nextBoolean();
     }
 
     public Environment getEnvironment() { return activeEnvironment; }
