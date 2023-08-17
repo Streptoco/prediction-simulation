@@ -6,7 +6,7 @@ import engine.context.api.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Rule {
+public class  Rule {
     private String name;
     RuleActivation activation;
     private List<ActionInterface> actions;

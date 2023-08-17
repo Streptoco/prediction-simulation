@@ -22,7 +22,7 @@ import engine.properties.impl.StringProperty;
 import java.sql.Time;
 import java.util.*;
 
-public class World {
+public class    World {
     private Termination termination;
     private Map<String, EntityInstanceManager> managers;
     private List<Rule> rules;

@@ -49,5 +49,7 @@ public class PropertyFactory {
         String tempValString = String.valueOf(prdEnvProperty.getPRDRange().getFrom());
         PRDValue tempVal = new PRDValue();
         tempVal.setInit(tempValString);
-
+        property.setPRDValue(tempVal);
+        return BuildProperty(property);
     }
+}
