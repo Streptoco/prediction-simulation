@@ -9,7 +9,6 @@ import engine.entity.impl.EntityDefinition;
 import engine.properties.api.PropertyInterface;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
-import engine.value.generator.FixedValueGenerator;
 
 // TODO: check if given property is indeed decimal/integer
 
@@ -26,8 +25,8 @@ public class CalculationAction extends AbstractAction {
     private String propertyName;
     private CalculationType calculationType;
 
-    public CalculationAction(EntityDefinition entityDefinition, String propertyName, String calculationType, Expression firstArgument, Expression secondArgument) {
-        super(ActionType.CALCULATION, entityDefinition);
+    public CalculationAction(String propertyName, String calculationType, Expression firstArgument, Expression secondArgument) {
+        super(ActionType.CALCULATION);
         this.propertyName = propertyName;
         this.firstArgument = firstArgument;
         this.secondArgument = secondArgument;

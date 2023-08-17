@@ -9,7 +9,7 @@ import engine.properties.api.PropertyType;
 public class DecimalProperty extends AbstractProperty {
     private double value;
 
-    public DecimalProperty(double value, String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
+    public DecimalProperty(double value, String name, double rangeFrom, double rangeTo, boolean isRandomlyGenerated) {
         super(name,rangeFrom,rangeTo,isRandomlyGenerated, ReturnType.DECIMAL);
         this.value = value;
     }
@@ -34,7 +34,7 @@ public class DecimalProperty extends AbstractProperty {
     }
 
     public PropertyExpressionEvaluation evaluate(Expression expression) {
-        double expresionValue = (double) expression.getValue();
+        double expresionValue = expression.getCastedNumber().doubleValue();
         PropertyExpressionEvaluation result;
         if(this.value == expresionValue) {
             result = new PropertyExpressionEvaluation(true, false);

@@ -13,43 +13,63 @@ import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.properties.api.AbstractProperty;
+import engine.properties.api.PropertyInterface;
 import engine.properties.impl.BooleanProperty;
 import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
 import engine.properties.impl.StringProperty;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.sql.Time;
+import java.util.*;
 
-public class World {
-    private int tickCounter;
-    private EntityInstanceManager manager;
-    private ArrayList<Rule> rules;
+public class    World {
+    private Termination termination;
+    private Map<String, EntityInstanceManager> managers;
+    private List<Rule> rules;
+    private List<EntityDefinition> entities;
     private Environment activeEnvironment;
+    private long time;
     //Constructors
 
-    public World(int tickCounter, EntityInstanceManager manager, ArrayList<Rule> rules) {
-        this.tickCounter = tickCounter;
-        this.manager = manager;
+    public World(Termination termination, List<EntityDefinition> entities, Environment environment,
+                 List<Rule> rules) {
+        this.time = System.currentTimeMillis();
+        this.termination = termination;
+        this.entities = entities;
         this.rules = rules;
-        this.activeEnvironment = new Environment();
-    }
-
-    public void Run() {
-        for (int i = 0; i < tickCounter; i++) {
-            for(EntityInstance currentInstance : manager.getInstances()) {
-                ContextImpl context = new ContextImpl(currentInstance, manager, activeEnvironment);
-                for (Rule rule : rules) {
-                    rule.invokeAction(context);
-                }
+        this.activeEnvironment = environment;
+        managers = new HashMap<>();
+        for (EntityDefinition entity : entities) {
+            managers.put(entity.getName(), new EntityInstanceManager());
+            for (int i = 0; i < entity.getPopulation(); i++) {
+                managers.get(entity.getName()).create(entity);
             }
-
         }
     }
 
-    public static int randomGetter(int randomNumberUpperBound) {
+    public void Run() {
+        int ticks = 0;
+        while (!termination.getTermination(ticks, System.currentTimeMillis())) {
+            for(EntityDefinition currentEntity : entities) {
+                for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
+                    ContextImpl context = new ContextImpl(currentInstance, managers.get(currentEntity.getName()), activeEnvironment);
+                    for (Rule rule : rules) {
+                        rule.invokeAction(context);
+                    }
+                }
+            }
+            ticks++;
+        }
+    }
+
+    public static double NumberRandomGetter(double rangeMin, double rangeMax) {
         Random random = new Random();
-        return random.nextInt(randomNumberUpperBound);
+        return rangeMin + (rangeMax - rangeMin) * random.nextDouble();
+    }
+
+    public static boolean BooleanRandomGetter() {
+        Random random = new Random();
+        return random.nextBoolean();
     }
 
     public Environment getEnvironment() { return activeEnvironment; }

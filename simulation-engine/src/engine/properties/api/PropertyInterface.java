@@ -9,9 +9,9 @@ import engine.actions.impl.condition.api.PropertyExpressionEvaluation;
 public interface PropertyInterface {
     public String getName();
 
-    public int getFrom();
+    public double getFrom();
 
-    public int getTo();
+    public double getTo();
 
     public boolean getRandomStatus();
 

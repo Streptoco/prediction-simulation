@@ -9,7 +9,8 @@ import engine.properties.api.PropertyType;
 public class StringProperty extends AbstractProperty {
     private String value;
 
-    public StringProperty(String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
+    public StringProperty(String name, double rangeFrom, double rangeTo, boolean isRandomlyGenerated) {
+        //TODO: Why the name is the value?
         super(name, rangeFrom, rangeTo, isRandomlyGenerated, ReturnType.STRING);
         this.value = name;
     }

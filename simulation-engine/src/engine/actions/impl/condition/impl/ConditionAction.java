@@ -10,32 +10,33 @@ import engine.actions.expression.Expression;
 import engine.properties.api.PropertyInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ConditionAction extends AbstractAction {
 
     private PropertyInterface propertyInstance;
-    private ActionInterface thenAction;
-    private ActionInterface elseAction;
+    private List<ActionInterface> thenAction;
+    private List<ActionInterface> elseAction;
     private Expression valueExpression;
     private String valueOperator;
     private String propertyName;
     private boolean isConditionHappening;
 
-    public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression, ActionInterface thenAction, ActionInterface elseAction) {
-        super(ActionType.CONDITION, entityDefinition);
+    public ConditionAction(String propertyName, String operator, Expression valueExpression, List<ActionInterface> thenAction, List<ActionInterface> elseAction) {
+        super(ActionType.CONDITION);
         this.propertyName = propertyName;
         this.valueOperator = operator;
         this.valueExpression = valueExpression;
         this.thenAction = thenAction;
-        if(elseAction != null) {
+        if(elseAction.size() != 0) {
             this.elseAction = elseAction;
         } else {
             this.elseAction = null;
         }
     }
 
-    public ConditionAction(EntityDefinition entityDefinition, String propertyName, String operator, Expression valueExpression) {
-        super(ActionType.CONDITION, entityDefinition);
+    public ConditionAction(String propertyName, String operator, Expression valueExpression) {
+        super(ActionType.CONDITION);
         this.valueExpression = valueExpression;
         this.valueOperator = operator;
         this.propertyName = propertyName;
@@ -46,10 +47,14 @@ public class ConditionAction extends AbstractAction {
         PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
 
         if (EvaluateExpression(result)) {
-            thenAction.invoke(context);
+            for (ActionInterface action : thenAction) {
+                action.invoke(context);
+            }
         } else {
             if (elseAction != null) {
-                elseAction.invoke(context);
+                for (ActionInterface action: elseAction) {
+                    action.invoke(context);
+                }
             }
         }
     }
@@ -64,16 +69,5 @@ public class ConditionAction extends AbstractAction {
         } else {
             return !result.isGreater();
         }
-    }
-
-    private void MultipleEvaluation() {
-        // TODO: handle
-    }
-
-    public boolean getIsConditionHappening(Context context) {
-        propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
-        PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
-
-        return EvaluateExpression(result);
     }
 }

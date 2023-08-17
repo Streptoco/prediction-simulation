@@ -11,7 +11,7 @@ import engine.properties.api.PropertyType;
 public class IntProperty extends AbstractProperty {
     private int value;
 
-    public IntProperty(int value, String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
+    public IntProperty(int value, String name, double rangeFrom, double rangeTo, boolean isRandomlyGenerated) {
         super(name,rangeFrom,rangeTo,isRandomlyGenerated, ReturnType.INT);
         this.value = value;
     }

@@ -24,8 +24,8 @@ public class IncreaseDecreaseAction extends AbstractAction {
     IncreaseDecrease increaseDecrease;
     String propertyName;
 
-    public IncreaseDecreaseAction(EntityDefinition entityDefinition, String propertyName, Expression increaseBy, String type) {
-        super(ActionType.INCREASE,entityDefinition);
+    public IncreaseDecreaseAction(String propertyName, Expression increaseBy, String type) {
+        super(ActionType.INCREASE);
         this.propertyName = propertyName;
         this.increaseBy = increaseBy;
         if (type.equalsIgnoreCase("increase")) {
@@ -41,6 +41,7 @@ public class IncreaseDecreaseAction extends AbstractAction {
 
     public void invoke(Context context) { // why not first get the property type and then work from there. if it's increase it can't be boolean or string.
         propertyToIncrease = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        this.increaseBy.evaluateExpression(context);
         if (this.increaseDecrease.equals(IncreaseDecrease.INCREASE)) {
             if (propertyToIncrease.getPropertyType().equals(ReturnType.INT)) {
                 IntProperty intProperty = (IntProperty)propertyToIncrease;

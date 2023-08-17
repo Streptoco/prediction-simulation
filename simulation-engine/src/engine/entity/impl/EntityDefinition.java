@@ -23,4 +23,8 @@ public class EntityDefinition implements EntityDefinitionInterface {
     public int getPopulation() { return population; }
 
     public ArrayList<PropertyInterface> getProps() { return propertyList; }
+
+    public void addProperty(PropertyInterface newProperty) {
+        propertyList.add(newProperty);
+    }
 }

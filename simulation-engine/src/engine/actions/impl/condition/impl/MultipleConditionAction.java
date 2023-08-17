@@ -13,49 +13,57 @@ import java.util.List;
 
 public class MultipleConditionAction extends AbstractAction {
 
-    private List<ConditionAction> conditionActionList;
+    private List<Condition> conditionList;
     private LogicalOperatorForSingularity logicalOperator;
-    private ActionInterface thenAction;
-    private ActionInterface elseAction;
+    private List<ActionInterface> thenAction;
+    private List<ActionInterface> elseAction;
     private boolean wasInvoked;
-    public MultipleConditionAction(EntityDefinition entityDefinition, ActionInterface thenAction, ActionInterface elseAction,
-                                   LogicalOperatorForSingularity logicalOperator, ConditionAction... conditions) {
-        super(ActionType.CONDITION, entityDefinition);
-        this.logicalOperator = logicalOperator;
+    public MultipleConditionAction(List<ActionInterface> thenAction, List<ActionInterface> elseAction,
+                                   String logicalOperator, List<Condition> conditions) {
+        super(ActionType.CONDITION);
+        this.logicalOperator = logicalOperator.equalsIgnoreCase("and") ? LogicalOperatorForSingularity.AND : logicalOperator.equalsIgnoreCase("or") ? LogicalOperatorForSingularity.OR : null;
         this.thenAction = thenAction;
         if (elseAction != null) {
             this.elseAction = elseAction;
         }
-        conditionActionList = Arrays.asList(conditions);
+        conditionList = conditions;
     }
 
     public void invoke(Context context) {
         this.wasInvoked = false;
         switch (logicalOperator) {
             case OR:
-                for (ConditionAction condition : conditionActionList) {
-                    if (condition.getIsConditionHappening(context)) {
-                        thenAction.invoke(context);
+                for (Condition condition : conditionList) {
+                    if (condition.evaluate(context)) {
+                        for (ActionInterface action : thenAction) {
+                            action.invoke(context);
+                        }
                         wasInvoked = true;
                         break;
                     }
                 }
                 if (!wasInvoked && (elseAction != null)) {
-                    elseAction.invoke(context);
+                    for (ActionInterface action : elseAction) {
+                        action.invoke(context);
+                    }
                 }
                 break;
             case AND:
-                for (ConditionAction condition : conditionActionList) {
-                    if (!condition.getIsConditionHappening(context)) {
+                for (Condition condition : conditionList) {
+                    if (!condition.evaluate(context)) {
                         if(elseAction != null) {
-                            elseAction.invoke(context);
+                            for (ActionInterface action : elseAction) {
+                                action.invoke(context);
+                            }
                         }
                         wasInvoked = true;
                         break;
                     }
                 }
                 if (!wasInvoked && (thenAction != null)) {
-                    thenAction.invoke(context);
+                    for (ActionInterface action : thenAction) {
+                        action.invoke(context);
+                    }
                 }
                 break;
         }

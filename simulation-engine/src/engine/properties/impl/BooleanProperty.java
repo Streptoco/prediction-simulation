@@ -9,7 +9,7 @@ import engine.properties.api.PropertyType;
 public class BooleanProperty extends AbstractProperty {
     private boolean value;
 
-    public BooleanProperty(boolean value, String name, int rangeFrom, int rangeTo, boolean isRandomlyGenerated) {
+    public BooleanProperty(boolean value, String name, double rangeFrom, double rangeTo, boolean isRandomlyGenerated) {
         super(name, rangeFrom, rangeTo, isRandomlyGenerated, ReturnType.BOOLEAN);
         this.value = value;
     }
