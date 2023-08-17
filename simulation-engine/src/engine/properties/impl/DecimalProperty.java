@@ -34,7 +34,7 @@ public class DecimalProperty extends AbstractProperty {
     }
 
     public PropertyExpressionEvaluation evaluate(Expression expression) {
-        double expresionValue = (double) expression.getValue();
+        double expresionValue = expression.getCastedNumber().doubleValue();
         PropertyExpressionEvaluation result;
         if(this.value == expresionValue) {
             result = new PropertyExpressionEvaluation(true, false);
