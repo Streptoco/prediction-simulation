@@ -49,13 +49,14 @@ public class ActionFactory {
                 List<ActionInterface> thenList = new ArrayList<>();
                 List<ActionInterface> elseList = new ArrayList<>();
                 List<PRDAction> prdThenList = prdAction.getPRDThen().getPRDAction();
-                List<PRDAction> prdElseList = prdAction.getPRDElse().getPRDAction();
+                List<PRDAction> prdElseList = prdAction.getPRDElse() == null ? null : prdAction.getPRDElse().getPRDAction();
                 for(PRDAction currentAction : prdThenList) {
                     thenList.add(ActionFactory.BuildAction(currentAction));
                 }
-
-                for(PRDAction currentAction : prdElseList) {
-                    elseList.add(ActionFactory.BuildAction(currentAction));
+                if(prdElseList != null) {
+                    for (PRDAction currentAction : prdElseList) {
+                        elseList.add(ActionFactory.BuildAction(currentAction));
+                    }
                 }
 
                 if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
