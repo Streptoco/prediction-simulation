@@ -19,6 +19,7 @@ import engine.properties.impl.DecimalProperty;
 import engine.properties.impl.IntProperty;
 import engine.properties.impl.StringProperty;
 
+import java.sql.Time;
 import java.util.*;
 
 public class World {
@@ -27,17 +28,16 @@ public class World {
     private List<Rule> rules;
     private List<EntityDefinition> entities;
     private Environment activeEnvironment;
+    private long time;
     //Constructors
 
-    public World(Termination termination, List<EntityDefinition> entities, List<PropertyInterface> properties,
+    public World(Termination termination, List<EntityDefinition> entities, Environment environment,
                  List<Rule> rules) {
+        this.time = System.currentTimeMillis();
         this.termination = termination;
         this.entities = entities;
         this.rules = rules;
-        this.activeEnvironment = new Environment();
-        for (PropertyInterface property : properties) {
-            activeEnvironment.setProperty(property);
-        }
+        this.activeEnvironment = environment;
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());
@@ -48,14 +48,17 @@ public class World {
     }
 
     public void Run() {
-        for (int i = 0; i < tickCounter; i++) {
-            for(EntityInstance currentInstance : manager.getInstances()) {
-                ContextImpl context = new ContextImpl(currentInstance, manager, activeEnvironment);
-                for (Rule rule : rules) {
-                    rule.invokeAction(context);
+        int ticks = 0;
+        while (!termination.getTermination(ticks, System.currentTimeMillis())) {
+            for(EntityDefinition currentEntity : entities) {
+                for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
+                    ContextImpl context = new ContextImpl(currentInstance, managers.get(currentEntity.getName()), activeEnvironment);
+                    for (Rule rule : rules) {
+                        rule.invokeAction(context);
+                    }
                 }
             }
-            // TODO: make by termination...
+            ticks++;
         }
     }
 
