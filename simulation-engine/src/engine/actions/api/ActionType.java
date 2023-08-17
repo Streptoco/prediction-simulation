@@ -6,6 +6,8 @@ public enum ActionType {
     INCREASE,
     DECREASE,
     CALCULATION,
+    SET,
+    KILL,
     CONDITION;
     public static ActionType convert(String name) {
         if(name.equalsIgnoreCase("increase")) {
@@ -16,7 +18,15 @@ public enum ActionType {
             return CALCULATION;
         } else if(name.equalsIgnoreCase("condition")) {
             return CONDITION;
-        } else {
+        }
+        else if (name.equalsIgnoreCase("kill")) {
+            return KILL;
+
+        }
+        else if (name.equalsIgnoreCase("set")) {
+            return SET;
+        }
+        else {
             throw new RuntimeException(); //TODO: fix this
         }
     }
