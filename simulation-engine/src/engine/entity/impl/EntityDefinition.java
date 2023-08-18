@@ -1,9 +1,7 @@
 package engine.entity.impl;
 
 import engine.entity.api.EntityDefinitionInterface;
-import engine.properties.api.AbstractProperty;
-import engine.properties.api.PropertyInterface;
-import engine.properties.api.PropertyType;
+import engine.property.api.PropertyInterface;
 
 import java.util.ArrayList;
 

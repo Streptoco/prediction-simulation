@@ -12,6 +12,8 @@ public class Termination {
     }
 
     public boolean getTermination(int currentTick, long outerTimeInMillis) {
-        return (currentTick >= this.ticks || outerTimeInMillis >= this.howManySecondsToRun);
+        long currentTime = System.currentTimeMillis();
+        currentTime -= outerTimeInMillis;
+        return (currentTick >= this.ticks || currentTime >= this.howManySecondsToRun);
     }
 }

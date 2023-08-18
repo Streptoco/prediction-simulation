@@ -1,7 +1,7 @@
 package engine.context.api;
 
 import engine.entity.impl.EntityInstance;
-import engine.properties.api.PropertyInterface;
+import engine.property.api.PropertyInterface;
 
 public interface Context {
     EntityInstance getPrimaryEntityInstance();

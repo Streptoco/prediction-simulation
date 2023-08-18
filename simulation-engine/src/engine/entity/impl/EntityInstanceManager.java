@@ -1,11 +1,10 @@
 package engine.entity.impl;
 
-import engine.properties.api.AbstractProperty;
-import engine.properties.api.PropertyInterface;
-import engine.properties.impl.BooleanProperty;
-import engine.properties.impl.DecimalProperty;
-import engine.properties.impl.IntProperty;
-import engine.properties.impl.StringProperty;
+import engine.property.api.PropertyInterface;
+import engine.property.impl.BooleanProperty;
+import engine.property.impl.DecimalProperty;
+import engine.property.impl.IntProperty;
+import engine.property.impl.StringProperty;
 
 import java.util.ArrayList;
 import java.util.List;

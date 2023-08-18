@@ -1,7 +1,7 @@
 package engine.entity.impl;
 
 import engine.entity.api.EntityInstanceInterface;
-import engine.properties.api.PropertyInterface;
+import engine.property.api.PropertyInterface;
 
 import java.util.HashMap;
 import java.util.Map;

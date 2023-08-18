@@ -7,19 +7,11 @@ package engine;
 
 //TODO: in the loop, when it ends, return why it ended.
 
-import engine.actions.expression.ReturnType;
 import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
-import engine.properties.api.AbstractProperty;
-import engine.properties.api.PropertyInterface;
-import engine.properties.impl.BooleanProperty;
-import engine.properties.impl.DecimalProperty;
-import engine.properties.impl.IntProperty;
-import engine.properties.impl.StringProperty;
 
-import java.sql.Time;
 import java.util.*;
 
 public class    World {
@@ -28,12 +20,12 @@ public class    World {
     private List<Rule> rules;
     private List<EntityDefinition> entities;
     private Environment activeEnvironment;
-    private long time;
+    private long currentTime;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
                  List<Rule> rules) {
-        this.time = System.currentTimeMillis();
+        this.currentTime = System.currentTimeMillis();
         this.termination = termination;
         this.entities = entities;
         this.rules = rules;
@@ -49,7 +41,7 @@ public class    World {
 
     public void Run() {
         int ticks = 0;
-        while (!termination.getTermination(ticks, System.currentTimeMillis())) {
+        while (!termination.getTermination(ticks, currentTime)) {
             for(EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
                     ContextImpl context = new ContextImpl(currentInstance, managers.get(currentEntity.getName()), activeEnvironment);

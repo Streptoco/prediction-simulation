@@ -1,6 +1,6 @@
 package engine.entity.api;
 
-import engine.properties.api.PropertyInterface;
+import engine.property.api.PropertyInterface;
 
 public interface EntityInstanceInterface {
     int getId();
