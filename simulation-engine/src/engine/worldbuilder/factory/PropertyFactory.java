@@ -60,9 +60,9 @@ public class PropertyFactory {
                 break;
             case STRING:
                 if (isRandom) {
-                    resultProperty = new StringProperty(World.StringRandomGetter(), from, to, isRandom);
+                    resultProperty = new StringProperty(propertyName, World.StringRandomGetter(), from, to, isRandom);
                 } else {
-                    resultProperty = new StringProperty(prdProperty.getPRDValue().getInit(), from, to, isRandom);
+                    resultProperty = new StringProperty(propertyName, prdProperty.getPRDValue().getInit(), from, to, isRandom);
                 }
                 break;
             default: // TODO: throw exception.

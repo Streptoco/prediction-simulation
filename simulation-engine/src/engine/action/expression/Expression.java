@@ -90,6 +90,11 @@ public class Expression {
         } catch (NumberFormatException e) {
             //
         }
+        if(!(name.equalsIgnoreCase("true") || name.equalsIgnoreCase("false"))) {
+            castedValueOfExpression = (String) name;
+            this.returnType = ReturnType.STRING;
+            return;
+        }
         try {
             castedValueOfExpression = Boolean.parseBoolean(name);
             this.returnType = ReturnType.BOOLEAN;
@@ -97,8 +102,7 @@ public class Expression {
         } catch (NumberFormatException e) {
             //
         }
-        this.returnType = ReturnType.STRING;
-        return;
+
     }
 
     public Object getValue() { return castedValueOfExpression; }

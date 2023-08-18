@@ -79,8 +79,8 @@ public class EngineWrapper {
 //        rules.add(rule1);
 
         try {
-            File file = new File("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex1-cigarets.xml");
-            //File file = new File("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\master-ex1.xml");
+            //File file = new File("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex1-cigarets.xml");
+            File file = new File("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\master-ex1.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(PRDWorld.class);
             Unmarshaller u = jaxbContext.createUnmarshaller();
             PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);

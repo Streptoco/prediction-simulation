@@ -41,7 +41,7 @@ public class EntityInstanceManager {
                     newPropertyInstance = new DecimalProperty((double)propertyValue, currentProperty.getName(), currentProperty.getFrom(), currentProperty.getTo(), currentProperty.getRandomStatus() );
                     break;
                 case STRING:
-                    newPropertyInstance = new StringProperty((String)propertyValue, currentProperty.getFrom(), currentProperty.getTo(), currentProperty.getRandomStatus() );
+                    newPropertyInstance = new StringProperty(currentProperty.getName(), (String) propertyValue, currentProperty.getFrom(), currentProperty.getTo(), currentProperty.getRandomStatus() );
                     break;
                 case BOOLEAN:
                     if (currentProperty.getRandomStatus()) {
