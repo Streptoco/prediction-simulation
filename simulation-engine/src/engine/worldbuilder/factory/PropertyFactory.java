@@ -23,7 +23,7 @@ public class PropertyFactory {
         switch (returnType) {
             case INT:
                 if (isRandom) {
-                    double randomValue = World.NumberRandomGetter(from, to);
+                    double randomValue = World.NumberRandomGetter(from, to); // TODO: change to minimal values.
                     resultProperty = new IntProperty((int) randomValue, propertyName, from, to, isRandom);
                 }
                 else {
