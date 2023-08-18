@@ -10,11 +10,13 @@ public class EntityInstance implements EntityInstanceInterface {
     private EntityDefinition entityDefinition;
     private int id;
     private Map<String, PropertyInterface> properties;
+    private boolean isAlive;
 
     public EntityInstance(EntityDefinition entityDefinition, int id) {
         this.entityDefinition = entityDefinition;
         this.id = id;
         properties = new HashMap<>();
+        this.isAlive = true;
     }
 
     public int getId() {
@@ -33,4 +35,8 @@ public class EntityInstance implements EntityInstanceInterface {
     public void addProperty(PropertyInterface property) {
         properties.put(property.getName(), property);
     }
+
+    public void setDead() { this.isAlive = false;}
+
+    public boolean isAlive() { return this.isAlive; }
 }
