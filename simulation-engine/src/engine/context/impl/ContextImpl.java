@@ -4,7 +4,7 @@ import engine.Environment;
 import engine.context.api.Context;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
-import engine.properties.api.PropertyInterface;
+import engine.property.api.PropertyInterface;
 
 public class ContextImpl implements Context {
     private EntityInstance primaryEntityInstance;
@@ -23,8 +23,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public void removeEntity(EntityInstance entityInstance) {
-        //entityInstanceManager.killEntity(entityInstance.getId());
+    public void removeEntity() {
+        entityInstanceManager.killEntity(primaryEntityInstance);
     }
 
     @Override

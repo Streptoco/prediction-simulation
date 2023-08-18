@@ -1,18 +1,17 @@
 package engine.worldbuilder.factory;
 
-import engine.actions.api.ActionInterface;
-import engine.actions.api.ActionType;
-import engine.actions.expression.Expression;
-import engine.actions.impl.calculation.CalculationAction;
-import engine.actions.impl.condition.impl.ConditionAction;
-import engine.actions.impl.condition.impl.MultipleConditionAction;
-import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
-import engine.entity.impl.EntityDefinition;
+import engine.action.api.ActionInterface;
+import engine.action.api.ActionType;
+import engine.action.expression.Expression;
+import engine.action.impl.calculation.CalculationAction;
+import engine.action.impl.condition.impl.ConditionAction;
+import engine.action.impl.condition.impl.MultipleConditionAction;
+import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
+import engine.action.impl.kill.KillAction;
+import engine.action.impl.set.SetAction;
 import engine.worldbuilder.prdobjects.PRDAction;
-import engine.worldbuilder.prdobjects.PRDCondition;
 import engine.worldbuilder.prdobjects.PRDDivide;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,13 +59,20 @@ public class ActionFactory {
                 }
 
                 if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
-                    resultAction = new ConditionAction(prdAction.getProperty(), prdAction.getPRDCondition().getOperator(),
+                    resultAction = new ConditionAction(prdAction.getPRDCondition().getProperty(), prdAction.getPRDCondition().getOperator(),
                             new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList);
                 }
                 else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
                     resultAction = new MultipleConditionAction(thenList,elseList, prdAction.getPRDCondition().getLogical(),
                             ConditionFactory.BuildConditionFromList(prdAction.getPRDCondition().getPRDCondition()));
                 }
+                break;
+            case SET:
+                resultAction = new SetAction(prdAction.getProperty(), new Expression(prdAction.getValue()));
+                break;
+            case KILL:
+                resultAction = new KillAction();
+                break;
         }
         return resultAction;
     }

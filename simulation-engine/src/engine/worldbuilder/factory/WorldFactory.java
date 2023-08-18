@@ -5,13 +5,12 @@ import engine.Rule;
 import engine.Termination;
 import engine.World;
 import engine.entity.impl.EntityDefinition;
-import engine.properties.api.PropertyInterface;
+import engine.property.api.PropertyInterface;
 import engine.worldbuilder.prdobjects.PRDAction;
 import engine.worldbuilder.prdobjects.PRDEntity;
 import engine.worldbuilder.prdobjects.PRDRule;
 import engine.worldbuilder.prdobjects.PRDWorld;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +29,6 @@ public class WorldFactory {
          for(PRDRule rule : prdWorld.getPRDRules().getPRDRule()) {
              Rule currentRule = RuleFactory.BuildRule(rule);
              rules.add(currentRule);
-             for (PRDAction action : rule.getPRDActions().getPRDAction()) {
-                 currentRule.addAction(ActionFactory.BuildAction(action));
-             }
          }
          // rules
 

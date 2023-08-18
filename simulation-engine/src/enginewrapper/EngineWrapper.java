@@ -1,32 +1,12 @@
 package enginewrapper;
 
 import engine.*;
-import engine.actions.api.AbstractAction;
-import engine.actions.api.ActionInterface;
-import engine.actions.expression.Expression;
-import engine.actions.impl.calculation.CalculationAction;
-import engine.actions.impl.condition.impl.ConditionAction;
-import engine.actions.impl.condition.impl.LogicalOperatorForSingularity;
-import engine.actions.impl.condition.impl.MultipleConditionAction;
-import engine.actions.impl.condition.impl.Singularity;
-import engine.actions.impl.increasedecrease.IncreaseDecreaseAction;
-import engine.context.api.Context;
-import engine.context.impl.ContextImpl;
-import engine.entity.impl.EntityDefinition;
-import engine.entity.impl.EntityInstance;
-import engine.entity.impl.EntityInstanceManager;
-import engine.properties.api.PropertyInterface;
-import engine.properties.impl.DecimalProperty;
-import engine.properties.impl.IntProperty;
-import engine.worldbuilder.factory.WorldFactory;
 import engine.worldbuilder.prdobjects.PRDWorld;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EngineWrapper {
     public static void main(String[] args) {

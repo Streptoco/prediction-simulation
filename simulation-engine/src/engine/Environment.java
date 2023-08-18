@@ -1,12 +1,7 @@
 package engine;
 
-import engine.actions.expression.ReturnType;
-import engine.properties.api.AbstractProperty;
-import engine.properties.api.PropertyInterface;
-import engine.properties.impl.BooleanProperty;
-import engine.properties.impl.DecimalProperty;
-import engine.properties.impl.IntProperty;
-import engine.properties.impl.StringProperty;
+import engine.action.expression.ReturnType;
+import engine.property.api.PropertyInterface;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,17 +9,17 @@ import java.util.Map;
 // for environmental variables...
 //TODO: figure out how environment properties work and how I should store them
 public class Environment {
-    private static Map<String, PropertyInterface> envVariables = null;
+    private Map<String, PropertyInterface> envVariables;
 
     public Environment(){
         envVariables = new HashMap<>();
     }
 
-    public static Object environmentGetter(String propertyName) {
+    public Object environmentGetter(String propertyName) {
         return envVariables.get(propertyName).getValue();
     }
 
-    public static ReturnType propertyTypeGetter (String propertyName) {
+    public  ReturnType propertyTypeGetter (String propertyName) {
         return envVariables.get(propertyName).getPropertyType();
     }
 

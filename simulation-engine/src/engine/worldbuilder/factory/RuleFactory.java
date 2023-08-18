@@ -2,9 +2,8 @@ package engine.worldbuilder.factory;
 
 import engine.Rule;
 import engine.RuleActivation;
-import engine.actions.api.ActionInterface;
+import engine.action.api.ActionInterface;
 import engine.worldbuilder.prdobjects.PRDAction;
-import engine.worldbuilder.prdobjects.PRDActions;
 import engine.worldbuilder.prdobjects.PRDRule;
 
 import java.util.ArrayList;
