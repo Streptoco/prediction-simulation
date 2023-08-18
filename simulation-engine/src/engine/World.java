@@ -41,13 +41,15 @@ public class World {
 
     public void Run() {
         int ticks = 0;
-        while (!termination.getTermination(ticks, currentTime)) {
+        while (termination.getTermination(ticks, currentTime)) {
             for(EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
                     if (currentInstance.isAlive()) {
                         ContextImpl context = new ContextImpl(currentInstance, managers.get(currentEntity.getName()), activeEnvironment);
                         for (Rule rule : rules) {
-                            rule.invokeAction(context);
+                            if (rule.activation(ticks)) {
+                                rule.invokeAction(context);
+                            }
                         }
                     }
                 }
