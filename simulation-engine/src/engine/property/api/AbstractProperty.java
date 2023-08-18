@@ -29,4 +29,5 @@ public abstract class AbstractProperty implements PropertyInterface {
     public ReturnType getPropertyType() { return propertyType; }
 
     public abstract Object getValue();
+
 }

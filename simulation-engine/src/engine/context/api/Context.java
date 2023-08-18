@@ -5,6 +5,6 @@ import engine.property.api.PropertyInterface;
 
 public interface Context {
     EntityInstance getPrimaryEntityInstance();
-    void removeEntity(EntityInstance entityInstance);
+    void removeEntity();
     PropertyInterface getEnvironmentVariable(String name);
 }

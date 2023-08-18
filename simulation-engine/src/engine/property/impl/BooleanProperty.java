@@ -19,4 +19,8 @@ public class BooleanProperty extends AbstractProperty {
     public PropertyExpressionEvaluation evaluate(Expression expression) {
         return null;
     }
+
+    public void setValue(boolean newVal) {
+        this.value = newVal;
+    }
 }

@@ -50,8 +50,8 @@ public class EntityInstanceManager {
 
     public List<EntityInstance> getInstances() { return instances; }
 
-    public void killEntity(int id) {
-        // Do something
+    public void killEntity() {
+        instances.clear();
     }
 
 }
