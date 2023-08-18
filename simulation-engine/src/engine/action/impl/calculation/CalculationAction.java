@@ -11,11 +11,6 @@ import engine.property.impl.IntProperty;
 
 // TODO: check if given property is indeed decimal/integer
 
-enum CalculationType {
-    MULTIPLY,
-    DIVIDE
-}
-
 public class CalculationAction extends AbstractAction {
 
     private PropertyInterface resultProp;

@@ -30,7 +30,7 @@ public class EntityInstanceManager {
             switch (currentProperty.getPropertyType()) {
                 case INT:
                     if (currentProperty.getRandomStatus()) {
-                        propertyValue = World.NumberRandomGetter(currentProperty.getFrom(),currentProperty.getTo());
+                        propertyValue = (int) World.NumberRandomGetter(currentProperty.getFrom(),currentProperty.getTo());
                     }
                     newPropertyInstance = new IntProperty((int)propertyValue, currentProperty.getName(), currentProperty.getFrom(), currentProperty.getTo(), currentProperty.getRandomStatus() );
                     break;

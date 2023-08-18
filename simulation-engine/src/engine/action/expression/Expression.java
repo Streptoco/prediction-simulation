@@ -12,12 +12,6 @@ import engine.property.impl.IntProperty;
 import static engine.general.object.World.*;
 
 
-enum Type {
-    FUNCTION,
-    PROPERTY,
-    FREE
-}
-
 public class Expression {
     String name;
     Type type;

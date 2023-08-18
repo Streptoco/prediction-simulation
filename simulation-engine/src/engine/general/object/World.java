@@ -68,5 +68,22 @@ public class World {
         return random.nextBoolean();
     }
 
+    public static String StringRandomGetter() {
+        Random randomInt = new Random();
+        int length =  randomInt.nextInt(50 - 1 + 1) + 1;
+        String allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?,-_.() ";
+        StringBuilder randomString = new StringBuilder();
+        Random randomStr = new Random();
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = randomStr.nextInt(allowedCharacters.length());
+            char randomChar = allowedCharacters.charAt(randomIndex);
+            randomString.append(randomChar);
+        }
+
+        return randomString.toString();
+
+    }
+
     public Environment getEnvironment() { return activeEnvironment; }
 }

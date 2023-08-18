@@ -12,11 +12,6 @@ import engine.property.api.PropertyInterface;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.IntProperty;
 
-enum IncreaseDecrease {
-    INCREASE,
-    DECREASE
-}
-
 public class IncreaseDecreaseAction extends AbstractAction {
     PropertyInterface propertyToIncrease;
     Expression increaseBy;
