@@ -1,4 +1,4 @@
-package engine;
+package engine.general.object;
 
 /*
 * World contains a main loop that ticks one at a time, and also has a list of rules.

@@ -1,7 +1,7 @@
 package engine.worldbuilder.factory;
 
-import engine.Rule;
-import engine.RuleActivation;
+import engine.general.object.Rule;
+import engine.general.object.RuleActivation;
 import engine.action.api.ActionInterface;
 import engine.worldbuilder.prdobjects.PRDAction;
 import engine.worldbuilder.prdobjects.PRDRule;

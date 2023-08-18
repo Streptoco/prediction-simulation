@@ -1,6 +1,6 @@
 package engine.worldbuilder.factory;
 
-        import engine.World;
+        import engine.general.object.World;
         import engine.action.expression.ReturnType;
         import engine.property.api.PropertyInterface;
         import engine.property.impl.BooleanProperty;

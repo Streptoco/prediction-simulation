@@ -1,3 +1,5 @@
+package basic.dto;
+
 import engine.property.api.PropertyInterface;
 
 import java.util.ArrayList;

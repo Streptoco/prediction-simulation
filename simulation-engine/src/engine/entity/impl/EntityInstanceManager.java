@@ -1,7 +1,6 @@
 package engine.entity.impl;
 
-import engine.Environment;
-import engine.World;
+import engine.general.object.World;
 import engine.property.api.PropertyInterface;
 import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;

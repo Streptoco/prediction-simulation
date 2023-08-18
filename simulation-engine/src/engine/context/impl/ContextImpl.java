@@ -1,6 +1,6 @@
 package engine.context.impl;
 
-import engine.Environment;
+import engine.general.object.Environment;
 import engine.context.api.Context;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;

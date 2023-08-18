@@ -5,12 +5,11 @@ package engine.action.expression;
 //TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
 
 import engine.context.api.Context;
-import engine.entity.impl.EntityInstance;
 import engine.property.api.PropertyInterface;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.IntProperty;
 
-import static engine.World.*;
+import static engine.general.object.World.*;
 
 
 enum Type {

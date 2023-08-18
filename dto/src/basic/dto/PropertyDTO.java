@@ -1,3 +1,5 @@
+package basic.dto;
+
 import engine.action.expression.ReturnType;
 
 public class PropertyDTO {

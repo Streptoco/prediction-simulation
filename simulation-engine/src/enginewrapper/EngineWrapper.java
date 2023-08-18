@@ -1,6 +1,6 @@
 package enginewrapper;
 
-import engine.*;
+import engine.general.object.World;
 import engine.worldbuilder.prdobjects.PRDWorld;
 
 import javax.xml.bind.JAXBContext;

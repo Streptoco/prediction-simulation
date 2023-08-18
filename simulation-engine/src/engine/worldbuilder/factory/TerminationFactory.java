@@ -1,6 +1,6 @@
 package engine.worldbuilder.factory;
 
-import engine.Termination;
+import engine.general.object.Termination;
 import engine.worldbuilder.prdobjects.PRDBySecond;
 import engine.worldbuilder.prdobjects.PRDByTicks;
 import engine.worldbuilder.prdobjects.PRDTermination;
