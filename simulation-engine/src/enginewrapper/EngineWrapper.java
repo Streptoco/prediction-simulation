@@ -79,7 +79,7 @@ public class EngineWrapper {
 //        rules.add(rule1);
 
         try {
-            File file = new File("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\src\\engine\\ex1-cigarets.xml");
+            File file = new File("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex1-cigarets.xml");
             JAXBContext jaxbContext = JAXBContext.newInstance(PRDWorld.class);
             Unmarshaller u = jaxbContext.createUnmarshaller();
             PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
