@@ -24,7 +24,7 @@ public class ContextImpl implements Context {
 
     @Override
     public void removeEntity() {
-        entityInstanceManager.killEntity();
+        entityInstanceManager.killEntity(primaryEntityInstance);
     }
 
     @Override

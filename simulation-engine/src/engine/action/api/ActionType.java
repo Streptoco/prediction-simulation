@@ -19,7 +19,6 @@ public enum ActionType {
         }
         else if (name.equalsIgnoreCase("kill")) {
             return KILL;
-
         }
         else if (name.equalsIgnoreCase("set")) {
             return SET;

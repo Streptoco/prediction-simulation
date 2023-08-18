@@ -12,11 +12,11 @@ public class TerminationFactory {
         for (Object object : termination.getPRDByTicksOrPRDBySecond()) {
             if (object.getClass().equals(PRDBySecond.class)) {
                 PRDBySecond prdBySecond = (PRDBySecond) object;
-                ticksToTermination = prdBySecond.getCount();
+                secondsToTermination = prdBySecond.getCount();
             }
             else if (object.getClass().equals(PRDByTicks.class)) {
                 PRDByTicks prdByTicks = (PRDByTicks) object;
-                secondsToTermination = prdByTicks.getCount();
+                ticksToTermination = prdByTicks.getCount();
             }
         }
         return new Termination(ticksToTermination,secondsToTermination);

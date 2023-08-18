@@ -29,9 +29,6 @@ public class WorldFactory {
          for(PRDRule rule : prdWorld.getPRDRules().getPRDRule()) {
              Rule currentRule = RuleFactory.BuildRule(rule);
              rules.add(currentRule);
-             for (PRDAction action : rule.getPRDActions().getPRDAction()) {
-                 currentRule.addAction(ActionFactory.BuildAction(action));
-             }
          }
          // rules
 

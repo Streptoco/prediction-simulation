@@ -23,7 +23,7 @@ public class EntityInstanceManager {
         EntityInstance newInstance = new EntityInstance(entityDefinition, countInstances);
         instances.add(newInstance);
 
-        for(PropertyInterface currentProperty : entityDefinition.getProps()) {
+        for(PropertyInterface currentProperty : entityDefinition.getProps()) { // are you on the ipad?
             Object propertyValue = currentProperty.getValue();
             PropertyInterface newPropertyInstance = null;
             switch (currentProperty.getPropertyType()) {
