@@ -1,4 +1,3 @@
-import engine.action.api.ActionInterface;
 import engine.action.expression.ReturnType;
 import engine.exception.XMLException;
 import engine.general.object.Engine;
@@ -6,9 +5,6 @@ import enginetoui.dto.basic.ActionDTO;
 import enginetoui.dto.basic.EntityDTO;
 import enginetoui.dto.basic.PropertyDTO;
 import enginetoui.dto.basic.RuleDTO;
-import exceptions.FileDoesNotExistException;
-
-import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
@@ -115,6 +111,10 @@ public class driver {
 
     }
 
+    public static void ShowPastSimulations(Engine engine) {
+
+    }
+
 
     private static void Run() {
         Engine engine = new Engine();
@@ -135,6 +135,9 @@ public class driver {
                 case 3:
                     simulationId = RunTheWorld(engine);
                     System.out.println("Simulation ran successfully, run id: " + simulationId);
+                    break;
+                case 4:
+                    ShowPastSimulations(engine);
                     break;
                 default:
                     System.out.println("Wrong input! Try again\n");

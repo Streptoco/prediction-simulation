@@ -12,6 +12,7 @@ import java.util.List;
 
 public class EntityInstanceManager {
     private int countInstances;
+    private int numberOfAllInstances;
     private List<EntityInstance> instances;
 
     public EntityInstanceManager() {

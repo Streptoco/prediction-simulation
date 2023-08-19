@@ -12,6 +12,7 @@ import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class World {
@@ -21,6 +22,8 @@ public class World {
     private List<EntityDefinition> entities;
     private Environment activeEnvironment;
     private long currentTime;
+
+    private SimpleDateFormat simulationDate;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
@@ -29,6 +32,7 @@ public class World {
         this.entities = entities;
         this.rules = rules;
         this.activeEnvironment = environment;
+        this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());
@@ -95,4 +99,8 @@ public class World {
 
     public int GetSimulationTotalTicks() { return this.termination.getAllTicks();}
     public long GetSimulationTotalTime() { return this.termination.getHowManySecondsToRun();}
+
+    public SimpleDateFormat getSimulationDate() {
+        return simulationDate;
+    }
 }

@@ -10,9 +10,9 @@ import enginetoui.dto.basic.RuleDTO;
 import java.util.*;
 
 public class Engine {
-    private Map<Integer, World> simulations; //TODO: should be map, key:value pairs. the key would be generated.
+    private final Map<Integer, World> simulations; //TODO: should be map, key:value pairs. the key would be generated.
     private int serialNumber = 1;
-    private XmlReader reader;
+    private final XmlReader reader;
 
     public Engine() {
         simulations = new HashMap<>();
@@ -76,5 +76,9 @@ public class Engine {
     public int RunSimulation() {
         simulations.get(serialNumber - 1).Run();
         return (serialNumber - 1);
+    }
+
+    public List<World> GetSimulationSorted() {
+
     }
 }
