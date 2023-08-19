@@ -25,6 +25,7 @@ public class SetAction extends AbstractAction {
     public void invoke(Context context) {
         propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         ReturnType returnType = propertyInstance.getPropertyType();
+        valueExpression.evaluateExpression(context);
         switch (returnType) {
             case INT:
                 IntProperty intProperty = (IntProperty)propertyInstance;
