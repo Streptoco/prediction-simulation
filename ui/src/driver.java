@@ -37,30 +37,75 @@ public class driver {
     }
 
     private static void ShowSimulationDetails(Engine engine) {
-        int i = 1;
+        int i = 1, j = 1;
+        System.out.println("Entities:\n");
         List<EntityDTO> entities = engine.GetAllEntities();
-        for(EntityDTO entity : entities) {
-            System.out.println(i++ + ". " + "Name: " + entity.name + "\nPopulation: " + entity.population + "Properties:\n");
-            for(PropertyDTO property : entity.propertyList) {
-                System.out.println("\tProperty Name: " + property.name + "\tProperty type: " + property.type + "\n");
-                if(!(property.type.equals(ReturnType.STRING) || property.type.equals(ReturnType.BOOLEAN))) {
-                    System.out.println("\tFrom: " + property.from + "\tTo: " + property.to + "\n");
+        for (EntityDTO entity : entities) {
+            System.out.println(i + ".  " + "Name: " + entity.name + "\n\tPopulation: " + entity.population + "\n\tProperties:");
+            i++;
+            for (PropertyDTO property : entity.propertyList) {
+                System.out.println("\t\t" + j + ".  " + "Property Name: \"" + property.name + "\"" + "\tProperty type: \"" + property.type + "\"");
+                if (!(property.type.equals(ReturnType.STRING) || property.type.equals(ReturnType.BOOLEAN))) {
+                    System.out.println("\t\t\tFrom: " + property.from + "\n\t\t\tTo: " + property.to);
                 }
-                System.out.println("\tIs randomly generated: " + property.isRandomlyGenerated + "\n");
+                System.out.println("\t\t\tIs randomly generated: " + property.isRandomlyGenerated + "\n");
+                j++;
             }
         }
         i = 1;
+        System.out.println("Rules:\n");
         List<RuleDTO> rules = engine.GetAllRules();
-        for(RuleDTO rule : rules) {
-            System.out.println(i + ". " + "Name: " + rule.name + "\nActivated every " + rule.tick + "ticks\n" + "In probability under " + rule.probability + "\n" +
-                    "Number of actions: " + rule.numOfActions + "\n");
-            int j = 1;
-            System.out.println("Actions of the rule:\n");
-            for(ActionDTO action : rule.actionNames) {
-                System.out.println("\t" + j++ + ". " + action.type + "\n\t" + action.property);
+        for (RuleDTO rule : rules) {
+            System.out.println(i + ".  " + "Name: " + rule.name + "\n\tActivated every " + rule.tick + " ticks\n\t" + "In probability under " + rule.probability + "\n" +
+                    "\tNumber of actions: " + rule.numOfActions);
+            j = 1;
+            System.out.println("\tActions of the rule:");
+            for (ActionDTO action : rule.actionNames) {
+                System.out.println("\t\t\t" + j + ".  " + "Action type: " + action.type);
+                if(!action.property.equals("")) {
+                    System.out.println("\t\t\t\tAction name: " + action.property);
+                }
+                j++;
             }
+            i++;
         }
-        System.out.println("The simulation will run" + engine.GetSimulationTotalTicks() + "ticks or " + engine.GetSimulationTotalTime() + "seconds");
+        System.out.println("\nThe simulation will run " + engine.GetSimulationTotalTicks() + " ticks or " + engine.GetSimulationTotalTime() + " seconds\n");
+
+    }
+
+    public static int RunTheWorld(Engine engine) {
+       SetEnvVariables(engine);
+       return 0;
+    }
+
+    public static void SetEnvVariables(Engine engine){
+        List<PropertyDTO> envVariables = engine.GetAllEnvProperties();
+        System.out.println("Please choose the environment variable you wish to set, insert 0 to continue\n");
+        int i = 1;
+        Scanner scanner = new Scanner(System.in);
+        int userChoice;
+        String newValue, propertyName;
+        do {
+            for(PropertyDTO currentVar : envVariables) {
+                System.out.println(i + ". " + currentVar.getName());
+            }
+            i++;
+            userChoice = scanner.nextInt();
+            propertyName = envVariables.get(userChoice - 1).name;
+            newValue = scanner.nextLine();
+            switch (envVariables.get(userChoice - 1).type) {
+                case INT:
+                    engine.SetVariable(propertyName, Integer.parseInt(newValue));
+                    break;
+                case DECIMAL:
+                    engine.SetVariable(propertyName, Double.parseDouble(newValue));
+                    break;
+                case BOOLEAN:
+                    engine.SetVariable(propertyName, Boolean.parseBoolean(newValue));
+                case STRING:
+                    engine.SetVariable(propertyName, newValue);
+            }
+        } while(userChoice != 0);
 
     }
 
@@ -73,17 +118,25 @@ public class driver {
         Scanner scanner = new Scanner(System.in);
         int userChoice = scanner.nextInt();
         do {
-            switch (userChoice){
+            switch (userChoice) {
                 case 1:
                     LoadXMLFile(engine);
                     break;
                 case 2:
                     ShowSimulationDetails(engine);
                     break;
+                case 3:
+                    RunTheWorld(engine);
+                    break;
+                default:
+                    System.out.println("Wrong input! Try again\n");
+                    break;
 
             }
-        } while(userChoice != 5);
-
+            System.out.println("Please choose an option:\n1. Load a new XML File.\n2. Show simulation details\n" +
+                    "3. Run the simulation\n4. Show details of past simulation\n5. Exit :)");
+            userChoice = scanner.nextInt();
+        } while (userChoice != 5);
 
 
     }
