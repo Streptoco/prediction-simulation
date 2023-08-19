@@ -29,18 +29,18 @@ public class ActionFactory {
                 String calculationType = "";
                 String arg1 = "", arg2 = "";
                 PRDDivide prdDivide = prdAction.getPRDDivide();
-                if (prdAction.getPRDMultiply() == null && prdAction.getPRDMultiply() == null) {
-                    // TODO: throw exception
-                }
-                else if (prdAction.getPRDDivide() == null) {
+                if (prdAction.getPRDDivide() == null) {
                     calculationType = "multiply";
                     arg1 = prdAction.getPRDMultiply().getArg1();
                     arg2 = prdAction.getPRDMultiply().getArg2();
                 }
-                else {
+                else if(prdAction.getPRDMultiply() == null) {
                     calculationType = "divide";
                     arg1 = prdAction.getPRDDivide().getArg1();
                     arg2 = prdAction.getPRDDivide().getArg2();
+                }
+                else {
+                    // TODO: throw exception
                 }
                 resultAction = new CalculationAction(prdAction.getResultProp(), calculationType, new Expression(arg1), new Expression(arg2));
                 break;

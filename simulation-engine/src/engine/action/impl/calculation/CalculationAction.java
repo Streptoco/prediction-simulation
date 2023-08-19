@@ -38,6 +38,8 @@ public class CalculationAction extends AbstractAction {
     public void invoke(Context context) {
         resultProp = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         boolean isMultiply = (this.calculationType.equals(CalculationType.MULTIPLY));
+        firstArgument.evaluateExpression(context);
+        secondArgument.evaluateExpression(context);
         if (checkValidityOfExpressions()) {
             if (resultProp != null) {
                     switch (resultProp.getPropertyType()) {

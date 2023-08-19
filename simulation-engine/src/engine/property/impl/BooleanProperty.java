@@ -19,9 +19,9 @@ public class BooleanProperty extends AbstractProperty {
 
     // TODO: we'll probably need a way to change this value, maybe implement it in the interface?
     public PropertyExpressionEvaluation evaluate(Expression expression) {
-        //boolean expressionValue = (boolean) expression.getValue();
+        boolean expressionValue = (boolean) expression.getValue();
         PropertyExpressionEvaluation result;
-        if (expression.getValue().equals(this.value)) { //TODO: not working as expected. need to fix that
+        if (expressionValue == this.value) { //TODO: not working as expected. need to fix that
             result = new PropertyExpressionEvaluation(true, false);
         } else {
             result = new PropertyExpressionEvaluation(false, false);

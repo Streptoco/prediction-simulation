@@ -40,13 +40,11 @@ public class Expression {
             String envVariableName = "";
             int startIndex = name.indexOf("(");
             int endIndex = name.indexOf(")");
-
             if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
                 envVariableName = name.substring(startIndex + 1, endIndex);
             }
 
             castedValueOfExpression = context.getEnvironmentVariable(envVariableName);
-            PropertyInterface propertyInterface = (PropertyInterface) castedValueOfExpression;
             ReturnType returnType = ((PropertyInterface) castedValueOfExpression).getPropertyType();
             switch (returnType) {
                 case INT:
@@ -56,6 +54,9 @@ public class Expression {
                 case DECIMAL:
                     DecimalProperty decimalProperty = (DecimalProperty) castedValueOfExpression;
                     castedNumber = (Number) ((DecimalProperty) castedValueOfExpression).getValue();
+                    break;
+                case BOOLEAN:
+                    castedValueOfExpression = ((PropertyInterface) castedValueOfExpression).getValue();
                     break;
             }
             this.returnType = returnType;
@@ -96,7 +97,8 @@ public class Expression {
             return;
         }
         try {
-            castedValueOfExpression = Boolean.parseBoolean(name);
+            //castedValueOfExpression = Boolean.parseBoolean(name);
+            castedValueOfExpression = (String) name;
             this.returnType = ReturnType.BOOLEAN;
             return;
         } catch (NumberFormatException e) {
