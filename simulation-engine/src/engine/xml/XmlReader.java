@@ -1,9 +1,11 @@
 package engine.xml;
+
 import engine.exception.*;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.*;
 import enginetoui.dto.basic.EntityNotFoundDTO;
 import enginetoui.dto.basic.PropertyDuplicateNameDTO;
+import enginetoui.dto.basic.PropertyNotFoundDTO;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,10 +17,11 @@ import java.util.List;
 import java.util.Set;
 
 public class XmlReader {
-    public XmlReader() {}
+    public XmlReader() {
+    }
 
-    public World ReadXML(String filePath){
-        if(!(filePath.endsWith(".xml"))) {
+    public World ReadXML(String filePath) {
+        if (!(filePath.endsWith(".xml"))) {
             throw new XMLFileException(filePath);
         }
         File file = new File(filePath);
@@ -28,17 +31,22 @@ public class XmlReader {
             Unmarshaller u = jaxbContext.createUnmarshaller();
             PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
             String propertyDuplicateName = CheckEnvProperties(aWholeNewWorld.getPRDEvironment().getPRDEnvProperty());
-            if(propertyDuplicateName != null){
+            if (propertyDuplicateName != null) {
                 throw new XMLDuplicateEnvPropertyName(filePath, propertyDuplicateName);
             }
             PropertyDuplicateNameDTO propertyDuplicate = CheckEntityProperties(aWholeNewWorld.getPRDEntities().getPRDEntity());
-            if(propertyDuplicate != null) {
+            if (propertyDuplicate != null) {
                 throw new XMLDuplicateEntityPropertyName(filePath, propertyDuplicate.propertyName, propertyDuplicate.entityName);
             }
             EntityNotFoundDTO entityNotFound = CheckRuleEntity(aWholeNewWorld.getPRDRules().getPRDRule(), aWholeNewWorld.getPRDEntities().getPRDEntity());
-            if(entityNotFound != null) {
+            if (entityNotFound != null) {
                 throw new XMLEntityNotFoundException(filePath, entityNotFound.ruleName, entityNotFound.entityName);
             }
+            PropertyNotFoundDTO propertyNotFound = CheckRuleEntityProperty(aWholeNewWorld.getPRDRules().getPRDRule(), aWholeNewWorld.getPRDEntities().getPRDEntity());
+            if (propertyNotFound != null) {
+                throw new XMLRulePropertyNotFoundException(filePath, propertyNotFound.ruleName, propertyNotFound.entityName, propertyNotFound.propertyName);
+            }
+
             return engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
@@ -48,12 +56,12 @@ public class XmlReader {
 
     private String CheckEnvProperties(List<PRDEnvProperty> envProperties) {
         List<String> propertyName = new ArrayList<>();
-        for(PRDEnvProperty property : envProperties) {
+        for (PRDEnvProperty property : envProperties) {
             propertyName.add(property.getPRDName());
         }
         Set<String> duplicates = new HashSet<>();
-        for(String name : propertyName) {
-            if(duplicates.contains(name)) {
+        for (String name : propertyName) {
+            if (duplicates.contains(name)) {
                 return name;
                 //throw new XMLDuplicateEnvPropertyName(filePath, propertyDuplicateName);
             }
@@ -64,14 +72,14 @@ public class XmlReader {
 
     private PropertyDuplicateNameDTO CheckEntityProperties(List<PRDEntity> prdEntity) {
         List<PRDEnvProperty> tempPRDList = new ArrayList<>();
-        for(PRDEntity entity : prdEntity) {
-            for(PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
+        for (PRDEntity entity : prdEntity) {
+            for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
                 PRDEnvProperty tmpProperty = new PRDEnvProperty();
                 tmpProperty.setPRDName(property.getPRDName());
                 tempPRDList.add(tmpProperty);
             }
             String duplicateName = CheckEnvProperties(tempPRDList);
-            if(duplicateName != null) {
+            if (duplicateName != null) {
                 return new PropertyDuplicateNameDTO(duplicateName, entity.getName());
                 //throw new XMLDuplicateEntityPropertyName(filePath, propertyDuplicateName, aWholeNewWorld.getPRDEntities().getPRDEntity().get(0).getName()); //TODO: when there is more that 1 entity, need to find the problematic one
             }
@@ -81,20 +89,47 @@ public class XmlReader {
 
     private EntityNotFoundDTO CheckRuleEntity(List<PRDRule> prdRuleList, List<PRDEntity> prdEntity) {
         List<String> entityNames = new ArrayList<>();
-        for(PRDEntity entity : prdEntity) {
+        for (PRDEntity entity : prdEntity) {
             entityNames.add(entity.getName());
         }
-        for(PRDRule prdRule : prdRuleList) {
+        for (PRDRule prdRule : prdRuleList) {
             for (PRDAction action : prdRule.getPRDActions().getPRDAction()) {
                 if (!entityNames.contains(action.getEntity())) {
-                    return new EntityNotFoundDTO(prdRule.getName() ,action.getEntity());
+                    return new EntityNotFoundDTO(prdRule.getName(), action.getEntity());
                 }
             }
         }
         return null;
     }
 
+    private PropertyNotFoundDTO CheckRuleEntityProperty(List<PRDRule> prdRuleList, List<PRDEntity> prdEntity) {
+        boolean propertyFound = false;
+        PRDEntity entity = null;
+        for (PRDRule rule : prdRuleList) {
+            for (PRDAction action : rule.getPRDActions().getPRDAction()) {
+                for(PRDEntity currentEntity : prdEntity) {
+                    if(currentEntity.getName().equals(action.getEntity())){
+                        entity = currentEntity;
+                    }
+                }
+                for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
+                    if (action.getProperty().equals(property.getPRDName())) {
+                        propertyFound = true;
+                    }
+                }
+                if (propertyFound == false) {
+                    return new PropertyNotFoundDTO(rule.getName(), entity.getName(), action.getProperty());
+                }
+            }
+        }
 
+        return null;
+    }
+
+    private String CheckCalculationAction(List<PRDRule> prdRules) {
+        List<PRDAction> actionList = new ArrayList<>();
+
+    }
 
 
 }
