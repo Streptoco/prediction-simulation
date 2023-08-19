@@ -72,4 +72,9 @@ public class Engine {
     public void SetVariable(String variableName, String value) {
         simulations.get(serialNumber - 1).getEnvironment().updateProperty(variableName, value);
     }
+
+    public int RunSimulation() {
+        simulations.get(serialNumber - 1).Run();
+        return (serialNumber - 1);
+    }
 }

@@ -75,12 +75,12 @@ public class driver {
 
     public static int RunTheWorld(Engine engine) {
        SetEnvVariables(engine);
-       return 0;
+       return engine.RunSimulation();
     }
 
     public static void SetEnvVariables(Engine engine){
         List<PropertyDTO> envVariables = engine.GetAllEnvProperties();
-        System.out.println("Please choose the environment variable you wish to set, insert 0 to continue\n");
+        System.out.println("\nPlease choose the environment variable you wish to set, insert 0 to continue");
         int i = 1;
         Scanner scanner = new Scanner(System.in);
         int userChoice;
@@ -88,22 +88,28 @@ public class driver {
         do {
             for(PropertyDTO currentVar : envVariables) {
                 System.out.println(i + ". " + currentVar.getName());
+                i++;
             }
-            i++;
+            System.out.println("Press 0 to continue");
+            i = 1;
             userChoice = scanner.nextInt();
-            propertyName = envVariables.get(userChoice - 1).name;
-            newValue = scanner.nextLine();
-            switch (envVariables.get(userChoice - 1).type) {
-                case INT:
-                    engine.SetVariable(propertyName, Integer.parseInt(newValue));
-                    break;
-                case DECIMAL:
-                    engine.SetVariable(propertyName, Double.parseDouble(newValue));
-                    break;
-                case BOOLEAN:
-                    engine.SetVariable(propertyName, Boolean.parseBoolean(newValue));
-                case STRING:
-                    engine.SetVariable(propertyName, newValue);
+            scanner.nextLine();
+            if(userChoice > 0) {
+                propertyName = envVariables.get(userChoice - 1).name;
+                System.out.println("Please insert the new value:");
+                newValue = scanner.nextLine();
+                switch (envVariables.get(userChoice - 1).type) {
+                    case INT:
+                        engine.SetVariable(propertyName, Integer.parseInt(newValue));
+                        break;
+                    case DECIMAL:
+                        engine.SetVariable(propertyName, Double.parseDouble(newValue));
+                        break;
+                    case BOOLEAN:
+                        engine.SetVariable(propertyName, Boolean.parseBoolean(newValue));
+                    case STRING:
+                        engine.SetVariable(propertyName, newValue);
+                }
             }
         } while(userChoice != 0);
 
@@ -112,6 +118,7 @@ public class driver {
 
     private static void Run() {
         Engine engine = new Engine();
+        int simulationId;
         WelcomePlayer();
         System.out.println("Please choose an option:\n1. Load a new XML File.\n2. Show simulation details\n" +
                 "3. Run the simulation\n4. Show details of past simulation\n5. Exit :)");
@@ -126,7 +133,8 @@ public class driver {
                     ShowSimulationDetails(engine);
                     break;
                 case 3:
-                    RunTheWorld(engine);
+                    simulationId = RunTheWorld(engine);
+                    System.out.println("Simulation ran successfully, run id: " + simulationId);
                     break;
                 default:
                     System.out.println("Wrong input! Try again\n");

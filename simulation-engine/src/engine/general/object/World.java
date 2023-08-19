@@ -25,7 +25,6 @@ public class World {
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
                  List<Rule> rules) {
-        this.currentTime = System.currentTimeMillis();
         this.termination = termination;
         this.entities = entities;
         this.rules = rules;
@@ -41,6 +40,7 @@ public class World {
 
     public void Run() {
         int ticks = 0;
+        this.currentTime = System.currentTimeMillis();
         while (termination.getTermination(ticks, currentTime)) {
             for(EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
