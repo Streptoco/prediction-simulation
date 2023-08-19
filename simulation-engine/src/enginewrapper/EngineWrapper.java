@@ -1,5 +1,6 @@
 package enginewrapper;
 
+import engine.general.object.Engine;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.PRDWorld;
 import engine.xml.XmlReader;
@@ -26,5 +27,6 @@ public class EngineWrapper {
 //            throw new RuntimeException(e);
 //        }
         new XmlReader().ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex1-cigarets.xml");
+        Engine engine = new Engine();
     }
 }
