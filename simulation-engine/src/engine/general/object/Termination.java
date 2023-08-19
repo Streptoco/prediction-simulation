@@ -1,4 +1,4 @@
-package engine;
+package engine.general.object;
 
 import java.sql.Time;
 
@@ -14,6 +14,6 @@ public class Termination {
     public boolean getTermination(int currentTick, long outerTimeInMillis) {
         long currentTime = System.currentTimeMillis();
         currentTime -= outerTimeInMillis;
-        return (currentTick >= this.ticks || currentTime >= this.howManySecondsToRun);
+        return (currentTick <= this.ticks && currentTime <= this.howManySecondsToRun);
     }
 }

@@ -7,9 +7,9 @@ public enum ReturnType {
     STRING;
 
     public static ReturnType convert(String name) {
-        if(name.equalsIgnoreCase("int")) {
+        if(name.equalsIgnoreCase("decimal")) {
             return INT;
-        } else if(name.equalsIgnoreCase("decimal")) {
+        } else if(name.equalsIgnoreCase("float")) {
             return DECIMAL;
         } else if (name.equalsIgnoreCase("string")) {
             return STRING;

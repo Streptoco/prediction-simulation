@@ -1,33 +1,42 @@
 package engine.worldbuilder.factory;
 
-        import engine.World;
-        import engine.action.expression.ReturnType;
-        import engine.property.api.PropertyInterface;
-        import engine.property.impl.BooleanProperty;
-        import engine.property.impl.DecimalProperty;
-        import engine.property.impl.IntProperty;
-        import engine.property.impl.StringProperty;
-        import engine.worldbuilder.prdobjects.PRDEnvProperty;
-        import engine.worldbuilder.prdobjects.PRDProperty;
-        import engine.worldbuilder.prdobjects.PRDValue;
+import engine.general.object.World;
+import engine.action.expression.ReturnType;
+import engine.property.api.PropertyInterface;
+import engine.property.impl.BooleanProperty;
+import engine.property.impl.DecimalProperty;
+import engine.property.impl.IntProperty;
+import engine.property.impl.StringProperty;
+import engine.worldbuilder.prdobjects.PRDEnvProperty;
+import engine.worldbuilder.prdobjects.PRDProperty;
+import engine.worldbuilder.prdobjects.PRDValue;
 
 public class PropertyFactory {
     public static PropertyInterface BuildProperty(PRDProperty prdProperty) {
         String propertyName = prdProperty.getPRDName();
-        double from = prdProperty.getPRDRange().getFrom();
-        double to = prdProperty.getPRDRange().getTo();
-        boolean isRandom = prdProperty.getPRDValue().isRandomInitialize();
+        double from = 0;
+        double to = 0;
+        boolean isRandom;
+        if (prdProperty.getPRDValue() != null) {
+            isRandom = prdProperty.getPRDValue().isRandomInitialize();
+        } else {
+            isRandom = true; //is true because env properties are need to be set by the user, and if not to be generated randomly
+        }
         String propertyType = prdProperty.getType();
         ReturnType returnType = ReturnType.convert(propertyType);
+        if (returnType == ReturnType.INT || returnType == ReturnType.DECIMAL) {
+            from = prdProperty.getPRDRange().getFrom();
+            to = prdProperty.getPRDRange().getTo();
+        }
         PropertyInterface resultProperty = null;
         switch (returnType) {
             case INT:
                 if (isRandom) {
-                    double randomValue = World.NumberRandomGetter(from, to);
+                    double randomValue = World.NumberRandomGetter(from, to); // TODO: change to minimal values.
                     resultProperty = new IntProperty((int) randomValue, propertyName, from, to, isRandom);
-                }
-                else {
-                    int intFromValue = Integer.parseInt(prdProperty.getPRDValue().getInit());
+                } else {
+                    double doubleFromValue = Double.parseDouble(prdProperty.getPRDValue().getInit());
+                    int intFromValue = (int) doubleFromValue;
                     resultProperty = new IntProperty(intFromValue, propertyName, from, to, isRandom);
                 }
                 break;
@@ -35,8 +44,7 @@ public class PropertyFactory {
                 if (isRandom) {
                     double randomValue = World.NumberRandomGetter(from, to);
                     resultProperty = new DecimalProperty(randomValue, propertyName, from, to, isRandom);
-                }
-                else {
+                } else {
                     double doubleFromValue = Double.parseDouble(prdProperty.getPRDValue().getInit());
                     resultProperty = new DecimalProperty(doubleFromValue, propertyName, from, to, isRandom);
                 }
@@ -44,15 +52,18 @@ public class PropertyFactory {
             case BOOLEAN:
                 if (isRandom) {
                     boolean randomValue = World.BooleanRandomGetter();
-                    resultProperty = new BooleanProperty(randomValue,propertyName,from,to,isRandom);
-                }
-                else {
+                    resultProperty = new BooleanProperty(randomValue, propertyName, from, to, isRandom);
+                } else {
                     boolean booleanFromValue = Boolean.parseBoolean(prdProperty.getPRDValue().getInit());
                     resultProperty = new BooleanProperty(booleanFromValue, propertyName, from, to, isRandom);
                 }
                 break;
             case STRING:
-                resultProperty = new StringProperty(prdProperty.getPRDValue().getInit(), from, to, isRandom);
+                if (isRandom) {
+                    resultProperty = new StringProperty(propertyName, World.StringRandomGetter(), from, to, isRandom);
+                } else {
+                    resultProperty = new StringProperty(propertyName, prdProperty.getPRDValue().getInit(), from, to, isRandom);
+                }
                 break;
             default: // TODO: throw exception.
         }
@@ -65,10 +76,12 @@ public class PropertyFactory {
         property.setType(prdEnvProperty.getType());
         property.setPRDRange(prdEnvProperty.getPRDRange());
         //property need to value in order to use the upper BuildProperty function
-        String tempValString = String.valueOf(prdEnvProperty.getPRDRange().getFrom());
-        PRDValue tempVal = new PRDValue();
-        tempVal.setInit(tempValString);
-        property.setPRDValue(tempVal);
+        if (property.getType().equalsIgnoreCase("decimal") || property.getType().equalsIgnoreCase("float")) {
+            String tempValString = String.valueOf(prdEnvProperty.getPRDRange().getFrom());
+            PRDValue tempVal = new PRDValue();
+            tempVal.setInit(tempValString);
+            property.setPRDValue(tempVal);
+        }
         return BuildProperty(property);
     }
 }

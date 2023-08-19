@@ -1,4 +1,4 @@
-package engine;
+package engine.general.object;
 
 /*
 * World contains a main loop that ticks one at a time, and also has a list of rules.
@@ -41,13 +41,15 @@ public class World {
 
     public void Run() {
         int ticks = 0;
-        while (!termination.getTermination(ticks, currentTime)) {
+        while (termination.getTermination(ticks, currentTime)) {
             for(EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
                     if (currentInstance.isAlive()) {
                         ContextImpl context = new ContextImpl(currentInstance, managers.get(currentEntity.getName()), activeEnvironment);
                         for (Rule rule : rules) {
-                            rule.invokeAction(context);
+                            if (rule.activation(ticks)) {
+                                rule.invokeAction(context);
+                            }
                         }
                     }
                 }
@@ -64,6 +66,23 @@ public class World {
     public static boolean BooleanRandomGetter() {
         Random random = new Random();
         return random.nextBoolean();
+    }
+
+    public static String StringRandomGetter() {
+        Random randomInt = new Random();
+        int length =  randomInt.nextInt(50 - 1 + 1) + 1;
+        String allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?,-_.() ";
+        StringBuilder randomString = new StringBuilder();
+        Random randomStr = new Random();
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = randomStr.nextInt(allowedCharacters.length());
+            char randomChar = allowedCharacters.charAt(randomIndex);
+            randomString.append(randomChar);
+        }
+
+        return randomString.toString();
+
     }
 
     public Environment getEnvironment() { return activeEnvironment; }

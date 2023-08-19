@@ -5,19 +5,12 @@ package engine.action.expression;
 //TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
 
 import engine.context.api.Context;
-import engine.entity.impl.EntityInstance;
 import engine.property.api.PropertyInterface;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.IntProperty;
 
-import static engine.World.*;
+import static engine.general.object.World.*;
 
-
-enum Type {
-    FUNCTION,
-    PROPERTY,
-    FREE
-}
 
 public class Expression {
     String name;
@@ -97,6 +90,11 @@ public class Expression {
         } catch (NumberFormatException e) {
             //
         }
+        if(!(name.equalsIgnoreCase("true") || name.equalsIgnoreCase("false"))) {
+            castedValueOfExpression = (String) name;
+            this.returnType = ReturnType.STRING;
+            return;
+        }
         try {
             castedValueOfExpression = Boolean.parseBoolean(name);
             this.returnType = ReturnType.BOOLEAN;
@@ -104,8 +102,7 @@ public class Expression {
         } catch (NumberFormatException e) {
             //
         }
-        this.returnType = ReturnType.STRING;
-        return;
+
     }
 
     public Object getValue() { return castedValueOfExpression; }
