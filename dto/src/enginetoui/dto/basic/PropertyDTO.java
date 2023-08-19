@@ -1,4 +1,4 @@
-package basic.dto;
+package enginetoui.dto.basic;
 
 import engine.action.expression.ReturnType;
 
