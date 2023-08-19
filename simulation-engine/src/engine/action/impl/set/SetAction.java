@@ -46,4 +46,9 @@ public class SetAction extends AbstractAction {
             default: // TODO: handle error
         }
     }
+
+    @Override
+    public String getPropertyName() {
+        return propertyName;
+    }
 }

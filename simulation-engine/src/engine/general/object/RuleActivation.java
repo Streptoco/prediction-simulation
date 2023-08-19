@@ -12,6 +12,14 @@ public class RuleActivation {
         this.alwaysActivate = false;
     }
 
+    public int getTicks() {
+        return ticks;
+    }
+
+    public double getProbability() {
+        return probability;
+    }
+
     public RuleActivation(int ticks) {
         this.ticks = ticks;
         this.probability = 1;

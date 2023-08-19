@@ -16,4 +16,12 @@ public class Termination {
         currentTime -= outerTimeInMillis;
         return (currentTick <= this.ticks && currentTime <= this.howManySecondsToRun);
     }
+
+    public int getAllTicks() {
+        return ticks;
+    }
+
+    public long getHowManySecondsToRun() {
+        return howManySecondsToRun/1000L;
+    }
 }

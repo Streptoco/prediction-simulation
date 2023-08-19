@@ -58,6 +58,11 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
+    @Override
+    public String getPropertyName() {
+        return propertyName;
+    }
+
     public boolean EvaluateExpression(PropertyExpressionEvaluation result) {
         if (valueOperator.equals("=")) {
             return result.isEqual();
@@ -68,5 +73,6 @@ public class ConditionAction extends AbstractAction {
         } else {
             return !result.isGreater();
         }
+
     }
 }

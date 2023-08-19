@@ -21,11 +21,12 @@ public class XmlReader {
     }
 
     public World ReadXML(String filePath) {
+        filePath = filePath.replaceAll("\\s", "");
         if (!(filePath.endsWith(".xml"))) {
             throw new XMLFileException(filePath);
         }
         File file = new File(filePath);
-        JAXBContext jaxbContext = null;
+        JAXBContext jaxbContext;
         try {
             jaxbContext = JAXBContext.newInstance(PRDWorld.class);
             Unmarshaller u = jaxbContext.createUnmarshaller();
@@ -102,22 +103,29 @@ public class XmlReader {
         return null;
     }
 
+
     private PropertyNotFoundDTO CheckRuleEntityProperty(List<PRDRule> prdRuleList, List<PRDEntity> prdEntity) {
         boolean propertyFound = false;
         PRDEntity entity = null;
         for (PRDRule rule : prdRuleList) {
             for (PRDAction action : rule.getPRDActions().getPRDAction()) {
+                if(action.getType().equalsIgnoreCase("condition")) {
+                    continue;
+                    //TODO: need to check the actions of then and else
+                }
                 for(PRDEntity currentEntity : prdEntity) {
                     if(currentEntity.getName().equals(action.getEntity())){
                         entity = currentEntity;
+                        break;
                     }
                 }
                 for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
                     if (action.getProperty().equals(property.getPRDName())) {
                         propertyFound = true;
+                        break;
                     }
                 }
-                if (propertyFound == false) {
+                if (!propertyFound) {
                     return new PropertyNotFoundDTO(rule.getName(), entity.getName(), action.getProperty());
                 }
             }
@@ -128,6 +136,7 @@ public class XmlReader {
 
     private String CheckCalculationAction(List<PRDRule> prdRules) {
         List<PRDAction> actionList = new ArrayList<>();
+        return null;
 
     }
 

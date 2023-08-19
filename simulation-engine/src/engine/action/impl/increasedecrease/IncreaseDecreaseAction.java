@@ -67,4 +67,9 @@ public class IncreaseDecreaseAction extends AbstractAction {
             }
         }
     }
+
+    @Override
+    public String getPropertyName() {
+        return propertyName;
+    }
 }

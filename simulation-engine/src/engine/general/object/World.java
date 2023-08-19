@@ -86,4 +86,13 @@ public class World {
     }
 
     public Environment getEnvironment() { return activeEnvironment; }
+
+    public List<EntityDefinition> GetEntities() { return this.entities; }
+
+    public List<Rule> getRules() {
+        return rules;
+    }
+
+    public int GetSimulationTotalTicks() { return this.termination.getAllTicks();}
+    public long GetSimulationTotalTime() { return this.termination.getHowManySecondsToRun();}
 }

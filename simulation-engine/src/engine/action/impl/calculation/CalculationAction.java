@@ -88,4 +88,8 @@ public class CalculationAction extends AbstractAction {
         }
         return false;
     }
+
+    public String getPropertyName() {
+        return propertyName;
+    }
 }
