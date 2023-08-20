@@ -15,6 +15,8 @@ public class EntityInstanceManager {
     private int numberOfAllInstances;
     private List<EntityInstance> instances;
 
+    private String entityName;
+
     public EntityInstanceManager() {
         countInstances = 0;
         instances = new ArrayList<>();
@@ -67,4 +69,23 @@ public class EntityInstanceManager {
         countInstances--;
     }
 
+    public int getNumberOfAllInstances() {
+        return numberOfAllInstances;
+    }
+
+    public void setNumberOfAllInstances(int numberOfAllInstances) {
+        this.numberOfAllInstances = numberOfAllInstances;
+    }
+
+    public int getCountInstances() {
+        return countInstances;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
 }

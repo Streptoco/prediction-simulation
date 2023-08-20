@@ -22,8 +22,9 @@ public class World {
     private List<EntityDefinition> entities;
     private Environment activeEnvironment;
     private long currentTime;
+    private final SimpleDateFormat simulationDate;
 
-    private SimpleDateFormat simulationDate;
+    private final Date simDate;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
@@ -33,9 +34,13 @@ public class World {
         this.rules = rules;
         this.activeEnvironment = environment;
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
+        this.simDate = new Date();
+        this.simulationDate.format(this.simDate);
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());
+            managers.get(entity.getName()).setNumberOfAllInstances(entity.getPopulation());
+            managers.get(entity.getName()).setEntityName(entity.getName());
             for (int i = 0; i < entity.getPopulation(); i++) {
                 managers.get(entity.getName()).create(entity);
             }
@@ -102,5 +107,16 @@ public class World {
 
     public SimpleDateFormat getSimulationDate() {
         return simulationDate;
+    }
+
+    public List<EntityInstanceManager> getAllInstancesManager() {
+        return new ArrayList<>(managers.values());
+    }
+
+    public Date getSimDate() {
+        return simDate;
+    }
+    public EntityInstanceManager GetInstances(String entityName) {
+        return managers.get(entityName);
     }
 }

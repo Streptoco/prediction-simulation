@@ -1,14 +1,16 @@
 import engine.action.expression.ReturnType;
 import engine.exception.XMLException;
 import engine.general.object.Engine;
-import enginetoui.dto.basic.ActionDTO;
-import enginetoui.dto.basic.EntityDTO;
-import enginetoui.dto.basic.PropertyDTO;
-import enginetoui.dto.basic.RuleDTO;
+import engine.general.object.World;
+import enginetoui.dto.basic.*;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class driver {
+    private static boolean loadXML = false;
+
     public static void main(String[] args) {
         Run();
     }
@@ -26,6 +28,7 @@ public class driver {
             try {
                 engine.addSimulation(filePath);
                 isWorldAccepted = true;
+                loadXML = true;
             } catch (XMLException e) {
                 System.out.println(e.getMessage());
             }
@@ -33,6 +36,10 @@ public class driver {
     }
 
     private static void ShowSimulationDetails(Engine engine) {
+        if (!loadXML) {
+            System.out.println("No XML file loaded to the system, return to main menu\n");
+            return;
+        }
         int i = 1, j = 1;
         System.out.println("Entities:\n");
         List<EntityDTO> entities = engine.GetAllEntities();
@@ -58,7 +65,7 @@ public class driver {
             System.out.println("\tActions of the rule:");
             for (ActionDTO action : rule.actionNames) {
                 System.out.println("\t\t\t" + j + ".  " + "Action type: " + action.type);
-                if(!action.property.equals("")) {
+                if (!action.property.equals("")) {
                     System.out.println("\t\t\t\tAction name: " + action.property);
                 }
                 j++;
@@ -70,27 +77,26 @@ public class driver {
     }
 
     public static int RunTheWorld(Engine engine) {
-       SetEnvVariables(engine);
-       return engine.RunSimulation();
+        SetEnvVariables(engine);
+        return engine.RunSimulation();
     }
 
-    public static void SetEnvVariables(Engine engine){
+    public static void SetEnvVariables(Engine engine) {
         List<PropertyDTO> envVariables = engine.GetAllEnvProperties();
         System.out.println("\nPlease choose the environment variable you wish to set, insert 0 to continue");
         int i = 1;
+        int userChoice; //TODO: need to fix this menu
         Scanner scanner = new Scanner(System.in);
-        int userChoice;
         String newValue, propertyName;
         do {
-            for(PropertyDTO currentVar : envVariables) {
+            for (PropertyDTO currentVar : envVariables) {
                 System.out.println(i + ". " + currentVar.getName());
                 i++;
             }
             System.out.println("Press 0 to continue");
             i = 1;
-            userChoice = scanner.nextInt();
-            scanner.nextLine();
-            if(userChoice > 0) {
+            userChoice = ValidChoice(envVariables.size(), 0);
+            if (userChoice > 0) {
                 propertyName = envVariables.get(userChoice - 1).name;
                 System.out.println("Please insert the new value:");
                 newValue = scanner.nextLine();
@@ -107,14 +113,82 @@ public class driver {
                         engine.SetVariable(propertyName, newValue);
                 }
             }
-        } while(userChoice != 0);
+        } while (userChoice != 0);
 
     }
 
     public static void ShowPastSimulations(Engine engine) {
+        List<WorldDTO> allSimulations = engine.GetSimulations();
+        int i = 1;
+        System.out.println("All the past simulations:");
+        for (WorldDTO simulations : allSimulations) {
+            System.out.println(i + ".  " + "Simulation ID: " + simulations.simulationId + "\n\tSimulation Date: " + simulations.GetSimulationDateString());
+            i++;
+        }
+        System.out.println("Please choose the desired simulation:");
+        Scanner scanner = new Scanner(System.in);
+        String userChoiceString;
+        int userChoice = -1;
+        boolean validChoice = false;
+        do {
+            userChoiceString = scanner.nextLine();
+            try {
+                userChoice = -1;
+                userChoice = Integer.parseInt(userChoiceString);
+            } catch (NumberFormatException e) {
+                if (userChoice == -1) {
+                    userChoice = -1;
+                }
+            }
+            if (userChoice > 0 && userChoice <= allSimulations.size() + 1) {
+                validChoice = true;
+                break;
+            } else {
+                System.out.println("Wrong input, try again");
+            }
+
+        } while (!validChoice);
+
+        WorldDTO relevantWorld = allSimulations.get(userChoice - 1);
+        System.out.println("Please choose the information you like to see\n1. Amount per entity\n2. Histogram of property");
+        validChoice = false;
+        do {
+            userChoiceString = scanner.nextLine();
+            try {
+                userChoice = -1;
+                userChoice = Integer.parseInt(userChoiceString);
+            } catch (NumberFormatException e) {
+                if (userChoice == -1) {
+                    userChoice = -1;
+                }
+            }
+            if (userChoice == 1 || userChoice == 2) {
+                validChoice = true;
+                break;
+            } else {
+                System.out.println("Wrong input, try again");
+            }
+        } while (!validChoice);
+
+        if (userChoice == 1) {
+            int j = 1;
+            for (InstancesDTO instance : relevantWorld.instances) {
+                System.out.println("\t" + j + ".  " + "Entity name: " + instance.entityName + "\n\t\tAmount at the beginning: " + instance.numberOfInstances
+                        + "\n\t\t" + "Amount at the end: " + instance.numberOfRemainInstances + "\n");
+            }
+        } else {
+            System.out.println("Choose the relevant entity:");
+            int j = 1;
+            for (InstancesDTO instance : relevantWorld.instances) {
+                System.out.println("\t" + j + ".  " + "Entity name: " + instance.entityName);
+            }
+            userChoice = ValidChoice(relevantWorld.instances.size(), 1) - 1;
+
+            //Map<String, Integer> histogram = relevantWorld.GetHistogram(relevantWorld.instances.get(userChoice).entityName, "age", )
+
+        }
 
     }
-
 
     private static void Run() {
         Engine engine = new Engine();
@@ -123,8 +197,11 @@ public class driver {
         System.out.println("Please choose an option:\n1. Load a new XML File.\n2. Show simulation details\n" +
                 "3. Run the simulation\n4. Show details of past simulation\n5. Exit :)");
         Scanner scanner = new Scanner(System.in);
-        int userChoice = scanner.nextInt();
+        String userChoiceString;
+        int userChoice = -1;
         do {
+            userChoice = ValidChoice(5, 1);
+
             switch (userChoice) {
                 case 1:
                     LoadXMLFile(engine);
@@ -133,22 +210,60 @@ public class driver {
                     ShowSimulationDetails(engine);
                     break;
                 case 3:
-                    simulationId = RunTheWorld(engine);
-                    System.out.println("Simulation ran successfully, run id: " + simulationId);
+                    if (!loadXML) {
+                        System.out.println("No XML file loaded to the system, return to main menu\n");
+                    } else {
+                        simulationId = RunTheWorld(engine);
+                        System.out.println("Simulation ran successfully, run id: " + simulationId);
+                    }
                     break;
                 case 4:
                     ShowPastSimulations(engine);
+                    break;
+                case 5:
                     break;
                 default:
                     System.out.println("Wrong input! Try again\n");
                     break;
 
             }
-            System.out.println("Please choose an option:\n1. Load a new XML File.\n2. Show simulation details\n" +
-                    "3. Run the simulation\n4. Show details of past simulation\n5. Exit :)");
-            userChoice = scanner.nextInt();
+            if (userChoice != 5) {
+                System.out.println("Please choose an option:\n1. Load a new XML File.\n2. Show simulation details\n" +
+                        "3. Run the simulation\n4. Show details of past simulation\n5. Exit :)");
+            }
+
         } while (userChoice != 5);
 
+    }
+
+    public static int ValidChoice(int upLimit, int downLimit) {
+        Scanner scanner = new Scanner(System.in);
+        String userChoiceString;
+        int userChoice = 1;
+        boolean validChoice = false;
+        do {
+            userChoiceString = scanner.nextLine();
+            try {
+                userChoice = -1;
+                userChoice = Integer.parseInt(userChoiceString);
+            } catch (NumberFormatException e) {
+                if (userChoice == -1) {
+                    userChoice = -1;
+                }
+            }
+            if (userChoice != -1) {
+                if (userChoice >= downLimit || userChoice < upLimit) {
+                    validChoice = true;
+                    return userChoice;
+                } else {
+                    System.out.println("Wrong input, try again");
+                }
+            } else {
+                System.out.println("Wrong input, try again");
+            }
+        } while (!validChoice);
+        return 0;
 
     }
+
 }

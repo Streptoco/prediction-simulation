@@ -1,11 +1,13 @@
 package engine.general.object;
 
 import engine.entity.impl.EntityDefinition;
+import engine.entity.impl.EntityInstanceManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.XmlReader;
 import enginetoui.dto.basic.EntityDTO;
 import enginetoui.dto.basic.PropertyDTO;
 import enginetoui.dto.basic.RuleDTO;
+import enginetoui.dto.basic.WorldDTO;
 
 import java.util.*;
 
@@ -78,7 +80,15 @@ public class Engine {
         return (serialNumber - 1);
     }
 
-    public List<World> GetSimulationSorted() {
+    public List<WorldDTO> GetSimulations() {
+        List<WorldDTO> resultList = new ArrayList<>();
+        for(Map.Entry<Integer, World> entry : simulations.entrySet()) {
+            resultList.add(new WorldDTO(entry.getKey(), entry.getValue().getSimulationDate(), entry.getValue().getAllInstancesManager(), entry.getValue().getSimDate()));
+        }
+        return resultList;
+    }
 
+    public EntityInstanceManager GetInstanceManager(String name, int simID) {
+        return this.simulations.get(simID - 1).GetInstances(name);
     }
 }

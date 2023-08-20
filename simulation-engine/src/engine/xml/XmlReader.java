@@ -109,20 +109,27 @@ public class XmlReader {
         PRDEntity entity = null;
         for (PRDRule rule : prdRuleList) {
             for (PRDAction action : rule.getPRDActions().getPRDAction()) {
-                if(action.getType().equalsIgnoreCase("condition")) {
-                    continue;
-                    //TODO: need to check the actions of then and else
-                }
-                for(PRDEntity currentEntity : prdEntity) {
-                    if(currentEntity.getName().equals(action.getEntity())){
+                for (PRDEntity currentEntity : prdEntity) {
+                    if (currentEntity.getName().equals(action.getEntity())) {
                         entity = currentEntity;
                         break;
                     }
                 }
-                for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
-                    if (action.getProperty().equals(property.getPRDName())) {
-                        propertyFound = true;
-                        break;
+                if (action.getType().equalsIgnoreCase("calculation")) {
+                    PropertyNotFoundDTO calResult = CheckCalculationAction(action, entity, rule);
+                    if (calResult != null) {
+                        return calResult;
+                    }
+
+                } else if (action.getType().equalsIgnoreCase("condition")) {
+                    continue;
+                    //TODO: need to check the actions of then and else
+                } else {
+                    for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
+                        if (action.getProperty().equals(property.getPRDName())) {
+                            propertyFound = true;
+                            break;
+                        }
                     }
                 }
                 if (!propertyFound) {
@@ -134,10 +141,28 @@ public class XmlReader {
         return null;
     }
 
-    private String CheckCalculationAction(List<PRDRule> prdRules) {
-        List<PRDAction> actionList = new ArrayList<>();
-        return null;
+    private PropertyNotFoundDTO CheckCalculationAction(PRDAction calAction, PRDEntity prdEntity, PRDRule rule) {
+        String resultProp = calAction.getResultProp();
+        boolean found = false;
+        for (PRDProperty property : prdEntity.getPRDProperties().getPRDProperty()) {
+            if (property.getPRDName().equals(resultProp)) {
+                found = true;
+                //TODO: check the arguments also
+                return null;
+            }
+        }
+        if (!found) {
+            return new PropertyNotFoundDTO(rule.getName(), prdEntity.getName(), calAction.getProperty());
+        } else {
+            return null;
+        }
+    }
 
+    private String CheckCalActionArgs(PRDAction calAction) {
+        if (calAction.getPRDMultiply() != null) {
+            PRDMultiply mulAction = calAction.getPRDMultiply();
+        }
+        return null;
     }
 
 
