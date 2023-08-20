@@ -1,5 +1,6 @@
 package engine.xml;
 
+import com.sun.org.apache.xerces.internal.xni.XNIException;
 import engine.exception.*;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.*;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 
 public class XmlReader {
+
+    private String xmlPath;
     public XmlReader() {
     }
 
@@ -25,6 +28,7 @@ public class XmlReader {
         if (!(filePath.endsWith(".xml"))) {
             throw new XMLFileException(filePath);
         }
+        this.xmlPath = filePath;
         File file = new File(filePath);
         JAXBContext jaxbContext;
         try {
@@ -124,7 +128,10 @@ public class XmlReader {
                 } else if (action.getType().equalsIgnoreCase("condition")) {
                     continue;
                     //TODO: need to check the actions of then and else
-                } else {
+                } else if(action.getType().equalsIgnoreCase("increase") || action.getType().equalsIgnoreCase("decrease")) {
+                    //TODO: do something
+                }
+                else {
                     for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
                         if (action.getProperty().equals(property.getPRDName())) {
                             propertyFound = true;
@@ -147,7 +154,9 @@ public class XmlReader {
         for (PRDProperty property : prdEntity.getPRDProperties().getPRDProperty()) {
             if (property.getPRDName().equals(resultProp)) {
                 found = true;
-                //TODO: check the arguments also
+                if(!CheckCalActionArgs(calAction)) {
+                    throw new XMLFileException(xmlPath + "The arguments of " + calAction.getType() + "are not valid");
+                }
                 return null;
             }
         }
@@ -158,11 +167,41 @@ public class XmlReader {
         }
     }
 
-    private String CheckCalActionArgs(PRDAction calAction) {
+    private boolean CheckCalActionArgs(PRDAction calAction) {
         if (calAction.getPRDMultiply() != null) {
             PRDMultiply mulAction = calAction.getPRDMultiply();
+            try {
+                double arg1 = Double.parseDouble(mulAction.getArg1());
+                double arg2 = Double.parseDouble(mulAction.getArg2());
+
+            } catch (NumberFormatException e) {
+                if(mulAction.getArg1().startsWith("environment(") || mulAction.getArg2().startsWith("environment(") ) {
+                    //TODO: check env properties somehow
+                    return true;
+                } else if (mulAction.getArg1().startsWith("random(") || mulAction.getArg2().startsWith("random(")) {
+                    return true;
+                }
+                return false;
+            }
         }
-        return null;
+        else {
+            PRDDivide divAction = calAction.getPRDDivide();
+            try {
+                double arg1 = Double.parseDouble(divAction.getArg1());
+                double arg2 = Double.parseDouble(divAction.getArg2());
+
+            } catch (NumberFormatException e) {
+                if(divAction.getArg1().startsWith("environment(") || divAction.getArg2().startsWith("environment(") ) {
+                    //TODO: check env properties somehow
+                    return true;
+                } else if (divAction.getArg1().startsWith("random(") || divAction.getArg2().startsWith("random(")) {
+                    return true;
+                }
+                return false;
+            }
+
+        }
+        return true;
     }
 
 
