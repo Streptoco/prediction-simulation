@@ -36,7 +36,7 @@ public class Expression {
             this.returnType = ReturnType.INT;
         }
 
-        else if (name.startsWith("environment")) {
+        else if (name.startsWith("environment(")) {
             String envVariableName = "";
             int startIndex = name.indexOf("(");
             int endIndex = name.indexOf(")");

@@ -20,6 +20,7 @@ import java.util.Set;
 public class XmlReader {
 
     private String xmlPath;
+    private List<PRDEnvProperty> envVariables;
     public XmlReader() {
     }
 
@@ -38,6 +39,8 @@ public class XmlReader {
             String propertyDuplicateName = CheckEnvProperties(aWholeNewWorld.getPRDEvironment().getPRDEnvProperty());
             if (propertyDuplicateName != null) {
                 throw new XMLDuplicateEnvPropertyName(filePath, propertyDuplicateName);
+            } else {
+                this.envVariables = aWholeNewWorld.getPRDEvironment().getPRDEnvProperty();
             }
             PropertyDuplicateNameDTO propertyDuplicate = CheckEntityProperties(aWholeNewWorld.getPRDEntities().getPRDEntity());
             if (propertyDuplicate != null) {
@@ -129,7 +132,7 @@ public class XmlReader {
                     continue;
                     //TODO: need to check the actions of then and else
                 } else if(action.getType().equalsIgnoreCase("increase") || action.getType().equalsIgnoreCase("decrease")) {
-                    //TODO: do something
+                    propertyFound = true;
                 }
                 else {
                     for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
@@ -175,10 +178,12 @@ public class XmlReader {
                 double arg2 = Double.parseDouble(mulAction.getArg2());
 
             } catch (NumberFormatException e) {
-                if(mulAction.getArg1().startsWith("environment(") || mulAction.getArg2().startsWith("environment(") ) {
-                    //TODO: check env properties somehow
-                    return true;
-                } else if (mulAction.getArg1().startsWith("random(") || mulAction.getArg2().startsWith("random(")) {
+                if(mulAction.getArg1().startsWith("environment(")) {
+                    return CheckEnvVariablesFromCalAction(mulAction.getArg1());
+                } else if(mulAction.getArg2().startsWith("environment(")) {
+                    return CheckEnvVariablesFromCalAction(mulAction.getArg2());
+                }
+                else if (mulAction.getArg1().startsWith("random(") || mulAction.getArg2().startsWith("random(")) {
                     return true;
                 }
                 return false;
@@ -191,17 +196,33 @@ public class XmlReader {
                 double arg2 = Double.parseDouble(divAction.getArg2());
 
             } catch (NumberFormatException e) {
-                if(divAction.getArg1().startsWith("environment(") || divAction.getArg2().startsWith("environment(") ) {
-                    //TODO: check env properties somehow
-                    return true;
-                } else if (divAction.getArg1().startsWith("random(") || divAction.getArg2().startsWith("random(")) {
-                    return true;
+                if(divAction.getArg1().startsWith("environment(")) {
+                    return CheckEnvVariablesFromCalAction(divAction.getArg1());
+                } else if(divAction.getArg2().startsWith("environment(")) {
+                    return CheckEnvVariablesFromCalAction(divAction.getArg1());
                 }
-                return false;
+                else return divAction.getArg1().startsWith("random(") || divAction.getArg2().startsWith("random(");
             }
 
         }
         return true;
+    }
+
+    private boolean CheckEnvVariablesFromCalAction(String arg) {
+        String envVariableName = "";
+        int startIndex = arg.indexOf("(");
+        int endIndex = arg.indexOf(")");
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            envVariableName = arg.substring(startIndex + 1, endIndex);
+        }
+        for(PRDEnvProperty property : this.envVariables) {
+            if(property.getPRDName().equalsIgnoreCase(envVariableName)) {
+                if(property.getType().equalsIgnoreCase("decimal") || property.getType().equalsIgnoreCase("float")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
