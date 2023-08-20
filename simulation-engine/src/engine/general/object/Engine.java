@@ -8,6 +8,7 @@ import enginetoui.dto.basic.EntityDTO;
 import enginetoui.dto.basic.PropertyDTO;
 import enginetoui.dto.basic.RuleDTO;
 import enginetoui.dto.basic.WorldDTO;
+import org.w3c.dom.ranges.RangeException;
 
 import java.util.*;
 
@@ -61,15 +62,31 @@ public class Engine {
     }
 
     public void SetVariable(String variableName, int value) {
+        double from = simulations.get(serialNumber).getEnvironment().getProperty(variableName).getFrom();
+        double to = simulations.get(serialNumber).getEnvironment().getProperty(variableName).getTo();
+        if(value < (int) from || value > (int) to) {
+            throw new RuntimeException("The value " + value + " is out of bound\n" +
+                    "The value should be between: " + (int)from + " to: " + (int)to);
+        }
         simulations.get(serialNumber).getEnvironment().updateProperty(variableName, value);
     }
 
     public void SetVariable(String variableName, double value) {
+        double from = simulations.get(serialNumber).getEnvironment().getProperty(variableName).getFrom();
+        double to = simulations.get(serialNumber).getEnvironment().getProperty(variableName).getTo();
+        if(value < from || value >  to) {
+            throw new RuntimeException("The value " + value + " is out of bound\n" +
+                    "The value should be between: " + from + " to: " + to);
+        }
         simulations.get(serialNumber).getEnvironment().updateProperty(variableName, value);
     }
 
-    public void SetVariable(String variableName, boolean value) {
-        simulations.get(serialNumber).getEnvironment().updateProperty(variableName, value);
+    public void SetVariableBool(String variableName, String value) {
+        if(!(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"))) {
+            throw new RuntimeException("The value " + value + " cannot be parsed to boolean\n" +
+                    "The value should be \"true\" or \"false\"");
+        }
+        simulations.get(serialNumber).getEnvironment().updateProperty(variableName, Boolean.parseBoolean(value));
     }
 
     public void SetVariable(String variableName, String value) {

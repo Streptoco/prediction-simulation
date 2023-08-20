@@ -3,6 +3,7 @@ import engine.exception.XMLException;
 import engine.general.object.Engine;
 import engine.general.object.World;
 import enginetoui.dto.basic.*;
+import org.w3c.dom.ranges.RangeException;
 
 import java.util.List;
 import java.util.Map;
@@ -102,17 +103,26 @@ public class driver {
                 propertyName = envVariables.get(userChoice - 1).name;
                 System.out.println("Please insert the new value:");
                 newValue = scanner.nextLine();
-                switch (envVariables.get(userChoice - 1).type) {
-                    case INT:
-                        engine.SetVariable(propertyName, Integer.parseInt(newValue));
-                        break;
-                    case DECIMAL:
-                        engine.SetVariable(propertyName, Double.parseDouble(newValue));
-                        break;
-                    case BOOLEAN:
-                        engine.SetVariable(propertyName, Boolean.parseBoolean(newValue));
-                    case STRING:
-                        engine.SetVariable(propertyName, newValue);
+                try {
+                    switch (envVariables.get(userChoice - 1).type) {
+                        case INT:
+                            engine.SetVariable(propertyName, Integer.parseInt(newValue));
+                            break;
+                        case DECIMAL:
+                            engine.SetVariable(propertyName, Double.parseDouble(newValue));
+                            break;
+                        case BOOLEAN:
+                            engine.SetVariableBool(propertyName, newValue);
+                            break;
+                        case STRING:
+                            engine.SetVariable(propertyName, newValue);
+                            break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Error while setting the environment variables\n" +
+                            "Unable to parse \"" + newValue + "\" to " + envVariables.get(userChoice - 1).type);
+                } catch (RuntimeException e) {
+                    System.out.println(e.getMessage());
                 }
             }
         } while (userChoice != 0);
@@ -189,8 +199,8 @@ public class driver {
             int userChoiceName = userChoice;
             j = 1;
             System.out.println("Choose the desired property");
-            for(String propertyName : relevantWorld.instances.get(userChoice).propertyNames) {
-                System.out.println("\t" + j + ". "+ "Property name: " + propertyName);
+            for (String propertyName : relevantWorld.instances.get(userChoice).propertyNames) {
+                System.out.println("\t" + j + ". " + "Property name: " + propertyName);
                 j++;
             }
             userChoice = ValidChoice(relevantWorld.instances.get(userChoice).propertyNames.size(), 1) - 1;
@@ -198,10 +208,10 @@ public class driver {
             String propertyName = relevantWorld.instances.get(userChoiceName).propertyNames.get(userChoiceProperty);
 
             Map<String, Integer> histogram = relevantWorld.GetHistogram(relevantWorld.instances.get(userChoiceName).entityName, propertyName, simulationId, engine);
-            for(Map.Entry<String, Integer> entry : histogram.entrySet()) {
+            for (Map.Entry<String, Integer> entry : histogram.entrySet()) {
                 String key = entry.getKey();
                 Integer value = entry.getValue();
-                System.out.println("Value: " + key + ", Amount: " + value );
+                System.out.println("Value: " + key + ", Amount: " + value);
             }
 
 
@@ -231,10 +241,9 @@ public class driver {
                 case 3:
                     if (!loadXML) {
                         System.out.println("No XML file loaded to the system, return to main menu\n");
-                    } else if(alreadyRun) {
+                    } else if (alreadyRun) {
                         System.out.println("This xml file was already used, please load a new xml");
-                    }
-                    else {
+                    } else {
                         simulationId = RunTheWorld(engine);
                         alreadyRun = true;
                         System.out.println("Simulation ran successfully, run id: " + simulationId);
@@ -275,7 +284,7 @@ public class driver {
                 }
             }
             if (userChoice != -1) {
-                if (userChoice >= downLimit || userChoice < upLimit) {
+                if (userChoice >= downLimit && userChoice <= upLimit) {
                     validChoice = true;
                     return userChoice;
                 } else {
