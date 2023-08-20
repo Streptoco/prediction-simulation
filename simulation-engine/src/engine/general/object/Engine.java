@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Engine {
     private final Map<Integer, World> simulations; //TODO: should be map, key:value pairs. the key would be generated.
-    private int serialNumber = 1;
+    private int serialNumber = 0;
     private final XmlReader reader;
 
     public Engine() {
@@ -22,11 +22,12 @@ public class Engine {
     }
 
     public void addSimulation(String filePath) {
+        serialNumber++;
         simulations.put(serialNumber, reader.ReadXML(filePath));
     }
 
     public List<EntityDTO> GetAllEntities() {
-        World currentWorld = simulations.get(serialNumber - 1);
+        World currentWorld = simulations.get(serialNumber);
         List<EntityDTO> resultList = new ArrayList<>();
         for (EntityDefinition entity : currentWorld.GetEntities()) {
             resultList.add(new EntityDTO(entity.getName(), entity.getPopulation(), entity.getProps()));
@@ -35,7 +36,7 @@ public class Engine {
     }
 
     public List<RuleDTO> GetAllRules() {
-        World currentWorld = simulations.get(serialNumber - 1);
+        World currentWorld = simulations.get(serialNumber);
         List<RuleDTO> resultList = new ArrayList<>();
         for (Rule rule : currentWorld.getRules()) {
             resultList.add(new RuleDTO(rule.getName(), rule.getTick(), rule.getProbability(), rule.GetNumOfActions(), rule.getActions()));
@@ -44,40 +45,40 @@ public class Engine {
     }
 
     public int GetSimulationTotalTicks() {
-        return simulations.get(serialNumber - 1).GetSimulationTotalTicks();
+        return simulations.get(serialNumber).GetSimulationTotalTicks();
     }
 
     public long GetSimulationTotalTime() {
-        return simulations.get(serialNumber - 1).GetSimulationTotalTime();
+        return simulations.get(serialNumber).GetSimulationTotalTime();
     }
 
     public List<PropertyDTO> GetAllEnvProperties() {
         List<PropertyDTO> resultList = new ArrayList<>();
-        for (PropertyInterface envProperty : this.simulations.get(this.serialNumber - 1).getEnvironment().GetAllEnvVariables()) {
+        for (PropertyInterface envProperty : this.simulations.get(this.serialNumber).getEnvironment().GetAllEnvVariables()) {
             resultList.add(new PropertyDTO(envProperty.getName(), envProperty.getPropertyType(), envProperty.getFrom(), envProperty.getTo(), envProperty.getRandomStatus()));
         }
         return resultList;
     }
 
     public void SetVariable(String variableName, int value) {
-        simulations.get(serialNumber - 1).getEnvironment().updateProperty(variableName, value);
+        simulations.get(serialNumber).getEnvironment().updateProperty(variableName, value);
     }
 
     public void SetVariable(String variableName, double value) {
-        simulations.get(serialNumber - 1).getEnvironment().updateProperty(variableName, value);
+        simulations.get(serialNumber).getEnvironment().updateProperty(variableName, value);
     }
 
     public void SetVariable(String variableName, boolean value) {
-        simulations.get(serialNumber - 1).getEnvironment().updateProperty(variableName, value);
+        simulations.get(serialNumber).getEnvironment().updateProperty(variableName, value);
     }
 
     public void SetVariable(String variableName, String value) {
-        simulations.get(serialNumber - 1).getEnvironment().updateProperty(variableName, value);
+        simulations.get(serialNumber).getEnvironment().updateProperty(variableName, value);
     }
 
     public int RunSimulation() {
-        simulations.get(serialNumber - 1).Run();
-        return (serialNumber - 1);
+        simulations.get(serialNumber).Run();
+        return (serialNumber);
     }
 
     public List<WorldDTO> GetSimulations() {
