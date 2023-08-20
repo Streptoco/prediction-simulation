@@ -19,5 +19,6 @@ public interface PropertyInterface {
 
     public Object getValue();
 
+
     public PropertyExpressionEvaluation evaluate(Expression expression);
 }

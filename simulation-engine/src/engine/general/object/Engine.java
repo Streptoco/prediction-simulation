@@ -22,7 +22,7 @@ public class Engine {
     }
 
     public void addSimulation(String filePath) {
-        simulations.put(serialNumber++, reader.ReadXML(filePath));
+        simulations.put(serialNumber, reader.ReadXML(filePath));
     }
 
     public List<EntityDTO> GetAllEntities() {
@@ -89,6 +89,6 @@ public class Engine {
     }
 
     public EntityInstanceManager GetInstanceManager(String name, int simID) {
-        return this.simulations.get(simID - 1).GetInstances(name);
+        return this.simulations.get(simID).GetInstances(name);
     }
 }

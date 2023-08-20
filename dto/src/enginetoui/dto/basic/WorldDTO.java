@@ -21,25 +21,28 @@ public class WorldDTO {
         this.simDate = date;
         this.instances = new ArrayList<>();
         this.managerList = entities;
-        for(EntityInstanceManager entityManager : entities) {
-            this.instances.add(new InstancesDTO(entityManager.getCountInstances(), entityManager.getNumberOfAllInstances(), entityManager.getEntityName()));
+        for (EntityInstanceManager entityManager : entities) {
+            this.instances.add(new InstancesDTO(entityManager.getCountInstances(), entityManager.getNumberOfAllInstances(), entityManager.getEntityName(), entityManager.getPropertiesName()));
         }
     }
+
     public String GetSimulationDateString() {
         return simulationDate.format(this.simDate);
     }
 
-    public Map<String, Integer> GetHistogram(String entityName, String propertyName, int simulationId,Engine engine) {
+public Map<String, Integer> GetHistogram(String entityName, String propertyName, int simulationId, Engine engine) {
         Map<String, Integer> resultMap = new HashMap<>();
-        EntityInstanceManager entity = engine.GetInstanceManager(entityName,simulationId);
-        for(EntityInstance currentInstance :entity.getInstances()) {
-            PropertyInterface currentProperty = currentInstance.getPropertyByName(propertyName);
-            if(resultMap.containsKey((String)currentProperty.getValue())) {
-                int val = (resultMap.get((String) currentProperty.getValue())) + 1;
-                resultMap.put((String) currentInstance.getPropertyByName(propertyName).getValue(), val);
+        EntityInstanceManager entity = engine.GetInstanceManager(entityName, simulationId);
+        for (EntityInstance currentInstance : entity.getInstances()) {
+            if(!currentInstance.isAlive()) {
+                continue;
             }
-            else {
-                resultMap.put((String) currentProperty.getValue(), 1);
+            PropertyInterface currentProperty = currentInstance.getPropertyByName(propertyName);
+            if (resultMap.containsKey((currentProperty.getValue().toString()))) {
+                int val = (resultMap.get(currentProperty.getValue().toString())) + 1;
+                resultMap.put((currentInstance.getPropertyByName(propertyName).getValue().toString()), val);
+            } else {
+                resultMap.put(currentProperty.getValue().toString(), 1);
             }
         }
         return resultMap;

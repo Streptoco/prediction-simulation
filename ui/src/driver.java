@@ -11,6 +11,8 @@ import java.util.Scanner;
 public class driver {
     private static boolean loadXML = false;
 
+    private static boolean alreadyRun = false;
+
     public static void main(String[] args) {
         Run();
     }
@@ -150,6 +152,7 @@ public class driver {
         } while (!validChoice);
 
         WorldDTO relevantWorld = allSimulations.get(userChoice - 1);
+        int simulationId = userChoice;
         System.out.println("Please choose the information you like to see\n1. Amount per entity\n2. Histogram of property");
         validChoice = false;
         do {
@@ -183,8 +186,24 @@ public class driver {
                 System.out.println("\t" + j + ".  " + "Entity name: " + instance.entityName);
             }
             userChoice = ValidChoice(relevantWorld.instances.size(), 1) - 1;
+            int userChoiceName = userChoice;
+            j = 1;
+            System.out.println("Choose the desired property");
+            for(String propertyName : relevantWorld.instances.get(userChoice).propertyNames) {
+                System.out.println("\t" + j + ". "+ "Property name: " + propertyName);
+                j++;
+            }
+            userChoice = ValidChoice(relevantWorld.instances.get(userChoice).propertyNames.size(), 1) - 1;
+            int userChoiceProperty = userChoice;
+            String propertyName = relevantWorld.instances.get(userChoiceName).propertyNames.get(userChoiceProperty);
 
-            //Map<String, Integer> histogram = relevantWorld.GetHistogram(relevantWorld.instances.get(userChoice).entityName, "age", )
+            Map<String, Integer> histogram = relevantWorld.GetHistogram(relevantWorld.instances.get(userChoiceName).entityName, propertyName, simulationId, engine);
+            for(Map.Entry<String, Integer> entry : histogram.entrySet()) {
+                String key = entry.getKey();
+                Integer value = entry.getValue();
+                System.out.println("Value: " + key + ", Amount: " + value );
+            }
+
 
         }
 
@@ -197,7 +216,6 @@ public class driver {
         System.out.println("Please choose an option:\n1. Load a new XML File.\n2. Show simulation details\n" +
                 "3. Run the simulation\n4. Show details of past simulation\n5. Exit :)");
         Scanner scanner = new Scanner(System.in);
-        String userChoiceString;
         int userChoice = -1;
         do {
             userChoice = ValidChoice(5, 1);
@@ -205,6 +223,7 @@ public class driver {
             switch (userChoice) {
                 case 1:
                     LoadXMLFile(engine);
+                    alreadyRun = false;
                     break;
                 case 2:
                     ShowSimulationDetails(engine);
@@ -212,8 +231,12 @@ public class driver {
                 case 3:
                     if (!loadXML) {
                         System.out.println("No XML file loaded to the system, return to main menu\n");
-                    } else {
+                    } else if(alreadyRun) {
+                        System.out.println("This xml file was already used, please load a new xml");
+                    }
+                    else {
                         simulationId = RunTheWorld(engine);
+                        alreadyRun = true;
                         System.out.println("Simulation ran successfully, run id: " + simulationId);
                     }
                     break;

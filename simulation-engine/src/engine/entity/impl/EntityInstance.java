@@ -3,8 +3,7 @@ package engine.entity.impl;
 import engine.entity.api.EntityInstanceInterface;
 import engine.property.api.PropertyInterface;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class EntityInstance implements EntityInstanceInterface {
     private EntityDefinition entityDefinition;
@@ -39,4 +38,8 @@ public class EntityInstance implements EntityInstanceInterface {
     public void setDead() { this.isAlive = false;}
 
     public boolean isAlive() { return this.isAlive; }
+
+    public List<String> getPropertiesName() {
+        return new ArrayList<>((properties.keySet()));
+    }
 }

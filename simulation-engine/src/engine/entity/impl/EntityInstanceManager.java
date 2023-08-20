@@ -9,6 +9,7 @@ import engine.property.impl.StringProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class EntityInstanceManager {
     private int countInstances;
@@ -87,5 +88,9 @@ public class EntityInstanceManager {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public List<String> getPropertiesName() {
+        return instances.get(0).getPropertiesName();
     }
 }
