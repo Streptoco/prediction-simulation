@@ -8,6 +8,7 @@ import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.action.expression.ReturnType;
 import engine.context.api.Context;
+import engine.exception.XMLException;
 import engine.property.api.PropertyInterface;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.IntProperty;

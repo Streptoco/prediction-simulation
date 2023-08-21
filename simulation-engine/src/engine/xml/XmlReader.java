@@ -164,10 +164,17 @@ public class XmlReader {
                     if (action.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
                         propertyName = action.getPRDCondition().getProperty();
                         if (CheckSingleConditionAction(action.getPRDCondition())) {
-                            if (CheckSingleConditionActions(action.getPRDThen().getPRDAction()) && CheckSingleConditionActions(action.getPRDElse().getPRDAction())) {
+                            if (CheckSingleConditionActions(action.getPRDThen().getPRDAction())) {
                                 propertyFound = true;
                             } else {
                                 propertyFound = false;
+                            }
+                            if(action.getPRDElse() != null) {
+                                if (CheckSingleConditionActions(action.getPRDElse().getPRDAction())) {
+                                    propertyFound = true;
+                                } else {
+                                    propertyFound = false;
+                                }
                             }
                         } else {
                             propertyFound = false;
