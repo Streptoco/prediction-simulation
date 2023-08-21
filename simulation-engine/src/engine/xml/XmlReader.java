@@ -1,6 +1,5 @@
 package engine.xml;
 
-import com.sun.org.apache.xerces.internal.xni.XNIException;
 import engine.exception.*;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.*;
@@ -21,6 +20,9 @@ public class XmlReader {
 
     private String xmlPath;
     private List<PRDEnvProperty> envVariables;
+
+    private List<PRDEntity> prdEntityList;
+
     public XmlReader() {
     }
 
@@ -36,21 +38,23 @@ public class XmlReader {
             jaxbContext = JAXBContext.newInstance(PRDWorld.class);
             Unmarshaller u = jaxbContext.createUnmarshaller();
             PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
-            String propertyDuplicateName = CheckEnvProperties(aWholeNewWorld.getPRDEvironment().getPRDEnvProperty());
+            String propertyDuplicateName = CheckEnvPropertiesNamesForDuplication(aWholeNewWorld.getPRDEvironment().getPRDEnvProperty());
             if (propertyDuplicateName != null) {
                 throw new XMLDuplicateEnvPropertyName(filePath, propertyDuplicateName);
             } else {
                 this.envVariables = aWholeNewWorld.getPRDEvironment().getPRDEnvProperty();
             }
-            PropertyDuplicateNameDTO propertyDuplicate = CheckEntityProperties(aWholeNewWorld.getPRDEntities().getPRDEntity());
+            PropertyDuplicateNameDTO propertyDuplicate = CheckEntityPropertiesNamesForDuplication(aWholeNewWorld.getPRDEntities().getPRDEntity());
             if (propertyDuplicate != null) {
                 throw new XMLDuplicateEntityPropertyName(filePath, propertyDuplicate.propertyName, propertyDuplicate.entityName);
+            } else {
+                this.prdEntityList = aWholeNewWorld.getPRDEntities().getPRDEntity();
             }
-            EntityNotFoundDTO entityNotFound = CheckRuleEntity(aWholeNewWorld.getPRDRules().getPRDRule(), aWholeNewWorld.getPRDEntities().getPRDEntity());
+            EntityNotFoundDTO entityNotFound = CheckInRulesActionsIfEntityExist(aWholeNewWorld.getPRDRules().getPRDRule(), aWholeNewWorld.getPRDEntities().getPRDEntity());
             if (entityNotFound != null) {
                 throw new XMLEntityNotFoundException(filePath, entityNotFound.ruleName, entityNotFound.entityName);
             }
-            PropertyNotFoundDTO propertyNotFound = CheckRuleEntityProperty(aWholeNewWorld.getPRDRules().getPRDRule(), aWholeNewWorld.getPRDEntities().getPRDEntity());
+            PropertyNotFoundDTO propertyNotFound = CheckInRulesActionIfEntityPropertyExist(aWholeNewWorld.getPRDRules().getPRDRule(), aWholeNewWorld.getPRDEntities().getPRDEntity());
             if (propertyNotFound != null) {
                 throw new XMLRulePropertyNotFoundException(filePath, propertyNotFound.ruleName, propertyNotFound.entityName, propertyNotFound.propertyName);
             }
@@ -62,7 +66,7 @@ public class XmlReader {
 
     }
 
-    private String CheckEnvProperties(List<PRDEnvProperty> envProperties) {
+    private String CheckEnvPropertiesNamesForDuplication(List<PRDEnvProperty> envProperties) {
         List<String> propertyName = new ArrayList<>();
         for (PRDEnvProperty property : envProperties) {
             propertyName.add(property.getPRDName());
@@ -78,7 +82,7 @@ public class XmlReader {
         return null;
     }
 
-    private PropertyDuplicateNameDTO CheckEntityProperties(List<PRDEntity> prdEntity) {
+    private PropertyDuplicateNameDTO CheckEntityPropertiesNamesForDuplication(List<PRDEntity> prdEntity) {
         List<PRDEnvProperty> tempPRDList = new ArrayList<>();
         for (PRDEntity entity : prdEntity) {
             for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
@@ -86,7 +90,7 @@ public class XmlReader {
                 tmpProperty.setPRDName(property.getPRDName());
                 tempPRDList.add(tmpProperty);
             }
-            String duplicateName = CheckEnvProperties(tempPRDList);
+            String duplicateName = CheckEnvPropertiesNamesForDuplication(tempPRDList);
             if (duplicateName != null) {
                 return new PropertyDuplicateNameDTO(duplicateName, entity.getName());
                 //throw new XMLDuplicateEntityPropertyName(filePath, propertyDuplicateName, aWholeNewWorld.getPRDEntities().getPRDEntity().get(0).getName()); //TODO: when there is more that 1 entity, need to find the problematic one
@@ -95,7 +99,7 @@ public class XmlReader {
         return null;
     }
 
-    private EntityNotFoundDTO CheckRuleEntity(List<PRDRule> prdRuleList, List<PRDEntity> prdEntity) {
+    private EntityNotFoundDTO CheckInRulesActionsIfEntityExist(List<PRDRule> prdRuleList, List<PRDEntity> prdEntity) {
         List<String> entityNames = new ArrayList<>();
         for (PRDEntity entity : prdEntity) {
             entityNames.add(entity.getName());
@@ -111,8 +115,9 @@ public class XmlReader {
     }
 
 
-    private PropertyNotFoundDTO CheckRuleEntityProperty(List<PRDRule> prdRuleList, List<PRDEntity> prdEntity) {
+    private PropertyNotFoundDTO CheckInRulesActionIfEntityPropertyExist(List<PRDRule> prdRuleList, List<PRDEntity> prdEntity) {
         boolean propertyFound = false;
+        String propertyName;
         PRDEntity entity = null;
         for (PRDRule rule : prdRuleList) {
             for (PRDAction action : rule.getPRDActions().getPRDAction()) {
@@ -122,6 +127,7 @@ public class XmlReader {
                         break;
                     }
                 }
+                propertyName = action.getProperty();
                 if (action.getType().equalsIgnoreCase("calculation")) {
                     PropertyNotFoundDTO calResult = CheckCalculationAction(action, entity, rule);
                     if (calResult != null) {
@@ -129,12 +135,14 @@ public class XmlReader {
                     }
 
                 } else if (action.getType().equalsIgnoreCase("condition")) {
-                    continue;
-                    //TODO: need to check the actions of then and else
-                } else if(action.getType().equalsIgnoreCase("increase") || action.getType().equalsIgnoreCase("decrease")) {
-                    propertyFound = true;
-                }
-                else {
+                    if (action.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
+                        propertyFound = CheckSingleConditionAction(action.getPRDCondition());
+                        propertyName = action.getPRDCondition().getProperty();
+                    }
+                } else if (action.getType().equalsIgnoreCase("increase") || action.getType().equalsIgnoreCase("decrease")) {
+                    propertyFound = CheckIncreaseDecreaseAction(action);
+                } else {
+                    // This might be an irrelevant piece of code
                     for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
                         if (action.getProperty().equals(property.getPRDName())) {
                             propertyFound = true;
@@ -143,7 +151,7 @@ public class XmlReader {
                     }
                 }
                 if (!propertyFound) {
-                    return new PropertyNotFoundDTO(rule.getName(), entity.getName(), action.getProperty());
+                    return new PropertyNotFoundDTO(rule.getName(), entity.getName(), propertyName);
                 }
             }
         }
@@ -157,7 +165,7 @@ public class XmlReader {
         for (PRDProperty property : prdEntity.getPRDProperties().getPRDProperty()) {
             if (property.getPRDName().equals(resultProp)) {
                 found = true;
-                if(!CheckCalActionArgs(calAction)) {
+                if (!CheckCalActionArgs(calAction)) {
                     throw new XMLFileException(xmlPath + "The arguments of " + calAction.getType() + "are not valid");
                 }
                 return null;
@@ -178,30 +186,24 @@ public class XmlReader {
                 double arg2 = Double.parseDouble(mulAction.getArg2());
 
             } catch (NumberFormatException e) {
-                if(mulAction.getArg1().startsWith("environment(")) {
+                if (mulAction.getArg1().startsWith("environment(")) {
                     return CheckEnvVariablesFromCalAction(mulAction.getArg1());
-                } else if(mulAction.getArg2().startsWith("environment(")) {
+                } else if (mulAction.getArg2().startsWith("environment(")) {
                     return CheckEnvVariablesFromCalAction(mulAction.getArg2());
-                }
-                else if (mulAction.getArg1().startsWith("random(") || mulAction.getArg2().startsWith("random(")) {
-                    return true;
-                }
-                return false;
+                } else return mulAction.getArg1().startsWith("random(") || mulAction.getArg2().startsWith("random(");
             }
-        }
-        else {
+        } else {
             PRDDivide divAction = calAction.getPRDDivide();
             try {
                 double arg1 = Double.parseDouble(divAction.getArg1());
                 double arg2 = Double.parseDouble(divAction.getArg2());
 
             } catch (NumberFormatException e) {
-                if(divAction.getArg1().startsWith("environment(")) {
+                if (divAction.getArg1().startsWith("environment(")) {
                     return CheckEnvVariablesFromCalAction(divAction.getArg1());
-                } else if(divAction.getArg2().startsWith("environment(")) {
+                } else if (divAction.getArg2().startsWith("environment(")) {
                     return CheckEnvVariablesFromCalAction(divAction.getArg1());
-                }
-                else return divAction.getArg1().startsWith("random(") || divAction.getArg2().startsWith("random(");
+                } else return divAction.getArg1().startsWith("random(") || divAction.getArg2().startsWith("random(");
             }
 
         }
@@ -215,14 +217,80 @@ public class XmlReader {
         if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
             envVariableName = arg.substring(startIndex + 1, endIndex);
         }
-        for(PRDEnvProperty property : this.envVariables) {
-            if(property.getPRDName().equalsIgnoreCase(envVariableName)) {
-                if(property.getType().equalsIgnoreCase("decimal") || property.getType().equalsIgnoreCase("float")) {
+        for (PRDEnvProperty property : this.envVariables) {
+            if (property.getPRDName().equalsIgnoreCase(envVariableName)) {
+                if (property.getType().equalsIgnoreCase("decimal") || property.getType().equalsIgnoreCase("float")) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private boolean CheckIncreaseDecreaseAction(PRDAction action) {
+        try {
+            double by = Double.parseDouble(action.getBy());
+        } catch (NumberFormatException e) {
+            if (action.getBy().startsWith("environment(")) {
+                return CheckEnvVariablesFromCalAction(action.getBy());
+            } else return action.getBy().startsWith("random(");
+        }
+        return true;
+    }
+
+    private boolean CheckSingleConditionAction(PRDCondition condition) {
+        boolean entityFound = false, propertyFound = false, validOperator = true;
+        PRDEntity relevantEntity = null;
+        if (condition.getSingularity().equalsIgnoreCase("single")) {
+            //Find the relevant entity for the condition
+            for (PRDEntity entity : prdEntityList) {
+                if (condition.getEntity().equalsIgnoreCase(entity.getName())) {
+                    entityFound = true;
+                    relevantEntity = entity;
+                    break;
+                }
+            }
+            if (!entityFound) {
+                return false;
+            }
+            //Find the relevant property of the entity for the condition
+            for (PRDProperty entityProperty : relevantEntity.getPRDProperties().getPRDProperty()) {
+                if (entityProperty.getPRDName().equalsIgnoreCase(condition.getProperty())) {
+                    propertyFound = CheckValidityOfPropertyTypeAndValue(entityProperty, condition.getValue());
+                    ///Check validity of the operator
+                    if (condition.getOperator().equalsIgnoreCase("bt") || condition.getOperator().equalsIgnoreCase("lt")) {
+                        if (entityProperty.getType().equalsIgnoreCase("boolean") || entityProperty.getType().equalsIgnoreCase("string")) {
+                            validOperator = false;
+                        }
+                    }
+                    break;
+                }
+            }
+            if (!propertyFound || !validOperator) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    private boolean CheckValidityOfPropertyTypeAndValue(PRDProperty property, String value) {
+        if (property.getType().equalsIgnoreCase("decimal") || property.getType().equalsIgnoreCase("float")) {
+            try {
+                double by = Double.parseDouble(value);
+            } catch (NumberFormatException e) {
+                if (value.startsWith("environment(")) {
+                    return CheckEnvVariablesFromCalAction(value);
+                } else return value.startsWith("random(");
+            }
+            return true;
+        } else if (property.getType().equalsIgnoreCase("boolean")) {
+            return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+        } else {
+            return true;
+        }
     }
 
 
