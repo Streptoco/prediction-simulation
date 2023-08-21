@@ -4,6 +4,7 @@ import engine.exception.*;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.*;
 import enginetoui.dto.basic.EntityNotFoundDTO;
+import enginetoui.dto.basic.PropertyDTO;
 import enginetoui.dto.basic.PropertyDuplicateNameDTO;
 import enginetoui.dto.basic.PropertyNotFoundDTO;
 
@@ -20,7 +21,6 @@ public class XmlReader {
 
     private String xmlPath;
     private List<PRDEnvProperty> envVariables;
-
     private List<PRDEntity> prdEntityList;
 
     public XmlReader() {
@@ -106,6 +106,33 @@ public class XmlReader {
         }
         for (PRDRule prdRule : prdRuleList) {
             for (PRDAction action : prdRule.getPRDActions().getPRDAction()) {
+                if (action.getType().equalsIgnoreCase("condition")) {
+                    if (action.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
+                        if (!entityNames.contains(action.getPRDCondition().getEntity())) {
+                            return new EntityNotFoundDTO(prdRule.getName(), action.getPRDCondition().getEntity());
+                        }
+                    } else {
+                        for (PRDCondition condition : action.getPRDCondition().getPRDCondition()) {
+                            if (!entityNames.contains(condition.getEntity())) {
+                                if (!condition.getSingularity().equalsIgnoreCase("multiple")) {
+                                    return new EntityNotFoundDTO(prdRule.getName(), condition.getEntity());
+                                }
+                            }
+                        }
+                    }
+                    for (PRDAction thenAction : action.getPRDThen().getPRDAction()) {
+                        if (!entityNames.contains(thenAction.getEntity())) {
+                            return new EntityNotFoundDTO(prdRule.getName(), thenAction.getEntity());
+                        }
+                    }
+                    if (action.getPRDElse() != null) {
+                        for (PRDAction elseAction : action.getPRDElse().getPRDAction()) {
+                            if (!entityNames.contains(elseAction.getEntity())) {
+                                return new EntityNotFoundDTO(prdRule.getName(), elseAction.getEntity());
+                            }
+                        }
+                    }
+                }
                 if (!entityNames.contains(action.getEntity())) {
                     return new EntityNotFoundDTO(prdRule.getName(), action.getEntity());
                 }
@@ -113,7 +140,6 @@ public class XmlReader {
         }
         return null;
     }
-
 
     private PropertyNotFoundDTO CheckInRulesActionIfEntityPropertyExist(List<PRDRule> prdRuleList, List<PRDEntity> prdEntity) {
         boolean propertyFound = false;
@@ -136,8 +162,18 @@ public class XmlReader {
 
                 } else if (action.getType().equalsIgnoreCase("condition")) {
                     if (action.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
-                        propertyFound = CheckSingleConditionAction(action.getPRDCondition());
                         propertyName = action.getPRDCondition().getProperty();
+                        if (CheckSingleConditionAction(action.getPRDCondition())) {
+                            if (CheckSingleConditionActions(action.getPRDThen().getPRDAction()) && CheckSingleConditionActions(action.getPRDElse().getPRDAction())) {
+                                propertyFound = true;
+                            } else {
+                                propertyFound = false;
+                            }
+                        } else {
+                            propertyFound = false;
+                        }
+                    } else {
+                        CheckMultipleConditionAction(action.getPRDCondition().getPRDCondition());
                     }
                 } else if (action.getType().equalsIgnoreCase("increase") || action.getType().equalsIgnoreCase("decrease")) {
                     propertyFound = CheckIncreaseDecreaseAction(action);
@@ -287,9 +323,50 @@ public class XmlReader {
             }
             return true;
         } else if (property.getType().equalsIgnoreCase("boolean")) {
-            return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
-        } else {
+            if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+                return true;
+            } else if (value.startsWith("environment(")) {
+                String envVariableName = "";
+                int startIndex = value.indexOf("(");
+                int endIndex = value.indexOf(")");
+                if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+                    envVariableName = value.substring(startIndex + 1, endIndex);
+                }
+                for (PRDEnvProperty envProperty : this.envVariables) {
+                    if (envProperty.getPRDName().equalsIgnoreCase(envVariableName)) {
+                        return envProperty.getType().equalsIgnoreCase("boolean");
+                    }
+                }
+
+            }
+        }
+        return true;
+    }
+
+
+    private boolean CheckSingleConditionActions(List<PRDAction> condition) {
+        if (condition == null) {
             return true;
+        }
+        for (PRDAction action : condition) {
+            if (action.getType().equalsIgnoreCase("increase") || action.getType().equalsIgnoreCase("decrease")) {
+                return CheckIncreaseDecreaseAction(action);
+            } else if (action.getType().equalsIgnoreCase("calculation")) {
+                return CheckCalActionArgs(action);
+            }
+        }
+        return true;
+    }
+
+    private void CheckMultipleConditionAction(List<PRDCondition> conditions) {
+        for (PRDCondition action : conditions) {
+            if (action.getSingularity().equalsIgnoreCase("single")) {
+                if (!CheckSingleConditionAction(action)) {
+                    throw new XMLException(xmlPath + "\nThere was a problem with multiple condition");
+                }
+            } else {
+                CheckMultipleConditionAction(action.getPRDCondition());
+            }
         }
     }
 

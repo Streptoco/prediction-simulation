@@ -8,7 +8,6 @@ import enginetoui.dto.basic.EntityDTO;
 import enginetoui.dto.basic.PropertyDTO;
 import enginetoui.dto.basic.RuleDTO;
 import enginetoui.dto.basic.WorldDTO;
-import org.w3c.dom.ranges.RangeException;
 
 import java.util.*;
 
@@ -25,6 +24,10 @@ public class Engine {
     public void addSimulation(String filePath) {
         serialNumber++;
         simulations.put(serialNumber, reader.ReadXML(filePath));
+    }
+
+    public void DecreaseSerialNumber() {
+        serialNumber--;
     }
 
     public List<EntityDTO> GetAllEntities() {

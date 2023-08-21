@@ -1,9 +1,7 @@
 import engine.action.expression.ReturnType;
 import engine.exception.XMLException;
 import engine.general.object.Engine;
-import engine.general.object.World;
 import enginetoui.dto.basic.*;
-import org.w3c.dom.ranges.RangeException;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +31,7 @@ public class driver {
                 isWorldAccepted = true;
                 loadXML = true;
             } catch (XMLException e) {
+                engine.DecreaseSerialNumber();
                 System.out.println(e.getMessage());
             }
         } while (!isWorldAccepted);
