@@ -24,7 +24,7 @@ public class XmlReader {
     }
 
     public World ReadXML(String filePath) throws JAXBException {
-        filePath = filePath.replaceAll("\\s", "");
+       // filePath = filePath.replaceAll("\\s", "");
         if (!(filePath.endsWith(".xml"))) {
             throw new XMLFileException(filePath);
         }
@@ -366,11 +366,7 @@ public class XmlReader {
                     break;
                 }
             }
-            if (!propertyFound || !validOperator) {
-                return false;
-            } else {
-                return true;
-            }
+            return propertyFound && validOperator;
 
         }
         return false;
