@@ -1,10 +1,11 @@
+package ui;
+
 import engine.action.expression.ReturnType;
 import engine.exception.XMLException;
 import engine.general.object.Engine;
 import enginetoui.dto.basic.*;
-import exceptions.FileDoesNotExistException;
 
-import java.io.FileNotFoundException;
+import javax.xml.bind.JAXBException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -35,6 +36,8 @@ public class driver {
             } catch (XMLException e) {
                 engine.DecreaseSerialNumber();
                 System.out.println(e.getMessage());
+            } catch (JAXBException | RuntimeException e) {
+                System.out.println("Unknown Error, please try again");
             }
         } while (!isWorldAccepted);
     }

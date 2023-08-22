@@ -23,7 +23,7 @@ public class XmlReader {
     public XmlReader() {
     }
 
-    public World ReadXML(String filePath) {
+    public World ReadXML(String filePath) throws JAXBException {
         filePath = filePath.replaceAll("\\s", "");
         if (!(filePath.endsWith(".xml"))) {
             throw new XMLFileException(filePath);
@@ -62,7 +62,7 @@ public class XmlReader {
 
             return engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
         } catch (JAXBException e) {
-            throw new RuntimeException(e);
+            throw e;
         }
     }
 
