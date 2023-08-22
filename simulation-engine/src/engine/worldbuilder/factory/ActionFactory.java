@@ -9,6 +9,7 @@ import engine.action.impl.condition.impl.MultipleConditionAction;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.action.impl.kill.KillAction;
 import engine.action.impl.set.SetAction;
+import engine.exception.XMLException;
 import engine.worldbuilder.prdobjects.PRDAction;
 import engine.worldbuilder.prdobjects.PRDDivide;
 

@@ -3,10 +3,7 @@ package engine.xml;
 import engine.exception.*;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.*;
-import enginetoui.dto.basic.EntityNotFoundDTO;
-import enginetoui.dto.basic.PropertyDTO;
-import enginetoui.dto.basic.PropertyDuplicateNameDTO;
-import enginetoui.dto.basic.PropertyNotFoundDTO;
+import enginetoui.dto.basic.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -58,13 +55,73 @@ public class XmlReader {
             if (propertyNotFound != null) {
                 throw new XMLRulePropertyNotFoundException(filePath, propertyNotFound.ruleName, propertyNotFound.entityName, propertyNotFound.propertyName);
             }
+            ArgumentsInvalidDTO argumentsInvalidDTO = CheckIfArgumentsAreValid(aWholeNewWorld.getPRDRules().getPRDRule());
+            if (argumentsInvalidDTO != null) {
+                throw new XMLException(argumentsInvalidDTO.getName());
+            }
 
             return engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    private ArgumentsInvalidDTO CheckIfArgumentsAreValid(List<PRDRule> prdRules) {
+        ArgumentsInvalidDTO dtoToReturn = null;
+        for (PRDRule rules : prdRules) {
+            for (PRDAction actions : rules.getPRDActions().getPRDAction()) {
+                if (actions.getType().equalsIgnoreCase("increase") ||
+                        actions.getType().equalsIgnoreCase("decrease")) {
+                    String toParse = actions.getBy();
+                    if (toParse.startsWith("random(") || toParse.startsWith("environment(")) {
+                        continue;
+                    }
+                    try {
+                        int tryInt = Integer.parseInt(toParse);
+                    } catch (NumberFormatException e) {
+                        return new ArgumentsInvalidDTO(toParse);
+                    }
+                    try {
+                        double tryDouble = Double.parseDouble(toParse);
+                    } catch (NumberFormatException e) {
+                        return new ArgumentsInvalidDTO(toParse);
+                    }
+                }
+                if (actions.getType().equalsIgnoreCase("condition")) {
+                    dtoToReturn = checkingArgumentsRecurse(actions);
+                    if (dtoToReturn != null) {
+                        return dtoToReturn;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    ArgumentsInvalidDTO checkingArgumentsRecurse(PRDAction action) {
+        if (action.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
+            if (action.getPRDThen().getPRDAction().get(0).getType().equalsIgnoreCase("increase")
+                    || action.getPRDThen().getPRDAction().get(0).getType().equalsIgnoreCase("decrease")) {
+                String toParse = action.getPRDThen().getPRDAction().get(0).getBy();
+                if (toParse.startsWith("random(") || toParse.startsWith("environment(")) {
+                    return null;
+                }
+                try {
+                    int tryInt = Integer.parseInt(toParse);
+                } catch (NumberFormatException e) {
+                    return new ArgumentsInvalidDTO("Error! the supplied argument isn't supported in the current action.\n" +
+                            "current action: \"" + action.getPRDThen().getPRDAction().get(0).getType() + "\" argument: \"" + toParse+"\"");
+                }
+                try {
+                    double tryDouble = Double.parseDouble(toParse);
+                } catch (NumberFormatException e) {
+                    throw new XMLException("Error");
+                }
+            }
+        }
+        return null;
+    }
+
 
     private String CheckEnvPropertiesNamesForDuplication(List<PRDEnvProperty> envProperties) {
         List<String> propertyName = new ArrayList<>();
