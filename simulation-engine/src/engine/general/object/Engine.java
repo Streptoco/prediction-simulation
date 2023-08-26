@@ -9,6 +9,7 @@ import enginetoui.dto.basic.PropertyDTO;
 import enginetoui.dto.basic.RuleDTO;
 import enginetoui.dto.basic.WorldDTO;
 
+import javax.xml.bind.JAXBException;
 import java.util.*;
 
 public class Engine {
@@ -21,7 +22,7 @@ public class Engine {
         reader = new XmlReader();
     }
 
-    public void addSimulation(String filePath) {
+    public void addSimulation(String filePath) throws JAXBException {
         serialNumber++;
         simulations.put(serialNumber, reader.ReadXML(filePath));
     }
