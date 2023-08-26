@@ -10,16 +10,16 @@ public class RuleDTO {
     public final int tick;
     public final double probability;
     public final int numOfActions;
-    public final List<String> actionNames;
+    public final List<ActionDTO> actionNames;
 
-    public RuleDTO(String name, int tick, double probabilty, int numOfActions, List<ActionInterface> actions) {
+    public RuleDTO(String name, int tick, double probability, int numOfActions, List<ActionInterface> actions) {
         this.name = name;
         this.tick = tick;
-        this.probability = probabilty;
+        this.probability = probability;
         this.numOfActions = numOfActions;
         this.actionNames = new ArrayList<>();
         for(ActionInterface action : actions) {
-            actionNames.add("WTF?!"); //TODO: WTF IS ACTION NAME??
+            actionNames.add(new ActionDTO(action.getActionType() ,action.getPropertyName()));
         }
     }
 }

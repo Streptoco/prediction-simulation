@@ -29,4 +29,24 @@ public class  Rule {
             action.invoke(context);
         }
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getTick() {
+        return activation.getTicks();
+    }
+
+    public double getProbability() {
+        return activation.getProbability();
+    }
+
+    public List<ActionInterface> getActions() {
+        return actions;
+    }
+
+    public int GetNumOfActions() {
+        return this.actions.size();
+    }
 }

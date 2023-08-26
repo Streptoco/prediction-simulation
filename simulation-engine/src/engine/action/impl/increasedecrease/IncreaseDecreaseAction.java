@@ -8,6 +8,7 @@ import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.action.expression.ReturnType;
 import engine.context.api.Context;
+import engine.exception.XMLException;
 import engine.property.api.PropertyInterface;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.IntProperty;
@@ -33,7 +34,7 @@ public class IncreaseDecreaseAction extends AbstractAction {
         }
     }
 
-    public void invoke(Context context) { // why not first get the property type and then work from there. if it's increase it can't be boolean or string.
+    public void invoke(Context context) {
         propertyToIncrease = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         this.increaseBy.evaluateExpression(context);
         if (this.increaseDecrease.equals(IncreaseDecrease.INCREASE)) {
@@ -66,5 +67,10 @@ public class IncreaseDecreaseAction extends AbstractAction {
                 //TODO: handle exception.
             }
         }
+    }
+
+    @Override
+    public String getPropertyName() {
+        return propertyName;
     }
 }

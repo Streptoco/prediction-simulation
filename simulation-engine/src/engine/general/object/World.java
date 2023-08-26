@@ -12,6 +12,7 @@ import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class World {
@@ -21,18 +22,25 @@ public class World {
     private List<EntityDefinition> entities;
     private Environment activeEnvironment;
     private long currentTime;
+    private final SimpleDateFormat simulationDate;
+
+    private final Date simDate;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
                  List<Rule> rules) {
-        this.currentTime = System.currentTimeMillis();
         this.termination = termination;
         this.entities = entities;
         this.rules = rules;
         this.activeEnvironment = environment;
+        this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
+        this.simDate = new Date();
+        this.simulationDate.format(this.simDate);
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());
+            managers.get(entity.getName()).setNumberOfAllInstances(entity.getPopulation());
+            managers.get(entity.getName()).setEntityName(entity.getName());
             for (int i = 0; i < entity.getPopulation(); i++) {
                 managers.get(entity.getName()).create(entity);
             }
@@ -41,6 +49,7 @@ public class World {
 
     public void Run() {
         int ticks = 0;
+        this.currentTime = System.currentTimeMillis();
         while (termination.getTermination(ticks, currentTime)) {
             for(EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
@@ -86,4 +95,28 @@ public class World {
     }
 
     public Environment getEnvironment() { return activeEnvironment; }
+
+    public List<EntityDefinition> GetEntities() { return this.entities; }
+
+    public List<Rule> getRules() {
+        return rules;
+    }
+
+    public int GetSimulationTotalTicks() { return this.termination.getAllTicks();}
+    public long GetSimulationTotalTime() { return this.termination.getHowManySecondsToRun();}
+
+    public SimpleDateFormat getSimulationDate() {
+        return simulationDate;
+    }
+
+    public List<EntityInstanceManager> getAllInstancesManager() {
+        return new ArrayList<>(managers.values());
+    }
+
+    public Date getSimDate() {
+        return simDate;
+    }
+    public EntityInstanceManager GetInstances(String entityName) {
+        return managers.get(entityName);
+    }
 }

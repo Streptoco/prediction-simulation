@@ -64,4 +64,9 @@ public class MultipleConditionAction extends AbstractAction {
                 break;
         }
     }
+
+    @Override
+    public String getPropertyName() {
+        return "";
+    }
 }

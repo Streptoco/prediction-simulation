@@ -12,4 +12,5 @@ public abstract class AbstractAction implements ActionInterface {
     public ActionType getActionType() {
         return actionType;
     }
+
 }

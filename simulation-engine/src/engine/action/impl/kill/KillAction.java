@@ -17,4 +17,9 @@ public class KillAction extends AbstractAction {
     public void invoke(Context context) {
         context.removeEntity();
     }
+
+    @Override
+    public String getPropertyName() {
+        return "";
+    }
 }
