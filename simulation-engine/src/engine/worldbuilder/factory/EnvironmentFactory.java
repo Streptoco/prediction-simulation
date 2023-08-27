@@ -1,5 +1,6 @@
 package engine.worldbuilder.factory;
 
+import engine.exception.XMLDuplicateEnvPropertyName;
 import engine.general.object.Environment;
 import engine.action.expression.ReturnType;
 import engine.property.api.PropertyInterface;
@@ -8,8 +9,8 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.IntProperty;
 import engine.property.impl.StringProperty;
 import engine.worldbuilder.prdobjects.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 public class EnvironmentFactory {
     public static Environment BuildEnvironment(PRDEnvironment prdEnv) {
@@ -32,6 +33,16 @@ public class EnvironmentFactory {
                     envProperties.add((StringProperty)PropertyFactory.BuildProperty(prdEnvProperty));
                     break;
             }
+        }
+
+        // Check for duplication in environment properties
+        Set<String> duplicates = new HashSet<>();
+        for (PropertyInterface property : envProperties) {
+            if (duplicates.contains(property.getName())) {
+                //return name;
+                throw new XMLDuplicateEnvPropertyName("", property.getName());
+            }
+            duplicates.add(property.getName());
         }
 
         for(PropertyInterface currentProperty : envProperties) {

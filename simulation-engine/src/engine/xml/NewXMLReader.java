@@ -1,5 +1,6 @@
 package engine.xml;
 
+import engine.exception.XMLException;
 import engine.exception.XMLFileException;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.PRDWorld;
@@ -8,6 +9,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 
 public class NewXMLReader {
     private String filePath;
@@ -30,7 +33,10 @@ public class NewXMLReader {
             this.world = engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
+        } catch (XMLException e) {
+            System.out.println(e.getMessage() + " in the XML file " + filePath);
         }
+
 
         return world;
     }
