@@ -1,15 +1,17 @@
 package engine.worldbuilder.factory;
 
 import engine.general.object.Termination;
-import engine.worldbuilder.prdobjects.PRDBySecond;
-import engine.worldbuilder.prdobjects.PRDByTicks;
-import engine.worldbuilder.prdobjects.PRDTermination;
+import engine.worldbuilder.prdobjects.*;
 
 public class TerminationFactory {
     public static Termination BuildTermination(PRDTermination termination) {
+        if(termination.getPRDByUser() != null) {
+            // TODO: do something to make it stop by user
+            return new Termination(0,0);
+        }
         int ticksToTermination = 0;
         int secondsToTermination = 0;
-        for (Object object : termination.getPRDByTicksOrPRDBySecond()) {
+        for (Object object : termination.getPRDBySecondOrPRDByTicks()) {
             if (object.getClass().equals(PRDBySecond.class)) {
                 PRDBySecond prdBySecond = (PRDBySecond) object;
                 secondsToTermination = prdBySecond.getCount();

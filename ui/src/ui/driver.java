@@ -254,7 +254,11 @@ public class driver {
                     }
                     break;
                 case 4:
-                    ShowPastSimulations(engine);
+                    if (!loadXML) {
+                        System.out.println("No XML file loaded to the system, return to main menu\n");
+                    } else {
+                        ShowPastSimulations(engine);
+                    }
                     break;
                 case 5:
                     break;

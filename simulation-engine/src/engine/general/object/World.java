@@ -23,16 +23,17 @@ public class World {
     private Environment activeEnvironment;
     private long currentTime;
     private final SimpleDateFormat simulationDate;
-
+    private int numOfThreds;
     private final Date simDate;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
-                 List<Rule> rules) {
+                 List<Rule> rules, int numOfThreds) {
         this.termination = termination;
         this.entities = entities;
         this.rules = rules;
         this.activeEnvironment = environment;
+        this.numOfThreds = numOfThreds;
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
