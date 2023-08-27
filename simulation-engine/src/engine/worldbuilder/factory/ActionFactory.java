@@ -3,14 +3,18 @@ package engine.worldbuilder.factory;
 import engine.action.api.ActionInterface;
 import engine.action.api.ActionType;
 import engine.action.expression.Expression;
+import engine.action.expression.ReturnType;
 import engine.action.impl.calculation.CalculationAction;
 import engine.action.impl.condition.impl.ConditionAction;
 import engine.action.impl.condition.impl.MultipleConditionAction;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.action.impl.kill.KillAction;
 import engine.action.impl.set.SetAction;
+import engine.exception.XMLVariableTypeException;
+import engine.property.api.PropertyInterface;
 import engine.worldbuilder.prdobjects.PRDAction;
 import engine.worldbuilder.prdobjects.PRDDivide;
+import engine.xml.NewXMLReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +26,34 @@ public class ActionFactory {
         switch (actionType) {
             case INCREASE:
             case DECREASE:
+                Expression expression = new Expression(prdAction.getBy());
+                expression.FreeValuePositioning();
                 resultAction = new IncreaseDecreaseAction(prdAction.getProperty(),
-                        new Expression(prdAction.getBy()), prdAction.getType());
+                        expression, prdAction.getType());
+                if(!expression.getReturnType().equals(ReturnType.INT) || !expression.getReturnType().equals(ReturnType.DECIMAL)) {
+                    String expressionValue = (String) expression.getValue();
+                    if(expressionValue.startsWith("environment(")) {
+                        String envVariableName = "";
+                        int startIndex = expressionValue.indexOf("(");
+                        int endIndex = expressionValue.indexOf(")");
+                        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+                            envVariableName = expressionValue.substring(startIndex + 1, endIndex);
+                        }
+                        for(PropertyInterface envProperty : NewXMLReader.envVariables) {
+                            if(envProperty.getName().equals(envVariableName)) {
+                                if(!(envProperty.getPropertyType().equals(ReturnType.INT) || envProperty.getPropertyType().equals(ReturnType.DECIMAL))) {
+                                    throw new XMLVariableTypeException("", expression.getReturnType() ,envProperty.getPropertyType());
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if(expressionValue.startsWith("random(")) {
+                        //TODO: make this work - RONNY
+                    }
+                }
+
                 break;
             case CALCULATION:
                 String calculationType = "";
