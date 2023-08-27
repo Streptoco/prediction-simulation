@@ -10,17 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class driver {
+public class Driver {
     private static boolean loadXML = false;
 
     private static boolean alreadyRun = false;
 
-    public static void main(String[] args) {
+    public void execute() {
         Run();
-    }
-
-    private static void WelcomePlayer() {
-        System.out.println("Hello and welcome to the predictions simulator!");
     }
 
     private static void LoadXMLFile(Engine engine) {
@@ -226,9 +222,6 @@ public class driver {
     private static void Run() {
         Engine engine = new Engine();
         int simulationId;
-        WelcomePlayer();
-        System.out.println("Please choose an option:\n1. Load a new XML File.\n2. Show simulation details\n" +
-                "3. Run the simulation\n4. Show details of past simulation\n5. Exit :)");
         Scanner scanner = new Scanner(System.in);
         int userChoice = -1;
         do {

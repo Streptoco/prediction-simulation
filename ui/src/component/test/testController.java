@@ -1,5 +1,6 @@
 package component.test;
 
+import engine.general.object.Engine;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.binding.StringExpression;
@@ -11,13 +12,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ui.Driver;
 
+import javax.xml.bind.JAXBException;
 import java.io.File;
 
 public class testController {
     @FXML
     public Button button;
     public Label label;
+
+    private Engine engine;
 
     private ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
 
@@ -37,6 +42,7 @@ public class testController {
     }
     @FXML
     public void openFileChooser(ActionEvent event) {
+        engine = new Engine();
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(new Stage());
 
@@ -44,6 +50,11 @@ public class testController {
             selectedFile.set(file);
         }
 
+        try {
+            engine.addSimulation(file.getPath());
+        } catch (JAXBException e) {
+            System.out.println("Unknown to user");
+        }
 
     }
 }
