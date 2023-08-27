@@ -4,8 +4,7 @@ import engine.action.expression.Expression;
 import engine.action.impl.condition.impl.Condition;
 import engine.action.impl.condition.impl.MultipleCondition;
 import engine.action.impl.condition.impl.SingleCondition;
-import engine.worldbuilder.prdobjects.PRDCondition;
-
+import engine.worldbuilder.prdobjects.*;
 import java.util.ArrayList;
 import java.util.List;
 

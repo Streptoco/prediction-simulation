@@ -7,10 +7,7 @@ import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.IntProperty;
 import engine.property.impl.StringProperty;
-import engine.worldbuilder.prdobjects.PRDEnvProperty;
-import engine.worldbuilder.prdobjects.PRDProperty;
-import engine.worldbuilder.prdobjects.PRDValue;
-
+import engine.worldbuilder.prdobjects.*;
 public class PropertyFactory {
     public static PropertyInterface BuildProperty(PRDProperty prdProperty) {
         String propertyName = prdProperty.getPRDName();
@@ -25,8 +22,13 @@ public class PropertyFactory {
         String propertyType = prdProperty.getType();
         ReturnType returnType = ReturnType.convert(propertyType);
         if (returnType == ReturnType.INT || returnType == ReturnType.DECIMAL) {
-            from = prdProperty.getPRDRange().getFrom();
-            to = prdProperty.getPRDRange().getTo();
+            if(prdProperty.getPRDRange() != null) {
+                from = prdProperty.getPRDRange().getFrom();
+                to = prdProperty.getPRDRange().getTo();
+            } else { // In case range is not given, the range is limitless
+                from = 0; // is it need to be 0 or the minimum value?
+                to = Integer.MAX_VALUE;
+            }
         }
         PropertyInterface resultProperty = null;
         switch (returnType) {
@@ -76,11 +78,13 @@ public class PropertyFactory {
         property.setType(prdEnvProperty.getType());
         property.setPRDRange(prdEnvProperty.getPRDRange());
         //property need to value in order to use the upper BuildProperty function
-        if (property.getType().equalsIgnoreCase("decimal") || property.getType().equalsIgnoreCase("float")) {
-            String tempValString = String.valueOf(prdEnvProperty.getPRDRange().getFrom());
-            PRDValue tempVal = new PRDValue();
-            tempVal.setInit(tempValString);
-            property.setPRDValue(tempVal);
+        if(property.getPRDRange() != null) {
+            if (property.getType().equalsIgnoreCase("decimal") || property.getType().equalsIgnoreCase("float")) {
+                String tempValString = String.valueOf(prdEnvProperty.getPRDRange().getFrom());
+                PRDValue tempVal = new PRDValue();
+                tempVal.setInit(tempValString);
+                property.setPRDValue(tempVal);
+            }
         }
         return BuildProperty(property);
     }

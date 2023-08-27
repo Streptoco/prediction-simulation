@@ -35,11 +35,11 @@ public class XmlReader {
             jaxbContext = JAXBContext.newInstance(PRDWorld.class);
             Unmarshaller u = jaxbContext.createUnmarshaller();
             PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
-            String propertyDuplicateName = CheckEnvPropertiesNamesForDuplication(aWholeNewWorld.getPRDEvironment().getPRDEnvProperty());
+            String propertyDuplicateName = CheckEnvPropertiesNamesForDuplication(aWholeNewWorld.getPRDEnvironment().getPRDEnvProperty());
             if (propertyDuplicateName != null) {
                 throw new XMLDuplicateEnvPropertyName(filePath, propertyDuplicateName);
             } else {
-                this.envVariables = aWholeNewWorld.getPRDEvironment().getPRDEnvProperty();
+                this.envVariables = aWholeNewWorld.getPRDEnvironment().getPRDEnvProperty();
             }
             PropertyDuplicateNameDTO propertyDuplicate = CheckEntityPropertiesNamesForDuplication(aWholeNewWorld.getPRDEntities().getPRDEntity());
             if (propertyDuplicate != null) {

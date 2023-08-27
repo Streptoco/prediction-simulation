@@ -7,14 +7,12 @@ import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.IntProperty;
 import engine.property.impl.StringProperty;
-import engine.worldbuilder.prdobjects.PRDEnvProperty;
-import engine.worldbuilder.prdobjects.PRDEvironment;
-
+import engine.worldbuilder.prdobjects.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnvironmentFactory {
-    public static Environment BuildEnvironment(PRDEvironment prdEnv) {
+    public static Environment BuildEnvironment(PRDEnvironment prdEnv) {
         List<PropertyInterface> envProperties = new ArrayList<>();
         Environment resultEnv = new Environment();
         ReturnType propertyType;

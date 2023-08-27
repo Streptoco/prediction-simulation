@@ -3,9 +3,7 @@ package engine.worldbuilder.factory;
 import engine.general.object.Rule;
 import engine.general.object.RuleActivation;
 import engine.action.api.ActionInterface;
-import engine.worldbuilder.prdobjects.PRDAction;
-import engine.worldbuilder.prdobjects.PRDRule;
-
+import engine.worldbuilder.prdobjects.*;
 import java.util.ArrayList;
 import java.util.List;
 
