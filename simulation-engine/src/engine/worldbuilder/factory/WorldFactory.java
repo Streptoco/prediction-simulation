@@ -23,6 +23,7 @@ public class WorldFactory {
          for(PRDEntity entity : prdWorld.getPRDEntities().getPRDEntity()) {
              entities.add(EntityFactory.BuildEntity(entity));
          }
+         NewXMLReader.entityDefinitionList = entities;
          // entities
          
          List<Rule> rules = new ArrayList<>();
