@@ -11,12 +11,14 @@ import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
+import engine.grid.impl.Grid;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class World {
     private Termination termination;
+    private Grid grid;
     private Map<String, EntityInstanceManager> managers;
     private List<Rule> rules;
     private List<EntityDefinition> entities;

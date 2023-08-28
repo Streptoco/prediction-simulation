@@ -13,7 +13,7 @@ import javax.xml.bind.JAXBException;
 import java.util.*;
 
 public class Engine {
-    private final Map<Integer, World> simulations; //TODO: should be map, key:value pairs. the key would be generated.
+    private final Map<Integer, World> simulations;
     private int serialNumber = 0;
     private final XmlReader reader;
 

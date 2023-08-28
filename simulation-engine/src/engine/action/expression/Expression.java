@@ -1,9 +1,5 @@
 package engine.action.expression;
 
-//TODO: figure out how to segment the functions needed to be implemented: environment, and random.
-//TODO: error handling.
-//TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
-
 import engine.context.api.Context;
 import engine.property.api.PropertyInterface;
 import engine.property.impl.DecimalProperty;
@@ -28,7 +24,6 @@ public class Expression {
         propertyMatch = context.getPrimaryEntityInstance().getPropertyByName(name);
 
         if (name.startsWith("random(")) {
-            // TODO: segment to functions. it should be up to the parentheses... and then evaluate.
             type = Type.FUNCTION;
             this.returnType = ReturnType.INT;
             double stringValue = Double.parseDouble(name.replaceAll("[^0-9]", ""));
@@ -77,7 +72,7 @@ public class Expression {
     public void FreeValuePositioning() {
         try {
             castedValueOfExpression = Double.parseDouble(name);
-            castedNumber = Double.parseDouble(name); //TODO: need to do it cross class
+            castedNumber = Double.parseDouble(name);
             this.returnType = ReturnType.INT;
             return;
         } catch (NumberFormatException e) {

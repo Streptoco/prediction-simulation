@@ -1,5 +1,7 @@
 package handler.controller;
 
+import engine.general.object.Engine;
+import enginetoui.dto.basic.WorldDTO;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ObjectProperty;
@@ -12,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.xml.bind.JAXBException;
 import java.io.File;
 
 public class Controller {
@@ -30,16 +33,18 @@ public class Controller {
     private TextField textField;
     @FXML
     private Label programLabel;
+    private Engine engine;
 
     private final ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
     @FXML
     public void initialize() {
+        engine = new Engine();
         StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
         textField.textProperty().bind(labelTextBinding);
     }
 
     @FXML
-    public void openFileChooser(ActionEvent event) {
+    public void openFileChooser(ActionEvent event) throws JAXBException {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(new Stage());
 
@@ -47,6 +52,7 @@ public class Controller {
             selectedFile.set(file);
         }
 
+        engine.addSimulation(selectedFile.asString().get());
         // TODO: keep operating
 
     }

@@ -142,6 +142,7 @@ public class XmlReader {
     private PropertyDuplicateNameDTO CheckEntityPropertiesNamesForDuplication(List<PRDEntity> prdEntity) {
         List<PRDEnvProperty> tempPRDList = new ArrayList<>();
         for (PRDEntity entity : prdEntity) {
+            tempPRDList.clear();
             for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
                 PRDEnvProperty tmpProperty = new PRDEnvProperty();
                 tmpProperty.setPRDName(property.getPRDName());

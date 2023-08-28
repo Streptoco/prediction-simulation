@@ -30,7 +30,7 @@ public class WorldDTO {
         return simulationDate.format(this.simDate);
     }
 
-public Map<String, Integer> GetHistogram(String entityName, String propertyName, int simulationId, Engine engine) {
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName, int simulationId, Engine engine) {
         Map<String, Integer> resultMap = new HashMap<>();
         EntityInstanceManager entity = engine.GetInstanceManager(entityName, simulationId);
         for (EntityInstance currentInstance : entity.getInstances()) {
