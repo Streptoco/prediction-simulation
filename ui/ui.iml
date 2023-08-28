@@ -11,5 +11,6 @@
     <orderEntry type="module" module-name="dto" />
     <orderEntry type="module" module-name="predictions-1" />
     <orderEntry type="module" module-name="Predictions" />
+    <orderEntry type="library" name="ext" level="project" />
   </component>
 </module>
