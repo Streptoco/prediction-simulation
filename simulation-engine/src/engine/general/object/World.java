@@ -30,7 +30,7 @@ public class World {
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
-                 List<Rule> rules, int numOfThreds) {
+                 List<Rule> rules, int numOfThreds, Grid grid) {
         this.termination = termination;
         this.entities = entities;
         this.rules = rules;
@@ -39,6 +39,7 @@ public class World {
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
+        this.grid = grid;
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());

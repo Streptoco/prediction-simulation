@@ -15,7 +15,6 @@ public class Grid {
                 locationGrid[i][j] = new Tile();
             }
         }
-        // TODO: c'tor
     }
 
     public void setGridLength(int length) {this.lengthSize = length;}

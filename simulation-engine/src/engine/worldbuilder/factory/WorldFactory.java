@@ -5,6 +5,7 @@ import engine.general.object.Rule;
 import engine.general.object.Termination;
 import engine.general.object.World;
 import engine.entity.impl.EntityDefinition;
+import engine.grid.impl.Grid;
 import engine.property.api.PropertyInterface;
 import engine.worldbuilder.prdobjects.*;
 import engine.xml.NewXMLReader;
@@ -34,6 +35,10 @@ public class WorldFactory {
          Termination termination = TerminationFactory.BuildTermination(prdWorld.getPRDTermination());
          // termination
 
-         return new World(termination,entities,environment,rules, numOfThreads);
+         // TODO: add all the new shit that popped up.
+
+         Grid grid = GridFactory.BuildGrid(prdWorld.getPRDGrid());
+
+         return new World(termination,entities,environment,rules, numOfThreads, grid);
      }
 }
