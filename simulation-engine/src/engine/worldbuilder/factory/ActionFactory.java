@@ -38,7 +38,6 @@ public class ActionFactory {
             case CALCULATION:
                 String calculationType = "";
                 String arg1 = "", arg2 = "";
-                PRDDivide prdDivide = prdAction.getPRDDivide();
                 if (prdAction.getPRDDivide() == null) {
                     calculationType = "multiply";
                     arg1 = prdAction.getPRDMultiply().getArg1();
@@ -47,8 +46,6 @@ public class ActionFactory {
                     calculationType = "divide";
                     arg1 = prdAction.getPRDDivide().getArg1();
                     arg2 = prdAction.getPRDDivide().getArg2();
-                } else {
-                    // TODO: throw exception
                 }
                 Expression arg1Expression = new Expression(arg1);
                 Expression arg2Expression = new Expression(arg2);
@@ -206,8 +203,8 @@ public class ActionFactory {
         }
     }
 
-    public static boolean CheckPropertyAndValueType(PropertyInterface property, String value) {
-        boolean sameType = false;
+    public static void CheckPropertyAndValueType(PropertyInterface property, String value) {
+        boolean sameType;
         switch (property.getPropertyType()) {
             case INT:
             case DECIMAL:
@@ -226,8 +223,6 @@ public class ActionFactory {
         }
         if (!sameType) {
             throw new XMLVariableTypeException("", value, property.getPropertyType());
-        } else {
-            return sameType;
         }
     }
 }
