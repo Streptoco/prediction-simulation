@@ -34,6 +34,7 @@ public class WorldFactory {
 
          Termination termination = TerminationFactory.BuildTermination(prdWorld.getPRDTermination());
          // termination
+         // TODO: termination has to be bound dynamically upon the creation of the world
 
          // TODO: add all the new shit that popped up.
 

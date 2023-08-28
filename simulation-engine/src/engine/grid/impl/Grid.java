@@ -2,6 +2,8 @@ package engine.grid.impl;
 
 import java.util.Random;
 
+// TODO: handle seamlessness.
+
 public class Grid {
     private int lengthSize;
     private int widthSize;

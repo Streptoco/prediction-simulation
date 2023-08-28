@@ -3,6 +3,7 @@ package engine.general.object;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
 import engine.property.api.PropertyInterface;
+import engine.xml.NewXMLReader;
 import engine.xml.XmlReader;
 import enginetoui.dto.basic.EntityDTO;
 import enginetoui.dto.basic.PropertyDTO;
@@ -15,11 +16,11 @@ import java.util.*;
 public class Engine {
     private final Map<Integer, World> simulations;
     private int serialNumber = 0;
-    private final XmlReader reader;
+    private final NewXMLReader reader;
 
     public Engine() {
         simulations = new HashMap<>();
-        reader = new XmlReader();
+        reader = new NewXMLReader();
     }
 
     public void addSimulation(String filePath) throws JAXBException {
@@ -108,6 +109,13 @@ public class Engine {
             resultList.add(new WorldDTO(entry.getKey(), entry.getValue().getSimulationDate(), entry.getValue().getAllInstancesManager(), entry.getValue().getSimDate()));
         }
         return resultList;
+    }
+
+    // TODO: bearing in mind that simulation ID might no longer be required?
+    public WorldDTO getWorldDTO() {
+        Date date = new Date();
+        return new WorldDTO(++serialNumber, simulations.get(serialNumber).getSimulationDate(), simulations.get(serialNumber).getAllInstancesManager(),
+                date);
     }
 
     public EntityInstanceManager GetInstanceManager(String name, int simID) {

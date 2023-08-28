@@ -34,6 +34,7 @@ public class Controller {
     @FXML
     private Label programLabel;
     private Engine engine;
+    private WorldDTO currentWorldDTO;
 
     private final ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
     @FXML
@@ -53,6 +54,9 @@ public class Controller {
         }
 
         engine.addSimulation(selectedFile.asString().get());
+        // TODO: find out if and when this scope is deprecated
+        //currentWorldDTO = engine.getWorldDTO();
+        //textField.textProperty().set(currentWorldDTO.GetSimulationDateString());
         // TODO: keep operating
 
     }
