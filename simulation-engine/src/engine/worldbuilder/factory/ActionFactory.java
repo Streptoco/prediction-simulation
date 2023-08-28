@@ -76,7 +76,7 @@ public class ActionFactory {
                 if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
                     resultAction = new ConditionAction(prdAction.getPRDCondition().getProperty(), prdAction.getPRDCondition().getOperator(),
                             new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList);
-                    SearchEntityAndProperty(prdAction.getPRDCondition().getEntity(), prdAction.getPRDCondition().getProperty(), ruleName);
+                    SearchEntityAndProperty(prdAction.getPRDCondition().getEntity(), prdAction.getPRDCondition().getProperty(), ruleName, prdAction.getPRDCondition().getValue());
                 } else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
                     resultAction = new MultipleConditionAction(thenList, elseList, prdAction.getPRDCondition().getLogical(),
                             ConditionFactory.BuildConditionFromList(prdAction.getPRDCondition().getPRDCondition()));
@@ -97,7 +97,7 @@ public class ActionFactory {
         return resultAction;
     }
 
-    public static boolean CheckIfEnvPropertyExistAndInTheCorrectType(Expression expression) {
+    public static void CheckIfEnvPropertyExistAndInTheCorrectType(Expression expression) {
         String envVariableName = "";
         String expressionValue = (String) expression.getValue();
         boolean found = false;
@@ -119,7 +119,6 @@ public class ActionFactory {
         if (!found) {
             throw new XMLEnvPropertyNotFound("", expressionValue);
         }
-        return found;
     }
 
     public static void CheckArgumentsTypeForNumbers(Expression expression) {
@@ -136,7 +135,7 @@ public class ActionFactory {
             } else if (expressionValue.startsWith("ticks(")) {
                 //TODO: handle
             } else {
-                throw new XMLVariableTypeException("", expression.getReturnType(), ReturnType.DECIMAL);
+                throw new XMLVariableTypeException("", expressionValue, ReturnType.DECIMAL);
             }
         }
     }
@@ -180,27 +179,53 @@ public class ActionFactory {
 
     }
 
-    public static void SearchEntityAndProperty(String entityName, String propertyName, String ruleName) {
+    public static void SearchEntityAndProperty(String entityName, String propertyName, String ruleName, String value) {
         EntityDefinition currentEntity = SearchEntity(entityName, ruleName);
         boolean found = false;
-        for(PropertyInterface property : currentEntity.getProps()) {
-            if(property.getName().equalsIgnoreCase(propertyName)) {
+        for (PropertyInterface property : currentEntity.getProps()) {
+            if (property.getName().equalsIgnoreCase(propertyName)) {
                 found = true;
+                CheckPropertyAndValueType(property, value);
                 break;
             }
         }
-        if(!found) {
+        if (!found) {
             throw new XMLEntityPropertyNotFound("", entityName, propertyName, ruleName);
         }
     }
 
     public static void CheckMultipleCondition(PRDCondition multipleCondition, String ruleName) {
-        for(PRDCondition currentCondition : multipleCondition.getPRDCondition()) {
-            if(currentCondition.getSingularity().equalsIgnoreCase("single")) {
-                SearchEntityAndProperty(currentCondition.getEntity(), currentCondition.getProperty(), ruleName);
+        for (PRDCondition currentCondition : multipleCondition.getPRDCondition()) {
+            if (currentCondition.getSingularity().equalsIgnoreCase("single")) {
+                SearchEntityAndProperty(currentCondition.getEntity(), currentCondition.getProperty(), ruleName, currentCondition.getValue());
             } else {
                 CheckMultipleCondition(currentCondition, ruleName);
             }
+        }
+    }
+
+    public static boolean CheckPropertyAndValueType(PropertyInterface property, String value) {
+        boolean sameType = false;
+        switch (property.getPropertyType()) {
+            case INT:
+            case DECIMAL:
+                try {
+                    double doubleValue = Double.parseDouble(value);
+                    sameType = true;
+                } catch (NumberFormatException e) {
+                    sameType = false;
+                }
+                break;
+            case BOOLEAN:
+                sameType = value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+                break;
+            default:
+                sameType = true;
+        }
+        if (!sameType) {
+            throw new XMLVariableTypeException("", value, property.getPropertyType());
+        } else {
+            return sameType;
         }
     }
 }
