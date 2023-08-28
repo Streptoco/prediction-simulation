@@ -15,7 +15,7 @@ public class EntityInstanceManager {
     private int countInstances;
     private int numberOfAllInstances;
     private List<EntityInstance> instances;
-
+    private EntityDefinition entityDefinition;
     private String entityName;
 
     public EntityInstanceManager() {
@@ -25,6 +25,7 @@ public class EntityInstanceManager {
 
     public EntityInstance create(EntityDefinition entityDefinition) {
         countInstances++;
+        this.entityDefinition = entityDefinition;
         EntityInstance newInstance = new EntityInstance(entityDefinition, countInstances);
         instances.add(newInstance);
 
@@ -93,4 +94,10 @@ public class EntityInstanceManager {
     public List<String> getPropertiesName() {
         return instances.get(0).getPropertiesName();
     }
+
+    public EntityDefinition getEntityDefinition() {
+        return entityDefinition;
+    }
+
+
 }

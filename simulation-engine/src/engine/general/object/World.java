@@ -18,23 +18,23 @@ import java.util.*;
 
 public class World {
     private Termination termination;
-    private Map<String, EntityInstanceManager> managers;
+    private final Map<String, EntityInstanceManager> managers;
     private final List<Rule> rules;
     private final List<EntityDefinition> entities;
     private final Environment activeEnvironment;
     private long currentTime;
     private final SimpleDateFormat simulationDate;
-    private int numOfThreds;
+    private int numOfThreads;
     private final Date simDate;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
-                 List<Rule> rules, int numOfThreds, Grid grid) {
+                 List<Rule> rules, int numOfThreads, Grid grid) {
         this.termination = termination;
         this.entities = entities;
         this.rules = rules;
         this.activeEnvironment = environment;
-        this.numOfThreds = numOfThreds;
+        this.numOfThreads = numOfThreads;
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
