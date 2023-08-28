@@ -84,7 +84,9 @@ public class ActionFactory {
                 }
                 break;
             case SET:
-                resultAction = new SetAction(prdAction.getProperty(), new Expression(prdAction.getValue()));
+                Expression setExpression = new Expression(prdAction.getValue());
+                resultAction = new SetAction(prdAction.getProperty(), setExpression);
+                SearchEntityAndProperty(prdAction.getEntity(), prdAction.getProperty(), ruleName, prdAction.getValue());
                 break;
             case KILL:
                 resultAction = new KillAction();
