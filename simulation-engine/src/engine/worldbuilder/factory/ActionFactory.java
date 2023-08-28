@@ -10,6 +10,7 @@ import engine.action.impl.condition.impl.MultipleConditionAction;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.action.impl.kill.KillAction;
 import engine.action.impl.set.SetAction;
+import engine.exception.XMLEnvPropertyNotFound;
 import engine.exception.XMLVariableTypeException;
 import engine.property.api.PropertyInterface;
 import engine.worldbuilder.prdobjects.PRDAction;
@@ -33,24 +34,12 @@ public class ActionFactory {
                 if(!expression.getReturnType().equals(ReturnType.INT) || !expression.getReturnType().equals(ReturnType.DECIMAL)) {
                     String expressionValue = (String) expression.getValue();
                     if(expressionValue.startsWith("environment(")) {
-                        String envVariableName = "";
-                        int startIndex = expressionValue.indexOf("(");
-                        int endIndex = expressionValue.indexOf(")");
-                        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
-                            envVariableName = expressionValue.substring(startIndex + 1, endIndex);
-                        }
-                        for(PropertyInterface envProperty : NewXMLReader.envVariables) {
-                            if(envProperty.getName().equals(envVariableName)) {
-                                if(!(envProperty.getPropertyType().equals(ReturnType.INT) || envProperty.getPropertyType().equals(ReturnType.DECIMAL))) {
-                                    throw new XMLVariableTypeException("", expression.getReturnType() ,envProperty.getPropertyType());
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
+                       CheckIfEnvPropertyExistAndInTheCorrectType(expression);
                     }
                     else if(expressionValue.startsWith("random(")) {
                         //TODO: make this work - RONNY
+                    } else {
+                        throw new XMLVariableTypeException("", expression.getReturnType(), ReturnType.DECIMAL);
                     }
                 }
 
@@ -106,5 +95,30 @@ public class ActionFactory {
                 break;
         }
         return resultAction;
+    }
+
+    public static boolean CheckIfEnvPropertyExistAndInTheCorrectType(Expression expression) {
+        String envVariableName = "";
+        String expressionValue = (String) expression.getValue();
+        boolean found = false;
+        int startIndex = expressionValue.indexOf("(");
+        int endIndex = expressionValue.indexOf(")");
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            envVariableName = expressionValue.substring(startIndex + 1, endIndex);
+        }
+        for(PropertyInterface envProperty : NewXMLReader.envVariables) {
+            if(envProperty.getName().equals(envVariableName)) {
+                if(!(envProperty.getPropertyType().equals(ReturnType.INT) || envProperty.getPropertyType().equals(ReturnType.DECIMAL))) {
+                    throw new XMLVariableTypeException("", expression.getReturnType() ,envProperty.getPropertyType());
+                } else {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if(!found) {
+            throw new XMLEnvPropertyNotFound("", expressionValue);
+        }
+        return found;
     }
 }

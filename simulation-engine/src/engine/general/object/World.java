@@ -18,11 +18,10 @@ import java.util.*;
 
 public class World {
     private Termination termination;
-    private Grid grid;
     private Map<String, EntityInstanceManager> managers;
-    private List<Rule> rules;
-    private List<EntityDefinition> entities;
-    private Environment activeEnvironment;
+    private final List<Rule> rules;
+    private final List<EntityDefinition> entities;
+    private final Environment activeEnvironment;
     private long currentTime;
     private final SimpleDateFormat simulationDate;
     private int numOfThreds;
@@ -39,7 +38,6 @@ public class World {
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
-        this.grid = grid;
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());
@@ -123,4 +121,19 @@ public class World {
     public EntityInstanceManager GetInstances(String entityName) {
         return managers.get(entityName);
     }
+
+    public void createPopulationOfEntity(EntityDefinition entity, int population){
+        EntityInstance currentEntity;
+        for(int i = 0; i < population; i++) {
+            currentEntity = managers.get(entity.getName()).create(entity);
+        }
+    }
+
+    public void placeEntityOnGrid(EntityInstance entity) {
+
+    }
+
+
+
+
 }
