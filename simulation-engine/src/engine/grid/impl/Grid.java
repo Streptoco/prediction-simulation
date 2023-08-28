@@ -5,9 +5,7 @@ import java.util.Random;
 public class Grid {
     private int lengthSize;
     private int widthSize;
-    private Tile[][] locationGrid;
-
-    private boolean isGridFull = false;
+    private final Tile[][] locationGrid;
     public Grid(int length, int width) {
         this.lengthSize = length;
         this.widthSize = width;
@@ -24,7 +22,7 @@ public class Grid {
     public void setGridWidth(int width) {this.widthSize = width;}
 
     public boolean addSackToGrid(Sack sack) {
-        if (!isGridFull) {
+        if (!CheckIfGridIsFull()) {
             int randomLength;
             int randomWidth;
             Random random = new Random();
@@ -52,6 +50,4 @@ public class Grid {
         }
         return true;
     }
-
-
 }
