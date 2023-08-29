@@ -26,6 +26,8 @@ public class World {
     private final SimpleDateFormat simulationDate;
     private int numOfThreads;
     private final Date simDate;
+    private Grid grid;
+    private List<EntityInstance> allInstances;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
@@ -38,6 +40,7 @@ public class World {
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
+        this.grid = grid;
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());
@@ -51,6 +54,8 @@ public class World {
 
     public void Run() {
         int ticks = 0;
+        getAllInstances();
+        grid.assignSacks(this.allInstances);
         this.currentTime = System.currentTimeMillis();
         while (termination.getTermination(ticks, currentTime)) {
             for(EntityDefinition currentEntity : entities) {
@@ -133,7 +138,12 @@ public class World {
 
     }
 
-
+    public void getAllInstances() {
+        this. allInstances = new ArrayList<>();
+        for(EntityDefinition entityDefinition : entities) {
+            allInstances.addAll(managers.get(entityDefinition.getName()).getInstances());
+        }
+    }
 
 
 }

@@ -11,18 +11,32 @@ import java.util.List;
 
 public class ContextImpl implements Context {
     private EntityInstance primaryEntityInstance;
+    private EntityInstance secondaryEntityInstance;
     private EntityInstanceManager entityInstanceManager;
     private Environment activeEnvironment;
 
     public ContextImpl(EntityInstance primaryEntityInstance, EntityInstanceManager entityInstanceManager, Environment activeEnvironment) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
+        this.secondaryEntityInstance = null;
+        this.activeEnvironment = activeEnvironment;
+    }
+
+    // Second c'tor with secondary entity and not fuck up the backward compatibility
+    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstance secondaryEntityInstance ,EntityInstanceManager entityInstanceManager, Environment activeEnvironment) {
+        this.primaryEntityInstance = primaryEntityInstance;
+        this.entityInstanceManager = entityInstanceManager;
+        this.secondaryEntityInstance = secondaryEntityInstance;
         this.activeEnvironment = activeEnvironment;
     }
 
     @Override
     public EntityInstance getPrimaryEntityInstance() {
         return primaryEntityInstance;
+    }
+
+    public EntityInstance getSecondaryEntityInstance() {
+        return secondaryEntityInstance;
     }
 
     public String getEntityName() { return entityInstanceManager.getEntityName() ;}

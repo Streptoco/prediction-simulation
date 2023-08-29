@@ -16,7 +16,11 @@ public class EngineWrapper {
     public static void main(String[] args) {
         NewXMLReader xmlReader = new NewXMLReader();
         try {
-            xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus.xml");
+            World world = xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus.xml");
+            world.createPopulationOfEntity(world.GetEntities().get(0), 20);
+            world.createPopulationOfEntity(world.GetEntities().get(1), 40);
+            System.out.println("hey lol");
+            world.Run();
         } catch (JAXBException e) {
             System.out.println(e.getMessage());
         }
