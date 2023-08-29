@@ -16,7 +16,7 @@ public class EngineWrapper {
     public static void main(String[] args) {
         NewXMLReader xmlReader = new NewXMLReader();
         try {
-            xmlReader.ReadXML("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\ex2-virus.xml");
+            xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus.xml");
         } catch (JAXBException e) {
             System.out.println(e.getMessage());
         }

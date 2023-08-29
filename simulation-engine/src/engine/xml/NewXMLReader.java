@@ -1,5 +1,6 @@
 package engine.xml;
 
+import engine.entity.impl.EntityDefinition;
 import engine.exception.XMLException;
 import engine.exception.XMLFileException;
 import engine.general.object.World;
@@ -19,6 +20,8 @@ public class NewXMLReader {
     private World world;
 
     public static List<PropertyInterface> envVariables = null;
+
+    public static List<EntityDefinition> entityDefinitionList = null;
 
     public NewXMLReader() {
     }

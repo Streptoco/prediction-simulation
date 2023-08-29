@@ -9,7 +9,6 @@ import engine.entity.impl.EntityInstanceManager;
 import java.util.List;
 
 public class KillAction extends AbstractAction {
-    EntityInstanceManager managerToKill;
     public KillAction() {
         super(ActionType.KILL);
     }
