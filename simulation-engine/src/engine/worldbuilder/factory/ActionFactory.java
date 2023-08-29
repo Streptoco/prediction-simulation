@@ -9,11 +9,13 @@ import engine.action.impl.condition.impl.ConditionAction;
 import engine.action.impl.condition.impl.MultipleConditionAction;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.action.impl.kill.KillAction;
+import engine.action.impl.proximity.ProximityAction;
 import engine.action.impl.set.SetAction;
 import engine.entity.impl.EntityDefinition;
 import engine.exception.*;
 import engine.property.api.PropertyInterface;
 import engine.worldbuilder.prdobjects.PRDAction;
+import engine.worldbuilder.prdobjects.PRDActions;
 import engine.worldbuilder.prdobjects.PRDCondition;
 import engine.worldbuilder.prdobjects.PRDDivide;
 import engine.xml.NewXMLReader;
@@ -91,6 +93,17 @@ public class ActionFactory {
             case REPLACE:
                 break;
             case PROXIMITY:
+                // TODO: get first entity, get secondary entity, check for the depth (in the invokaction) and get list of actions.
+                List<ActionInterface> actionsInCaseOfProximity = new ArrayList<>();
+                List<PRDAction> prdActionsForProximityList = prdAction.getPRDActions().getPRDAction();
+                for (PRDAction currentAction : prdActionsForProximityList) {
+                    actionsInCaseOfProximity.add(ActionFactory.BuildAction(currentAction,ruleName));
+                }
+                // added all the actions to be performed into the list itself
+                String sourceEntity = prdAction.getPRDBetween().getSourceEntity();
+                String targetEntity = prdAction.getPRDBetween().getTargetEntity();
+                Expression proximityExpression = new Expression(prdAction.getPRDEnvDepth().getOf());
+                resultAction = new ProximityAction(actionType,sourceEntity,targetEntity, proximityExpression,actionsInCaseOfProximity);
                 break;
         }
         return resultAction;
