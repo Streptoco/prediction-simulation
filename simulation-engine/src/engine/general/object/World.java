@@ -56,8 +56,12 @@ public class World {
         int ticks = 0;
         getAllInstances();
         grid.assignSacks(this.allInstances);
+        grid.drawGrid();
         this.currentTime = System.currentTimeMillis();
         while (termination.getTermination(ticks, currentTime)) {
+            grid.MoveSacks();
+            System.out.println("Move number " + ticks);
+            grid.drawGrid();
             for(EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
                     if (currentInstance.isAlive()) {

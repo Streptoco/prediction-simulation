@@ -101,7 +101,7 @@ public class Grid {
         }
         do {
             Random random = new Random();
-            int randomIndex = random.nextInt(possibleMoves.size()) - 1;
+            int randomIndex = random.nextInt(possibleMoves.size());
             if (!locationGrid[possibleMoves.get(randomIndex).getRow()][possibleMoves.get(randomIndex).getCol()].getTaken()) {
                 return possibleMoves.get(randomIndex);
             } else {
@@ -118,12 +118,21 @@ public class Grid {
                     Coordinate newCoordinate = findNewTile(i, j);
                     locationGrid[newCoordinate.getRow()][newCoordinate.getCol()].setSack(locationGrid[i][j].getSack());
                     locationGrid[newCoordinate.getRow()][newCoordinate.getCol()].setTaken(true);
-                    if (i != newCoordinate.getRow() && j != newCoordinate.getCol()) {
+                    if (!(i == newCoordinate.getRow() && j == newCoordinate.getCol())) {
                         locationGrid[i][j].setSack(null);
                         locationGrid[i][j].setTaken(false);
                     }
                 }
             }
+        }
+    }
+
+    public void drawGrid() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.print(locationGrid[i][j].getTaken() ? " T " : " F ");
+            }
+            System.out.println();
         }
     }
 }

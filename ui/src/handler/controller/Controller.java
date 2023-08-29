@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import testing.testDTO;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -53,11 +54,15 @@ public class Controller {
             selectedFile.set(file);
         }
 
-        engine.addSimulation(selectedFile.asString().get());
-        // TODO: find out if and when this scope is deprecated
+        //engine.addSimulation(selectedFile.asString().get());
         //currentWorldDTO = engine.getWorldDTO();
         //textField.textProperty().set(currentWorldDTO.GetSimulationDateString());
-        // TODO: keep operating
+
+        // TESTING PURPOSES:
+        testDTO test = new testDTO();
+        textField.textProperty().set(test.entityName);
+
+
 
     }
 }

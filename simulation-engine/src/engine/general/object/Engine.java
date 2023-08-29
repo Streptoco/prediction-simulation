@@ -114,7 +114,7 @@ public class Engine {
     // TODO: bearing in mind that simulation ID might no longer be required?
     public WorldDTO getWorldDTO() {
         Date date = new Date();
-        return new WorldDTO(++serialNumber, simulations.get(serialNumber).getSimulationDate(), simulations.get(serialNumber).getAllInstancesManager(),
+        return new WorldDTO(serialNumber, simulations.get(serialNumber).getSimulationDate(), simulations.get(serialNumber).getAllInstancesManager(),
                 date);
     }
 
