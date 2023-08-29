@@ -16,7 +16,7 @@ public class Expression {
     ReturnType returnType;
     Number castedNumber;
 
-    public Expression (String name) { // random(5), "11", "true"
+    public Expression(String name) {
         this.name = name;
     }
 
@@ -27,11 +27,9 @@ public class Expression {
             type = Type.FUNCTION;
             this.returnType = ReturnType.INT;
             double stringValue = Double.parseDouble(name.replaceAll("[^0-9]", ""));
-            castedNumber = NumberRandomGetter(0,stringValue);
+            castedNumber = NumberRandomGetter(0, stringValue);
             this.returnType = ReturnType.INT;
-        }
-
-        else if (name.startsWith("environment(")) {
+        } else if (name.startsWith("environment(")) {
             String envVariableName = "";
             int startIndex = name.indexOf("(");
             int endIndex = name.indexOf(")");
@@ -55,15 +53,43 @@ public class Expression {
                     break;
             }
             this.returnType = returnType;
-        }
-        else if (propertyMatch != null) {
+        } else if (name.startsWith("evaluate(")) {
+            String entityName = "", propertyName = "";
+            int entityNameStartIndex, entityNameEndIndex, propertyNameStartIndex, propertyNameEndIndex;
+            entityNameStartIndex = name.indexOf("(");
+            entityNameEndIndex = name.indexOf(".");
+            if (entityNameStartIndex != -1 && entityNameEndIndex != -1) {
+                // the entity name is irrelevant because we use the context?
+                entityName = name.substring(entityNameStartIndex + 1, entityNameEndIndex);
+            } else {
+                //TODO: throw entity not found exception
+            }
+            propertyNameStartIndex = entityNameEndIndex;
+            propertyNameEndIndex = name.indexOf(")");
+            if (propertyNameStartIndex != -1 && propertyNameEndIndex != -1) {
+                propertyName = name.substring(propertyNameStartIndex + 1, propertyNameEndIndex);
+            } else {
+                //TODO: throw property not found exception
+            }
+            if(entityName.equals(context.getEntityName())) {
+                castedValueOfExpression = context.getPrimaryEntityInstance().getPropertyByName(propertyName).getValue();
+                this.returnType = context.getPrimaryEntityInstance().getPropertyByName(propertyName).getPropertyType();
+            } else {
+                //TODO: get the secondary entity somehow
+            }
+            switch (this.returnType) {
+                case DECIMAL:
+                case INT:
+                    castedNumber = (Number) castedValueOfExpression;
+            }
+
+        } else if (propertyMatch != null) {
             // we need to know the property type and then return the value
             type = Type.PROPERTY;
             this.returnType = propertyMatch.getPropertyType();
             castedValueOfExpression = propertyMatch.getValue();
             castedNumber = (Number) propertyMatch.getValue();
-        }
-        else {
+        } else {
             type = Type.FREE;
             FreeValuePositioning();
         }
@@ -86,7 +112,7 @@ public class Expression {
         } catch (NumberFormatException e) {
             //
         }
-        if(!(name.equalsIgnoreCase("true") || name.equalsIgnoreCase("false"))) {
+        if (!(name.equalsIgnoreCase("true") || name.equalsIgnoreCase("false"))) {
             castedValueOfExpression = (String) name;
             this.returnType = ReturnType.STRING;
             return;
@@ -102,9 +128,15 @@ public class Expression {
 
     }
 
-    public Object getValue() { return castedValueOfExpression; }
+    public Object getValue() {
+        return castedValueOfExpression;
+    }
 
-    public ReturnType getReturnType() { return this.returnType; }
+    public ReturnType getReturnType() {
+        return this.returnType;
+    }
 
-    public Number getCastedNumber() { return castedNumber; }
+    public Number getCastedNumber() {
+        return castedNumber;
+    }
 }

@@ -15,4 +15,12 @@ public class Tile {
         this.currentSack = sack;
         this.taken = true;
     }
+
+    public Sack getSack() {
+        return currentSack;
+    }
+
+    public void setTaken(boolean taken) {
+        this.taken = taken;
+    }
 }
