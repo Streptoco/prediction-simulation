@@ -6,6 +6,7 @@ import engine.grid.api.Coordinate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 // TODO: handle seamlessness.
 
@@ -220,13 +221,44 @@ public class Grid {
         }
     }
 
-    public List<EntityInstance> getAllInstancesAroundMe(Coordinate myLocation, int depth) {
-        List<EntityInstance> resultList = new ArrayList<>();
-        int actualDepth = depth - 1, numOfTilesToScan = 8 * depth;
-        for (int i = 0; i <= actualDepth; i++) {
+    public void getAllInstancesAroundMe(Coordinate targetLocation,Coordinate currentLocation, int depth, Set<EntityInstance> entityInstances) {
+        //Using set to avoid duplications
+        //Check if the current tiles in the grid is taken and it is not the target tile that we started search from
+        if (locationGrid[currentLocation.getRow()][currentLocation.getCol()].getTaken() && !(targetLocation.getRow() == currentLocation.getRow() && targetLocation.getCol() == currentLocation.getCol())) {
+            entityInstances.add(locationGrid[currentLocation.getRow()][currentLocation.getCol()].getEntityInSack());
+        }
+        if (depth != 0) {
+            // calculate the indexes of the rows around me
+            int upperRow = RowMinusMinus(currentLocation.getRow());
+            int leftCol = ColMinusMinus(currentLocation.getCol());
+            int rightCol = ColPlusPlus(currentLocation.getCol());
+            int downRow = RowPlusPlus(currentLocation.getRow());
+
+            // checking the upper row
+            Coordinate upperLeft = new Coordinate(upperRow, leftCol);
+            getAllInstancesAroundMe(targetLocation, upperLeft, depth - 1, entityInstances);
+            Coordinate upperMiddle = new Coordinate(upperRow, currentLocation.getCol());
+            getAllInstancesAroundMe(targetLocation, upperMiddle, depth - 1, entityInstances);
+            Coordinate upperRight = new Coordinate(upperRow, rightCol);
+            getAllInstancesAroundMe(targetLocation, upperRight, depth - 1, entityInstances);
+
+            // checking the middle row
+            Coordinate middleLeft = new Coordinate(currentLocation.getRow(), leftCol);
+            getAllInstancesAroundMe(targetLocation, middleLeft, depth - 1, entityInstances);
+            Coordinate middleRight = new Coordinate(currentLocation.getRow(), leftCol);
+            getAllInstancesAroundMe(targetLocation, middleRight, depth - 1, entityInstances);
+
+            //checking the down row
+            Coordinate downLeft = new Coordinate(downRow, leftCol);
+            getAllInstancesAroundMe(targetLocation, downLeft, depth - 1, entityInstances);
+            Coordinate downMiddle = new Coordinate(downRow, currentLocation.getCol());
+            getAllInstancesAroundMe(targetLocation, downMiddle, depth - 1, entityInstances);
+            Coordinate downRight = new Coordinate(downRow, rightCol);
+            getAllInstancesAroundMe(targetLocation, downRight, depth - 1, entityInstances);
+
+
 
         }
-        return resultList;
     }
 
 
