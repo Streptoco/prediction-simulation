@@ -1,5 +1,7 @@
 package engine.grid.impl;
 
+import engine.entity.impl.EntityInstance;
+
 public class Tile {
     private boolean taken;
     private Sack currentSack;
@@ -19,6 +21,8 @@ public class Tile {
     public Sack getSack() {
         return currentSack;
     }
+
+    public EntityInstance getEntityInSack() { return currentSack.getEntity(); }
 
     public void setTaken(boolean taken) {
         this.taken = taken;

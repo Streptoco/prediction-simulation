@@ -9,4 +9,8 @@ public class Sack {
     public Sack(EntityInstance entity) {
         this.entity = entity;
     }
+
+    public EntityInstance getEntity() {
+        return entity;
+    }
 }

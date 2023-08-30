@@ -47,9 +47,13 @@ public class EntityInstance implements EntityInstanceInterface {
         properties.put(property.getName(), property);
     }
 
-    public void setDead() { this.isAlive = false;}
+    public void setDead() {
+        this.isAlive = false;
+    }
 
-    public boolean isAlive() { return this.isAlive; }
+    public boolean isAlive() {
+        return this.isAlive;
+    }
 
     public List<String> getPropertiesName() {
         return new ArrayList<>((properties.keySet()));
@@ -67,4 +71,5 @@ public class EntityInstance implements EntityInstanceInterface {
         this.position.setRow(row);
         this.position.setCol(col);
     }
+
 }

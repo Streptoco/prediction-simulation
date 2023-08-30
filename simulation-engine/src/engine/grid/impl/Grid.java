@@ -135,4 +135,99 @@ public class Grid {
             System.out.println();
         }
     }
+
+    public int rowUp(int currentRow, int depth) {
+        int result;
+        if (currentRow == 0) {
+            return rows - depth;
+        } else {
+            result = currentRow - depth;
+        }
+        if (result < 0) {
+            result = rows + result;
+        }
+        return result;
+    }
+
+    public int rowDown(int currentRow, int depth) {
+        int result;
+        if (currentRow == rows - 1) {
+            return depth - 1;
+        } else {
+            result = currentRow + depth;
+        }
+        if (result >= rows) {
+            result = result - rows;
+        }
+        return result;
+    }
+
+    public int colLeft(int currentCol, int depth) {
+        int result;
+        if (currentCol == 0) {
+            return cols - depth;
+        } else {
+            result = currentCol - depth;
+        }
+        if (result < 0) {
+            result = cols + result;
+        }
+        return result;
+    }
+
+    public int colRight(int currentCol, int depth) {
+        int result;
+        if (currentCol == cols - 1) {
+            return depth - 1;
+        } else {
+            result = currentCol + depth;
+        }
+        if (result >= cols) {
+            result = result - cols;
+        }
+        return result;
+    }
+
+    public int RowPlusPlus(int currentRow) {
+        if (currentRow == rows - 1) {
+            return 0;
+        } else {
+            return currentRow++;
+        }
+    }
+
+    public int ColPlusPlus(int currentCol) {
+        if (currentCol == cols - 1) {
+            return 0;
+        } else {
+            return currentCol++;
+        }
+    }
+
+    public int RowMinusMinus(int currentRow) {
+        if (currentRow == 0) {
+            return rows - 1;
+        } else {
+            return currentRow--;
+        }
+    }
+
+    public int ColMinusMinus(int currentCol) {
+        if (currentCol == 0) {
+            return cols - 1;
+        } else {
+            return currentCol--;
+        }
+    }
+
+    public List<EntityInstance> getAllInstancesAroundMe(Coordinate myLocation, int depth) {
+        List<EntityInstance> resultList = new ArrayList<>();
+        int actualDepth = depth - 1, numOfTilesToScan = 8 * depth;
+        for (int i = 0; i <= actualDepth; i++) {
+
+        }
+        return resultList;
+    }
+
+
 }
