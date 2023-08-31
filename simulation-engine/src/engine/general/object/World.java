@@ -11,13 +11,14 @@ import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
+import engine.grid.api.Coordinate;
 import engine.grid.impl.Grid;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class World {
-    private Termination termination;
+    Termination termination;
     private final Map<String, EntityInstanceManager> managers;
     private final List<Rule> rules;
     private final List<EntityDefinition> entities;
@@ -138,15 +139,33 @@ public class World {
         }
     }
 
-    public void placeEntityOnGrid(EntityInstance entity) {
-
-    }
-
     public void getAllInstances() {
         this. allInstances = new ArrayList<>();
         for(EntityDefinition entityDefinition : entities) {
             allInstances.addAll(managers.get(entityDefinition.getName()).getInstances());
         }
+    }
+
+
+
+
+
+
+    //=============================================================================================
+
+    public void placeEntityOnGrid(EntityInstance entity, int row, int col) {
+        // THIS IS A DUMMY FUNCTION FOR DEBUG PURPOSE
+        grid.addSackToGrid(entity, row, col);
+    }
+    public void printGrid() {
+        grid.drawGrid();
+    }
+
+    public List<EntityInstance> changeGrid(EntityInstance entity, int row, int col) {
+        Set<EntityInstance> set = new HashSet<>();
+        Coordinate coordinate = new Coordinate(row, col);
+        grid.getAllInstancesAroundMe(coordinate, coordinate, 1, set);
+        return new ArrayList<>(set);
     }
 
 

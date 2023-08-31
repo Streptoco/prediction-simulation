@@ -13,12 +13,16 @@ public class EntityInstance implements EntityInstanceInterface {
     private boolean isAlive;
     private Coordinate position;
 
+    private String name; //FOR DEBUG PURPOSE
+
+
 
     public EntityInstance(EntityDefinition entityDefinition, int id) {
         this.entityDefinition = entityDefinition;
         this.id = id;
         properties = new HashMap<>();
         this.isAlive = true;
+        this.name = entityDefinition.getName();
     }
 
     public EntityInstance(EntityDefinition entityDefinition, int id, Coordinate position) {
@@ -72,4 +76,11 @@ public class EntityInstance implements EntityInstanceInterface {
         this.position.setCol(col);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
