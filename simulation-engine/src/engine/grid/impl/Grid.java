@@ -137,58 +137,6 @@ public class Grid {
         }
     }
 
-    public int rowUp(int currentRow, int depth) {
-        int result;
-        if (currentRow == 0) {
-            return rows - depth;
-        } else {
-            result = currentRow - depth;
-        }
-        if (result < 0) {
-            result = rows + result;
-        }
-        return result;
-    }
-
-    public int rowDown(int currentRow, int depth) {
-        int result;
-        if (currentRow == rows - 1) {
-            return depth - 1;
-        } else {
-            result = currentRow + depth;
-        }
-        if (result >= rows) {
-            result = result - rows;
-        }
-        return result;
-    }
-
-    public int colLeft(int currentCol, int depth) {
-        int result;
-        if (currentCol == 0) {
-            return cols - depth;
-        } else {
-            result = currentCol - depth;
-        }
-        if (result < 0) {
-            result = cols + result;
-        }
-        return result;
-    }
-
-    public int colRight(int currentCol, int depth) {
-        int result;
-        if (currentCol == cols - 1) {
-            return depth - 1;
-        } else {
-            result = currentCol + depth;
-        }
-        if (result >= cols) {
-            result = result - cols;
-        }
-        return result;
-    }
-
     public int RowPlusPlus(int currentRow) {
         if (currentRow == rows - 1) {
             return 0;
