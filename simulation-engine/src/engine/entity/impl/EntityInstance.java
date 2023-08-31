@@ -12,6 +12,7 @@ public class EntityInstance implements EntityInstanceInterface {
     private final Map<String, PropertyInterface> properties;
     private boolean isAlive;
     private Coordinate position;
+    String entityName;
 
 
     public EntityInstance(EntityDefinition entityDefinition, int id) {
@@ -19,6 +20,7 @@ public class EntityInstance implements EntityInstanceInterface {
         this.id = id;
         properties = new HashMap<>();
         this.isAlive = true;
+        this.entityName = entityDefinition.getName();
     }
 
     public EntityInstance(EntityDefinition entityDefinition, int id, Coordinate position) {
@@ -27,6 +29,7 @@ public class EntityInstance implements EntityInstanceInterface {
         properties = new HashMap<>();
         this.isAlive = true;
         this.position = position;
+        this.entityName = entityDefinition.getName();
     }
 
 
@@ -72,4 +75,7 @@ public class EntityInstance implements EntityInstanceInterface {
         this.position.setCol(col);
     }
 
+    public String getEntityName() {
+        return entityName;
+    }
 }
