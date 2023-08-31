@@ -245,7 +245,7 @@ public class Grid {
             // checking the middle row
             Coordinate middleLeft = new Coordinate(currentLocation.getRow(), leftCol);
             getAllInstancesAroundMe(targetLocation, middleLeft, depth - 1, entityInstances);
-            Coordinate middleRight = new Coordinate(currentLocation.getRow(), leftCol);
+            Coordinate middleRight = new Coordinate(currentLocation.getRow(), rightCol);
             getAllInstancesAroundMe(targetLocation, middleRight, depth - 1, entityInstances);
 
             //checking the down row
