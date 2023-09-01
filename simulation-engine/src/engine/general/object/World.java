@@ -1,9 +1,9 @@
 package engine.general.object;
 
 /*
-* World contains a main loop that ticks one at a time, and also has a list of rules.
-* The list of rules, we'll go by them and for every iteration in the loop we'll see if it can be invoked.
-* */
+ * World contains a main loop that ticks one at a time, and also has a list of rules.
+ * The list of rules, we'll go by them and for every iteration in the loop we'll see if it can be invoked.
+ * */
 
 //TODO: in the loop, when it ends, return why it ended.
 
@@ -62,7 +62,7 @@ public class World {
             grid.MoveSacks();
             System.out.println("Move number " + ticks);
             grid.drawGrid();
-            for(EntityDefinition currentEntity : entities) {
+            for (EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
                     if (currentInstance.isAlive()) {
                         ContextImpl context = new ContextImpl(currentInstance, managers.get(currentEntity.getName()), activeEnvironment);
@@ -90,7 +90,7 @@ public class World {
 
     public static String StringRandomGetter() {
         Random randomInt = new Random();
-        int length =  randomInt.nextInt(50 - 1 + 1) + 1;
+        int length = randomInt.nextInt(50 - 1 + 1) + 1;
         String allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?,-_.() ";
         StringBuilder randomString = new StringBuilder();
         Random randomStr = new Random();
@@ -105,16 +105,25 @@ public class World {
 
     }
 
-    public Environment getEnvironment() { return activeEnvironment; }
+    public Environment getEnvironment() {
+        return activeEnvironment;
+    }
 
-    public List<EntityDefinition> GetEntities() { return this.entities; }
+    public List<EntityDefinition> GetEntities() {
+        return this.entities;
+    }
 
     public List<Rule> getRules() {
         return rules;
     }
 
-    public int GetSimulationTotalTicks() { return this.termination.getAllTicks();}
-    public long GetSimulationTotalTime() { return this.termination.getHowManySecondsToRun();}
+    public int GetSimulationTotalTicks() {
+        return this.termination.getAllTicks();
+    }
+
+    public long GetSimulationTotalTime() {
+        return this.termination.getHowManySecondsToRun();
+    }
 
     public SimpleDateFormat getSimulationDate() {
         return simulationDate;
@@ -127,24 +136,21 @@ public class World {
     public Date getSimDate() {
         return simDate;
     }
+
     public EntityInstanceManager GetInstances(String entityName) {
         return managers.get(entityName);
     }
 
-    public void createPopulationOfEntity(EntityDefinition entity, int population){
+    public void createPopulationOfEntity(EntityDefinition entity, int population) {
         EntityInstance currentEntity;
-        for(int i = 0; i < population; i++) {
+        for (int i = 0; i < population; i++) {
             currentEntity = managers.get(entity.getName()).create(entity);
         }
     }
 
-    public void placeEntityOnGrid(EntityInstance entity) {
-
-    }
-
     public void getAllInstances() {
-        this. allInstances = new ArrayList<>();
-        for(EntityDefinition entityDefinition : entities) {
+        this.allInstances = new ArrayList<>();
+        for (EntityDefinition entityDefinition : entities) {
             allInstances.addAll(managers.get(entityDefinition.getName()).getInstances());
         }
     }

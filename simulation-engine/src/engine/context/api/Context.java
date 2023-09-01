@@ -2,6 +2,7 @@ package engine.context.api;
 
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
+import engine.entity.impl.EntityInstanceManager;
 import engine.general.object.Environment;
 import engine.grid.impl.Grid;
 import engine.property.api.PropertyInterface;
@@ -17,4 +18,5 @@ public interface Context {
     String getEntityName();
     Grid getGrid();
     Environment getEnv();
+    EntityInstanceManager getManager();
 }

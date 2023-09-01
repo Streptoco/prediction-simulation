@@ -71,7 +71,7 @@ public class Expression {
             } else {
                 //TODO: throw property not found exception
             }
-            if(entityName.equals(context.getEntityName())) {
+            if(entityName.equals(context.getPrimaryEntityInstance().getEntityName())) { // if(entityName.equals(context.getEntityName()))
                 castedValueOfExpression = context.getPrimaryEntityInstance().getPropertyByName(propertyName).getValue();
                 this.returnType = context.getPrimaryEntityInstance().getPropertyByName(propertyName).getPropertyType();
             } else {

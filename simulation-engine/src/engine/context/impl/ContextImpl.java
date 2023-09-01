@@ -86,4 +86,9 @@ public class ContextImpl implements Context {
     public Environment getEnv() {
         return activeEnvironment;
     }
+
+    @Override
+    public EntityInstanceManager getManager() {
+        return this.entityInstanceManager;
+    }
 }

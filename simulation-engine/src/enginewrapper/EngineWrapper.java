@@ -16,7 +16,7 @@ public class EngineWrapper {
     public static void main(String[] args) {
         NewXMLReader xmlReader = new NewXMLReader();
         try {
-            World world = xmlReader.ReadXML("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\test-xml.xml");
+            World world = xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified.xml");
             world.createPopulationOfEntity(world.GetEntities().get(0), 20);
             world.createPopulationOfEntity(world.GetEntities().get(1), 40);
             System.out.println("hey lol");
