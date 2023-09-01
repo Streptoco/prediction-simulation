@@ -20,9 +20,13 @@ public class Termination {
     }
 
     public boolean getTermination(int currentTick, long outerTimeInMillis) {
-        long currentTime = System.currentTimeMillis();
-        currentTime -= outerTimeInMillis;
-        return (currentTick <= this.ticks && currentTime <= this.howManySecondsToRun);
+        if(isUserInteractive) {
+            return true;
+        } else {
+            long currentTime = System.currentTimeMillis();
+            currentTime -= outerTimeInMillis;
+            return (currentTick <= this.ticks && currentTime <= this.howManySecondsToRun);
+        }
     }
 
     public boolean getIsInteractive() { return this.isUserInteractive;}

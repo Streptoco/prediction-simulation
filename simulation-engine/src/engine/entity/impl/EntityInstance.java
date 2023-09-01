@@ -71,8 +71,7 @@ public class EntityInstance implements EntityInstanceInterface {
     }
 
     public void setPosition(int row, int col) {
-        this.position.setRow(row);
-        this.position.setCol(col);
+        setPosition(new Coordinate(row, col));
     }
 
     public String getEntityName() {

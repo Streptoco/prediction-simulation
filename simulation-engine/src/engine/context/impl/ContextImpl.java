@@ -91,4 +91,10 @@ public class ContextImpl implements Context {
     public EntityInstanceManager getManager() {
         return this.entityInstanceManager;
     }
+
+    public void setGrid(Grid grid) {
+        if(this.grid == null) {
+            this.grid = grid;
+        }
+    }
 }

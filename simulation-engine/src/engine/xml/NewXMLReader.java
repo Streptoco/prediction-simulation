@@ -38,7 +38,6 @@ public class NewXMLReader {
             Unmarshaller u = jaxbContext.createUnmarshaller();
             PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
             this.world = engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
-            System.out.println("hey lol");
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         } catch (XMLException e) {

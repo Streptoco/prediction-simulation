@@ -59,13 +59,16 @@ public class World {
         grid.drawGrid();
         this.currentTime = System.currentTimeMillis();
         while (termination.getTermination(ticks, currentTime)) {
-            grid.MoveSacks();
-            System.out.println("Move number " + ticks);
-            grid.drawGrid();
+            if(ticks != 0) {
+                grid.MoveSacks();
+                System.out.println("Move number " + ticks);
+                grid.drawGrid();
+            }
             for (EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
                     if (currentInstance.isAlive()) {
                         ContextImpl context = new ContextImpl(currentInstance, managers.get(currentEntity.getName()), activeEnvironment);
+                        context.setGrid(this.grid);
                         for (Rule rule : rules) {
                             if (rule.activation(ticks)) {
                                 rule.invokeAction(context);

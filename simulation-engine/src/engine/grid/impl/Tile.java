@@ -8,7 +8,6 @@ public class Tile {
     public Tile() {
         this.taken = false;
         this.currentSack = null;
-        // TODO: c'tor
     }
 
     public boolean getTaken() {return this.taken;}
@@ -27,4 +26,5 @@ public class Tile {
     public void setTaken(boolean taken) {
         this.taken = taken;
     }
+
 }

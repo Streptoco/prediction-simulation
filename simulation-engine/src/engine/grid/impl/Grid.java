@@ -44,7 +44,10 @@ public class Grid {
                 randomWidth = random.nextInt(cols);
 
             } while (locationGrid[randomLength][randomWidth].getTaken());
+            int finalRow = randomLength;
+            int finalCol = randomWidth;
             locationGrid[randomLength][randomWidth].setSack(sack);
+            sack.getEntity().setPosition(finalRow, finalCol);
             return true;
         } else {
             // TODO: message that it can't be done? exception?
@@ -70,55 +73,113 @@ public class Grid {
         }
     }
 
-    public Coordinate findNewTile(int row, int col) {
-        int tempRow, tempCol;
+//    public Coordinate findNewTile(int row, int col) {
+//        int tempRow, tempCol;
+//        List<Coordinate> possibleMoves = new ArrayList<>();
+//        //Moving up
+//        if (row == 0) {
+//            possibleMoves.add(new Coordinate(rows - 1, col));
+//        } else {
+//            possibleMoves.add(new Coordinate(row - 1, col));
+//        }
+//
+//        //Moving down
+//        if (row == rows - 1) {
+//            possibleMoves.add(new Coordinate(0, col));
+//        } else {
+//            possibleMoves.add(new Coordinate(row + 1, col));
+//        }
+//
+//        //Moving right
+//        if (col == cols - 1) {
+//            possibleMoves.add(new Coordinate(row, 0));
+//        } else {
+//            possibleMoves.add(new Coordinate(row, col + 1));
+//        }
+//
+//        //Moving left
+//        if (col == 0) {
+//            possibleMoves.add(new Coordinate(row, cols - 1));
+//        } else {
+//            possibleMoves.add(new Coordinate(row, col - 1));
+//        }
+//        do {
+//            Random random = new Random();
+//            int randomIndex = random.nextInt(possibleMoves.size());
+//            if (!locationGrid[possibleMoves.get(randomIndex).getRow()][possibleMoves.get(randomIndex).getCol()].getTaken()) {
+//                return possibleMoves.get(randomIndex);
+//            } else {
+//                possibleMoves.remove(randomIndex);
+//            }
+//        } while (!possibleMoves.isEmpty());
+//        return new Coordinate(row, col);
+//    }
+
+    public Coordinate findNewTile(Coordinate currentLocation) {
         List<Coordinate> possibleMoves = new ArrayList<>();
-        //Moving up
-        if (row == 0) {
-            possibleMoves.add(new Coordinate(rows - 1, col));
-        } else {
-            possibleMoves.add(new Coordinate(row - 1, col));
-        }
+        int upperRow = RowMinusMinus(currentLocation.getRow());
+        int leftCol = ColMinusMinus(currentLocation.getCol());
+        int rightCol = ColPlusPlus(currentLocation.getCol());
+        int downRow = RowPlusPlus(currentLocation.getRow());
 
-        //Moving down
-        if (row == rows - 1) {
-            possibleMoves.add(new Coordinate(0, col));
-        } else {
-            possibleMoves.add(new Coordinate(row + 1, col));
+        //Upper Left
+        if (!locationGrid[upperRow][leftCol].getTaken()) {
+            possibleMoves.add(new Coordinate(upperRow, leftCol));
         }
-
-        //Moving right
-        if (col == cols - 1) {
-            possibleMoves.add(new Coordinate(row, 0));
-        } else {
-            possibleMoves.add(new Coordinate(row, col + 1));
+        //Upper Middle
+        if (!locationGrid[upperRow][currentLocation.getCol()].getTaken()) {
+            possibleMoves.add(new Coordinate(upperRow, currentLocation.getCol()));
         }
-
-        //Moving left
-        if (col == 0) {
-            possibleMoves.add(new Coordinate(row, cols - 1));
-        } else {
-            possibleMoves.add(new Coordinate(row, col - 1));
+        //Upper Right
+        if (!locationGrid[upperRow][rightCol].getTaken()) {
+            possibleMoves.add(new Coordinate(upperRow, rightCol));
         }
-        do {
-            Random random = new Random();
-            int randomIndex = random.nextInt(possibleMoves.size());
-            if (!locationGrid[possibleMoves.get(randomIndex).getRow()][possibleMoves.get(randomIndex).getCol()].getTaken()) {
-                return possibleMoves.get(randomIndex);
-            } else {
-                possibleMoves.remove(randomIndex);
-            }
-        } while (!possibleMoves.isEmpty());
-        return new Coordinate(row, col);
+        //Middle left
+        if (!locationGrid[currentLocation.getRow()][leftCol].getTaken()) {
+            possibleMoves.add(new Coordinate(currentLocation.getRow(), leftCol));
+        }
+        //Middle Right
+        if (!locationGrid[currentLocation.getRow()][rightCol].getTaken()) {
+            possibleMoves.add(new Coordinate(currentLocation.getRow(), rightCol));
+        }
+        //Down left
+        if (!locationGrid[downRow][leftCol].getTaken()) {
+            possibleMoves.add(new Coordinate(downRow, leftCol));
+        }
+        //Down middle
+        if (!locationGrid[downRow][currentLocation.getCol()].getTaken()) {
+            possibleMoves.add(new Coordinate(downRow, currentLocation.getCol()));
+        }
+        //Down right
+        if (!locationGrid[downRow][rightCol].getTaken()) {
+            possibleMoves.add(new Coordinate(downRow, rightCol));
+        }
+        if (possibleMoves.isEmpty()) {
+            return new Coordinate(currentLocation.getRow(), currentLocation.getCol());
+        } else {
+            do {
+                Random random = new Random();
+                int randomIndex = random.nextInt(possibleMoves.size());
+                Tile currentTile = locationGrid[possibleMoves.get(randomIndex).getRow()][possibleMoves.get(randomIndex).getCol()];
+                if (!currentTile.getTaken()) {
+                    return possibleMoves.get(randomIndex);
+                } else {
+                    possibleMoves.remove(randomIndex);
+                }
+            } while (!possibleMoves.isEmpty());
+        }
+        return new Coordinate(currentLocation.getRow(), currentLocation.getCol());
     }
 
     public void MoveSacks() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                if (locationGrid[i][j].getTaken()) {
-                    Coordinate newCoordinate = findNewTile(i, j);
+                if (locationGrid[i][j].getTaken() && !locationGrid[i][j].getSack().isMoved()) {
+                    Coordinate newCoordinate = findNewTile(new Coordinate(i, j));
                     locationGrid[newCoordinate.getRow()][newCoordinate.getCol()].setSack(locationGrid[i][j].getSack());
                     locationGrid[newCoordinate.getRow()][newCoordinate.getCol()].setTaken(true);
+                    locationGrid[newCoordinate.getRow()][newCoordinate.getCol()].getSack().getEntity().setPosition(newCoordinate);
+                    locationGrid[newCoordinate.getRow()][newCoordinate.getCol()].getSack().setMoved(true);
                     if (!(i == newCoordinate.getRow() && j == newCoordinate.getCol())) {
                         locationGrid[i][j].setSack(null);
                         locationGrid[i][j].setTaken(false);
@@ -126,22 +187,39 @@ public class Grid {
                 }
             }
         }
-    }
-
-    public void drawGrid() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                System.out.print(locationGrid[i][j].getTaken() ? " T " : " F ");
+                if (locationGrid[i][j].getSack() != null) {
+                    locationGrid[i][j].getSack().setMoved(false);
+                }
+            }
+        }
+    }
+
+
+    public void drawGrid() {
+        System.out.println("==================================================================");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (j == 0) {
+                    System.out.print(i + ".\t");
+                }
+                if (locationGrid[i][j].getTaken()) {
+                    System.out.print(locationGrid[i][j].getSack().getEntity().getId() + "" + locationGrid[i][j].getSack().getEntity().getEntityName().charAt(0) + " ");
+                } else {
+                    System.out.print("-- ");
+                }
             }
             System.out.println();
         }
+        System.out.println("==================================================================");
     }
 
     public int RowPlusPlus(int currentRow) {
         if (currentRow == rows - 1) {
             return 0;
         } else {
-            return currentRow++;
+            return ++currentRow;
         }
     }
 
@@ -149,7 +227,7 @@ public class Grid {
         if (currentCol == cols - 1) {
             return 0;
         } else {
-            return currentCol++;
+            return ++currentCol;
         }
     }
 
@@ -157,7 +235,7 @@ public class Grid {
         if (currentRow == 0) {
             return rows - 1;
         } else {
-            return currentRow--;
+            return --currentRow;
         }
     }
 
@@ -165,15 +243,17 @@ public class Grid {
         if (currentCol == 0) {
             return cols - 1;
         } else {
-            return currentCol--;
+            return --currentCol;
         }
     }
 
-    public void getAllInstancesAroundMe(Coordinate targetLocation,Coordinate currentLocation, int depth, Set<EntityInstance> entityInstances) {
+    public void getAllInstancesAroundMe(Coordinate targetLocation, Coordinate currentLocation, int depth, Set<EntityInstance> entityInstances) {
         //Using set to avoid duplications
         //Check if the current tiles in the grid is taken and it is not the target tile that we started search from
-        if (locationGrid[currentLocation.getRow()][currentLocation.getCol()].getTaken() && !(targetLocation.getRow() == currentLocation.getRow() && targetLocation.getCol() == currentLocation.getCol())) {
-            entityInstances.add(locationGrid[currentLocation.getRow()][currentLocation.getCol()].getEntityInSack());
+        if (locationGrid[currentLocation.getRow()][currentLocation.getCol()].getTaken()) {
+            if (targetLocation.getRow() != currentLocation.getRow() || targetLocation.getCol() != currentLocation.getCol()) {
+                entityInstances.add(locationGrid[currentLocation.getRow()][currentLocation.getCol()].getEntityInSack());
+            }
         }
         if (depth != 0) {
             // calculate the indexes of the rows around me
@@ -203,7 +283,6 @@ public class Grid {
             getAllInstancesAroundMe(targetLocation, downMiddle, depth - 1, entityInstances);
             Coordinate downRight = new Coordinate(downRow, rightCol);
             getAllInstancesAroundMe(targetLocation, downRight, depth - 1, entityInstances);
-
 
 
         }

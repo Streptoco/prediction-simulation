@@ -38,6 +38,7 @@ public class ProximityAction extends AbstractAction {
         primarySourceEntity = context.getPrimaryEntityInstance();
         this.grid = context.getGrid();
         Set<EntityInstance> surroundEntitiesSet = new HashSet<>();
+        this.depth.evaluateExpression(context);
         grid.getAllInstancesAroundMe(primarySourceEntity.getPosition(), primarySourceEntity.getPosition(), depth.getCastedNumber().intValue(), surroundEntitiesSet);
         List<EntityInstance> surroundEntities = new ArrayList<>(surroundEntitiesSet);
         // iterate over the surround entities that the function found
@@ -45,7 +46,7 @@ public class ProximityAction extends AbstractAction {
             if(currentEntity.getEntityName().equalsIgnoreCase(targetEntity)) {
                 //iterate over the action in the actionList to invoke in the currentEntity
                 for(ActionInterface action : actionList) {
-                    //The entityInstanceManager in the context that the function hold is the manager of the souce entity
+                    //The entityInstanceManager in the context that the function hold is the manager of the source entity
                     //Do we need to send the entityInstanceManager of the target entity, or it doesn't matter in the possible action of the actionsList?
                     Context currentContext = new ContextImpl(currentEntity, context.getManager(), context.getEnv());
                     action.invoke(currentContext);
