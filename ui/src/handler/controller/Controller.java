@@ -2,7 +2,6 @@ package handler.controller;
 
 import engine.general.object.Engine;
 import engine.xml.NewXMLReader;
-import enginetoui.dto.basic.api.DTO;
 import enginetoui.dto.basic.impl.EntityDTO;
 import enginetoui.dto.basic.impl.RuleDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
@@ -16,7 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import tree.item.*;
+import tree.item.impl.*;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -28,7 +27,7 @@ public class Controller implements Initializable {
     NewXMLReader xmlReader = new NewXMLReader();
 
     @FXML
-    private TextField mainTextField;
+    private TextArea mainTextArea;
     @FXML
     private TreeView treeView;
     @FXML
@@ -72,7 +71,6 @@ public class Controller implements Initializable {
 
     public void selectItemTermination() {
         System.out.println("This is a test to see if this works.");
-        mainTextField.textProperty().set(currentWorldDTO.termination.toString());
         // TODO: generify somethings that we could show in the scene
     }
 
@@ -83,6 +81,8 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         engine = new Engine();
+        mainTextArea.setDisable(true);
+        mainTextArea.setStyle("-fx-font-size: 24px");
         try {
             engine.addSimulation("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\test-xml.xml");
         } catch (JAXBException e) {
@@ -120,6 +120,20 @@ public class Controller implements Initializable {
         }
 
         treeView.setRoot(worldTreeItem);
+
+        treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            mainTextArea.clear();
+            if (newValue != null) {
+                // Check if the selected item is a RuleTreeItem or EntityTreeItem
+                if (newValue instanceof RuleTreeItem) {
+                    ((RuleTreeItem) newValue).ApplyText(mainTextArea);
+                } else if (newValue instanceof EntityTreeItem) {
+                    ((EntityTreeItem) newValue).ApplyText(mainTextArea);
+                } else if (newValue instanceof TerminationTreeItem) {
+                    ((TerminationTreeItem) newValue).ApplyText(mainTextArea);
+                }
+            }
+        });
 
 
         // branches should actually be of the same type of DTO, and just hold different values.

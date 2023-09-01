@@ -1,6 +1,5 @@
-package tree.item;
+package tree.item.impl;
 
-import engine.general.object.Environment;
 import enginetoui.dto.basic.impl.EnvironmentDTO;
 import enginetoui.dto.basic.impl.PropertyDTO;
 import javafx.scene.control.TreeItem;

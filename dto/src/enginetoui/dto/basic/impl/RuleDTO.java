@@ -24,4 +24,8 @@ public class RuleDTO {
             }
         }
     }
+
+    public String getName() {
+        return this.name;
+    }
 }
