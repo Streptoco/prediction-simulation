@@ -1,6 +1,7 @@
 package handler.controller;
 
 import engine.general.object.Engine;
+import engine.general.object.Environment;
 import engine.xml.NewXMLReader;
 import enginetoui.dto.basic.impl.EntityDTO;
 import enginetoui.dto.basic.impl.RuleDTO;
@@ -131,6 +132,12 @@ public class Controller implements Initializable {
                     ((EntityTreeItem) newValue).ApplyText(mainTextArea);
                 } else if (newValue instanceof TerminationTreeItem) {
                     ((TerminationTreeItem) newValue).ApplyText(mainTextArea);
+                } else if (newValue instanceof GridTreeItem) {
+                    ((GridTreeItem) newValue).ApplyText(mainTextArea);
+                } else if (newValue instanceof PropertyTreeItem) {
+                    ((PropertyTreeItem) newValue).ApplyText(mainTextArea);
+                } else if (newValue instanceof EnvironmentTreeItem) {
+                    ((EnvironmentTreeItem) newValue).ApplyText(mainTextArea);
                 }
             }
         });
