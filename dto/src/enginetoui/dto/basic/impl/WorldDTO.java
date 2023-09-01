@@ -4,6 +4,7 @@ import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.general.object.Engine;
+import engine.general.object.Environment;
 import engine.general.object.Rule;
 import engine.general.object.Termination;
 import engine.property.api.PropertyInterface;
@@ -15,7 +16,7 @@ import java.util.*;
 public class WorldDTO implements DTO {
     public final int simulationId;
     public final SimpleDateFormat simulationDate;
-
+    public final EnvironmentDTO environment;
     public final List<EntityDTO> entityDefinitions;
 
     public final List<RuleDTO> rules;
@@ -26,7 +27,7 @@ public class WorldDTO implements DTO {
     public TerminationDTO termination;
 
     public WorldDTO(int simulationId, SimpleDateFormat simulationDate, List<EntityInstanceManager> entities,
-                    Date date, Termination termination, List<Rule> rules, List<EntityDefinition> entityDefinitions) {
+                    Date date, Termination termination, List<Rule> rules, List<EntityDefinition> entityDefinitions, Environment environment) {
         this.rules = new ArrayList<>();
         this.entityDefinitions = new ArrayList<>();
         this.simulationId = simulationId;
@@ -44,6 +45,7 @@ public class WorldDTO implements DTO {
             this.entityDefinitions.add(new EntityDTO(entity.getName(),entity.getPopulation(),entity.getProps()));
         }
         this.termination = new TerminationDTO(termination.getAllTicks(), termination.getHowManySecondsToRun(), termination.getIsInteractive());
+        this.environment = new EnvironmentDTO(environment.GetAllEnvVariablesNames(),environment.GetAllEnvVariables());
     }
 
     public List<RuleDTO> getRules() {return this.rules;}

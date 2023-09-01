@@ -100,9 +100,12 @@ public class Controller implements Initializable {
         RuleTreeFatherItem ruleTreeFatherItem = new RuleTreeFatherItem();
         EntitiesTreeFatherItem entitiesTreeFatherItem = new EntitiesTreeFatherItem();
 
+
         TerminationTreeItem terminationTreeItem = new TerminationTreeItem(currentWorldDTO.termination);
 
-        worldTreeItem.getChildren().setAll(ruleTreeFatherItem, entitiesTreeFatherItem, terminationTreeItem);
+        EnvironmentTreeItem environmentTreeItem = new EnvironmentTreeItem(currentWorldDTO.environment);
+
+        worldTreeItem.getChildren().setAll(ruleTreeFatherItem, entitiesTreeFatherItem, terminationTreeItem, environmentTreeItem);
 
         for (RuleDTO ruleDTO : currentWorldDTO.getRules()) {
             RuleTreeItem newRule = new RuleTreeItem(ruleDTO);
@@ -113,6 +116,8 @@ public class Controller implements Initializable {
             EntityTreeItem newEntity = new EntityTreeItem(entity);
             entitiesTreeFatherItem.getChildren().add(newEntity);
         }
+
+
 
         treeView.setRoot(worldTreeItem);
 
