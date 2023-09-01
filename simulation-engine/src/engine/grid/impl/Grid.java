@@ -51,6 +51,10 @@ public class Grid {
         }
     }
 
+    public int getRows() {return this.rows;}
+
+    public int getCols() {return this.cols;}
+
     public void addSackToGrid(EntityInstance entity, int row, int col) {
         Sack sack = new Sack(entity);
         Tile tile = new Tile();

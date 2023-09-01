@@ -90,7 +90,6 @@ public class Controller implements Initializable {
         }
 
         currentWorldDTO = engine.getWorldDTO();
-        System.out.println("hey lol");
 
         StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
         textField.textProperty().bind(labelTextBinding);
@@ -103,9 +102,12 @@ public class Controller implements Initializable {
 
         TerminationTreeItem terminationTreeItem = new TerminationTreeItem(currentWorldDTO.termination);
 
+
         EnvironmentTreeItem environmentTreeItem = new EnvironmentTreeItem(currentWorldDTO.environment);
 
-        worldTreeItem.getChildren().setAll(ruleTreeFatherItem, entitiesTreeFatherItem, terminationTreeItem, environmentTreeItem);
+        GridTreeItem gridTreeItem = new GridTreeItem(currentWorldDTO.gridDTO);
+
+        worldTreeItem.getChildren().setAll(ruleTreeFatherItem, entitiesTreeFatherItem, environmentTreeItem, terminationTreeItem, gridTreeItem);
 
         for (RuleDTO ruleDTO : currentWorldDTO.getRules()) {
             RuleTreeItem newRule = new RuleTreeItem(ruleDTO);
@@ -116,8 +118,6 @@ public class Controller implements Initializable {
             EntityTreeItem newEntity = new EntityTreeItem(entity);
             entitiesTreeFatherItem.getChildren().add(newEntity);
         }
-
-
 
         treeView.setRoot(worldTreeItem);
 

@@ -16,6 +16,9 @@ import java.util.*;
 public class WorldDTO implements DTO {
     public final int simulationId;
     public final SimpleDateFormat simulationDate;
+
+    public final GridDTO gridDTO;
+
     public final EnvironmentDTO environment;
     public final List<EntityDTO> entityDefinitions;
 
@@ -27,7 +30,8 @@ public class WorldDTO implements DTO {
     public TerminationDTO termination;
 
     public WorldDTO(int simulationId, SimpleDateFormat simulationDate, List<EntityInstanceManager> entities,
-                    Date date, Termination termination, List<Rule> rules, List<EntityDefinition> entityDefinitions, Environment environment) {
+                    Date date, Termination termination, List<Rule> rules,
+                    List<EntityDefinition> entityDefinitions, Environment environment, int gridRows, int gridCols) {
         this.rules = new ArrayList<>();
         this.entityDefinitions = new ArrayList<>();
         this.simulationId = simulationId;
@@ -46,6 +50,7 @@ public class WorldDTO implements DTO {
         }
         this.termination = new TerminationDTO(termination.getAllTicks(), termination.getHowManySecondsToRun(), termination.getIsInteractive());
         this.environment = new EnvironmentDTO(environment.GetAllEnvVariablesNames(),environment.GetAllEnvVariables());
+        this.gridDTO = new GridDTO(gridRows,gridCols);
     }
 
     public List<RuleDTO> getRules() {return this.rules;}

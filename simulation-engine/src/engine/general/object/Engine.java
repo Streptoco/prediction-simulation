@@ -110,7 +110,8 @@ public class Engine {
         for(Map.Entry<Integer, World> entry : simulations.entrySet()) {
             resultList.add(new WorldDTO(entry.getKey(), entry.getValue().getSimulationDate(), entry.getValue().getAllInstancesManager(),
                     entry.getValue().getSimDate(), entry.getValue().getTermination(),
-                    entry.getValue().getRules(), entry.getValue().GetEntities(), entry.getValue().getEnvironment()));
+                    entry.getValue().getRules(), entry.getValue().GetEntities(), entry.getValue().getEnvironment(),
+                    entry.getValue().getRows(), entry.getValue().getCols()));
         }
         return resultList;
     }
@@ -120,7 +121,8 @@ public class Engine {
         Date date = new Date();
         return new WorldDTO(serialNumber, simulations.get(serialNumber).getSimulationDate(), simulations.get(serialNumber).getAllInstancesManager(),
                 date, simulations.get(serialNumber).getTermination(),simulations.get(serialNumber).getRules(),
-                simulations.get(serialNumber).GetEntities(), simulations.get(serialNumber).getEnvironment());
+                simulations.get(serialNumber).GetEntities(), simulations.get(serialNumber).getEnvironment(), simulations.get(serialNumber).getRows(),
+                simulations.get(serialNumber).getCols());
     }
 
     public EntityInstanceManager GetInstanceManager(String name, int simID) {

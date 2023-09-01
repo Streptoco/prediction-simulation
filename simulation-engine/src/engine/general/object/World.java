@@ -79,6 +79,10 @@ public class World {
         }
     }
 
+    public int getRows() {return this.grid.getRows();}
+
+    public int getCols() {return this.grid.getCols();}
+
     public static double NumberRandomGetter(double rangeMin, double rangeMax) {
         Random random = new Random();
         return rangeMin + (rangeMax - rangeMin) * random.nextDouble();
@@ -147,10 +151,6 @@ public class World {
     }
 
     public Termination getTermination() {return this.termination;}
-
-
-
-
 
 
     //=============================================================================================
