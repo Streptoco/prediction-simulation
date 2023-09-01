@@ -8,4 +8,5 @@ public interface ActionInterface {
     ActionType getActionType();
 
     String getPropertyName();
+    String getEntityOfTheAction();
 }

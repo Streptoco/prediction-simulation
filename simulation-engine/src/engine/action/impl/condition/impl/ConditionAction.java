@@ -20,8 +20,8 @@ public class ConditionAction extends AbstractAction {
     private String propertyName;
     private boolean isConditionHappening;
 
-    public ConditionAction(String propertyName, String operator, Expression valueExpression, List<ActionInterface> thenAction, List<ActionInterface> elseAction) {
-        super(ActionType.CONDITION);
+    public ConditionAction(String propertyName, String operator, Expression valueExpression, List<ActionInterface> thenAction, List<ActionInterface> elseAction, String actionEntity) {
+        super(ActionType.CONDITION, actionEntity);
         this.propertyName = propertyName;
         this.valueOperator = operator;
         this.valueExpression = valueExpression;
@@ -33,8 +33,8 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
-    public ConditionAction(String propertyName, String operator, Expression valueExpression) {
-        super(ActionType.CONDITION);
+    public ConditionAction(String propertyName, String operator, Expression valueExpression, String actionEntity) {
+        super(ActionType.CONDITION, actionEntity);
         this.valueExpression = valueExpression;
         this.valueOperator = operator;
         this.propertyName = propertyName;

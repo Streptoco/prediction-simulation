@@ -19,8 +19,8 @@ public class IncreaseDecreaseAction extends AbstractAction {
     IncreaseDecrease increaseDecrease;
     String propertyName;
 
-    public IncreaseDecreaseAction(String propertyName, Expression increaseBy, String type) {
-        super(ActionType.INCREASE);
+    public IncreaseDecreaseAction(String propertyName, Expression increaseBy, String type, String actionEntity) {
+        super(ActionType.INCREASE, actionEntity);
         this.propertyName = propertyName;
         this.increaseBy = increaseBy;
         if (type.equalsIgnoreCase("increase")) {

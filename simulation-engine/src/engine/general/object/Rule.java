@@ -5,7 +5,7 @@ import engine.context.api.Context;
 
 import java.util.List;
 
-public class  Rule {
+public class Rule {
     private String name;
     RuleActivation activation;
     private List<ActionInterface> actions;
@@ -26,7 +26,9 @@ public class  Rule {
 
     public void invokeAction(Context context) {
         for (ActionInterface action : actions) {
-            action.invoke(context);
+            if (action.getEntityOfTheAction().equalsIgnoreCase(context.getEntityName())) {
+                action.invoke(context);
+            }
         }
     }
 

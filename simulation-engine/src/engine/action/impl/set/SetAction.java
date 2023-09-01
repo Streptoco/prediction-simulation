@@ -15,8 +15,8 @@ public class SetAction extends AbstractAction {
     private PropertyInterface propertyInstance;
     private String propertyName;
     private Expression valueExpression;
-    public SetAction(String propertyName, Expression valueExpression) {
-        super(ActionType.SET);
+    public SetAction(String propertyName, Expression valueExpression, String actionEntity) {
+        super(ActionType.SET, actionEntity);
         this.propertyName = propertyName;
         this.valueExpression = valueExpression;
     }

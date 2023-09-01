@@ -12,8 +12,8 @@ import java.util.List;
 
 public class KillAction extends AbstractAction {
     List<EntityInstance> entitiesToKill;
-    public KillAction() {
-        super(ActionType.KILL);
+    public KillAction(String actionEntity) {
+        super(ActionType.KILL, actionEntity);
         this.entitiesToKill = new ArrayList<>();
     }
     @Override

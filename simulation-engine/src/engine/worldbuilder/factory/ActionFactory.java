@@ -33,7 +33,7 @@ public class ActionFactory {
                 Expression expression = new Expression(prdAction.getBy());
                 expression.FreeValuePositioning();
                 resultAction = new IncreaseDecreaseAction(prdAction.getProperty(),
-                        expression, prdAction.getType());
+                        expression, prdAction.getType(), prdAction.getEntity());
                 CheckArgumentsTypeForNumbers(expression);
                 SearchEntity(prdAction.getEntity(), ruleName);
                 break;
@@ -51,7 +51,7 @@ public class ActionFactory {
                 }
                 Expression arg1Expression = new Expression(arg1);
                 Expression arg2Expression = new Expression(arg2);
-                resultAction = new CalculationAction(prdAction.getResultProp(), calculationType, arg1Expression, arg2Expression);
+                resultAction = new CalculationAction(prdAction.getResultProp(), calculationType, arg1Expression, arg2Expression, prdAction.getEntity());
                 arg1Expression.FreeValuePositioning();
                 arg2Expression.FreeValuePositioning();
                 CheckArgumentsTypeForNumbers(arg1Expression);
@@ -74,21 +74,21 @@ public class ActionFactory {
 
                 if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
                     resultAction = new ConditionAction(prdAction.getPRDCondition().getProperty(), prdAction.getPRDCondition().getOperator(),
-                            new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList);
+                            new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList, prdAction.getEntity());
                     SearchEntityAndProperty(prdAction.getPRDCondition().getEntity(), prdAction.getPRDCondition().getProperty(), ruleName, prdAction.getPRDCondition().getValue());
                 } else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
                     resultAction = new MultipleConditionAction(thenList, elseList, prdAction.getPRDCondition().getLogical(),
-                            ConditionFactory.BuildConditionFromList(prdAction.getPRDCondition().getPRDCondition()));
+                            ConditionFactory.BuildConditionFromList(prdAction.getPRDCondition().getPRDCondition()), prdAction.getEntity());
                     CheckMultipleCondition(prdAction.getPRDCondition(), ruleName);
                 }
                 break;
             case SET:
                 Expression setExpression = new Expression(prdAction.getValue());
-                resultAction = new SetAction(prdAction.getProperty(), setExpression);
+                resultAction = new SetAction(prdAction.getProperty(), setExpression, prdAction.getEntity());
                 SearchEntityAndProperty(prdAction.getEntity(), prdAction.getProperty(), ruleName, prdAction.getValue());
                 break;
             case KILL:
-                resultAction = new KillAction();
+                resultAction = new KillAction(prdAction.getEntity());
                 break;
             case REPLACE:
                 break;

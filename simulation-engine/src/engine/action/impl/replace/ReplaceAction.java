@@ -16,8 +16,8 @@ public class ReplaceAction extends AbstractAction {
     private EntityInstance entityToKill;
     private ReplaceMode mode;
 
-    public ReplaceAction(ActionType actionType, ReplaceMode mode) {
-        super(actionType);
+    public ReplaceAction(ActionType actionType, ReplaceMode mode, String actionEntity) {
+        super(actionType, actionEntity);
         this.entityToCreate = null;
         this.mode = mode;
     }

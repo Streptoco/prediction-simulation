@@ -26,7 +26,7 @@ public class ProximityAction extends AbstractAction {
     private Grid grid;
 
     public ProximityAction(ActionType actionType, String sourceEntity, String targetEntity, Expression depth, List<ActionInterface> actionList) {
-        super(actionType);
+        super(actionType, sourceEntity);
         this.actionList = actionList;
         this.sourceEntity = sourceEntity;
         this.targetEntity = targetEntity;
