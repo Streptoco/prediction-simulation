@@ -1,10 +1,11 @@
 package handler.controller;
 
 import engine.general.object.Engine;
-import engine.general.object.Rule;
-import engine.general.object.World;
 import engine.xml.NewXMLReader;
-import enginetoui.dto.basic.WorldDTO;
+import enginetoui.dto.basic.api.DTO;
+import enginetoui.dto.basic.impl.EntityDTO;
+import enginetoui.dto.basic.impl.RuleDTO;
+import enginetoui.dto.basic.impl.WorldDTO;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ObjectProperty;
@@ -13,10 +14,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import testing.testDTO;
+import tree.item.*;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -26,6 +26,9 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     NewXMLReader xmlReader = new NewXMLReader();
+
+    @FXML
+    private TextField mainTextField;
     @FXML
     private TreeView treeView;
     @FXML
@@ -65,14 +68,15 @@ public class Controller implements Initializable {
         //textField.textProperty().set(currentWorldDTO.GetSimulationDateString());
 
         // TESTING PURPOSES:
-        testDTO test = new testDTO();
-        textField.textProperty().set(test.entityName);
-
-
-
     }
 
-    public void selectItem() {
+    public void selectItemTermination() {
+        System.out.println("This is a test to see if this works.");
+        mainTextField.textProperty().set(currentWorldDTO.termination.toString());
+        // TODO: generify somethings that we could show in the scene
+    }
+
+    public void selectItemRule() {
 
     }
 
@@ -92,7 +96,25 @@ public class Controller implements Initializable {
         textField.textProperty().bind(labelTextBinding);
         // TODO: make this relevant lel
 
+        WorldTreeItem worldTreeItem = new WorldTreeItem(currentWorldDTO);
+        RuleTreeFatherItem ruleTreeFatherItem = new RuleTreeFatherItem();
+        EntitiesTreeFatherItem entitiesTreeFatherItem = new EntitiesTreeFatherItem();
 
+        TerminationTreeItem terminationTreeItem = new TerminationTreeItem(currentWorldDTO.termination);
+
+        worldTreeItem.getChildren().setAll(ruleTreeFatherItem, entitiesTreeFatherItem, terminationTreeItem);
+
+        for (RuleDTO ruleDTO : currentWorldDTO.getRules()) {
+            RuleTreeItem newRule = new RuleTreeItem(ruleDTO);
+            ruleTreeFatherItem.getChildren().add(newRule);
+        }
+
+        for (EntityDTO entity : currentWorldDTO.getEntities()) {
+            EntityTreeItem newEntity = new EntityTreeItem(entity);
+            entitiesTreeFatherItem.getChildren().add(newEntity);
+        }
+
+        treeView.setRoot(worldTreeItem);
 
 
         // branches should actually be of the same type of DTO, and just hold different values.

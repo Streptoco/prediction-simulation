@@ -4,11 +4,10 @@ import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.NewXMLReader;
-import engine.xml.XmlReader;
-import enginetoui.dto.basic.EntityDTO;
-import enginetoui.dto.basic.PropertyDTO;
-import enginetoui.dto.basic.RuleDTO;
-import enginetoui.dto.basic.WorldDTO;
+import enginetoui.dto.basic.impl.EntityDTO;
+import enginetoui.dto.basic.impl.PropertyDTO;
+import enginetoui.dto.basic.impl.RuleDTO;
+import enginetoui.dto.basic.impl.WorldDTO;
 
 import javax.xml.bind.JAXBException;
 import java.util.*;
@@ -109,7 +108,8 @@ public class Engine {
     public List<WorldDTO> GetSimulations() {
         List<WorldDTO> resultList = new ArrayList<>();
         for(Map.Entry<Integer, World> entry : simulations.entrySet()) {
-            resultList.add(new WorldDTO(entry.getKey(), entry.getValue().getSimulationDate(), entry.getValue().getAllInstancesManager(), entry.getValue().getSimDate()));
+            resultList.add(new WorldDTO(entry.getKey(), entry.getValue().getSimulationDate(), entry.getValue().getAllInstancesManager(),
+                    entry.getValue().getSimDate(), entry.getValue().getTermination(), entry.getValue().getRules(), entry.getValue().GetEntities()));
         }
         return resultList;
     }
@@ -118,7 +118,7 @@ public class Engine {
     public WorldDTO getWorldDTO() {
         Date date = new Date();
         return new WorldDTO(serialNumber, simulations.get(serialNumber).getSimulationDate(), simulations.get(serialNumber).getAllInstancesManager(),
-                date);
+                date, simulations.get(serialNumber).getTermination(),simulations.get(serialNumber).getRules(), simulations.get(serialNumber).GetEntities());
     }
 
     public EntityInstanceManager GetInstanceManager(String name, int simID) {

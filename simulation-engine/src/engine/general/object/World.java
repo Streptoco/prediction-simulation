@@ -146,6 +146,8 @@ public class World {
         }
     }
 
+    public Termination getTermination() {return this.termination;}
+
 
 
 

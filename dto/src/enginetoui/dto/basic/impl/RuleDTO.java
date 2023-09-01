@@ -1,4 +1,4 @@
-package enginetoui.dto.basic;
+package enginetoui.dto.basic.impl;
 
 import engine.action.api.ActionInterface;
 
@@ -18,8 +18,10 @@ public class RuleDTO {
         this.probability = probability;
         this.numOfActions = numOfActions;
         this.actionNames = new ArrayList<>();
-        for(ActionInterface action : actions) {
-            actionNames.add(new ActionDTO(action.getActionType() ,action.getPropertyName()));
+        if (actions != null) {
+            for(ActionInterface action : actions) {
+                actionNames.add(new ActionDTO(action.getActionType() ,action.getPropertyName()));
+            }
         }
     }
 }

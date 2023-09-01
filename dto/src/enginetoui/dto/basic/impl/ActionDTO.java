@@ -1,4 +1,4 @@
-package enginetoui.dto.basic;
+package enginetoui.dto.basic.impl;
 
 import engine.action.api.ActionType;
 
