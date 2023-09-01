@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-// TODO: handle seamlessness.
-
 public class Grid {
     private int rows;
     private int cols;
@@ -72,48 +70,6 @@ public class Grid {
             addSackToGrid(sack);
         }
     }
-
-//    public Coordinate findNewTile(int row, int col) {
-//        int tempRow, tempCol;
-//        List<Coordinate> possibleMoves = new ArrayList<>();
-//        //Moving up
-//        if (row == 0) {
-//            possibleMoves.add(new Coordinate(rows - 1, col));
-//        } else {
-//            possibleMoves.add(new Coordinate(row - 1, col));
-//        }
-//
-//        //Moving down
-//        if (row == rows - 1) {
-//            possibleMoves.add(new Coordinate(0, col));
-//        } else {
-//            possibleMoves.add(new Coordinate(row + 1, col));
-//        }
-//
-//        //Moving right
-//        if (col == cols - 1) {
-//            possibleMoves.add(new Coordinate(row, 0));
-//        } else {
-//            possibleMoves.add(new Coordinate(row, col + 1));
-//        }
-//
-//        //Moving left
-//        if (col == 0) {
-//            possibleMoves.add(new Coordinate(row, cols - 1));
-//        } else {
-//            possibleMoves.add(new Coordinate(row, col - 1));
-//        }
-//        do {
-//            Random random = new Random();
-//            int randomIndex = random.nextInt(possibleMoves.size());
-//            if (!locationGrid[possibleMoves.get(randomIndex).getRow()][possibleMoves.get(randomIndex).getCol()].getTaken()) {
-//                return possibleMoves.get(randomIndex);
-//            } else {
-//                possibleMoves.remove(randomIndex);
-//            }
-//        } while (!possibleMoves.isEmpty());
-//        return new Coordinate(row, col);
-//
 
     public Coordinate findNewTile(Coordinate currentLocation) {
         List<Coordinate> possibleMoves = new ArrayList<>();

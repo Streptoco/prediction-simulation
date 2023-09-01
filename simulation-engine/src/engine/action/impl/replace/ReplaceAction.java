@@ -27,6 +27,7 @@ public class ReplaceAction extends AbstractAction {
         if (this.entityToCreate == null) {
             throw new NoEntityToKillException(context.getPrimaryEntityInstance().getEntityName());
         }
+
         switch (mode) {
             case SCRATCH:
                 //DO SOMETHING
