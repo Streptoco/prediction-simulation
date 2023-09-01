@@ -26,6 +26,9 @@ public class Engine {
     public void addSimulation(String filePath) throws JAXBException {
         serialNumber++;
         simulations.put(serialNumber, reader.ReadXML(filePath));
+        simulations.get(serialNumber).createPopulationOfEntity(simulations.get(serialNumber).GetEntities().get(0), 25);
+        simulations.get(serialNumber).createPopulationOfEntity(simulations.get(serialNumber).GetEntities().get(1), 1);
+        // NOTE: THIS IS HARD CODED SO THAT I COULD CREATE DTOs
     }
 
     public void DecreaseSerialNumber() {

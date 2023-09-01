@@ -16,7 +16,7 @@ public class Driver extends Application {
         primaryStage.setTitle("Predictions - Simulator");
 
         FXMLLoader loader = new FXMLLoader();
-        URL url = getClass().getResource("predictions-ui.fxml");
+        URL url = getClass().getResource("predictions-ui-2.fxml");
         loader.setLocation(url);
         Parent root = loader.load();
         Controller controller = new Controller();
