@@ -113,7 +113,7 @@ public class Grid {
 //            }
 //        } while (!possibleMoves.isEmpty());
 //        return new Coordinate(row, col);
-//    }
+//
 
     public Coordinate findNewTile(Coordinate currentLocation) {
         List<Coordinate> possibleMoves = new ArrayList<>();

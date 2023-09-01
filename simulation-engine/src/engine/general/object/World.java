@@ -59,7 +59,7 @@ public class World {
         grid.drawGrid();
         this.currentTime = System.currentTimeMillis();
         while (termination.getTermination(ticks, currentTime)) {
-            if(ticks != 0) {
+            if (ticks != 0) {
                 grid.MoveSacks();
                 System.out.println("Move number " + ticks);
                 grid.drawGrid();
@@ -77,6 +77,7 @@ public class World {
                     }
                 }
             }
+            removeSpecifiedEntities();
             ticks++;
         }
     }
@@ -155,6 +156,17 @@ public class World {
         this.allInstances = new ArrayList<>();
         for (EntityDefinition entityDefinition : entities) {
             allInstances.addAll(managers.get(entityDefinition.getName()).getInstances());
+        }
+    }
+
+    public void removeSpecifiedEntities() {
+        Iterator<EntityInstance> it = allInstances.iterator();
+        while (it.hasNext()) {
+            EntityInstance instance = it.next();
+            if (!instance.isAlive()) {
+                managers.get(instance.getEntityName()).killEntity(instance);
+                it.remove();
+            }
         }
     }
 

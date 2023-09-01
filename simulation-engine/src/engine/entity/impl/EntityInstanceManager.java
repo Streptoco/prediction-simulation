@@ -67,7 +67,7 @@ public class EntityInstanceManager {
 
     public void killEntity(EntityInstance entityToKill) {
         //instances.remove(entityToKill);
-        entityToKill.setDead();
+        //entityToKill.setDead();
         countInstances--;
     }
 
