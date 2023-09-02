@@ -1,5 +1,6 @@
 package tree.item.impl;
 
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import enginetoui.dto.basic.api.ActionDTOInterface;
 import enginetoui.dto.basic.impl.CalculationActionDTO;
 import enginetoui.dto.basic.impl.ConditionActionDTO;
@@ -11,12 +12,12 @@ import tree.item.api.TreeItemEnabled;
 
 public class ActionTreeItem extends TreeItem<String> implements TreeItemEnabled {
 
-    ActionDTOInterface actionDTO;
+    public ActionDTOInterface actionDTO;
+    public boolean isMultipleCondition;
 
     public ActionTreeItem(ActionDTOInterface actionDTO) {
         super(actionDTO.getType().toString());
         this.actionDTO = actionDTO;
-
     }
 
     @Override
@@ -38,7 +39,18 @@ public class ActionTreeItem extends TreeItem<String> implements TreeItemEnabled 
                 mainTextArea.appendText(calculationDTO.secondExpression + '\n');
                 break;
             case CONDITION:
-
+                ConditionActionDTO conditionActionDTO = (ConditionActionDTO) actionDTO;
+                if (conditionActionDTO.numberOfConditions == 1) {
+                    mainTextArea.appendText("Single condition\n");
+                    mainTextArea.appendText(conditionActionDTO.value+"\n");
+                    mainTextArea.appendText(conditionActionDTO.property + "\n");
+                    mainTextArea.appendText(conditionActionDTO.operator + "\n");
+                } else {
+                    mainTextArea.appendText("Multiple condition with " + conditionActionDTO.numberOfConditions + " sub-conditions\n");
+                    mainTextArea.appendText(conditionActionDTO.value + "\n");
+                    mainTextArea.appendText(conditionActionDTO.property + "\n");
+                    mainTextArea.appendText(conditionActionDTO.operator + "\n");
+                }
         }
     }
 }
