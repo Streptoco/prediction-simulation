@@ -20,6 +20,8 @@ public class Expression {
         this.name = name;
     }
 
+    public String getName() {return this.name;}
+
     public void evaluateExpression(Context context) {
         propertyMatch = context.getPrimaryEntityInstance().getPropertyByName(name);
 

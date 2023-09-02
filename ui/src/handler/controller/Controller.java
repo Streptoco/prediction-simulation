@@ -75,10 +75,6 @@ public class Controller implements Initializable {
         // TODO: generify somethings that we could show in the scene
     }
 
-    public void selectItemRule() {
-
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         engine = new Engine();
@@ -120,6 +116,7 @@ public class Controller implements Initializable {
             entitiesTreeFatherItem.getChildren().add(newEntity);
         }
 
+        treeView.setShowRoot(false);
         treeView.setRoot(worldTreeItem);
 
         treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {

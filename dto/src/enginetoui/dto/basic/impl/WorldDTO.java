@@ -43,7 +43,7 @@ public class WorldDTO implements DTO {
             this.instances.add(new InstancesDTO(entityManager.getCountInstances(), entityManager.getNumberOfAllInstances(), entityManager.getEntityName(), entityManager.getPropertiesName()));
         }
         for (Rule rule : rules) {
-            this.rules.add(new RuleDTO(rule.getName(),rule.getTick(),rule.getProbability(),rule.GetNumOfActions(), null));
+            this.rules.add(new RuleDTO(rule.getName(),rule.getTick(),rule.getProbability(),rule.GetNumOfActions(), rule.getActions()));
         }
         for (EntityDefinition entity: entityDefinitions) {
             this.entityDefinitions.add(new EntityDTO(entity.getName(),entity.getPopulation(),entity.getProps()));
@@ -77,15 +77,5 @@ public class WorldDTO implements DTO {
             }
         }
         return resultMap;
-    }
-
-    @Override
-    public void transferData() {
-
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 }

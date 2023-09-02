@@ -34,6 +34,19 @@ public class CalculationAction extends AbstractAction {
             // TODO: handle exception: not divide or multiply.
         }
     }
+
+    public String getCalculationType() {
+        if (calculationType.equals(CalculationType.DIVIDE)) {
+            return "divide";
+        } else {
+            return "multiply";
+        }
+    }
+
+    public String getFirstExpression() {return firstArgument.getName();}
+
+    public String getSecondArgument() {return secondArgument.getName();}
+
     @Override
     public void invoke(Context context) {
         resultProp = context.getPrimaryEntityInstance().getPropertyByName(propertyName);

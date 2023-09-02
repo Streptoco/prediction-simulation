@@ -1,6 +1,11 @@
 package enginetoui.dto.basic.impl;
 
 import engine.action.api.ActionInterface;
+import engine.action.api.ActionType;
+import engine.action.impl.calculation.CalculationAction;
+import engine.action.impl.condition.impl.ConditionAction;
+import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
+import enginetoui.dto.basic.api.ActionDTOInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +15,7 @@ public class RuleDTO {
     public final int tick;
     public final double probability;
     public final int numOfActions;
-    public final List<ActionDTO> actionNames;
+    public final List<ActionDTOInterface> actionNames;
 
     public RuleDTO(String name, int tick, double probability, int numOfActions, List<ActionInterface> actions) {
         this.name = name;
@@ -20,7 +25,20 @@ public class RuleDTO {
         this.actionNames = new ArrayList<>();
         if (actions != null) {
             for(ActionInterface action : actions) {
-                actionNames.add(new ActionDTO(action.getActionType() ,action.getPropertyName()));
+                switch (action.getActionType()) {
+                    case INCREASE:
+                    case DECREASE:
+                        IncreaseDecreaseAction actionHandlerIncrease = (IncreaseDecreaseAction) action;
+                        actionNames.add(new IncreaseActionDTO(actionHandlerIncrease.getActionType(), actionHandlerIncrease.getPropertyName(),actionHandlerIncrease.getExpression()));
+                        break;
+                    case CALCULATION:
+                        CalculationAction actionHandlerCalculation = (CalculationAction) action;
+                        actionNames.add(new CalculationActionDTO(actionHandlerCalculation.getActionType(), actionHandlerCalculation.getPropertyName(),
+                                actionHandlerCalculation.getFirstExpression(), actionHandlerCalculation.getSecondArgument(), actionHandlerCalculation.getCalculationType()));
+                        break;
+                    case CONDITION:
+                        ConditionAction
+                }
             }
         }
     }
