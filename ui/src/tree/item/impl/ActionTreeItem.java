@@ -13,7 +13,6 @@ import tree.item.api.TreeItemEnabled;
 public class ActionTreeItem extends TreeItem<String> implements TreeItemEnabled {
 
     public ActionDTOInterface actionDTO;
-    public boolean isMultipleCondition;
 
     public ActionTreeItem(ActionDTOInterface actionDTO) {
         super(actionDTO.getType().toString());
@@ -40,15 +39,13 @@ public class ActionTreeItem extends TreeItem<String> implements TreeItemEnabled 
                 break;
             case CONDITION:
                 ConditionActionDTO conditionActionDTO = (ConditionActionDTO) actionDTO;
-                if (conditionActionDTO.numberOfConditions == 1) {
+                if (conditionActionDTO.numberOfConditions == 0) {
                     mainTextArea.appendText("Single condition\n");
                     mainTextArea.appendText(conditionActionDTO.value+"\n");
                     mainTextArea.appendText(conditionActionDTO.property + "\n");
                     mainTextArea.appendText(conditionActionDTO.operator + "\n");
                 } else {
                     mainTextArea.appendText("Multiple condition with " + conditionActionDTO.numberOfConditions + " sub-conditions\n");
-                    mainTextArea.appendText(conditionActionDTO.value + "\n");
-                    mainTextArea.appendText(conditionActionDTO.property + "\n");
                     mainTextArea.appendText(conditionActionDTO.operator + "\n");
                 }
         }

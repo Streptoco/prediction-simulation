@@ -43,7 +43,7 @@ public class RuleDTO {
                             actionNames.add(new ConditionActionDTO(action.getActionType(), actionHandlerMultiple.getConditionsSize(), actionHandlerMultiple.getOperator(), null,null));
                         } else {
                             ConditionAction actionHandleSingle = (ConditionAction) action;
-                            actionNames.add(new ConditionActionDTO(action.getActionType(), 1, actionHandleSingle.getValueOperator(), actionHandleSingle.getPropertyName(),
+                            actionNames.add(new ConditionActionDTO(action.getActionType(), 0, actionHandleSingle.getValueOperator(), actionHandleSingle.getProperty(),
                                     actionHandleSingle.getValueExpression()));
                         }
                         break;
