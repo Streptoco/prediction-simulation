@@ -135,6 +135,8 @@ public class Controller implements Initializable {
                     ((PropertyTreeItem) newValue).ApplyText(mainTextArea);
                 } else if (newValue instanceof EnvironmentTreeItem) {
                     ((EnvironmentTreeItem) newValue).ApplyText(mainTextArea);
+                } else if (newValue instanceof ActionTreeItem) {
+                    ((ActionTreeItem) newValue).ApplyText(mainTextArea);
                 }
             }
         });
