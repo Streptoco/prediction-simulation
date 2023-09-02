@@ -25,6 +25,12 @@ public class MultipleConditionAction extends AbstractAction {
         conditionList = conditions;
     }
 
+    public int getConditionsSize() { return conditionList.size();}
+
+    public String getOperator() {
+        return logicalOperator.name();
+    }
+
     public void invoke(Context context) {
         this.wasInvoked = false;
         switch (logicalOperator) {

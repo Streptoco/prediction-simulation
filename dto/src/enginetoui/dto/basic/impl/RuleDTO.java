@@ -4,6 +4,7 @@ import engine.action.api.ActionInterface;
 import engine.action.api.ActionType;
 import engine.action.impl.calculation.CalculationAction;
 import engine.action.impl.condition.impl.ConditionAction;
+import engine.action.impl.condition.impl.MultipleConditionAction;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
 import enginetoui.dto.basic.api.ActionDTOInterface;
 
@@ -37,7 +38,15 @@ public class RuleDTO {
                                 actionHandlerCalculation.getFirstExpression(), actionHandlerCalculation.getSecondArgument(), actionHandlerCalculation.getCalculationType()));
                         break;
                     case CONDITION:
-                        ConditionAction
+                        if (action.getClass().equals(MultipleConditionAction.class)) {
+                            MultipleConditionAction actionHandlerMultiple = (MultipleConditionAction) action;
+                            actionNames.add(new ConditionActionDTO(action.getActionType(), actionHandlerMultiple.getConditionsSize(), actionHandlerMultiple.getOperator(), null,null));
+                        } else {
+                            ConditionAction actionHandleSingle = (ConditionAction) action;
+                            actionNames.add(new ConditionActionDTO(action.getActionType(), 1, actionHandleSingle.getValueOperator(), actionHandleSingle.getPropertyName(),
+                                    actionHandleSingle.getValueExpression()));
+                        }
+                        break;
                 }
             }
         }

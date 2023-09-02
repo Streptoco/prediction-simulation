@@ -8,12 +8,11 @@ import engine.general.object.Environment;
 import engine.general.object.Rule;
 import engine.general.object.Termination;
 import engine.property.api.PropertyInterface;
-import enginetoui.dto.basic.api.DTO;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class WorldDTO implements DTO {
+public class WorldDTO {
     public final int simulationId;
     public final SimpleDateFormat simulationDate;
 

@@ -33,6 +33,11 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
+    public String getValueExpression() {return this.valueOperator;}
+    public String getValueOperator() {return this.valueOperator;}
+
+    public String getProperty() {return this.propertyName;}
+
     public ConditionAction(String propertyName, String operator, Expression valueExpression) {
         super(ActionType.CONDITION);
         this.valueExpression = valueExpression;
