@@ -109,6 +109,9 @@ public class ActionFactory {
                 resultAction = new ProximityAction(actionType, sourceEntity, targetEntity, proximityExpression, actionsInCaseOfProximity);
                 break;
         }
+        if(prdAction.getPRDSecondaryEntity() != null && resultAction != null) {
+            addSecondaryEntity(resultAction, prdAction.getPRDSecondaryEntity().getPRDSelection().getCount(), prdAction.getPRDSecondaryEntity().getPRDSelection().getPRDCondition());
+        }
         return resultAction;
     }
 
@@ -240,6 +243,11 @@ public class ActionFactory {
         if (!sameType) {
             throw new XMLVariableTypeException("", value, property.getPropertyType());
         }
+    }
+
+    public static void addSecondaryEntity(ActionInterface action, String count, PRDCondition prdCondition) {
+        Condition condition = ConditionFactory.BuildCondition(prdCondition);
+        action.addSecondEntity(count, condition);
     }
 
 }

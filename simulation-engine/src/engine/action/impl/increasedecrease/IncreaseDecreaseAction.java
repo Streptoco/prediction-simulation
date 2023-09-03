@@ -56,7 +56,7 @@ public class IncreaseDecreaseAction extends AbstractAction {
             if (propertyToIncrease.getPropertyType().equals(ReturnType.INT)) {
                 IntProperty intProperty = (IntProperty)propertyToIncrease;
                 //intProperty.decreaseValue((int)increaseBy.getValue());
-                intProperty.increaseValue(increaseBy.getCastedNumber().intValue());
+                intProperty.decreaseValue(increaseBy.getCastedNumber().intValue());
             }
             else if (propertyToIncrease.getPropertyType().equals(ReturnType.DECIMAL)) {
                 DecimalProperty decimalProperty = (DecimalProperty)propertyToIncrease;

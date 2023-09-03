@@ -37,13 +37,6 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
-    public ConditionAction(String propertyName, String operator, Expression valueExpression, String actionEntity) {
-        super(ActionType.CONDITION, actionEntity);
-        this.valueExpression = valueExpression;
-        this.valueOperator = operator;
-        this.propertyName = propertyName;
-    }
-
     public void invoke(Context context) {
         propertyInstance = context.getInstance(entityName).getPropertyByName(propertyName);
         valueExpression.evaluateExpression(context);

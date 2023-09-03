@@ -53,7 +53,7 @@ public class ContextImpl implements Context {
         } else if(entityName.equalsIgnoreCase(secondaryEntityInstance.getEntityName())) {
             return secondaryEntityInstance;
         } else {
-            throw new RuntimeException("Entity name was not as the primary entity name or the secondary entity name");
+            throw new RuntimeException("Entity name was not as the primary entity name or the secondary entity ");
         }
     }
 
@@ -91,6 +91,7 @@ public class ContextImpl implements Context {
     public EntityDefinition getPrimaryEntityDefinition() {
         return entityInstanceManager.get(primaryEntityInstance.getEntityName()).getEntityDefinition();
     }
+
     public EntityDefinition getSecondaryEntityDefinition() {
         return entityInstanceManager.get(secondaryEntityInstance.getEntityName()).getEntityDefinition();
     }

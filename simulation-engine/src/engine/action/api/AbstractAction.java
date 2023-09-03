@@ -1,5 +1,6 @@
 package engine.action.api;
 
+import engine.action.impl.condition.impl.Condition;
 import engine.entity.impl.EntityInstance;
 
 import java.util.List;
@@ -8,6 +9,7 @@ public abstract class AbstractAction implements ActionInterface {
 
     private final ActionType actionType;
     private final String entityOfTheAction;
+    private SecondaryEntityChooser secondaryEntityChooser = null;
     private List<EntityInstance> secondaryEntityList = null;
 
 
@@ -25,5 +27,10 @@ public abstract class AbstractAction implements ActionInterface {
     @Override
     public String getEntityOfTheAction() {
         return entityOfTheAction;
+    }
+
+    @Override
+    public void addSecondEntity(String count, Condition condition) {
+        this.secondaryEntityChooser = new SecondaryEntityChooser(count, condition);
     }
 }
