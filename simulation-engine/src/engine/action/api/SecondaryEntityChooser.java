@@ -11,11 +11,13 @@ import java.util.List;
 
 public class SecondaryEntityChooser {
 
-    boolean allEntities;
-    Condition condition;
-    int count;
+    private String secondEntityName;
+    private boolean allEntities;
+    private Condition condition;
+    private int count;
 
-    public SecondaryEntityChooser(String count, Condition condition) {
+    public SecondaryEntityChooser(String entityName, String count, Condition condition) {
+        this.secondEntityName = entityName;
         if (count.equalsIgnoreCase("all")) {
             allEntities = true;
             condition = null;
@@ -24,6 +26,10 @@ public class SecondaryEntityChooser {
             this.count = Integer.parseInt(count);
         }
 
+    }
+
+    public String getSecondEntityName() {
+        return secondEntityName;
     }
 
     public List<EntityInstance> secondaryEntitiesListBuilder(Context context, List<EntityInstance> entitiesList) {

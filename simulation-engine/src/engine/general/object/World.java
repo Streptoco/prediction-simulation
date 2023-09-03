@@ -170,5 +170,27 @@ public class World {
         }
     }
 
+    public void NewRun() {
+        int ticks = 0;
+        getAllInstances();
+        grid.assignSacks(this.allInstances);
+        grid.drawGrid();
+        this.currentTime = System.currentTimeMillis();
+        while (termination.getTermination(ticks, currentTime)) {
+            if (ticks != 0) {
+                grid.MoveSacks();
+                System.out.println("Move number " + ticks);
+                grid.drawGrid();
+            }
+            for (Rule rule : rules) {
+                if (rule.activation(ticks)) {
+                    rule.NewInvokeAction();
+                }
+            }
+            removeSpecifiedEntities();
+            ticks++;
+        }
 
+    }
 }
+

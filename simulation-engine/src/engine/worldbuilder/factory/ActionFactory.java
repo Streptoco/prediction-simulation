@@ -110,7 +110,7 @@ public class ActionFactory {
                 break;
         }
         if(prdAction.getPRDSecondaryEntity() != null && resultAction != null) {
-            addSecondaryEntity(resultAction, prdAction.getPRDSecondaryEntity().getPRDSelection().getCount(), prdAction.getPRDSecondaryEntity().getPRDSelection().getPRDCondition());
+            addSecondaryEntity(resultAction, prdAction.getPRDSecondaryEntity().getPRDSelection().getCount(), prdAction.getPRDSecondaryEntity().getEntity() ,prdAction.getPRDSecondaryEntity().getPRDSelection().getPRDCondition());
         }
         return resultAction;
     }
@@ -245,9 +245,9 @@ public class ActionFactory {
         }
     }
 
-    public static void addSecondaryEntity(ActionInterface action, String count, PRDCondition prdCondition) {
+    public static void addSecondaryEntity(ActionInterface action, String entityName ,String count, PRDCondition prdCondition) {
         Condition condition = ConditionFactory.BuildCondition(prdCondition);
-        action.addSecondEntity(count, condition);
+        action.addSecondEntity(entityName ,count, condition);
     }
 
 }

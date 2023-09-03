@@ -9,6 +9,7 @@ public abstract class AbstractAction implements ActionInterface {
 
     private final ActionType actionType;
     private final String entityOfTheAction;
+    boolean hasSecondaryEntity = false;
     private SecondaryEntityChooser secondaryEntityChooser = null;
     private List<EntityInstance> secondaryEntityList = null;
 
@@ -30,7 +31,21 @@ public abstract class AbstractAction implements ActionInterface {
     }
 
     @Override
-    public void addSecondEntity(String count, Condition condition) {
-        this.secondaryEntityChooser = new SecondaryEntityChooser(count, condition);
+    public void addSecondEntity(String entityName, String count, Condition condition) {
+        this.secondaryEntityChooser = new SecondaryEntityChooser(entityName, count, condition);
+        this.hasSecondaryEntity = true;
+    }
+    @Override
+    public boolean haveSecondaryEntity() {
+        return hasSecondaryEntity;
+    }
+
+    @Override
+    public String getSecondEntityName() {
+        if(secondaryEntityChooser != null) {
+            return secondaryEntityChooser.getSecondEntityName();
+        } else {
+            return null;
+        }
     }
 }
