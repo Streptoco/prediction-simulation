@@ -8,17 +8,21 @@ import engine.entity.impl.EntityInstanceManager;
 import engine.grid.impl.Grid;
 import engine.property.api.PropertyInterface;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ContextImpl implements Context {
     private EntityInstance primaryEntityInstance;
     private EntityInstance secondaryEntityInstance;
-    private EntityInstanceManager entityInstanceManager;
+    //private EntityInstanceManager entityInstanceManager;
+    private Map<String, EntityInstanceManager> entityInstanceManager;
+
     private Environment activeEnvironment;
 
     private Grid grid = null;
 
-    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstanceManager entityInstanceManager, Environment activeEnvironment) {
+    public ContextImpl(EntityInstance primaryEntityInstance, Map<String, EntityInstanceManager> entityInstanceManager, Environment activeEnvironment) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.secondaryEntityInstance = null;
@@ -26,7 +30,7 @@ public class ContextImpl implements Context {
     }
 
     // Second c'tor with secondary entity and not fuck up the backward compatibility
-    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstance secondaryEntityInstance ,EntityInstanceManager entityInstanceManager, Environment activeEnvironment) {
+    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstance secondaryEntityInstance, Map<String, EntityInstanceManager> entityInstanceManager, Environment activeEnvironment) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.secondaryEntityInstance = secondaryEntityInstance;
@@ -34,7 +38,7 @@ public class ContextImpl implements Context {
     }
 
     // Third c'tor with secondary entity and grid
-    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstance secondaryEntityInstance ,EntityInstanceManager entityInstanceManager, Environment activeEnvironment, Grid grid) {
+    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstance secondaryEntityInstance, Map<String, EntityInstanceManager> entityInstanceManager, Environment activeEnvironment, Grid grid) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.secondaryEntityInstance = secondaryEntityInstance;
@@ -42,6 +46,16 @@ public class ContextImpl implements Context {
         this.grid = grid;
     }
 
+    @Override
+    public EntityInstance getInstance(String entityName) {
+        if(entityName.equalsIgnoreCase(primaryEntityInstance.getEntityName())) {
+            return primaryEntityInstance;
+        } else if(entityName.equalsIgnoreCase(secondaryEntityInstance.getEntityName())) {
+            return secondaryEntityInstance;
+        } else {
+            throw new RuntimeException("Entity name was not as the primary entity name or the secondary entity name");
+        }
+    }
 
     @Override
     public EntityInstance getPrimaryEntityInstance() {
@@ -52,29 +66,48 @@ public class ContextImpl implements Context {
         return secondaryEntityInstance;
     }
 
-    public String getEntityName() { return entityInstanceManager.getEntityName() ;}
+    public String getPrimaryEntityName() {
+        return this.primaryEntityInstance.getEntityName();
+    }
+
+    public String getSecondaryEntityName() {
+        return this.secondaryEntityInstance.getEntityName();
+    }
 
     @Override
-    public void removeEntity() {
-        entityInstanceManager.killEntity(primaryEntityInstance);
+    public void removePrimaryEntity() {
+        entityInstanceManager.get(primaryEntityInstance.getEntityName()).killEntity(primaryEntityInstance);
+    }
+
+    public void removeSecondaryEntity() {
+        entityInstanceManager.get(secondaryEntityInstance.getEntityName()).killEntity(secondaryEntityInstance);
     }
 
     @Override
     public PropertyInterface getEnvironmentVariable(String name) {
         return activeEnvironment.getProperty(name);
     }
-    public EntityDefinition getEntityDefinition() {
-        return entityInstanceManager.getEntityDefinition();
+
+    public EntityDefinition getPrimaryEntityDefinition() {
+        return entityInstanceManager.get(primaryEntityInstance.getEntityName()).getEntityDefinition();
+    }
+    public EntityDefinition getSecondaryEntityDefinition() {
+        return entityInstanceManager.get(secondaryEntityInstance.getEntityName()).getEntityDefinition();
     }
 
     @Override
     public List<EntityInstance> getInstancesList() {
-        return entityInstanceManager.getInstances();
+
+        List<EntityInstance> resultList = new ArrayList<>();
+        for (Map.Entry<String, EntityInstanceManager> entry : this.entityInstanceManager.entrySet()) {
+            resultList.addAll(entry.getValue().getInstances());
+        }
+        return resultList;
     }
 
     @Override
     public Grid getGrid() {
-        if(grid != null) {
+        if (grid != null) {
             return this.grid;
         } else {
             //TODO: handle exception
@@ -88,12 +121,12 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public EntityInstanceManager getManager() {
+    public Map<String, EntityInstanceManager> getManager() {
         return this.entityInstanceManager;
     }
 
     public void setGrid(Grid grid) {
-        if(this.grid == null) {
+        if (this.grid == null) {
             this.grid = grid;
         }
     }

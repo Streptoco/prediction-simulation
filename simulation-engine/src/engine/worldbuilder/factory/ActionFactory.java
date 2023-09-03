@@ -5,13 +5,16 @@ import engine.action.api.ActionType;
 import engine.action.expression.Expression;
 import engine.action.expression.ReturnType;
 import engine.action.impl.calculation.CalculationAction;
+import engine.action.impl.condition.impl.Condition;
 import engine.action.impl.condition.impl.ConditionAction;
 import engine.action.impl.condition.impl.MultipleConditionAction;
+import engine.action.impl.condition.impl.SingleCondition;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.action.impl.kill.KillAction;
 import engine.action.impl.proximity.ProximityAction;
 import engine.action.impl.set.SetAction;
 import engine.entity.impl.EntityDefinition;
+import engine.entity.impl.EntityInstance;
 import engine.exception.*;
 import engine.property.api.PropertyInterface;
 import engine.worldbuilder.prdobjects.PRDAction;
@@ -73,7 +76,7 @@ public class ActionFactory {
                 }
 
                 if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
-                    resultAction = new ConditionAction(prdAction.getPRDCondition().getProperty(), prdAction.getPRDCondition().getOperator(),
+                    resultAction = new ConditionAction(prdAction.getPRDCondition().getEntity(), prdAction.getPRDCondition().getProperty(), prdAction.getPRDCondition().getOperator(),
                             new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList, prdAction.getEntity());
                     SearchEntityAndProperty(prdAction.getPRDCondition().getEntity(), prdAction.getPRDCondition().getProperty(), ruleName, prdAction.getPRDCondition().getValue());
                 } else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
@@ -97,13 +100,13 @@ public class ActionFactory {
                 List<ActionInterface> actionsInCaseOfProximity = new ArrayList<>();
                 List<PRDAction> prdActionsForProximityList = prdAction.getPRDActions().getPRDAction();
                 for (PRDAction currentAction : prdActionsForProximityList) {
-                    actionsInCaseOfProximity.add(ActionFactory.BuildAction(currentAction,ruleName));
+                    actionsInCaseOfProximity.add(ActionFactory.BuildAction(currentAction, ruleName));
                 }
                 // added all the actions to be performed into the list itself
                 String sourceEntity = prdAction.getPRDBetween().getSourceEntity();
                 String targetEntity = prdAction.getPRDBetween().getTargetEntity();
                 Expression proximityExpression = new Expression(prdAction.getPRDEnvDepth().getOf());
-                resultAction = new ProximityAction(actionType,sourceEntity,targetEntity, proximityExpression,actionsInCaseOfProximity);
+                resultAction = new ProximityAction(actionType, sourceEntity, targetEntity, proximityExpression, actionsInCaseOfProximity);
                 break;
         }
         return resultAction;
@@ -238,4 +241,5 @@ public class ActionFactory {
             throw new XMLVariableTypeException("", value, property.getPropertyType());
         }
     }
+
 }

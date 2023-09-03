@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 public class ProximityAction extends AbstractAction {
-    private String sourceEntity;
     private EntityInstance primarySourceEntity;
     private String targetEntity;
     private Expression depth;
@@ -28,7 +27,6 @@ public class ProximityAction extends AbstractAction {
     public ProximityAction(ActionType actionType, String sourceEntity, String targetEntity, Expression depth, List<ActionInterface> actionList) {
         super(actionType, sourceEntity);
         this.actionList = actionList;
-        this.sourceEntity = sourceEntity;
         this.targetEntity = targetEntity;
         this.depth = depth;
     }
@@ -49,7 +47,7 @@ public class ProximityAction extends AbstractAction {
                     //The entityInstanceManager in the context that the function hold is the manager of the source entity
                     //Do we need to send the entityInstanceManager of the target entity, or it doesn't matter in the possible action of the actionsList?
                     Context currentContext = new ContextImpl(currentEntity, context.getManager(), context.getEnv());
-                    action.invoke(currentContext);
+                        action.invoke(currentContext);
                 }
             }
         }

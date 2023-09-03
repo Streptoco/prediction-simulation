@@ -11,7 +11,7 @@ import java.util.List;
 public class ConditionFactory{
     public static Condition BuildCondition (PRDCondition prdCondition) {
             if (prdCondition.getSingularity().equalsIgnoreCase("single")) {
-                return (new SingleCondition(prdCondition.getProperty(), prdCondition.getOperator(), new Expression(prdCondition.getValue())));
+                return (new SingleCondition(prdCondition.getEntity(), prdCondition.getProperty(), prdCondition.getOperator(), new Expression(prdCondition.getValue())));
             } else if (prdCondition.getSingularity().equalsIgnoreCase("multiple")) {
                 return new MultipleCondition(prdCondition.getLogical(), BuildConditionFromList(prdCondition.getPRDCondition()));
             }

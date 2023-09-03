@@ -17,11 +17,15 @@ public class ConditionAction extends AbstractAction {
     private List<ActionInterface> elseAction;
     private Expression valueExpression;
     private String valueOperator;
+
+    String entityName;
+    //TODO: need to make the property as expression
     private String propertyName;
     private boolean isConditionHappening;
 
-    public ConditionAction(String propertyName, String operator, Expression valueExpression, List<ActionInterface> thenAction, List<ActionInterface> elseAction, String actionEntity) {
+    public ConditionAction(String entityName,String propertyName, String operator, Expression valueExpression, List<ActionInterface> thenAction, List<ActionInterface> elseAction, String actionEntity) {
         super(ActionType.CONDITION, actionEntity);
+        this.entityName = entityName;
         this.propertyName = propertyName;
         this.valueOperator = operator;
         this.valueExpression = valueExpression;
@@ -41,7 +45,7 @@ public class ConditionAction extends AbstractAction {
     }
 
     public void invoke(Context context) {
-        propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        propertyInstance = context.getInstance(entityName).getPropertyByName(propertyName);
         valueExpression.evaluateExpression(context);
         PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
 

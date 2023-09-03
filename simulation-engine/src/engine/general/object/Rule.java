@@ -26,7 +26,7 @@ public class Rule {
 
     public void invokeAction(Context context) {
         for (ActionInterface action : actions) {
-            if (action.getEntityOfTheAction().equalsIgnoreCase(context.getEntityName())) {
+            if (action.getEntityOfTheAction().equalsIgnoreCase(context.getPrimaryEntityName())) {
                 action.invoke(context);
             }
         }

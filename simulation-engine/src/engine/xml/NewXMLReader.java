@@ -41,7 +41,7 @@ public class NewXMLReader {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         } catch (XMLException e) {
-            System.out.println(e.getMessage() + " in the XML file " + filePath);
+            System.out.println(e.getMessage() + "in the XML file " + filePath);
         }
 
 

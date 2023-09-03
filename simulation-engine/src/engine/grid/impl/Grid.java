@@ -1,6 +1,7 @@
 package engine.grid.impl;
 
 import engine.entity.impl.EntityInstance;
+import engine.exception.XMLException;
 import engine.grid.api.Coordinate;
 
 import java.util.ArrayList;
@@ -14,6 +15,12 @@ public class Grid {
     private final Tile[][] locationGrid;
 
     public Grid(int length, int width) {
+        if(length < 10 || length > 100) {
+            throw new XMLException("\nGrid dimensions are incorrect the length should be more then 10 and less then 100");
+        }
+        if(width < 10 || width > 100) {
+            throw new XMLException("\nGrid dimensions are incorrect the width should be more then 10 and less then 100");
+        }
         this.rows = length;
         this.cols = width;
         this.locationGrid = new Tile[rows][cols];
@@ -23,15 +30,6 @@ public class Grid {
             }
         }
     }
-
-    public void setGridLength(int length) {
-        this.rows = length;
-    }
-
-    public void setGridWidth(int width) {
-        this.cols = width;
-    }
-
     public boolean addSackToGrid(Sack sack) {
         if (!CheckIfGridIsFull()) {
             int randomLength;
@@ -204,6 +202,7 @@ public class Grid {
     }
 
     public void getAllInstancesAroundMe(Coordinate targetLocation, Coordinate currentLocation, int depth, Set<EntityInstance> entityInstances) {
+        //TODO: change depth to expression and in case it is a string or boolean throw exception
         //Using set to avoid duplications
         //Check if the current tiles in the grid is taken and it is not the target tile that we started search from
         if (locationGrid[currentLocation.getRow()][currentLocation.getCol()].getTaken()) {

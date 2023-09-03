@@ -8,15 +8,18 @@ import engine.grid.impl.Grid;
 import engine.property.api.PropertyInterface;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Context {
     EntityInstance getPrimaryEntityInstance();
-    void removeEntity();
+    EntityInstance getSecondaryEntityInstance();
+    EntityInstance getInstance(String entityName);
+    void removePrimaryEntity();
     PropertyInterface getEnvironmentVariable(String name);
-    EntityDefinition getEntityDefinition();
+    EntityDefinition getPrimaryEntityDefinition();
     List<EntityInstance> getInstancesList();
-    String getEntityName();
+    String getPrimaryEntityName();
     Grid getGrid();
     Environment getEnv();
-    EntityInstanceManager getManager();
+    Map<String, EntityInstanceManager> getManager();
 }

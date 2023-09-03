@@ -67,7 +67,7 @@ public class World {
             for (EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
                     if (currentInstance.isAlive()) {
-                        ContextImpl context = new ContextImpl(currentInstance, managers.get(currentEntity.getName()), activeEnvironment);
+                        ContextImpl context = new ContextImpl(currentInstance, this.managers, activeEnvironment);
                         context.setGrid(this.grid);
                         for (Rule rule : rules) {
                             if (rule.activation(ticks)) {
