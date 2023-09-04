@@ -126,6 +126,12 @@ public class ContextImpl implements Context {
         return this.entityInstanceManager;
     }
 
+    @Override
+    public void addSecondEntity(EntityInstance secondaryEntity) {
+        this.secondaryEntityInstance = secondaryEntity;
+    }
+
+    @Override
     public void setGrid(Grid grid) {
         if (this.grid == null) {
             this.grid = grid;

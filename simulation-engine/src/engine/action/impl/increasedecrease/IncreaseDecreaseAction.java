@@ -35,7 +35,7 @@ public class IncreaseDecreaseAction extends AbstractAction {
     }
 
     public void invoke(Context context) {
-        propertyToIncrease = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        propertyToIncrease = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(propertyName);
         this.increaseBy.evaluateExpression(context);
         if (this.increaseDecrease.equals(IncreaseDecrease.INCREASE)) {
             if (propertyToIncrease.getPropertyType().equals(ReturnType.INT)) {

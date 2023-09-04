@@ -184,7 +184,7 @@ public class World {
             }
             for (Rule rule : rules) {
                 if (rule.activation(ticks)) {
-                    rule.NewInvokeAction();
+                    rule.NewInvokeAction(this.managers, this.activeEnvironment, this.grid);
                 }
             }
             removeSpecifiedEntities();

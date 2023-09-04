@@ -5,6 +5,7 @@ import engine.context.api.Context;
 import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
+import engine.grid.impl.Grid;
 
 import java.util.List;
 import java.util.Map;
@@ -36,16 +37,22 @@ public class Rule {
         }
     }
 
-    public void NewInvokeAction(Map<String, EntityInstanceManager> entityInstanceManager, Environment env) {
-        for(Map.Entry<String,EntityInstanceManager> entry : entityInstanceManager.entrySet()) {
-            for(EntityInstance entity : entry.getValue().getInstances()) {
+    public void NewInvokeAction(Map<String, EntityInstanceManager> entityInstanceManager, Environment env, Grid grid) {
+        for (Map.Entry<String, EntityInstanceManager> entry : entityInstanceManager.entrySet()) {
+            for (EntityInstance entity : entry.getValue().getInstances()) {
                 for (ActionInterface action : actions) {
                     if (action.getEntityOfTheAction().equalsIgnoreCase(entry.getValue().getEntityName())) {
+                        Context context = new ContextImpl(entity, entityInstanceManager, env);
+                        context.setGrid(grid);
                         if (!action.haveSecondaryEntity()) {
-                            Context context = new ContextImpl(entity, entityInstanceManager, env);
                             action.invoke(context);
                         } else {
                             List<EntityInstance> secondEntityList = entityInstanceManager.get(action.getSecondEntityName()).getInstances();
+                            List <EntityInstance> secondaryChosen = action.getSecondaryEntityChooser().secondaryEntitiesListBuilder(context, secondEntityList);
+                            for(EntityInstance secondaryEntity : secondaryChosen) {
+                                context.addSecondEntity(secondaryEntity);
+                                action.invoke(context);
+                            }
 
                         }
                     }

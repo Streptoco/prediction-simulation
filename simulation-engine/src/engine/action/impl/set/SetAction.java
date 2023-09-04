@@ -23,7 +23,7 @@ public class SetAction extends AbstractAction {
 
     @Override
     public void invoke(Context context) {
-        propertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        propertyInstance = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(propertyName);
         ReturnType returnType = propertyInstance.getPropertyType();
         valueExpression.evaluateExpression(context);
         switch (returnType) {
@@ -37,7 +37,7 @@ public class SetAction extends AbstractAction {
                 break;
             case BOOLEAN:
                 BooleanProperty booleanProperty = (BooleanProperty) propertyInstance;
-                booleanProperty.setValue((boolean)valueExpression.getValue());
+                booleanProperty.setValue(Boolean.parseBoolean((String) valueExpression.getValue()));
                 break;
             case STRING:
                 StringProperty stringProperty = (StringProperty) propertyInstance;

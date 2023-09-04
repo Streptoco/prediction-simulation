@@ -48,4 +48,9 @@ public abstract class AbstractAction implements ActionInterface {
             return null;
         }
     }
+
+    @Override
+    public SecondaryEntityChooser getSecondaryEntityChooser() {
+        return secondaryEntityChooser;
+    }
 }

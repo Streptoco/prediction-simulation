@@ -20,7 +20,8 @@ public class EngineWrapper {
             world.createPopulationOfEntity(world.GetEntities().get(0), 7);
             world.createPopulationOfEntity(world.GetEntities().get(1), 3);
             System.out.println("hey lol");
-            world.Run();
+            //world.Run();
+            world.NewRun();
         } catch (JAXBException e) {
             System.out.println(e.getMessage());
         }

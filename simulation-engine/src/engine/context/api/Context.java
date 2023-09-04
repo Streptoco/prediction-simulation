@@ -22,4 +22,6 @@ public interface Context {
     Grid getGrid();
     Environment getEnv();
     Map<String, EntityInstanceManager> getManager();
+    void addSecondEntity(EntityInstance secondaryEntity);
+    void setGrid(Grid grid);
 }

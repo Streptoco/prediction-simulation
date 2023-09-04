@@ -1,10 +1,12 @@
 package engine.action.api;
 
+import engine.action.expression.ReturnType;
 import engine.action.impl.condition.impl.Condition;
 import engine.context.api.Context;
 import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
+import engine.exception.XMLVariableTypeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,11 @@ public class SecondaryEntityChooser {
             condition = null;
         } else {
             this.condition = condition;
-            this.count = Integer.parseInt(count);
+            try {
+                this.count = Integer.parseInt(count);
+            } catch (NumberFormatException e) {
+                throw new XMLVariableTypeException("", count, ReturnType.INT);
+            }
         }
 
     }

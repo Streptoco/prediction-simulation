@@ -76,7 +76,7 @@ public class ActionFactory {
                 }
 
                 if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
-                    resultAction = new ConditionAction(prdAction.getPRDCondition().getEntity(), prdAction.getPRDCondition().getProperty(), prdAction.getPRDCondition().getOperator(),
+                    resultAction = new ConditionAction(prdAction.getPRDCondition().getProperty(), prdAction.getPRDCondition().getOperator(),
                             new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList, prdAction.getEntity());
                     SearchEntityAndProperty(prdAction.getPRDCondition().getEntity(), prdAction.getPRDCondition().getProperty(), ruleName, prdAction.getPRDCondition().getValue());
                 } else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
@@ -110,7 +110,7 @@ public class ActionFactory {
                 break;
         }
         if(prdAction.getPRDSecondaryEntity() != null && resultAction != null) {
-            addSecondaryEntity(resultAction, prdAction.getPRDSecondaryEntity().getPRDSelection().getCount(), prdAction.getPRDSecondaryEntity().getEntity() ,prdAction.getPRDSecondaryEntity().getPRDSelection().getPRDCondition());
+            addSecondaryEntity(resultAction, prdAction.getPRDSecondaryEntity().getEntity(), prdAction.getPRDSecondaryEntity().getPRDSelection().getCount() ,prdAction.getPRDSecondaryEntity().getPRDSelection().getPRDCondition());
         }
         return resultAction;
     }

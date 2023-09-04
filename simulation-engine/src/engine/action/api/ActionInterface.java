@@ -13,4 +13,5 @@ public interface ActionInterface {
     void addSecondEntity(String entityName, String count, Condition condition);
     boolean haveSecondaryEntity();
     String getSecondEntityName();
+    SecondaryEntityChooser getSecondaryEntityChooser();
 }
