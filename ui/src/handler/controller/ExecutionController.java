@@ -4,6 +4,7 @@ import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.EntityDTO;
 import enginetoui.dto.basic.impl.PropertyDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -25,14 +26,21 @@ public class ExecutionController implements Initializable {
     @FXML
     Label propertyComboBoxLabel;
     @FXML
-    Spinner<Integer> entityComboBoxSlider;
+    Spinner<Integer> entityComboBoxSpinner;
     @FXML
     Button clearButton;
     @FXML
     Button runButton;
+    @FXML
+    CheckBox randomize;
+    @FXML
+    Label statusLabel;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.world = (WorldDTO) resources.getObject("World");
+        this.entityComboBox = new ComboBox<>();
+        this.propertyComboBox = new ComboBox<>();
 
         for (EntityDTO entityDTO : world.getEntities()) {
             entityComboBox.getItems().add(entityDTO); // add all entities to combo box
@@ -44,6 +52,13 @@ public class ExecutionController implements Initializable {
 
         entityComboBoxLabel.textProperty().bind(entityComboBox.accessibleTextProperty()); // Don't know if right
         propertyComboBoxLabel.textProperty().bind(propertyComboBox.accessibleTextProperty());
+
+        propertyComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                // Perform your desired action here with the selected DTO (newValue)
+                System.out.println("Selected DTO: " + newValue.getName());
+            }
+        }); // LISTENER FOR WHEN PROPERTY VALUE CHANGES
 
 
 
