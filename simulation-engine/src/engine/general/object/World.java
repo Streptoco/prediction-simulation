@@ -172,14 +172,15 @@ public class World {
 
     public void NewRun() {
         int ticks = 0;
+        this.currentTime = System.currentTimeMillis();
         getAllInstances();
         grid.assignSacks(this.allInstances);
-        grid.drawGrid();
-        this.currentTime = System.currentTimeMillis();
         while (termination.getTermination(ticks, currentTime)) {
             if (ticks != 0) {
                 grid.MoveSacks();
                 System.out.println("Move number " + ticks);
+                grid.drawGrid();
+            } else {
                 grid.drawGrid();
             }
             for (Rule rule : rules) {
@@ -190,6 +191,10 @@ public class World {
             removeSpecifiedEntities();
             ticks++;
         }
+
+    }
+
+    public void addNewEntity(String newEntityName) {
 
     }
 }

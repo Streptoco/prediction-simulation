@@ -3,9 +3,10 @@ package engine.entity.api;
 import engine.property.api.PropertyInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface EntityDefinitionInterface {
     String getName();
     int getPopulation();
-    ArrayList<PropertyInterface> getProps();
+    List<PropertyInterface> getProps();
 }

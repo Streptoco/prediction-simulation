@@ -20,6 +20,7 @@ public class KillAction extends AbstractAction {
     public void invoke(Context context) {
         context.getInstance(this.getEntityOfTheAction()).setDead();
         this.entitiesToKill.add(context.getInstance(this.getEntityOfTheAction()));
+        context.getGrid().removeFromGrid(context.getInstance(this.getEntityOfTheAction()).getPosition());
     }
 
     public void removeSpecifiedEntities(List<EntityInstance> allInstances) {

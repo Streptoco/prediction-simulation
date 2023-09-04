@@ -12,6 +12,8 @@ import engine.action.impl.condition.impl.SingleCondition;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.action.impl.kill.KillAction;
 import engine.action.impl.proximity.ProximityAction;
+import engine.action.impl.replace.ReplaceAction;
+import engine.action.impl.replace.ReplaceMode;
 import engine.action.impl.set.SetAction;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
@@ -94,6 +96,7 @@ public class ActionFactory {
                 resultAction = new KillAction(prdAction.getEntity());
                 break;
             case REPLACE:
+                resultAction = new ReplaceAction(ReplaceMode.convert(prdAction.getMode()), prdAction.getKill(), prdAction.getCreate());
                 break;
             case PROXIMITY:
                 // TODO: get first entity, get secondary entity, check for the depth (in the invokaction) and get list of actions.

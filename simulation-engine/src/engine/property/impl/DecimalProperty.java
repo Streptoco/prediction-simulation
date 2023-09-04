@@ -32,6 +32,11 @@ public class DecimalProperty extends AbstractProperty {
         }
     }
 
+    @Override
+    public void setPropertyValue(Object value) {
+        setValue((double)value);
+    }
+
     public PropertyExpressionEvaluation evaluate(Expression expression) {
         double expresionValue = expression.getCastedNumber().doubleValue();
         PropertyExpressionEvaluation result;

@@ -77,4 +77,11 @@ public class EntityInstance implements EntityInstanceInterface {
     public String getEntityName() {
         return entityName;
     }
+    public void setProperty(String propertyName, Object propertyValue) {
+        this.properties.get(propertyName).setPropertyValue(propertyValue);
+    }
+
+    public List<PropertyInterface> getProps() {
+        return entityDefinition.getProps();
+    }
 }

@@ -35,6 +35,11 @@ public class IntProperty extends AbstractProperty {
     }
 
     @Override
+    public void setPropertyValue(Object value) {
+        setValue((int) value);
+    }
+
+    @Override
     public PropertyExpressionEvaluation evaluate(Expression expression) {
         //int expressionValue = (int)expression.getValue();
         int expressionValue = expression.getCastedNumber().intValue();

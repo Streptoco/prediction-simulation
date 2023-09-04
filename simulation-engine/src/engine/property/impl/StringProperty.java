@@ -34,4 +34,9 @@ public class StringProperty extends AbstractProperty {
     public void setValue(String newVal) {
         this.value = newVal;
     }
+
+    @Override
+    public void setPropertyValue(Object value) {
+        setValue((String)value);
+    }
 }

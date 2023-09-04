@@ -34,4 +34,9 @@ public class BooleanProperty extends AbstractProperty {
     public void setValue(boolean newVal) {
         this.value = newVal;
     }
+
+    @Override
+    public void setPropertyValue(Object value) {
+        setValue(Boolean.parseBoolean((String) value));
+    }
 }

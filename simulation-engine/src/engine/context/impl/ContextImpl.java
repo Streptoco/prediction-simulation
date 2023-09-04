@@ -15,12 +15,10 @@ import java.util.Map;
 public class ContextImpl implements Context {
     private EntityInstance primaryEntityInstance;
     private EntityInstance secondaryEntityInstance;
-    //private EntityInstanceManager entityInstanceManager;
     private Map<String, EntityInstanceManager> entityInstanceManager;
-
     private Environment activeEnvironment;
-
     private Grid grid = null;
+    int currentTick;
 
     public ContextImpl(EntityInstance primaryEntityInstance, Map<String, EntityInstanceManager> entityInstanceManager, Environment activeEnvironment) {
         this.primaryEntityInstance = primaryEntityInstance;

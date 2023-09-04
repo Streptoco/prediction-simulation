@@ -64,8 +64,10 @@ public class Grid {
 
     public void assignSacks(List<EntityInstance> instances) {
         for (EntityInstance currentEntity : instances) {
-            Sack sack = new Sack(currentEntity);
-            addSackToGrid(sack);
+            if(currentEntity.isAlive()) {
+                Sack sack = new Sack(currentEntity);
+                addSackToGrid(sack);
+            }
         }
     }
 
@@ -149,7 +151,10 @@ public class Grid {
             }
         }
     }
-
+    public void removeFromGrid(Coordinate coordinate) {
+        locationGrid[coordinate.getRow()][coordinate.getCol()].setSack(null);
+        locationGrid[coordinate.getRow()][coordinate.getCol()].setTaken(false);
+    }
 
     public void drawGrid() {
         System.out.println("==================================================================");

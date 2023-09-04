@@ -16,9 +16,10 @@ public class EngineWrapper {
     public static void main(String[] args) {
         NewXMLReader xmlReader = new NewXMLReader();
         try {
-            World world = xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified-2.xml".trim());
-            world.createPopulationOfEntity(world.GetEntities().get(0), 7);
-            world.createPopulationOfEntity(world.GetEntities().get(1), 3);
+            World world = xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified-3.xml".trim());
+            world.getEnvironment().updateProperty("infection-proximity", 1);
+            world.createPopulationOfEntity(world.GetEntities().get(0), 15);
+            world.createPopulationOfEntity(world.GetEntities().get(1), 2);
             System.out.println("hey lol");
             //world.Run();
             world.NewRun();
