@@ -51,6 +51,16 @@ public class Grid {
         }
     }
 
+    public boolean addSackToGrid(Sack sack, Coordinate coordinate) {
+        if(!locationGrid[coordinate.getRow()][coordinate.getCol()].getTaken()) {
+            locationGrid[coordinate.getRow()][coordinate.getCol()].setSack(sack);
+            locationGrid[coordinate.getRow()][coordinate.getCol()].setTaken(true);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean CheckIfGridIsFull() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -164,9 +174,9 @@ public class Grid {
                     System.out.print(i + ".\t");
                 }
                 if (locationGrid[i][j].getTaken()) {
-                    System.out.print(locationGrid[i][j].getSack().getEntity().getId() + "" + locationGrid[i][j].getSack().getEntity().getEntityName().charAt(0) + " ");
+                    System.out.print(locationGrid[i][j].getSack().getEntity().getId() + "" + locationGrid[i][j].getSack().getEntity().getEntityName().charAt(0) + "   ");
                 } else {
-                    System.out.print("-- ");
+                    System.out.print("--   ");
                 }
             }
             System.out.println();

@@ -40,20 +40,19 @@ public class ProximityAction extends AbstractAction {
         grid.getAllInstancesAroundMe(sourceEntity.getPosition(), sourceEntity.getPosition(), ((Double) depth.getValue()).intValue(), surroundEntitiesSet);
         List<EntityInstance> surroundEntities = new ArrayList<>(surroundEntitiesSet);
         // iterate over the surround entities that the function found
-        for(EntityInstance currentEntity : surroundEntities) {
-            if(currentEntity.getEntityName().equalsIgnoreCase(targetEntityName)) {
+        for (EntityInstance currentEntity : surroundEntities) {
+            if (currentEntity.getEntityName().equalsIgnoreCase(targetEntityName)) {
                 //iterate over the action in the actionList to invoke in the currentEntity
-                for(ActionInterface action : actionList) {
-                    //Check if the current entity is as the action entity
-                    //if(currentEntity.getEntityName().equalsIgnoreCase(action.getEntityOfTheAction())) {
+                if (sourceEntity.isAlive()) {
+                    for (ActionInterface action : actionList) {
                         Context currentContext = new ContextImpl(sourceEntity, currentEntity, context.getManager(), context.getEnv(), context.getCurrentTick());
                         currentContext.setGrid(grid);
                         action.invoke(currentContext);
-                    //}
+                    }
                 }
             }
         }
-        
+
     }
 
     @Override

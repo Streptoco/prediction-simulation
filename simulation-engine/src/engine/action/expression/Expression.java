@@ -2,141 +2,176 @@ package engine.action.expression;
 
 import engine.context.api.Context;
 import engine.property.api.PropertyInterface;
-import engine.property.impl.DecimalProperty;
-import engine.property.impl.IntProperty;
 
-import static engine.general.object.World.*;
-
+import static engine.general.object.World.NumberRandomGetter;
 
 public class Expression {
-    String name;
-    Type type;
-    PropertyInterface propertyMatch;
-    Object castedValueOfExpression;
-    ReturnType returnType;
-    Number castedNumber;
+    private final String expression;
+    private Type expressionType;
+    private ReturnType returnType;
+    private Object castedValueOfExpression;
 
-    public Expression(String name) {
-        this.name = name;
-    }
-
-    public void evaluateExpression(Context context) {
-        propertyMatch = context.getPrimaryEntityInstance().getPropertyByName(name);
-
-        if (name.startsWith("random(")) {
-            type = Type.FUNCTION;
-            this.returnType = ReturnType.INT;
-            double stringValue = Double.parseDouble(name.replaceAll("[^0-9]", ""));
-            castedNumber = NumberRandomGetter(0, stringValue);
-            this.returnType = ReturnType.INT;
-        } else if (name.startsWith("environment(")) {
-            String envVariableName = "";
-            int startIndex = name.indexOf("(");
-            int endIndex = name.indexOf(")");
-            if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
-                envVariableName = name.substring(startIndex + 1, endIndex);
-            }
-
-            castedValueOfExpression = context.getEnvironmentVariable(envVariableName);
-            ReturnType returnType = ((PropertyInterface) castedValueOfExpression).getPropertyType();
-            switch (returnType) {
-                case INT:
-                    IntProperty intProperty = (IntProperty) castedValueOfExpression;
-                    castedNumber = (Number) ((IntProperty) castedValueOfExpression).getValue();
-                    break;
-                case DECIMAL:
-                    DecimalProperty decimalProperty = (DecimalProperty) castedValueOfExpression;
-                    castedNumber = (Number) ((DecimalProperty) castedValueOfExpression).getValue();
-                    break;
-                case BOOLEAN:
-                    castedValueOfExpression = ((PropertyInterface) castedValueOfExpression).getValue();
-                    break;
-            }
-            this.returnType = returnType;
-        } else if (name.startsWith("evaluate(")) {
-            String entityName = "", propertyName = "";
-            int entityNameStartIndex, entityNameEndIndex, propertyNameStartIndex, propertyNameEndIndex;
-            entityNameStartIndex = name.indexOf("(");
-            entityNameEndIndex = name.indexOf(".");
-            if (entityNameStartIndex != -1 && entityNameEndIndex != -1) {
-                // the entity name is irrelevant because we use the context?
-                entityName = name.substring(entityNameStartIndex + 1, entityNameEndIndex);
-            } else {
-                //TODO: throw entity not found exception
-            }
-            propertyNameStartIndex = entityNameEndIndex;
-            propertyNameEndIndex = name.indexOf(")");
-            if (propertyNameStartIndex != -1 && propertyNameEndIndex != -1) {
-                propertyName = name.substring(propertyNameStartIndex + 1, propertyNameEndIndex);
-            } else {
-                //TODO: throw property not found exception
-            }
-            if(entityName.equals(context.getPrimaryEntityInstance().getEntityName())) { // if(entityName.equals(context.getEntityName()))
-                castedValueOfExpression = context.getPrimaryEntityInstance().getPropertyByName(propertyName).getValue();
-                this.returnType = context.getPrimaryEntityInstance().getPropertyByName(propertyName).getPropertyType();
-            } else {
-                //TODO: get the secondary entity somehow
-            }
-            switch (this.returnType) {
-                case DECIMAL:
-                case INT:
-                    castedNumber = (Number) castedValueOfExpression;
-            }
-
-        } else if (propertyMatch != null) {
-            // we need to know the property type and then return the value
-            type = Type.PROPERTY;
-            this.returnType = propertyMatch.getPropertyType();
-            castedValueOfExpression = propertyMatch.getValue();
-            castedNumber = (Number) propertyMatch.getValue();
-        } else {
-            type = Type.FREE;
-            FreeValuePositioning();
-        }
-    }
-
-    public void FreeValuePositioning() {
-        try {
-            castedValueOfExpression = Double.parseDouble(name);
-            castedNumber = Double.parseDouble(name);
-            this.returnType = ReturnType.INT;
-            return;
-        } catch (NumberFormatException e) {
-            //
-        }
-        try {
-            castedValueOfExpression = Double.parseDouble(name);
-            castedNumber = Double.parseDouble(name);
-            this.returnType = ReturnType.DECIMAL;
-            return;
-        } catch (NumberFormatException e) {
-            //
-        }
-        if (!(name.equalsIgnoreCase("true") || name.equalsIgnoreCase("false"))) {
-            castedValueOfExpression = (String) name;
-            this.returnType = ReturnType.STRING;
-            return;
-        }
-        try {
-            //castedValueOfExpression = Boolean.parseBoolean(name);
-            castedValueOfExpression = (String) name;
+    public Expression(String expression) {
+        this.expression = expression;
+        if (expression.startsWith("environment(")) {
+            this.expressionType = Type.ENVVARIABLE;
+        } else if (expression.startsWith("random(")) {
+            this.expressionType = Type.RANDOM;
+        } else if (expression.startsWith("evaluate(")) {
+            this.expressionType = Type.EVALUATE;
+        } else if (expression.startsWith("ticks(")) {
+            this.expressionType = Type.TICKS;
+        } else if (expression.startsWith("percent(")) {
+            this.expressionType = Type.PERCENT;
+        } else if (expression.equalsIgnoreCase("true") || expression.equalsIgnoreCase("false")) {
+            this.expressionType = Type.BOOLEAN;
             this.returnType = ReturnType.BOOLEAN;
-            return;
-        } catch (NumberFormatException e) {
-            //
+        } else {
+            try {
+                Double.parseDouble(expression);
+                this.expressionType = Type.NUMBER;
+                this.returnType = ReturnType.DECIMAL;
+            } catch (NumberFormatException e) {
+                this.expressionType = Type.STRING;
+                this.returnType = ReturnType.STRING;
+            }
         }
-
     }
 
+    public Type getType() {
+        return expressionType;
+    }
     public Object getValue() {
         return castedValueOfExpression;
     }
 
-    public ReturnType getReturnType() {
-        return this.returnType;
+    public String getExpression() {
+        return expression;
     }
 
-    public Number getCastedNumber() {
-        return castedNumber;
+    public ReturnType getReturnType() {
+        if(returnType != null) {
+            return returnType;
+        } else {
+            return null;
+        }
     }
+
+    private void assignValue(PropertyInterface entityProperty) {
+        switch (returnType) {
+            case INT:
+            case DECIMAL:
+                castedValueOfExpression = new Double(entityProperty.getValue().toString());
+                break;
+            case BOOLEAN:
+                castedValueOfExpression = Boolean.valueOf(entityProperty.getValue().toString());
+                break;
+            case STRING:
+                castedValueOfExpression = entityProperty.getValue().toString();
+                break;
+        }
+    }
+
+    private void evaluateEnvVariable(Context context) {
+        PropertyInterface envVariable;
+        String envVariableName = "";
+        int startIndex = expression.indexOf("(");
+        int endIndex = expression.indexOf(")");
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            envVariableName = expression.substring(startIndex + 1, endIndex);
+        }
+        envVariable = context.getEnvironmentVariable(envVariableName);
+        this.returnType = envVariable.getPropertyType();
+        assignValue(envVariable);
+    }
+
+    private void createRandomValue() {
+        double stringValue = Double.parseDouble(expression.replaceAll("[^0-9]", ""));
+        this.returnType = ReturnType.DECIMAL;
+        castedValueOfExpression = NumberRandomGetter(0, stringValue);
+    }
+
+    private void evaluateEntityProperty(Context context) {
+        String entityName = "", propertyName = "";
+        int entityNameStartIndex, entityNameEndIndex, propertyNameStartIndex, propertyNameEndIndex;
+        entityNameStartIndex = expression.indexOf("(");
+        entityNameEndIndex = expression.indexOf(".");
+        if (entityNameStartIndex != -1 && entityNameEndIndex != -1) {
+            entityName = expression.substring(entityNameStartIndex + 1, entityNameEndIndex);
+        }
+        propertyNameStartIndex = entityNameEndIndex;
+        propertyNameEndIndex = expression.indexOf(")");
+        if (propertyNameStartIndex != -1 && propertyNameEndIndex != -1) {
+            propertyName = expression.substring(propertyNameStartIndex + 1, propertyNameEndIndex);
+        }
+        PropertyInterface entityProperty = context.getInstance(entityName).getPropertyByName(propertyName);
+        this.returnType = entityProperty.getPropertyType();
+        assignValue(entityProperty);
+    }
+
+    private void getTicksSinceChange(Context context) {
+        String entityName = "", propertyName = "";
+        int entityNameStartIndex, entityNameEndIndex, propertyNameStartIndex, propertyNameEndIndex;
+        entityNameStartIndex = expression.indexOf("(");
+        entityNameEndIndex = expression.indexOf(".");
+        if (entityNameStartIndex != -1 && entityNameEndIndex != -1) {
+            entityName = expression.substring(entityNameStartIndex + 1, entityNameEndIndex);
+        }
+        propertyNameStartIndex = entityNameEndIndex;
+        propertyNameEndIndex = expression.indexOf(")");
+        if (propertyNameStartIndex != -1 && propertyNameEndIndex != -1) {
+            propertyName = expression.substring(propertyNameStartIndex + 1, propertyNameEndIndex);
+        }
+
+        castedValueOfExpression = (double) context.getInstance(entityName).getPropertyByName(propertyName).timeSinceLastChange(context.getCurrentTick());
+        this.returnType = ReturnType.INT;
+    }
+
+    private void evaluateString(Context context) {
+        if (context.getPrimaryEntityInstance().getPropertyByName(expression) != null) {
+            this.expressionType = Type.PROPERTY;
+            PropertyInterface entityProperty = context.getPrimaryEntityInstance().getPropertyByName(expression);
+            this.returnType = entityProperty.getPropertyType();
+            assignValue(entityProperty);
+        } else {
+            castedValueOfExpression = expression;
+            this.returnType = ReturnType.STRING;
+        }
+    }
+
+    public void evaluateExpression(Context context) {
+        switch (expressionType) {
+            case ENVVARIABLE:
+                evaluateEnvVariable(context);
+                break;
+            case RANDOM:
+                createRandomValue();
+                break;
+            case EVALUATE:
+                evaluateEntityProperty(context);
+                break;
+            case TICKS:
+                getTicksSinceChange(context);
+                break;
+            case NUMBER:
+                castedValueOfExpression = new Double(expression);
+                break;
+            case PERCENT:
+                break;
+            case BOOLEAN:
+                if (expression.equalsIgnoreCase("true")) {
+                    castedValueOfExpression = Boolean.TRUE;
+                } else {
+                    castedValueOfExpression = Boolean.FALSE;
+                }
+                this.returnType = ReturnType.BOOLEAN;
+                break;
+            case STRING:
+                evaluateString(context);
+                break;
+
+
+        }
+    }
+
 }
