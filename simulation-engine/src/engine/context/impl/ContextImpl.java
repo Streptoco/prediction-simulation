@@ -20,11 +20,12 @@ public class ContextImpl implements Context {
     private Grid grid = null;
     int currentTick;
 
-    public ContextImpl(EntityInstance primaryEntityInstance, Map<String, EntityInstanceManager> entityInstanceManager, Environment activeEnvironment) {
+    public ContextImpl(EntityInstance primaryEntityInstance, Map<String, EntityInstanceManager> entityInstanceManager, Environment activeEnvironment, int currentTick) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.secondaryEntityInstance = null;
         this.activeEnvironment = activeEnvironment;
+        this.currentTick = currentTick;
     }
 
     // Second c'tor with secondary entity and not fuck up the backward compatibility
@@ -36,12 +37,12 @@ public class ContextImpl implements Context {
     }
 
     // Third c'tor with secondary entity and grid
-    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstance secondaryEntityInstance, Map<String, EntityInstanceManager> entityInstanceManager, Environment activeEnvironment, Grid grid) {
+    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstance secondaryEntityInstance, Map<String, EntityInstanceManager> entityInstanceManager, Environment activeEnvironment, int currentTick) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.secondaryEntityInstance = secondaryEntityInstance;
         this.activeEnvironment = activeEnvironment;
-        this.grid = grid;
+        this.currentTick = currentTick;
     }
 
     @Override
@@ -134,5 +135,9 @@ public class ContextImpl implements Context {
         if (this.grid == null) {
             this.grid = grid;
         }
+    }
+    @Override
+    public int getCurrentTick() {
+        return this.currentTick;
     }
 }

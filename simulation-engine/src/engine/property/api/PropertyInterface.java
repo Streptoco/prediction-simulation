@@ -20,5 +20,6 @@ public interface PropertyInterface {
     Object getValue();
 
     PropertyExpressionEvaluation evaluate(Expression expression);
-    void setPropertyValue(Object value);
+    void setPropertyValue(Object value, int currentTick);
+    int timeSinceLastChange(int currentTick);
 }

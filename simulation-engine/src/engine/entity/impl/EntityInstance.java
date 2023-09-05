@@ -42,7 +42,6 @@ public class EntityInstance implements EntityInstanceInterface {
 //            throw new IllegalArgumentException("for entity of type " + entityDefinition.getName() + " has no property named " + propertyName);
             return null;
         }
-
         return properties.get(propertyName);
     }
 
@@ -76,9 +75,6 @@ public class EntityInstance implements EntityInstanceInterface {
 
     public String getEntityName() {
         return entityName;
-    }
-    public void setProperty(String propertyName, Object propertyValue) {
-        this.properties.get(propertyName).setPropertyValue(propertyValue);
     }
 
     public List<PropertyInterface> getProps() {

@@ -24,4 +24,5 @@ public interface Context {
     Map<String, EntityInstanceManager> getManager();
     void addSecondEntity(EntityInstance secondaryEntity);
     void setGrid(Grid grid);
+    int getCurrentTick();
 }

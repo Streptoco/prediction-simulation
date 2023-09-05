@@ -26,14 +26,13 @@ public class CalculationAction extends AbstractAction {
         this.secondArgument = secondArgument;
         if (calculationType.equalsIgnoreCase("multiply")) {
             this.calculationType = CalculationType.MULTIPLY;
-        }
-        else if (calculationType.equalsIgnoreCase("divide")) {
+        } else if (calculationType.equalsIgnoreCase("divide")) {
             this.calculationType = CalculationType.DIVIDE;
-        }
-        else {
+        } else {
             // TODO: handle exception: not divide or multiply.
         }
     }
+
     @Override
     public void invoke(Context context) {
         resultProp = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(propertyName);
@@ -42,34 +41,32 @@ public class CalculationAction extends AbstractAction {
         secondArgument.evaluateExpression(context);
         if (checkValidityOfExpressions()) {
             if (resultProp != null) {
-                    switch (resultProp.getPropertyType()) {
-                        case INT:
-                            if(isMultiply) {
-                                //((IntProperty) resultProp).setValue((int) firstArgument.getValue() * (int) secondArgument.getValue());
-                                ((IntProperty) resultProp).setValue(firstArgument.getCastedNumber().intValue() * secondArgument.getCastedNumber().intValue());
+                switch (resultProp.getPropertyType()) {
+                    case INT:
+                        if (isMultiply) {
+                            //((IntProperty) resultProp).setValue((int) firstArgument.getValue() * (int) secondArgument.getValue());
+                            ((IntProperty) resultProp).setValue(((Double) firstArgument.getValue()).intValue() * ((Double) secondArgument.getValue()).intValue(), context.getCurrentTick());
+                        } else {
+                            if (!((int) secondArgument.getValue() == 0)) {
+                                //((IntProperty) resultProp).setValue((int) firstArgument.getValue() / (int) secondArgument.getValue());
+                                ((IntProperty) resultProp).setValue(((Double) firstArgument.getValue()).intValue() / ((Double) secondArgument.getValue()).intValue(), context.getCurrentTick());
                             }
-                            else {
-                                if (!((int) secondArgument.getValue() == 0)) {
-                                    //((IntProperty) resultProp).setValue((int) firstArgument.getValue() / (int) secondArgument.getValue());
-                                    ((IntProperty) resultProp).setValue(firstArgument.getCastedNumber().intValue() / secondArgument.getCastedNumber().intValue());
-                                }
+                        }
+                        break;
+                    case DECIMAL:
+                        if (isMultiply) {
+                            //((DecimalProperty) resultProp).setValue((double) firstArgument.getValue() * (double) secondArgument.getValue());
+                            ((DecimalProperty) resultProp).setValue((Double) firstArgument.getValue() * (Double) secondArgument.getValue(), context.getCurrentTick());
+                        } else {
+                            if (!((Double)secondArgument.getValue() == 0)) {
+                                //((DecimalProperty) resultProp).setValue((double) firstArgument.getValue() / (double) secondArgument.getValue());
+                                ((DecimalProperty) resultProp).setValue((Double) firstArgument.getValue() / (Double) secondArgument.getValue(), context.getCurrentTick());
                             }
-                            break;
-                        case DECIMAL:
-                            if(isMultiply) {
-                                //((DecimalProperty) resultProp).setValue((double) firstArgument.getValue() * (double) secondArgument.getValue());
-                                ((DecimalProperty) resultProp).setValue(firstArgument.getCastedNumber().doubleValue() *  secondArgument.getCastedNumber().doubleValue());
-                            }
-                            else {
-                                if (!( secondArgument.getCastedNumber().doubleValue() == 0)) {
-                                    //((DecimalProperty) resultProp).setValue((double) firstArgument.getValue() / (double) secondArgument.getValue());
-                                    ((DecimalProperty) resultProp).setValue(firstArgument.getCastedNumber().doubleValue() /  secondArgument.getCastedNumber().doubleValue());
-                                }
-                            }
-                            break;
-                        default:
-                            //TODO: handle error
-                            break;
+                        }
+                        break;
+                    default:
+                        //TODO: handle error
+                        break;
 
                 }
             }

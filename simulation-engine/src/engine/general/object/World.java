@@ -67,7 +67,7 @@ public class World {
             for (EntityDefinition currentEntity : entities) {
                 for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
                     if (currentInstance.isAlive()) {
-                        ContextImpl context = new ContextImpl(currentInstance, this.managers, activeEnvironment);
+                        ContextImpl context = new ContextImpl(currentInstance, this.managers, activeEnvironment, ticks);
                         context.setGrid(this.grid);
                         for (Rule rule : rules) {
                             if (rule.activation(ticks)) {
@@ -177,15 +177,16 @@ public class World {
         grid.assignSacks(this.allInstances);
         while (termination.getTermination(ticks, currentTime)) {
             if (ticks != 0) {
+                grid.drawGrid();
                 grid.MoveSacks();
                 System.out.println("Move number " + ticks);
-                grid.drawGrid();
+                //grid.drawGrid();
             } else {
                 grid.drawGrid();
             }
             for (Rule rule : rules) {
                 if (rule.activation(ticks)) {
-                    rule.NewInvokeAction(this.managers, this.activeEnvironment, this.grid);
+                    rule.NewInvokeAction(this.managers, this.activeEnvironment, this.grid, ticks);
                 }
             }
             removeSpecifiedEntities();

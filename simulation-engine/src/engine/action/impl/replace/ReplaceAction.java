@@ -46,29 +46,15 @@ public class ReplaceAction extends AbstractAction {
                     for (PropertyInterface propertyToKill : entityToKill.getProps()) {
                         if (propertyToCreate.getName().equalsIgnoreCase(propertyToKill.getName())) {
                             if (propertyToCreate.getPropertyType().equals(propertyToKill.getPropertyType())) {
-                                propertyToCreate.setPropertyValue(propertyToKill.getValue());
+                                propertyToCreate.setPropertyValue(propertyToKill.getValue(), context.getCurrentTick());
                             }
                         }
                     }
-
                 }
                 killAction.invoke(context);
+                context.getGrid().addSackToGrid(new Sack(newEntityInstance), newEntityInstance.getPosition());
                 break;
         }
-    }
-
-    public void setEntityToCreate(String entityToCreate) {
-        this.entityToCreate = entityToCreate;
-    }
-
-    private void KillEntity(Context context) {
-        List<EntityInstance> entityInstances = context.getInstancesList();
-//        for(Iterator<EntityInstance> it = entityInstances.iterator(); it.hasNext()) {
-//            if(it.next().getId() == this.entityToKill.getId()) {
-//                it.remove();
-//            }
-//        }
-        entityInstances.removeIf(entityInstance -> entityInstance.getId() == this.entityToKill.getId());
     }
 
     @Override

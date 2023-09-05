@@ -7,6 +7,10 @@ import engine.context.api.Context;
 import engine.action.api.ActionType;
 import engine.action.expression.Expression;
 import engine.property.api.PropertyInterface;
+import engine.property.impl.BooleanProperty;
+import engine.property.impl.DecimalProperty;
+import engine.property.impl.IntProperty;
+import engine.property.impl.StringProperty;
 
 import java.util.List;
 
@@ -19,16 +23,16 @@ public class ConditionAction extends AbstractAction {
     private String valueOperator;
 
     //TODO: need to make the property as expression
-    private String propertyName;
+    private Expression property;
     private boolean isConditionHappening;
 
-    public ConditionAction(String propertyName, String operator, Expression valueExpression, List<ActionInterface> thenAction, List<ActionInterface> elseAction, String actionEntity) {
+    public ConditionAction(Expression propertyName, String operator, Expression valueExpression, List<ActionInterface> thenAction, List<ActionInterface> elseAction, String actionEntity) {
         super(ActionType.CONDITION, actionEntity);
-        this.propertyName = propertyName;
+        this.property = propertyName;
         this.valueOperator = operator;
         this.valueExpression = valueExpression;
         this.thenAction = thenAction;
-        if(elseAction.size() != 0) {
+        if (elseAction.size() != 0) {
             this.elseAction = elseAction;
         } else {
             this.elseAction = null;
@@ -36,9 +40,32 @@ public class ConditionAction extends AbstractAction {
     }
 
     public void invoke(Context context) {
-        propertyInstance = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(propertyName);
-        valueExpression.evaluateExpression(context);
-        PropertyExpressionEvaluation result = propertyInstance.evaluate(valueExpression);
+        propertyInstance = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(property.getExpression());
+        PropertyExpressionEvaluation result = null;
+        if (propertyInstance != null) {
+            valueExpression.evaluateExpression(context);
+            result = propertyInstance.evaluate(valueExpression);
+        } else {
+            property.evaluateExpression(context);
+            PropertyInterface propertyAsExpression = null;
+            switch (property.getReturnType()) {
+                case INT:
+                    propertyAsExpression = new IntProperty(((Double)property.getValue()).intValue(), property.getExpression(), ((Double)property.getValue()).intValue(), ((Double)property.getValue()).intValue(), false);
+                    break;
+                case DECIMAL:
+                    propertyAsExpression = new DecimalProperty((Double) property.getValue(), property.getExpression(), (Double) property.getValue(), (Double) property.getValue(), false);
+                    break;
+                case BOOLEAN:
+                    propertyAsExpression = new BooleanProperty((boolean) property.getValue(), property.getExpression(), 0, 0, false);
+                    break;
+                case STRING:
+                    propertyAsExpression = new StringProperty((String) property.getValue(), (String) property.getValue(), 0,0, false);
+                    break;
+            }
+            if(propertyAsExpression != null) {
+                result = propertyAsExpression.evaluate(valueExpression);
+            }
+        }
 
         if (EvaluateExpression(result)) {
             for (ActionInterface action : thenAction) {
@@ -46,7 +73,7 @@ public class ConditionAction extends AbstractAction {
             }
         } else {
             if (elseAction != null) {
-                for (ActionInterface action: elseAction) {
+                for (ActionInterface action : elseAction) {
                     action.invoke(context);
                 }
             }
@@ -55,7 +82,7 @@ public class ConditionAction extends AbstractAction {
 
     @Override
     public String getPropertyName() {
-        return propertyName;
+        return property.getExpression();
     }
 
     public boolean EvaluateExpression(PropertyExpressionEvaluation result) {

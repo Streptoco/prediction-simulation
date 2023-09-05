@@ -3,12 +3,12 @@ package engine.property.api;
 import engine.action.expression.ReturnType;
 
 public abstract class AbstractProperty implements PropertyInterface {
-    private String name;
-    private double rangeFrom;
-    private double rangeTo;
-    private boolean isRandomlyGenerated;
-
-    private ReturnType propertyType;
+    protected String name;
+    protected Double rangeFrom;
+    protected Double rangeTo;
+    protected boolean isRandomlyGenerated;
+    protected ReturnType propertyType;
+    protected int lastChangedTick;
 
     public AbstractProperty(String name, double rangeFrom, double rangeTo, boolean isRandomlyGenerated, ReturnType propertyType) {
         this.name = name;
@@ -16,6 +16,7 @@ public abstract class AbstractProperty implements PropertyInterface {
         this.rangeTo = rangeTo;
         this.isRandomlyGenerated = isRandomlyGenerated;
         this.propertyType = propertyType;
+        this.lastChangedTick = 0;
     }
 
     public String getName() { return name; }
@@ -29,5 +30,9 @@ public abstract class AbstractProperty implements PropertyInterface {
     public ReturnType getPropertyType() { return propertyType; }
 
     public abstract Object getValue();
+    @Override
+    public int timeSinceLastChange(int currentTick) {
+        return currentTick - this.lastChangedTick;
+    }
 
 }

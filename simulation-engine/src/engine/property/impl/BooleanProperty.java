@@ -20,7 +20,7 @@ public class BooleanProperty extends AbstractProperty {
     // TODO: we'll probably need a way to change this value, maybe implement it in the interface?
     public PropertyExpressionEvaluation evaluate(Expression expression) {
         //boolean expressionValue = (boolean) expression.getValue();
-        boolean expressionValue = Boolean.parseBoolean((String) expression.getValue());
+        boolean expressionValue = Boolean.parseBoolean(expression.getValue().toString());
         PropertyExpressionEvaluation result;
         if (expressionValue == this.value) { //TODO: not working as expected. need to fix that
             result = new PropertyExpressionEvaluation(true, false);
@@ -31,12 +31,13 @@ public class BooleanProperty extends AbstractProperty {
         return result;
     }
 
-    public void setValue(boolean newVal) {
+    public void setValue(boolean newVal, int currentTick) {
         this.value = newVal;
+        this.lastChangedTick = currentTick;
     }
 
     @Override
-    public void setPropertyValue(Object value) {
-        setValue(Boolean.parseBoolean((String) value));
+    public void setPropertyValue(Object value,int currentTick) {
+        setValue(Boolean.parseBoolean(value.toString()), currentTick);
     }
 }

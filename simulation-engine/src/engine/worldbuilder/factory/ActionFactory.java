@@ -4,6 +4,7 @@ import engine.action.api.ActionInterface;
 import engine.action.api.ActionType;
 import engine.action.expression.Expression;
 import engine.action.expression.ReturnType;
+import engine.action.expression.Type;
 import engine.action.impl.calculation.CalculationAction;
 import engine.action.impl.condition.impl.Condition;
 import engine.action.impl.condition.impl.ConditionAction;
@@ -36,10 +37,9 @@ public class ActionFactory {
             case INCREASE:
             case DECREASE:
                 Expression expression = new Expression(prdAction.getBy());
-                expression.FreeValuePositioning();
+                CheckArgumentsTypeForNumbers(expression, ruleName);
                 resultAction = new IncreaseDecreaseAction(prdAction.getProperty(),
                         expression, prdAction.getType(), prdAction.getEntity());
-                CheckArgumentsTypeForNumbers(expression);
                 SearchEntity(prdAction.getEntity(), ruleName);
                 break;
             case CALCULATION:
@@ -56,12 +56,10 @@ public class ActionFactory {
                 }
                 Expression arg1Expression = new Expression(arg1);
                 Expression arg2Expression = new Expression(arg2);
-                resultAction = new CalculationAction(prdAction.getResultProp(), calculationType, arg1Expression, arg2Expression, prdAction.getEntity());
-                arg1Expression.FreeValuePositioning();
-                arg2Expression.FreeValuePositioning();
-                CheckArgumentsTypeForNumbers(arg1Expression);
-                CheckArgumentsTypeForNumbers(arg2Expression);
+                CheckArgumentsTypeForNumbers(arg1Expression, ruleName);
+                CheckArgumentsTypeForNumbers(arg2Expression, ruleName);
                 CheckIfResultPropExistAndInTheCorrectType(prdAction.getEntity(), prdAction.getResultProp(), ruleName);
+                resultAction = new CalculationAction(prdAction.getResultProp(), calculationType, arg1Expression, arg2Expression, prdAction.getEntity());
                 break;
             case CONDITION:
                 List<ActionInterface> thenList = new ArrayList<>();
@@ -78,13 +76,15 @@ public class ActionFactory {
                 }
 
                 if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
-                    resultAction = new ConditionAction(prdAction.getPRDCondition().getProperty(), prdAction.getPRDCondition().getOperator(),
-                            new Expression(prdAction.getPRDCondition().getValue()), thenList, elseList, prdAction.getEntity());
-                    SearchEntityAndProperty(prdAction.getPRDCondition().getEntity(), prdAction.getPRDCondition().getProperty(), ruleName, prdAction.getPRDCondition().getValue());
+                    Expression conditionPropertyExpression = new Expression(prdAction.getPRDCondition().getProperty());
+                    Expression conditionValueExpression = new Expression(prdAction.getPRDCondition().getValue());
+                    CheckSingleAction(prdAction.getPRDCondition(), ruleName);
+                    resultAction = new ConditionAction(conditionPropertyExpression, prdAction.getPRDCondition().getOperator(),
+                            conditionValueExpression, thenList, elseList, prdAction.getEntity());
                 } else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
+                    CheckMultipleCondition(prdAction.getPRDCondition(), ruleName);
                     resultAction = new MultipleConditionAction(thenList, elseList, prdAction.getPRDCondition().getLogical(),
                             ConditionFactory.BuildConditionFromList(prdAction.getPRDCondition().getPRDCondition()), prdAction.getEntity());
-                    CheckMultipleCondition(prdAction.getPRDCondition(), ruleName);
                 }
                 break;
             case SET:
@@ -112,8 +112,8 @@ public class ActionFactory {
                 resultAction = new ProximityAction(actionType, sourceEntity, targetEntity, proximityExpression, actionsInCaseOfProximity);
                 break;
         }
-        if(prdAction.getPRDSecondaryEntity() != null && resultAction != null) {
-            addSecondaryEntity(resultAction, prdAction.getPRDSecondaryEntity().getEntity(), prdAction.getPRDSecondaryEntity().getPRDSelection().getCount() ,prdAction.getPRDSecondaryEntity().getPRDSelection().getPRDCondition());
+        if (prdAction.getPRDSecondaryEntity() != null && resultAction != null) {
+            addSecondaryEntity(resultAction, prdAction.getPRDSecondaryEntity().getEntity(), prdAction.getPRDSecondaryEntity().getPRDSelection().getCount(), prdAction.getPRDSecondaryEntity().getPRDSelection().getPRDCondition());
         }
         return resultAction;
     }
@@ -142,18 +142,19 @@ public class ActionFactory {
         }
     }
 
-    public static void CheckArgumentsTypeForNumbers(Expression expression) {
-        if (!(expression.getReturnType().equals(ReturnType.INT) || expression.getReturnType().equals(ReturnType.DECIMAL))) {
+    public static void CheckArgumentsTypeForNumbers(Expression expression, String ruleName) {
+        if (!(expression.getType().equals(Type.NUMBER))) {
             String expressionValue = (String) expression.getValue();
             if (expressionValue.startsWith("environment(")) {
                 CheckIfEnvPropertyExistAndInTheCorrectType(expression);
             } else if (expressionValue.startsWith("random(")) {
-                ///TODO: roni
-            } else if (expressionValue.startsWith("evaluate(")) {
-                //TODO: handle
+                //Random function only produce numbers
+                return;
+            } else if (expressionValue.startsWith("evaluate(") || expressionValue.startsWith("ticks(")) {
+                String entityName = ExtractEntityName(expressionValue);
+                String propertyName = ExtractPropertyName(expressionValue);
+                CheckIfEntityAndPropertyExist(entityName, propertyName, ruleName);
             } else if (expressionValue.startsWith("percent(")) {
-                //TODO: handle
-            } else if (expressionValue.startsWith("ticks(")) {
                 //TODO: handle
             } else {
                 throw new XMLVariableTypeException("", expressionValue, ReturnType.DECIMAL);
@@ -218,7 +219,7 @@ public class ActionFactory {
     public static void CheckMultipleCondition(PRDCondition multipleCondition, String ruleName) {
         for (PRDCondition currentCondition : multipleCondition.getPRDCondition()) {
             if (currentCondition.getSingularity().equalsIgnoreCase("single")) {
-                SearchEntityAndProperty(currentCondition.getEntity(), currentCondition.getProperty(), ruleName, currentCondition.getValue());
+                CheckSingleAction(currentCondition, ruleName);
             } else {
                 CheckMultipleCondition(currentCondition, ruleName);
             }
@@ -248,9 +249,77 @@ public class ActionFactory {
         }
     }
 
-    public static void addSecondaryEntity(ActionInterface action, String entityName ,String count, PRDCondition prdCondition) {
-        Condition condition = ConditionFactory.BuildCondition(prdCondition);
-        action.addSecondEntity(entityName ,count, condition);
+    public static void CheckIfEntityAndPropertyExist(String entityName, String propertyName, String ruleName) {
+        EntityDefinition currentEntity = SearchEntity(entityName, ruleName);
+        boolean found = false;
+        for (PropertyInterface property : currentEntity.getProps()) {
+            if (property.getName().equalsIgnoreCase(propertyName)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            throw new XMLEntityPropertyNotFound("", entityName, propertyName, ruleName);
+        }
     }
+
+    public static void addSecondaryEntity(ActionInterface action, String entityName, String count, PRDCondition prdCondition) {
+        Condition condition = ConditionFactory.BuildCondition(prdCondition);
+        action.addSecondEntity(entityName, count, condition);
+    }
+
+    public static String ExtractEntityName(String expression) {
+        String entityName = "";
+        int entityNameStartIndex, entityNameEndIndex;
+        entityNameStartIndex = expression.indexOf("(");
+        entityNameEndIndex = expression.indexOf(".");
+        if (entityNameStartIndex != -1 && entityNameEndIndex != -1) {
+            entityName = expression.substring(entityNameStartIndex + 1, entityNameEndIndex);
+        }
+        return entityName;
+    }
+
+    public static String ExtractPropertyName(String expression) {
+        String propertyName = "";
+        int propertyNameStartIndex, propertyNameEndIndex;
+        propertyNameStartIndex = expression.indexOf(".");
+        propertyNameEndIndex = expression.indexOf(")");
+        if (propertyNameStartIndex != -1 && propertyNameEndIndex != -1) {
+            propertyName = expression.substring(propertyNameStartIndex + 1, propertyNameEndIndex);
+        }
+        return propertyName;
+
+    }
+
+    public static boolean CheckConditionProperty(Expression expression, String ruleName) {
+        String expressionValue = expression.getExpression();
+        if (expressionValue.startsWith("evaluate(") || expressionValue.startsWith("ticks(")) {
+            String entityName = ExtractEntityName(expressionValue);
+            String propertyName = ExtractPropertyName(expressionValue);
+            CheckIfEntityAndPropertyExist(entityName, propertyName, ruleName);
+            return true;
+        } else if (expressionValue.startsWith("percent(")) {
+            //TODO: handle
+            return true;
+        } else if (expressionValue.startsWith("environment(")) {
+            CheckIfEnvPropertyExistAndInTheCorrectType(expression);
+            return true;
+        } else if (expressionValue.startsWith("random(")) {
+            //TODO: handle
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void CheckSingleAction(PRDCondition condition, String ruleName) {
+        Expression conditionPropertyExpression = new Expression(condition.getProperty());
+        Expression conditionValueExpression = new Expression(condition.getValue());
+        if (!CheckConditionProperty(conditionPropertyExpression, ruleName)) {
+            SearchEntityAndProperty(condition.getEntity(), condition.getProperty(), ruleName, condition.getValue());
+        }
+        //TODO: Check if the value is in the same type as the property in case it is a function property
+    }
+
 
 }

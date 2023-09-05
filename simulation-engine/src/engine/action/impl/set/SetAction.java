@@ -29,19 +29,19 @@ public class SetAction extends AbstractAction {
         switch (returnType) {
             case INT:
                 IntProperty intProperty = (IntProperty)propertyInstance;
-                intProperty.setValue(valueExpression.getCastedNumber().intValue());
+                intProperty.setValue(((Double)valueExpression.getValue()).intValue(), context.getCurrentTick());
                 break;
             case DECIMAL:
                 DecimalProperty decimalProperty = (DecimalProperty) propertyInstance;
-                decimalProperty.setValue(valueExpression.getCastedNumber().doubleValue());
+                decimalProperty.setValue((Double) valueExpression.getValue(), context.getCurrentTick());
                 break;
             case BOOLEAN:
                 BooleanProperty booleanProperty = (BooleanProperty) propertyInstance;
-                booleanProperty.setValue(Boolean.parseBoolean((String) valueExpression.getValue()));
+                booleanProperty.setValue(Boolean.parseBoolean(valueExpression.getValue().toString()), context.getCurrentTick());
                 break;
             case STRING:
                 StringProperty stringProperty = (StringProperty) propertyInstance;
-                stringProperty.setValue((String)valueExpression.getValue());
+                stringProperty.setValue((String)valueExpression.getValue(), context.getCurrentTick());
                 break;
             default: // TODO: handle error
         }

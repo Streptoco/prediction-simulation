@@ -45,7 +45,7 @@ public class SecondaryEntityChooser {
             int currentAmount = 0;
             List<EntityInstance> resultList = new ArrayList<>();
             for (EntityInstance entity : entitiesList) {
-                ContextImpl currentContext = new ContextImpl(entity, context.getManager(), context.getEnv());
+                ContextImpl currentContext = new ContextImpl(entity, context.getManager(), context.getEnv(), context.getCurrentTick());
                 if (condition.evaluate(currentContext)) {
                     resultList.add(entity);
                     ++currentAmount;

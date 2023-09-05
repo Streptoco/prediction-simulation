@@ -40,13 +40,11 @@ public class IncreaseDecreaseAction extends AbstractAction {
         if (this.increaseDecrease.equals(IncreaseDecrease.INCREASE)) {
             if (propertyToIncrease.getPropertyType().equals(ReturnType.INT)) {
                 IntProperty intProperty = (IntProperty)propertyToIncrease;
-                //intProperty.increaseValue((int)increaseBy.getValue());
-                intProperty.increaseValue(increaseBy.getCastedNumber().intValue());
+                intProperty.increaseValue(((Double)increaseBy.getValue()).intValue(), context.getCurrentTick());
             }
             else if (propertyToIncrease.getPropertyType().equals(ReturnType.DECIMAL)) {
                 DecimalProperty decimalProperty = (DecimalProperty)propertyToIncrease;
-                //decimalProperty.increaseValue((double)increaseBy.getValue());
-                decimalProperty.increaseValue(increaseBy.getCastedNumber().doubleValue());
+                decimalProperty.increaseValue((Double) increaseBy.getValue(), context.getCurrentTick());
             }
             else {
                 //TODO: handle exception.
@@ -56,12 +54,12 @@ public class IncreaseDecreaseAction extends AbstractAction {
             if (propertyToIncrease.getPropertyType().equals(ReturnType.INT)) {
                 IntProperty intProperty = (IntProperty)propertyToIncrease;
                 //intProperty.decreaseValue((int)increaseBy.getValue());
-                intProperty.decreaseValue(increaseBy.getCastedNumber().intValue());
+                intProperty.decreaseValue(((Double)increaseBy.getValue()).intValue(), context.getCurrentTick());
             }
             else if (propertyToIncrease.getPropertyType().equals(ReturnType.DECIMAL)) {
                 DecimalProperty decimalProperty = (DecimalProperty)propertyToIncrease;
                 //decimalProperty.decreaseValue((double)increaseBy.getValue());
-                decimalProperty.decreaseValue(increaseBy.getCastedNumber().doubleValue());
+                decimalProperty.decreaseValue((Double)increaseBy.getValue(), context.getCurrentTick());
             }
             else {
                 //TODO: handle exception.

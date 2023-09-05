@@ -1,5 +1,6 @@
 package engine.action.impl.proximity;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionInterface;
 import engine.action.api.ActionType;
@@ -8,6 +9,7 @@ import engine.context.api.Context;
 import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityInstance;
 import engine.grid.impl.Grid;
+import engine.property.impl.BooleanProperty;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,7 +37,7 @@ public class ProximityAction extends AbstractAction {
         this.grid = context.getGrid();
         Set<EntityInstance> surroundEntitiesSet = new HashSet<>();
         this.depth.evaluateExpression(context);
-        grid.getAllInstancesAroundMe(sourceEntity.getPosition(), sourceEntity.getPosition(), depth.getCastedNumber().intValue(), surroundEntitiesSet);
+        grid.getAllInstancesAroundMe(sourceEntity.getPosition(), sourceEntity.getPosition(), ((Double) depth.getValue()).intValue(), surroundEntitiesSet);
         List<EntityInstance> surroundEntities = new ArrayList<>(surroundEntitiesSet);
         // iterate over the surround entities that the function found
         for(EntityInstance currentEntity : surroundEntities) {
@@ -43,10 +45,11 @@ public class ProximityAction extends AbstractAction {
                 //iterate over the action in the actionList to invoke in the currentEntity
                 for(ActionInterface action : actionList) {
                     //Check if the current entity is as the action entity
-                    if(currentEntity.getEntityName().equalsIgnoreCase(action.getEntityOfTheAction())) {
-                        Context currentContext = new ContextImpl(currentEntity, context.getManager(), context.getEnv());
+                    //if(currentEntity.getEntityName().equalsIgnoreCase(action.getEntityOfTheAction())) {
+                        Context currentContext = new ContextImpl(sourceEntity, currentEntity, context.getManager(), context.getEnv(), context.getCurrentTick());
+                        currentContext.setGrid(grid);
                         action.invoke(currentContext);
-                    }
+                    //}
                 }
             }
         }

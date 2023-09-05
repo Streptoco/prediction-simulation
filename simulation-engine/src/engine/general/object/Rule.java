@@ -37,12 +37,12 @@ public class Rule {
         }
     }
 
-    public void NewInvokeAction(Map<String, EntityInstanceManager> entityInstanceManager, Environment env, Grid grid) {
+    public void NewInvokeAction(Map<String, EntityInstanceManager> entityInstanceManager, Environment env, Grid grid, int currentTick) {
         for (Map.Entry<String, EntityInstanceManager> entry : entityInstanceManager.entrySet()) {
             for (EntityInstance entity : entry.getValue().getInstances()) {
                 for (ActionInterface action : actions) {
-                    if (action.getEntityOfTheAction().equalsIgnoreCase(entry.getValue().getEntityName())) {
-                        Context context = new ContextImpl(entity, entityInstanceManager, env);
+                    if (action.getEntityOfTheAction().equalsIgnoreCase(entry.getValue().getEntityName()) && entity.isAlive()) {
+                        Context context = new ContextImpl(entity, entityInstanceManager, env, currentTick);
                         context.setGrid(grid);
                         if (!action.haveSecondaryEntity()) {
                             action.invoke(context);
