@@ -115,7 +115,22 @@ public class MainController extends ResourceBundle implements Initializable {
         currentSceneHolder.getChildren().add(detailsBox);
     }
 
+    private void ChangeDynamicExecutionScreen() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL mainFXML = getClass().getResource("execution-fxml.fxml");
+        fxmlLoader.setLocation(mainFXML);
+        fxmlLoader.setResources(this);
+        BorderPane executionBox = fxmlLoader.load();
+        ExecutionController executionController = fxmlLoader.getController();
+        currentSceneHolder.getChildren().clear();
+        currentSceneHolder.getChildren().add(executionBox);
+    }
+
     public void handleDetailsButton(ActionEvent actionEvent) throws IOException {
         ChangeDynamicDetailsScreen();
+    }
+
+    public void handleExecutionButton(ActionEvent actionEvent) throws IOException {
+        ChangeDynamicExecutionScreen();
     }
 }
