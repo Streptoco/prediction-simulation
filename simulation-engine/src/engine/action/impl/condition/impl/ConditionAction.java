@@ -39,6 +39,18 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
+    public String getValueExpression() {return this.valueExpression.getName();}
+    public String getValueOperator() {return this.valueOperator;}
+
+    public String getProperty() {return this.propertyName;}
+
+    public ConditionAction(String propertyName, String operator, Expression valueExpression) {
+        super(ActionType.CONDITION);
+        this.valueExpression = valueExpression;
+        this.valueOperator = operator;
+        this.propertyName = propertyName;
+    }
+
     public void invoke(Context context) {
         System.out.println("\tPerforming the action: " + getActionType() + " " + Singularity.SINGLE);
         propertyInstance = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(property.getExpression());

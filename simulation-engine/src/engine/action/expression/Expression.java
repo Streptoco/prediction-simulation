@@ -2,6 +2,8 @@ package engine.action.expression;
 
 import engine.context.api.Context;
 import engine.property.api.PropertyInterface;
+import engine.property.impl.DecimalProperty;
+import engine.property.impl.IntProperty;
 
 import static engine.general.object.World.NumberRandomGetter;
 
@@ -43,6 +45,11 @@ public class Expression {
     }
     public Object getValue() {
         return castedValueOfExpression;
+    }
+    public String getName() {return expression;}
+
+    public void evaluateExpression(Context context) {
+        propertyMatch = context.getPrimaryEntityInstance().getPropertyByName(name);
     }
 
     public String getExpression() {
@@ -136,6 +143,7 @@ public class Expression {
         } else {
             castedValueOfExpression = expression;
             this.returnType = ReturnType.STRING;
+            return;
         }
     }
 

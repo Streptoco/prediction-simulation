@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" fx:controller="handler.controller.Controller" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/8.0.381" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" fx:mainController="handler.mainController.MainController" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/8.0.381" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <GridPane prefHeight="139.0" prefWidth="853.0" BorderPane.alignment="CENTER">
         <columnConstraints>

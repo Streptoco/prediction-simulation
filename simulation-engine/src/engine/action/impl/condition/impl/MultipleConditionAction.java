@@ -25,6 +25,12 @@ public class MultipleConditionAction extends AbstractAction {
         conditionList = conditions;
     }
 
+    public int getConditionsSize() { return conditionList.size();}
+
+    public String getOperator() {
+        return logicalOperator.name();
+    }
+
     public void invoke(Context context) {
         System.out.println("\tPerforming the action: " + getActionType() + " " + Singularity.MULTIPLE);
         this.wasInvoked = false;

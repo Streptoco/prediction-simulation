@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+// TODO: handle seamlessness.
+
 public class Grid {
     private int rows;
     private int cols;
@@ -30,6 +32,15 @@ public class Grid {
             }
         }
     }
+
+    public void setGridLength(int length) {
+        this.rows = length;
+    }
+
+    public void setGridWidth(int width) {
+        this.cols = width;
+    }
+
     public boolean addSackToGrid(Sack sack) {
         if (!CheckIfGridIsFull()) {
             int randomLength;
@@ -59,6 +70,18 @@ public class Grid {
         } else {
             return false;
         }
+    }
+
+    public int getRows() {return this.rows;}
+
+    public int getCols() {return this.cols;}
+
+    public void addSackToGrid(EntityInstance entity, int row, int col) {
+        Sack sack = new Sack(entity);
+        Tile tile = new Tile();
+        tile.setSack(sack);
+        this.locationGrid[row][col] = tile;
+
     }
 
     public boolean CheckIfGridIsFull() {

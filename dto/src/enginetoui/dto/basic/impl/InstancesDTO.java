@@ -1,4 +1,4 @@
-package enginetoui.dto.basic;
+package enginetoui.dto.basic.impl;
 
 import java.util.List;
 import java.util.Set;

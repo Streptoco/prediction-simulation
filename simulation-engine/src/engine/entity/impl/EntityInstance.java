@@ -42,6 +42,7 @@ public class EntityInstance implements EntityInstanceInterface {
 //            throw new IllegalArgumentException("for entity of type " + entityDefinition.getName() + " has no property named " + propertyName);
             return null;
         }
+
         return properties.get(propertyName);
     }
 

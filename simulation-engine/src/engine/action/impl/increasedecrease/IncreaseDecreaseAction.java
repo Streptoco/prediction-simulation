@@ -71,4 +71,6 @@ public class IncreaseDecreaseAction extends AbstractAction {
     public String getPropertyName() {
         return propertyName;
     }
+
+    public String getExpression() {return this.increaseBy.getName();}
 }

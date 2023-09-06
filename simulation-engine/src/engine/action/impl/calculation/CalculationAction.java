@@ -33,6 +33,19 @@ public class CalculationAction extends AbstractAction {
         }
     }
 
+    public String getCalculationType() {
+        if (calculationType.equals(CalculationType.DIVIDE)) {
+            return "divide";
+        } else {
+            return "multiply";
+        }
+    }
+
+    public String getFirstExpression() {return firstArgument.getName();}
+
+    public String getSecondArgument() {return secondArgument.getName();}
+
+
     @Override
     public void invoke(Context context) {
         resultProp = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(propertyName);

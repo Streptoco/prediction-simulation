@@ -3,7 +3,10 @@ package engine.xml;
 import engine.exception.*;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.*;
-import enginetoui.dto.basic.*;
+import enginetoui.dto.basic.impl.ArgumentsInvalidDTO;
+import enginetoui.dto.basic.impl.EntityNotFoundDTO;
+import enginetoui.dto.basic.impl.PropertyDuplicateNameDTO;
+import enginetoui.dto.basic.impl.PropertyNotFoundDTO;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

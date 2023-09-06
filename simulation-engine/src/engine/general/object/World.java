@@ -1,9 +1,9 @@
 package engine.general.object;
 
 /*
- * World contains a main loop that ticks one at a time, and also has a list of rules.
- * The list of rules, we'll go by them and for every iteration in the loop we'll see if it can be invoked.
- * */
+* World contains a main loop that ticks one at a time, and also has a list of rules.
+* The list of rules, we'll go by them and for every iteration in the loop we'll see if it can be invoked.
+* */
 
 //TODO: in the loop, when it ends, return why it ended.
 
@@ -11,6 +11,7 @@ import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
+import engine.grid.api.Coordinate;
 import engine.grid.impl.Grid;
 
 import java.text.SimpleDateFormat;
@@ -81,6 +82,10 @@ public class World {
             ticks++;
         }
     }
+
+    public int getRows() {return this.grid.getRows();}
+
+    public int getCols() {return this.grid.getCols();}
 
     public static double NumberRandomGetter(double rangeMin, double rangeMax) {
         Random random = new Random();
@@ -192,6 +197,26 @@ public class World {
             removeSpecifiedEntities();
             ticks++;
         }
+    public Termination getTermination() {return this.termination;}
+
+
+    //=============================================================================================
+
+    public void placeEntityOnGrid(EntityInstance entity, int row, int col) {
+        // THIS IS A DUMMY FUNCTION FOR DEBUG PURPOSE
+        grid.addSackToGrid(entity, row, col);
+    }
+    public void printGrid() {
+        grid.drawGrid();
+    }
+
+    public List<EntityInstance> changeGrid(EntityInstance entity, int row, int col) {
+        Set<EntityInstance> set = new HashSet<>();
+        Coordinate coordinate = new Coordinate(row, col);
+        grid.getAllInstancesAroundMe(coordinate, coordinate, 1, set);
+        return new ArrayList<>(set);
+    }
+
 
     }
 }
