@@ -12,15 +12,15 @@ import java.util.Set;
 // TODO: handle seamlessness.
 
 public class Grid {
-    private int rows;
-    private int cols;
+    private final int rows;
+    private final int cols;
     private final Tile[][] locationGrid;
 
     public Grid(int length, int width) {
-        if(length < 10 || length > 100) {
+        if (length < 10 || length > 100) {
             throw new XMLException("\nGrid dimensions are incorrect the length should be more then 10 and less then 100");
         }
-        if(width < 10 || width > 100) {
+        if (width < 10 || width > 100) {
             throw new XMLException("\nGrid dimensions are incorrect the width should be more then 10 and less then 100");
         }
         this.rows = length;
@@ -31,14 +31,6 @@ public class Grid {
                 locationGrid[i][j] = new Tile();
             }
         }
-    }
-
-    public void setGridLength(int length) {
-        this.rows = length;
-    }
-
-    public void setGridWidth(int width) {
-        this.cols = width;
     }
 
     public boolean addSackToGrid(Sack sack) {
@@ -63,7 +55,7 @@ public class Grid {
     }
 
     public boolean addSackToGrid(Sack sack, Coordinate coordinate) {
-        if(!locationGrid[coordinate.getRow()][coordinate.getCol()].getTaken()) {
+        if (!locationGrid[coordinate.getRow()][coordinate.getCol()].getTaken()) {
             locationGrid[coordinate.getRow()][coordinate.getCol()].setSack(sack);
             locationGrid[coordinate.getRow()][coordinate.getCol()].setTaken(true);
             return true;
@@ -72,9 +64,13 @@ public class Grid {
         }
     }
 
-    public int getRows() {return this.rows;}
+    public int getRows() {
+        return this.rows;
+    }
 
-    public int getCols() {return this.cols;}
+    public int getCols() {
+        return this.cols;
+    }
 
     public void addSackToGrid(EntityInstance entity, int row, int col) {
         Sack sack = new Sack(entity);
@@ -97,7 +93,7 @@ public class Grid {
 
     public void assignSacks(List<EntityInstance> instances) {
         for (EntityInstance currentEntity : instances) {
-            if(currentEntity.isAlive()) {
+            if (currentEntity.isAlive()) {
                 Sack sack = new Sack(currentEntity);
                 addSackToGrid(sack);
             }
@@ -184,6 +180,7 @@ public class Grid {
             }
         }
     }
+
     public void removeFromGrid(Coordinate coordinate) {
         locationGrid[coordinate.getRow()][coordinate.getCol()].setSack(null);
         locationGrid[coordinate.getRow()][coordinate.getCol()].setTaken(false);

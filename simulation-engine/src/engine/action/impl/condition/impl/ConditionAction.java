@@ -21,8 +21,6 @@ public class ConditionAction extends AbstractAction {
     private List<ActionInterface> elseAction;
     private Expression valueExpression;
     private String valueOperator;
-
-    //TODO: need to make the property as expression
     private Expression property;
     private boolean isConditionHappening;
 
@@ -39,17 +37,26 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
-    public String getValueExpression() {return this.valueExpression.getName();}
-    public String getValueOperator() {return this.valueOperator;}
-
-    public String getProperty() {return this.propertyName;}
-
     public ConditionAction(String propertyName, String operator, Expression valueExpression) {
-        super(ActionType.CONDITION);
+        //IS THIS CTOR IN USE?
+        super(ActionType.CONDITION, null);
         this.valueExpression = valueExpression;
         this.valueOperator = operator;
-        this.propertyName = propertyName;
+        //this.propertyName = propertyName;
     }
+
+    public String getValueExpression() {
+        return this.valueExpression.getName();
+    }
+
+    public String getValueOperator() {
+        return this.valueOperator;
+    }
+
+    public String getProperty() {
+        return this.propertyInstance.getName();
+    }
+
 
     public void invoke(Context context) {
         System.out.println("\tPerforming the action: " + getActionType() + " " + Singularity.SINGLE);
@@ -64,7 +71,7 @@ public class ConditionAction extends AbstractAction {
             PropertyInterface propertyAsExpression = null;
             switch (property.getReturnType()) {
                 case INT:
-                    propertyAsExpression = new IntProperty(((Double)property.getValue()).intValue(), property.getExpression(), ((Double)property.getValue()).intValue(), ((Double)property.getValue()).intValue(), false);
+                    propertyAsExpression = new IntProperty(((Double) property.getValue()).intValue(), property.getExpression(), ((Double) property.getValue()).intValue(), ((Double) property.getValue()).intValue(), false);
                     break;
                 case DECIMAL:
                     propertyAsExpression = new DecimalProperty((Double) property.getValue(), property.getExpression(), (Double) property.getValue(), (Double) property.getValue(), false);
@@ -73,10 +80,10 @@ public class ConditionAction extends AbstractAction {
                     propertyAsExpression = new BooleanProperty((boolean) property.getValue(), property.getExpression(), 0, 0, false);
                     break;
                 case STRING:
-                    propertyAsExpression = new StringProperty((String) property.getValue(), (String) property.getValue(), 0,0, false);
+                    propertyAsExpression = new StringProperty((String) property.getValue(), (String) property.getValue(), 0, 0, false);
                     break;
             }
-            if(propertyAsExpression != null) {
+            if (propertyAsExpression != null) {
                 result = propertyAsExpression.evaluate(valueExpression);
             }
         }
