@@ -6,8 +6,7 @@ import engine.worldbuilder.prdobjects.*;
 public class TerminationFactory {
     public static Termination BuildTermination(PRDTermination termination) {
         if(termination.getPRDByUser() != null) {
-            // TODO: do something to make it stop by user - RONI
-            return new Termination(0,0);
+            return new Termination(true);
         }
         int ticksToTermination = 0;
         int secondsToTermination = 0;

@@ -3,28 +3,31 @@ package engine.general.object;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
 import engine.property.api.PropertyInterface;
-import engine.xml.XmlReader;
-import enginetoui.dto.basic.EntityDTO;
-import enginetoui.dto.basic.PropertyDTO;
-import enginetoui.dto.basic.RuleDTO;
-import enginetoui.dto.basic.WorldDTO;
+import engine.xml.NewXMLReader;
+import enginetoui.dto.basic.impl.EntityDTO;
+import enginetoui.dto.basic.impl.PropertyDTO;
+import enginetoui.dto.basic.impl.RuleDTO;
+import enginetoui.dto.basic.impl.WorldDTO;
 
 import javax.xml.bind.JAXBException;
 import java.util.*;
 
 public class Engine {
-    private final Map<Integer, World> simulations; //TODO: should be map, key:value pairs. the key would be generated.
+    private final Map<Integer, World> simulations;
     private int serialNumber = 0;
-    private final XmlReader reader;
+    private final NewXMLReader reader;
 
     public Engine() {
         simulations = new HashMap<>();
-        reader = new XmlReader();
+        reader = new NewXMLReader();
     }
 
     public void addSimulation(String filePath) throws JAXBException {
         serialNumber++;
         simulations.put(serialNumber, reader.ReadXML(filePath));
+        simulations.get(serialNumber).createPopulationOfEntity(simulations.get(serialNumber).GetEntities().get(0), 25);
+        simulations.get(serialNumber).createPopulationOfEntity(simulations.get(serialNumber).GetEntities().get(1), 1);
+        // NOTE: THIS IS HARD CODED SO THAT I COULD CREATE DTOs
     }
 
     public void DecreaseSerialNumber() {
@@ -105,9 +108,21 @@ public class Engine {
     public List<WorldDTO> GetSimulations() {
         List<WorldDTO> resultList = new ArrayList<>();
         for(Map.Entry<Integer, World> entry : simulations.entrySet()) {
-            resultList.add(new WorldDTO(entry.getKey(), entry.getValue().getSimulationDate(), entry.getValue().getAllInstancesManager(), entry.getValue().getSimDate()));
+            resultList.add(new WorldDTO(entry.getKey(), entry.getValue().getSimulationDate(), entry.getValue().getAllInstancesManager(),
+                    entry.getValue().getSimDate(), entry.getValue().getTermination(),
+                    entry.getValue().getRules(), entry.getValue().GetEntities(), entry.getValue().getEnvironment(),
+                    entry.getValue().getRows(), entry.getValue().getCols()));
         }
         return resultList;
+    }
+
+    // TODO: bearing in mind that simulation ID might no longer be required?
+    public WorldDTO getWorldDTO() {
+        Date date = new Date();
+        return new WorldDTO(serialNumber, simulations.get(serialNumber).getSimulationDate(), simulations.get(serialNumber).getAllInstancesManager(),
+                date, simulations.get(serialNumber).getTermination(),simulations.get(serialNumber).getRules(),
+                simulations.get(serialNumber).GetEntities(), simulations.get(serialNumber).getEnvironment(), simulations.get(serialNumber).getRows(),
+                simulations.get(serialNumber).getCols());
     }
 
     public EntityInstanceManager GetInstanceManager(String name, int simID) {

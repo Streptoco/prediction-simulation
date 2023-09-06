@@ -8,4 +8,9 @@ public class XMLVariableTypeException  extends XMLException{
         super(filePath);
         this.exceptionMessage += "There are invalid argument types in the action: \"" + action + "\" and the expected type was: \"" + expected + "\"";
     }
+
+    public XMLVariableTypeException(String filePath, String value, ReturnType expected) {
+        super(filePath);
+        this.exceptionMessage += "Couldn't parse: \"" + value + "\" into: \"" + expected + "\"";
+    }
 }

@@ -1,115 +1,182 @@
 package engine.action.expression;
 
-//TODO: figure out how to segment the functions needed to be implemented: environment, and random.
-//TODO: error handling.
-//TODO: 1. if expression is a name of a function (env,random) then do them. 2. if not, search all property names. 3. else, free expression.
-
 import engine.context.api.Context;
 import engine.property.api.PropertyInterface;
-import engine.property.impl.DecimalProperty;
-import engine.property.impl.IntProperty;
 
-import static engine.general.object.World.*;
-
+import static engine.general.object.World.NumberRandomGetter;
 
 public class Expression {
-    String name;
-    Type type;
-    PropertyInterface propertyMatch;
-    Object castedValueOfExpression;
-    ReturnType returnType;
-    Number castedNumber;
+    private final String expression;
+    private Type expressionType;
+    private ReturnType returnType;
+    private Object castedValueOfExpression;
 
-    public Expression (String name) { // random(5), "11", "true"
-        this.name = name;
+    public Expression(String expression) {
+        this.expression = expression;
+        if (expression.startsWith("environment(")) {
+            this.expressionType = Type.ENVVARIABLE;
+        } else if (expression.startsWith("random(")) {
+            this.expressionType = Type.RANDOM;
+        } else if (expression.startsWith("evaluate(")) {
+            this.expressionType = Type.EVALUATE;
+        } else if (expression.startsWith("ticks(")) {
+            this.expressionType = Type.TICKS;
+        } else if (expression.startsWith("percent(")) {
+            this.expressionType = Type.PERCENT;
+        } else if (expression.equalsIgnoreCase("true") || expression.equalsIgnoreCase("false")) {
+            this.expressionType = Type.BOOLEAN;
+            this.returnType = ReturnType.BOOLEAN;
+        } else {
+            try {
+                Double.parseDouble(expression);
+                this.expressionType = Type.NUMBER;
+                this.returnType = ReturnType.DECIMAL;
+            } catch (NumberFormatException e) {
+                this.expressionType = Type.STRING;
+                this.returnType = ReturnType.STRING;
+            }
+        }
+    }
+
+    public Type getType() {
+        return expressionType;
+    }
+
+    public Object getValue() {
+        return castedValueOfExpression;
+    }
+
+    public String getName() {
+        return expression;
+    }
+
+    public String getExpression() {
+        return expression;
+    }
+
+    public ReturnType getReturnType() {
+        if (returnType != null) {
+            return returnType;
+        } else {
+            return null;
+        }
+    }
+
+    private void assignValue(PropertyInterface entityProperty) {
+        switch (returnType) {
+            case INT:
+            case DECIMAL:
+                castedValueOfExpression = new Double(entityProperty.getValue().toString());
+                break;
+            case BOOLEAN:
+                castedValueOfExpression = Boolean.valueOf(entityProperty.getValue().toString());
+                break;
+            case STRING:
+                castedValueOfExpression = entityProperty.getValue().toString();
+                break;
+        }
+    }
+
+    private void evaluateEnvVariable(Context context) {
+        PropertyInterface envVariable;
+        String envVariableName = "";
+        int startIndex = expression.indexOf("(");
+        int endIndex = expression.indexOf(")");
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            envVariableName = expression.substring(startIndex + 1, endIndex);
+        }
+        envVariable = context.getEnvironmentVariable(envVariableName);
+        this.returnType = envVariable.getPropertyType();
+        assignValue(envVariable);
+    }
+
+    private void createRandomValue() {
+        double stringValue = Double.parseDouble(expression.replaceAll("[^0-9]", ""));
+        this.returnType = ReturnType.DECIMAL;
+        castedValueOfExpression = NumberRandomGetter(0, stringValue);
+    }
+
+    private void evaluateEntityProperty(Context context) {
+        String entityName = "", propertyName = "";
+        int entityNameStartIndex, entityNameEndIndex, propertyNameStartIndex, propertyNameEndIndex;
+        entityNameStartIndex = expression.indexOf("(");
+        entityNameEndIndex = expression.indexOf(".");
+        if (entityNameStartIndex != -1 && entityNameEndIndex != -1) {
+            entityName = expression.substring(entityNameStartIndex + 1, entityNameEndIndex);
+        }
+        propertyNameStartIndex = entityNameEndIndex;
+        propertyNameEndIndex = expression.indexOf(")");
+        if (propertyNameStartIndex != -1 && propertyNameEndIndex != -1) {
+            propertyName = expression.substring(propertyNameStartIndex + 1, propertyNameEndIndex);
+        }
+        PropertyInterface entityProperty = context.getInstance(entityName).getPropertyByName(propertyName);
+        this.returnType = entityProperty.getPropertyType();
+        assignValue(entityProperty);
+    }
+
+    private void getTicksSinceChange(Context context) {
+        String entityName = "", propertyName = "";
+        int entityNameStartIndex, entityNameEndIndex, propertyNameStartIndex, propertyNameEndIndex;
+        entityNameStartIndex = expression.indexOf("(");
+        entityNameEndIndex = expression.indexOf(".");
+        if (entityNameStartIndex != -1 && entityNameEndIndex != -1) {
+            entityName = expression.substring(entityNameStartIndex + 1, entityNameEndIndex);
+        }
+        propertyNameStartIndex = entityNameEndIndex;
+        propertyNameEndIndex = expression.indexOf(")");
+        if (propertyNameStartIndex != -1 && propertyNameEndIndex != -1) {
+            propertyName = expression.substring(propertyNameStartIndex + 1, propertyNameEndIndex);
+        }
+
+        castedValueOfExpression = (double) context.getInstance(entityName).getPropertyByName(propertyName).timeSinceLastChange(context.getCurrentTick());
+        this.returnType = ReturnType.INT;
+    }
+
+    private void evaluateString(Context context) {
+        if (context.getPrimaryEntityInstance().getPropertyByName(expression) != null) {
+            this.expressionType = Type.PROPERTY;
+            PropertyInterface entityProperty = context.getPrimaryEntityInstance().getPropertyByName(expression);
+            this.returnType = entityProperty.getPropertyType();
+            assignValue(entityProperty);
+        } else {
+            castedValueOfExpression = expression;
+            this.returnType = ReturnType.STRING;
+        }
     }
 
     public void evaluateExpression(Context context) {
-        propertyMatch = context.getPrimaryEntityInstance().getPropertyByName(name);
+        switch (expressionType) {
+            case ENVVARIABLE:
+                evaluateEnvVariable(context);
+                break;
+            case RANDOM:
+                createRandomValue();
+                break;
+            case EVALUATE:
+                evaluateEntityProperty(context);
+                break;
+            case TICKS:
+                getTicksSinceChange(context);
+                break;
+            case NUMBER:
+                castedValueOfExpression = new Double(expression);
+                break;
+            case PERCENT:
+                break;
+            case BOOLEAN:
+                if (expression.equalsIgnoreCase("true")) {
+                    castedValueOfExpression = Boolean.TRUE;
+                } else {
+                    castedValueOfExpression = Boolean.FALSE;
+                }
+                this.returnType = ReturnType.BOOLEAN;
+                break;
+            case STRING:
+                evaluateString(context);
+                break;
 
-        if (name.startsWith("random(")) {
-            // TODO: segment to functions. it should be up to the parentheses... and then evaluate.
-            type = Type.FUNCTION;
-            this.returnType = ReturnType.INT;
-            double stringValue = Double.parseDouble(name.replaceAll("[^0-9]", ""));
-            castedNumber = NumberRandomGetter(0,stringValue);
-            this.returnType = ReturnType.INT;
-        }
 
-        else if (name.startsWith("environment(")) {
-            String envVariableName = "";
-            int startIndex = name.indexOf("(");
-            int endIndex = name.indexOf(")");
-            if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
-                envVariableName = name.substring(startIndex + 1, endIndex);
-            }
-
-            castedValueOfExpression = context.getEnvironmentVariable(envVariableName);
-            ReturnType returnType = ((PropertyInterface) castedValueOfExpression).getPropertyType();
-            switch (returnType) {
-                case INT:
-                    IntProperty intProperty = (IntProperty) castedValueOfExpression;
-                    castedNumber = (Number) ((IntProperty) castedValueOfExpression).getValue();
-                    break;
-                case DECIMAL:
-                    DecimalProperty decimalProperty = (DecimalProperty) castedValueOfExpression;
-                    castedNumber = (Number) ((DecimalProperty) castedValueOfExpression).getValue();
-                    break;
-                case BOOLEAN:
-                    castedValueOfExpression = ((PropertyInterface) castedValueOfExpression).getValue();
-                    break;
-            }
-            this.returnType = returnType;
-        }
-        else if (propertyMatch != null) {
-            // we need to know the property type and then return the value
-            type = Type.PROPERTY;
-            this.returnType = propertyMatch.getPropertyType();
-            castedValueOfExpression = propertyMatch.getValue();
-            castedNumber = (Number) propertyMatch.getValue();
-        }
-        else {
-            type = Type.FREE;
-            FreeValuePositioning();
         }
     }
 
-    public void FreeValuePositioning() {
-        try {
-            castedValueOfExpression = Double.parseDouble(name);
-            castedNumber = Double.parseDouble(name); //TODO: need to do it cross class
-            this.returnType = ReturnType.INT;
-            return;
-        } catch (NumberFormatException e) {
-            //
-        }
-        try {
-            castedValueOfExpression = Double.parseDouble(name);
-            castedNumber = Double.parseDouble(name);
-            this.returnType = ReturnType.DECIMAL;
-            return;
-        } catch (NumberFormatException e) {
-            //
-        }
-        if(!(name.equalsIgnoreCase("true") || name.equalsIgnoreCase("false"))) {
-            castedValueOfExpression = (String) name;
-            this.returnType = ReturnType.STRING;
-            return;
-        }
-        try {
-            //castedValueOfExpression = Boolean.parseBoolean(name);
-            castedValueOfExpression = (String) name;
-            this.returnType = ReturnType.BOOLEAN;
-            return;
-        } catch (NumberFormatException e) {
-            //
-        }
-
-    }
-
-    public Object getValue() { return castedValueOfExpression; }
-
-    public ReturnType getReturnType() { return this.returnType; }
-
-    public Number getCastedNumber() { return castedNumber; }
 }

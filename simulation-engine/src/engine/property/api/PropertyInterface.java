@@ -3,22 +3,23 @@ package engine.property.api;
 // TODO: manage the range better. maybe create a class for the range.
 
 import engine.action.expression.Expression;
-import engine.action.expression.ReturnType;
+import engine.action.expression.*;
 import engine.action.impl.condition.api.PropertyExpressionEvaluation;
 
 public interface PropertyInterface {
-    public String getName();
+    String getName();
 
-    public double getFrom();
+    double getFrom();
 
-    public double getTo();
+    double getTo();
 
-    public boolean getRandomStatus();
+    boolean getRandomStatus();
 
-    public ReturnType getPropertyType();
+    ReturnType getPropertyType();
 
-    public Object getValue();
+    Object getValue();
 
-
-    public PropertyExpressionEvaluation evaluate(Expression expression);
+    PropertyExpressionEvaluation evaluate(Expression expression);
+    void setPropertyValue(Object value, int currentTick);
+    int timeSinceLastChange(int currentTick);
 }

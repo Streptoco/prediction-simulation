@@ -16,28 +16,36 @@ public class IntProperty extends AbstractProperty {
     }
 
     public Object getValue() { return value; }
-    public void increaseValue(int value) {
-        if (super.getFrom() < (this.value + value) && super.getTo() > (this.value + value)) {
+    public void increaseValue(int value, int currentTick) {
+        if (rangeFrom.intValue() < (this.value + value) && rangeTo.intValue() > (this.value + value)) {
             this.value += value;
+            this.lastChangedTick = currentTick;
         }
     }
 
-    public void decreaseValue(int value) {
+    public void decreaseValue(int value, int currentTick) {
         if (super.getFrom() < (this.value - value) && super.getTo() > (this.value - value)) {
             this.value -= value;
+            this.lastChangedTick = currentTick;
         }
     }
 
-    public void setValue(int value) {
+    public void setValue(int value, int currentTick) {
         if (super.getFrom() < value && super.getTo() > value) {
             this.value = value;
+            this.lastChangedTick = currentTick;
         }
+    }
+
+    @Override
+    public void setPropertyValue(Object value, int currentTick) {
+        setValue((int) value, currentTick);
     }
 
     @Override
     public PropertyExpressionEvaluation evaluate(Expression expression) {
         //int expressionValue = (int)expression.getValue();
-        int expressionValue = expression.getCastedNumber().intValue();
+        int expressionValue = ((Double)expression.getValue()).intValue();
         PropertyExpressionEvaluation result;
         if(this.value == expressionValue) {
             result = new PropertyExpressionEvaluation(true, false);

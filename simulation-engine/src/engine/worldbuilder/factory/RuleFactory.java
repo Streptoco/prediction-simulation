@@ -12,7 +12,7 @@ public class RuleFactory {
         String ruleName = rule.getName();
         List<ActionInterface> actionList = new ArrayList<>();
         for (PRDAction action : rule.getPRDActions().getPRDAction()) {
-            actionList.add(ActionFactory.BuildAction(action));
+            actionList.add(ActionFactory.BuildAction(action, ruleName));
         }
         RuleActivation activation = null;
         if (rule.getPRDActivation() != null) {

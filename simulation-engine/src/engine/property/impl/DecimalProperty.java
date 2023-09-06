@@ -15,31 +15,39 @@ public class DecimalProperty extends AbstractProperty {
 
     public Object getValue() { return value; }
 
-    public void increaseValue(double value) {
+    public void increaseValue(double value, int currentTick) {
         if (super.getFrom() < (this.value + value) && super.getTo() > (this.value + value)) {
             this.value += value;
+            this.lastChangedTick = currentTick;
         }
     }
 
-    public void decreaseValue(double value) {
+    public void decreaseValue(double value, int currentTick) {
         if (super.getFrom() < (this.value - value) && super.getTo() > (this.value - value)) { // from: 10 to: 60 // 32 - 11.25
             this.value -= value;
+            this.lastChangedTick = currentTick;
         }
     }
-    public void setValue(double value) {
+    public void setValue(double value, int currentTick) {
         if (super.getFrom() < value && super.getTo() > value) {
             this.value = value;
+            this.lastChangedTick = currentTick;
         }
+    }
+
+    @Override
+    public void setPropertyValue(Object value, int currentTick) {
+        setValue((double)value, currentTick);
     }
 
     public PropertyExpressionEvaluation evaluate(Expression expression) {
-        double expresionValue = expression.getCastedNumber().doubleValue();
+        double expressionValue = (Double) expression.getValue();
         PropertyExpressionEvaluation result;
-        if(this.value == expresionValue) {
+        if(this.value == expressionValue) {
             result = new PropertyExpressionEvaluation(true, false);
         }
         else {
-            if(this.value > expresionValue) {
+            if(this.value > expressionValue) {
                 result = new PropertyExpressionEvaluation(false, true);
             }
             else {

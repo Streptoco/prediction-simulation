@@ -1,5 +1,6 @@
 package engine.xml;
 
+import engine.entity.impl.EntityDefinition;
 import engine.exception.XMLException;
 import engine.exception.XMLFileException;
 import engine.general.object.World;
@@ -20,6 +21,8 @@ public class NewXMLReader {
 
     public static List<PropertyInterface> envVariables = null;
 
+    public static List<EntityDefinition> entityDefinitionList = null;
+
     public NewXMLReader() {
     }
 
@@ -35,11 +38,10 @@ public class NewXMLReader {
             Unmarshaller u = jaxbContext.createUnmarshaller();
             PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
             this.world = engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
-            System.out.println("hey lol");
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         } catch (XMLException e) {
-            System.out.println(e.getMessage() + " in the XML file " + filePath);
+            System.out.println(e.getMessage() + "in the XML file " + filePath);
         }
 
 

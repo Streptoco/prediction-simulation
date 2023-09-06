@@ -4,11 +4,12 @@ import engine.entity.api.EntityDefinitionInterface;
 import engine.property.api.PropertyInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EntityDefinition implements EntityDefinitionInterface {
     private String name;
     private int population;
-    private ArrayList<PropertyInterface> propertyList;
+    private List<PropertyInterface> propertyList;
 
     public EntityDefinition(String name, int population){
         this.name = name;
@@ -24,7 +25,7 @@ public class EntityDefinition implements EntityDefinitionInterface {
         this.population = population;
     }
 
-    public ArrayList<PropertyInterface> getProps() { return propertyList; }
+    public List<PropertyInterface> getProps() { return propertyList; }
 
     public void addProperty(PropertyInterface newProperty) {
         propertyList.add(newProperty);

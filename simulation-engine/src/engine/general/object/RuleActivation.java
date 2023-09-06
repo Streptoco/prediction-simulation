@@ -6,6 +6,7 @@ public class RuleActivation {
     private int ticks = 1;
     private double probability = 1;
     private boolean alwaysActivate;
+
     public RuleActivation(int ticks, double probability) {
         this.ticks = ticks;
         this.probability = probability;
@@ -36,16 +37,36 @@ public class RuleActivation {
         this.alwaysActivate = true;
     }
 
+    public boolean checkTickActivation(int ticks) {
+        if (alwaysActivate) {
+            return true;
+        } else {
+            if (ticks != 0) {
+                return (ticks % this.ticks == 0);
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public boolean checkProbabilityActivation() {
+        if (alwaysActivate) {
+            return true;
+        } else {
+            Random rand = new Random();
+            double newProbability = rand.nextDouble();
+            return (newProbability < probability);
+        }
+    }
+
     public boolean checkActivation(int ticks) {
         Random rand = new Random();
         double newProbability = rand.nextDouble();
         if (alwaysActivate) {
             return true;
-        }
-        else if (ticks != 0) {
+        } else if (ticks != 0) {
             return (ticks % this.ticks == 0) && (newProbability < probability);
-        }
-        else {
+        } else {
             return false;
         }
     }

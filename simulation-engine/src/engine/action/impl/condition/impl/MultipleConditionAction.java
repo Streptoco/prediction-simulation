@@ -15,8 +15,8 @@ public class MultipleConditionAction extends AbstractAction {
     private List<ActionInterface> elseAction;
     private boolean wasInvoked;
     public MultipleConditionAction(List<ActionInterface> thenAction, List<ActionInterface> elseAction,
-                                   String logicalOperator, List<Condition> conditions) {
-        super(ActionType.CONDITION);
+                                   String logicalOperator, List<Condition> conditions, String actionEntity) {
+        super(ActionType.CONDITION, actionEntity);
         this.logicalOperator = logicalOperator.equalsIgnoreCase("and") ? LogicalOperatorForSingularity.AND : logicalOperator.equalsIgnoreCase("or") ? LogicalOperatorForSingularity.OR : null;
         this.thenAction = thenAction;
         if (elseAction != null) {
@@ -25,7 +25,14 @@ public class MultipleConditionAction extends AbstractAction {
         conditionList = conditions;
     }
 
+    public int getConditionsSize() { return conditionList.size();}
+
+    public String getOperator() {
+        return logicalOperator.name();
+    }
+
     public void invoke(Context context) {
+        System.out.println("\tPerforming the action: " + getActionType() + " " + Singularity.MULTIPLE);
         this.wasInvoked = false;
         switch (logicalOperator) {
             case OR:

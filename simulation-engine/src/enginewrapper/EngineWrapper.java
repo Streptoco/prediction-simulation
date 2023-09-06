@@ -16,7 +16,13 @@ public class EngineWrapper {
     public static void main(String[] args) {
         NewXMLReader xmlReader = new NewXMLReader();
         try {
-            xmlReader.ReadXML("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\ex2-virus.xml");
+            World world = xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified-3.xml".trim());
+            world.getEnvironment().updateProperty("infection-proximity", 2);
+            world.createPopulationOfEntity(world.GetEntities().get(0), 15);
+            world.createPopulationOfEntity(world.GetEntities().get(1), 3);
+            System.out.println("hey lol");
+            //world.Run();
+            world.NewRun();
         } catch (JAXBException e) {
             System.out.println(e.getMessage());
         }

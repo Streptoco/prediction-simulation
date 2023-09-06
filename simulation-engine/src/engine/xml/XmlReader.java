@@ -3,7 +3,10 @@ package engine.xml;
 import engine.exception.*;
 import engine.general.object.World;
 import engine.worldbuilder.prdobjects.*;
-import enginetoui.dto.basic.*;
+import enginetoui.dto.basic.impl.ArgumentsInvalidDTO;
+import enginetoui.dto.basic.impl.EntityNotFoundDTO;
+import enginetoui.dto.basic.impl.PropertyDuplicateNameDTO;
+import enginetoui.dto.basic.impl.PropertyNotFoundDTO;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -142,6 +145,7 @@ public class XmlReader {
     private PropertyDuplicateNameDTO CheckEntityPropertiesNamesForDuplication(List<PRDEntity> prdEntity) {
         List<PRDEnvProperty> tempPRDList = new ArrayList<>();
         for (PRDEntity entity : prdEntity) {
+            tempPRDList.clear();
             for (PRDProperty property : entity.getPRDProperties().getPRDProperty()) {
                 PRDEnvProperty tmpProperty = new PRDEnvProperty();
                 tmpProperty.setPRDName(property.getPRDName());

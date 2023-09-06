@@ -1,7 +1,15 @@
 package engine.action.expression;
 
-enum Type {
+public enum Type {
     FUNCTION,
+    ENVVARIABLE,
+    RANDOM,
+    EVALUATE,
+    TICKS,
+    PERCENT,
     PROPERTY,
+    BOOLEAN,
+    STRING,
+    NUMBER,
     FREE
 }

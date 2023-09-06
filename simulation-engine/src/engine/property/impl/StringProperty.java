@@ -31,7 +31,13 @@ public class StringProperty extends AbstractProperty {
         return result;
     }
 
-    public void setValue(String newVal) {
+    public void setValue(String newVal, int currentTick) {
         this.value = newVal;
+        this.lastChangedTick = currentTick;
+    }
+
+    @Override
+    public void setPropertyValue(Object value, int currentTick) {
+        setValue((String)value, currentTick);
     }
 }

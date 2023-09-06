@@ -1,4 +1,4 @@
-package enginetoui.dto.basic;
+package enginetoui.dto.basic.impl;
 
 public class PropertyDuplicateNameDTO {
     public final String propertyName;

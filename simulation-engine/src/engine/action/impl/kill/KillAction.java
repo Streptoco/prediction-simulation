@@ -6,16 +6,24 @@ import engine.context.api.Context;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class KillAction extends AbstractAction {
-    EntityInstanceManager managerToKill;
-    public KillAction() {
-        super(ActionType.KILL);
+    public KillAction(String actionEntity) {
+        super(ActionType.KILL, actionEntity);
     }
     @Override
     public void invoke(Context context) {
-        context.removeEntity();
+        //context.getInstance(this.getEntityOfTheAction()).setDead();
+        //You will always kill the primary entity is case of kill action
+        context.getPrimaryEntityInstance().setDead();
+        context.getGrid().removeFromGrid(context.getPrimaryEntityInstance().getPosition());
+
+        EntityInstance entityToKill = context.getPrimaryEntityInstance();
+        System.out.println("\t\tKilling: " + entityToKill.getId() + "" + entityToKill.getEntityName().charAt(0) + " Place on grid: (" + entityToKill.getPosition().getRow() +
+                "," + entityToKill.getPosition().getCol() + ")");
     }
 
     @Override
