@@ -264,6 +264,7 @@ public class ActionFactory {
     }
 
     public static void addSecondaryEntity(ActionInterface action, String entityName, String count, PRDCondition prdCondition) {
+        //TODO: add check if the second entity exist and throw exception in case it not
         Condition condition = ConditionFactory.BuildCondition(prdCondition);
         action.addSecondEntity(entityName, count, condition);
     }

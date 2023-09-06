@@ -7,11 +7,11 @@ import java.util.List;
 
 public abstract class AbstractAction implements ActionInterface {
 
-    private final ActionType actionType;
-    private final String entityOfTheAction;
-    boolean hasSecondaryEntity = false;
-    private SecondaryEntityChooser secondaryEntityChooser = null;
-    private List<EntityInstance> secondaryEntityList = null;
+    protected final ActionType actionType;
+    protected final String entityOfTheAction;
+    protected boolean hasSecondaryEntity = false;
+    protected SecondaryEntityChooser secondaryEntityChooser = null;
+    protected List<EntityInstance> secondaryEntityList = null;
 
 
     protected AbstractAction(ActionType actionType, String entityName) {

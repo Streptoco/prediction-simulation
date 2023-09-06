@@ -26,7 +26,8 @@ public class EntityInstanceManager {
     public EntityInstance create(EntityDefinition entityDefinition) {
         countInstances++;
         this.entityDefinition = entityDefinition;
-        EntityInstance newInstance = new EntityInstance(entityDefinition, countInstances);
+        //EntityInstance newInstance = new EntityInstance(entityDefinition, countInstances);
+        EntityInstance newInstance = new EntityInstance(entityDefinition, instances.size() + 1);
         instances.add(newInstance);
 
         for(PropertyInterface currentProperty : entityDefinition.getProps()) {
@@ -66,8 +67,6 @@ public class EntityInstanceManager {
     public List<EntityInstance> getInstances() { return instances; }
 
     public void killEntity(EntityInstance entityToKill) {
-        //instances.remove(entityToKill);
-        //entityToKill.setDead();
         entityToKill.setDead();
         countInstances--;
     }

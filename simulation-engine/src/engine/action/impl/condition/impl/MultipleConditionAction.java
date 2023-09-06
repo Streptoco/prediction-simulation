@@ -26,6 +26,7 @@ public class MultipleConditionAction extends AbstractAction {
     }
 
     public void invoke(Context context) {
+        System.out.println("\tPerforming the action: " + getActionType() + " " + Singularity.MULTIPLE);
         this.wasInvoked = false;
         switch (logicalOperator) {
             case OR:

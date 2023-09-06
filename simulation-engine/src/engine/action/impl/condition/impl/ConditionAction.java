@@ -40,7 +40,9 @@ public class ConditionAction extends AbstractAction {
     }
 
     public void invoke(Context context) {
+        System.out.println("\tPerforming the action: " + getActionType() + " " + Singularity.SINGLE);
         propertyInstance = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(property.getExpression());
+        System.out.print("\t\tChecking if: " + property.getExpression() + "" + this.valueOperator + valueExpression.getExpression() + ": ");
         PropertyExpressionEvaluation result = null;
         if (propertyInstance != null) {
             valueExpression.evaluateExpression(context);
@@ -68,11 +70,13 @@ public class ConditionAction extends AbstractAction {
         }
 
         if (EvaluateExpression(result)) {
+            System.out.print("true\n");
             for (ActionInterface action : thenAction) {
                 action.invoke(context);
             }
         } else {
             if (elseAction != null) {
+                System.out.print("false\n");
                 for (ActionInterface action : elseAction) {
                     action.invoke(context);
                 }

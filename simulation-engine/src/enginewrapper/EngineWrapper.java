@@ -17,7 +17,7 @@ public class EngineWrapper {
         NewXMLReader xmlReader = new NewXMLReader();
         try {
             World world = xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified-3.xml".trim());
-            world.getEnvironment().updateProperty("infection-proximity", 1);
+            world.getEnvironment().updateProperty("infection-proximity", 2);
             world.createPopulationOfEntity(world.GetEntities().get(0), 15);
             world.createPopulationOfEntity(world.GetEntities().get(1), 3);
             System.out.println("hey lol");

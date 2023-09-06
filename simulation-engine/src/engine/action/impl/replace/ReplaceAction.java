@@ -51,7 +51,9 @@ public class ReplaceAction extends AbstractAction {
                         }
                     }
                 }
+                System.out.println("\tPerforming the action: " + getActionType());
                 killAction.invoke(context);
+                System.out.println("\t\t" + "Creating: " + newEntityInstance.getId() + "" + newEntityInstance.getEntityName().charAt(0) + " Place on grid: (" + newEntityInstance.getPosition().getRow() + "," + newEntityInstance.getPosition().getCol() + ")");
                 context.getGrid().addSackToGrid(new Sack(newEntityInstance), newEntityInstance.getPosition());
                 break;
         }

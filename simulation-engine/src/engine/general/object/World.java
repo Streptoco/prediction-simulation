@@ -177,25 +177,21 @@ public class World {
         grid.assignSacks(this.allInstances);
         while (termination.getTermination(ticks, currentTime)) {
             if (ticks != 0) {
-                grid.drawGrid();
-                //grid.MoveSacks();
-                System.out.println("Move number " + ticks);
                 //grid.drawGrid();
+                grid.MoveSacks();
+                System.out.println("Move number " + ticks);
+                grid.drawGrid();
             } else {
                 grid.drawGrid();
             }
             for (Rule rule : rules) {
-                if (rule.activation(ticks)) {
+                if (rule.CheckTicks(ticks)) {
                     rule.NewInvokeAction(this.managers, this.activeEnvironment, this.grid, ticks);
                 }
             }
             removeSpecifiedEntities();
             ticks++;
         }
-
-    }
-
-    public void addNewEntity(String newEntityName) {
 
     }
 }
