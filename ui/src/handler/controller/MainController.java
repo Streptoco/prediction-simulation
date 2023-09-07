@@ -2,8 +2,6 @@ package handler.controller;
 
 import engine.general.object.Engine;
 import engine.xml.NewXMLReader;
-import enginetoui.dto.basic.impl.EntityDTO;
-import enginetoui.dto.basic.impl.RuleDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
@@ -18,7 +16,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import tree.item.impl.*;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -78,6 +75,10 @@ public class MainController extends ResourceBundle implements Initializable {
 
         if (selectedFile != null) {
             selectedFile.set(file);
+            engine.loadWorld(selectedFile.getValue().getAbsolutePath());
+            currentWorldDTO = engine.getWorldDTO();
+            StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
+            textField.textProperty().bind(labelTextBinding);
         }
     }
 
@@ -90,17 +91,18 @@ public class MainController extends ResourceBundle implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         engine = new Engine();
 
-        try {
-            engine.addSimulation("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\test-xml.xml");
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-
-        currentWorldDTO = engine.getWorldDTO();
-
-        StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
-        textField.textProperty().bind(labelTextBinding);
-        // TODO: make this relevant lel
+//        try {
+//            //engine.addSimulation("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\test-xml.xml");
+//            engine.addSimulation(selectedFile.getValue().getAbsolutePath());
+//        } catch (JAXBException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        currentWorldDTO = engine.getWorldDTO();
+//
+//        StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
+//        textField.textProperty().bind(labelTextBinding);
+//        // TODO: make this relevant lel
     }
 
 

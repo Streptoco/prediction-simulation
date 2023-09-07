@@ -15,7 +15,6 @@ import java.util.*;
 public class WorldDTO {
     public final int simulationId;
     public final SimpleDateFormat simulationDate;
-
     public final GridDTO gridDTO;
 
     public final EnvironmentDTO environment;
@@ -60,9 +59,9 @@ public class WorldDTO {
         return simulationDate.format(this.simDate);
     }
 
-    public Map<String, Integer> GetHistogram(String entityName, String propertyName, int simulationId, Engine engine) {
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName, String filePath, Engine engine) {
         Map<String, Integer> resultMap = new HashMap<>();
-        EntityInstanceManager entity = engine.GetInstanceManager(entityName, simulationId);
+        EntityInstanceManager entity = engine.GetInstanceManager(entityName, filePath);
         for (EntityInstance currentInstance : entity.getInstances()) {
             if(!currentInstance.isAlive()) {
                 continue;

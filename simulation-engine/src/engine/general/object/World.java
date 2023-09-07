@@ -76,6 +76,9 @@ public class World {
         }
     }
 
+    public int getNumOfThreads() {
+        return numOfThreads;
+    }
     public int getRows() {
         return this.grid.getRows();
     }
@@ -119,6 +122,17 @@ public class World {
         return this.entities;
     }
 
+    public Grid getGrid() {
+        return grid;
+    }
+
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public Map<String, EntityInstanceManager> getManagers() {
+        return managers;
+    }
     public List<Rule> getRules() {
         return rules;
     }
@@ -172,6 +186,17 @@ public class World {
         }
     }
 
+    public void assignSacks() {
+        getAllInstances();
+        grid.assignSacks(this.allInstances);
+    }
+
+    public void setCurrentTime() {
+        this.currentTime = System.currentTimeMillis();
+    }
+
+
+
     public void NewRun() {
         int ticks = 0;
         this.currentTime = System.currentTimeMillis();
@@ -179,7 +204,6 @@ public class World {
         grid.assignSacks(this.allInstances);
         while (termination.getTermination(ticks, currentTime)) {
             if (ticks != 0) {
-                //grid.drawGrid();
                 grid.MoveSacks();
                 System.out.println("Move number " + ticks);
                 grid.drawGrid();
@@ -194,6 +218,10 @@ public class World {
             removeSpecifiedEntities();
             ticks++;
         }
+    }
+
+    synchronized public void doWhenTickIsOver()  {
+        removeSpecifiedEntities();
     }
 
     public Termination getTermination() {

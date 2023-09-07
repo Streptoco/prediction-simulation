@@ -1,31 +1,27 @@
 package enginewrapper;
 
-import engine.exception.XMLException;
 import engine.general.object.Engine;
-import engine.general.object.World;
-import engine.worldbuilder.prdobjects.PRDWorld;
-import engine.xml.NewXMLReader;
-import engine.xml.XmlReader;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
 
 public class EngineWrapper {
     public static void main(String[] args) {
-        NewXMLReader xmlReader = new NewXMLReader();
+        Engine engine = new Engine();
         try {
-            //World world = xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified-2.xml".trim());
-            World world = xmlReader.ReadXML("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-error-3.xml".trim());
-            //world.getEnvironment().updateProperty("infection-proximity", 2);
-            world.createPopulationOfEntity(world.GetEntities().get(0), 15);
-            world.createPopulationOfEntity(world.GetEntities().get(1), 3);
+            engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified-3.xml".trim());
+            //engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus.xml".trim());
+            //engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\master-ex2.xml".trim());
             System.out.println("hey lol");
-            //world.Run();
-            world.NewRun();
         } catch (JAXBException e) {
             System.out.println(e.getMessage());
         }
+        engine.StartSimulation();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        engine.StartSimulation();
+
     }
 }
