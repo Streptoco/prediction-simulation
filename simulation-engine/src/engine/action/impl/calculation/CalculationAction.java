@@ -19,7 +19,7 @@ public class CalculationAction extends AbstractAction {
     private String propertyName;
     private CalculationType calculationType;
 
-    public CalculationAction(String propertyName, String calculationType, Expression firstArgument, Expression secondArgumen, String entityAction) {
+    public CalculationAction(String propertyName, String calculationType, Expression firstArgument, Expression secondArgument, String entityAction) {
         super(ActionType.CALCULATION, entityAction);
         this.propertyName = propertyName;
         this.firstArgument = firstArgument;

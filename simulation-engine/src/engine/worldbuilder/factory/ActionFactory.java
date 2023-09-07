@@ -30,17 +30,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActionFactory {
+    public static String currentRuleName;
+    private static ActionType currentAction;
+
     public static ActionInterface BuildAction(PRDAction prdAction, String ruleName) {
+        currentRuleName = ruleName;
         ActionType actionType = ActionType.convert(prdAction.getType());
+        currentAction = actionType;
         ActionInterface resultAction = null;
         switch (actionType) {
             case INCREASE:
             case DECREASE:
                 Expression expression = new Expression(prdAction.getBy());
+                SearchEntity(prdAction.getEntity(), ruleName);
                 CheckArgumentsTypeForNumbers(expression, ruleName);
                 resultAction = new IncreaseDecreaseAction(prdAction.getProperty(),
                         expression, prdAction.getType(), prdAction.getEntity());
-                SearchEntity(prdAction.getEntity(), ruleName);
                 break;
             case CALCULATION:
                 String calculationType = "";
@@ -56,12 +61,13 @@ public class ActionFactory {
                 }
                 Expression arg1Expression = new Expression(arg1);
                 Expression arg2Expression = new Expression(arg2);
-                CheckArgumentsTypeForNumbers(arg1Expression, ruleName);
-                CheckArgumentsTypeForNumbers(arg2Expression, ruleName);
+                CheckArgumentsTypeForNumbers(arg1Expression, prdAction.getEntity(), ruleName);
+                CheckArgumentsTypeForNumbers(arg2Expression, prdAction.getEntity(), ruleName);
                 CheckIfResultPropExistAndInTheCorrectType(prdAction.getEntity(), prdAction.getResultProp(), ruleName);
                 resultAction = new CalculationAction(prdAction.getResultProp(), calculationType, arg1Expression, arg2Expression, prdAction.getEntity());
                 break;
             case CONDITION:
+                SearchEntity(prdAction.getEntity(), ruleName);
                 List<ActionInterface> thenList = new ArrayList<>();
                 List<ActionInterface> elseList = new ArrayList<>();
                 List<PRDAction> prdThenList = prdAction.getPRDThen().getPRDAction();
@@ -76,12 +82,14 @@ public class ActionFactory {
                 }
 
                 if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("single")) {
+                    currentAction = actionType;
                     Expression conditionPropertyExpression = new Expression(prdAction.getPRDCondition().getProperty());
                     Expression conditionValueExpression = new Expression(prdAction.getPRDCondition().getValue());
                     CheckSingleAction(prdAction.getPRDCondition(), ruleName);
                     resultAction = new ConditionAction(conditionPropertyExpression, prdAction.getPRDCondition().getOperator(),
                             conditionValueExpression, thenList, elseList, prdAction.getEntity());
                 } else if (prdAction.getPRDCondition().getSingularity().equalsIgnoreCase("multiple")) {
+                    currentAction = actionType;
                     CheckMultipleCondition(prdAction.getPRDCondition(), ruleName);
                     resultAction = new MultipleConditionAction(thenList, elseList, prdAction.getPRDCondition().getLogical(),
                             ConditionFactory.BuildConditionFromList(prdAction.getPRDCondition().getPRDCondition()), prdAction.getEntity());
@@ -89,26 +97,43 @@ public class ActionFactory {
                 break;
             case SET:
                 Expression setExpression = new Expression(prdAction.getValue());
-                resultAction = new SetAction(prdAction.getProperty(), setExpression, prdAction.getEntity());
                 SearchEntityAndProperty(prdAction.getEntity(), prdAction.getProperty(), ruleName, prdAction.getValue());
+                resultAction = new SetAction(prdAction.getProperty(), setExpression, prdAction.getEntity());
                 break;
             case KILL:
+                SearchEntity(prdAction.getEntity(), ruleName);
                 resultAction = new KillAction(prdAction.getEntity());
                 break;
             case REPLACE:
+                SearchEntity(prdAction.getKill(), ruleName);
+                SearchEntity(prdAction.getCreate(), ruleName);
                 resultAction = new ReplaceAction(ReplaceMode.convert(prdAction.getMode()), prdAction.getKill(), prdAction.getCreate());
                 break;
             case PROXIMITY:
-                // TODO: get first entity, get secondary entity, check for the depth (in the invokaction) and get list of actions.
+                  /*
+                TODO:
+                    1. Check that the source entity is exist
+                    2. Check that the target entity is exist
+                    3. Check that the depth is a number
+
+                    In unrelated notice:
+                    need to check that within ticks, percent the parameter is given with/ given by are numbers
+                    and in case of evaluate they are from the same type
+                 */
+
+                String sourceEntity = prdAction.getPRDBetween().getSourceEntity();
+                SearchEntity(sourceEntity, ruleName);
+                String targetEntity = prdAction.getPRDBetween().getTargetEntity();
+                SearchEntity(targetEntity, ruleName);
+                Expression proximityExpression = new Expression(prdAction.getPRDEnvDepth().getOf());
+                CheckArgumentsTypeForNumbers(proximityExpression, ruleName);
                 List<ActionInterface> actionsInCaseOfProximity = new ArrayList<>();
                 List<PRDAction> prdActionsForProximityList = prdAction.getPRDActions().getPRDAction();
                 for (PRDAction currentAction : prdActionsForProximityList) {
                     actionsInCaseOfProximity.add(ActionFactory.BuildAction(currentAction, ruleName));
                 }
                 // added all the actions to be performed into the list itself
-                String sourceEntity = prdAction.getPRDBetween().getSourceEntity();
-                String targetEntity = prdAction.getPRDBetween().getTargetEntity();
-                Expression proximityExpression = new Expression(prdAction.getPRDEnvDepth().getOf());
+
                 resultAction = new ProximityAction(actionType, sourceEntity, targetEntity, proximityExpression, actionsInCaseOfProximity);
                 break;
         }
@@ -118,9 +143,10 @@ public class ActionFactory {
         return resultAction;
     }
 
-    public static void CheckIfEnvPropertyExistAndInTheCorrectType(Expression expression) {
+    public static PropertyInterface CheckIfEnvPropertyExistAndInTheCorrectType(Expression expression) {
         String envVariableName = "";
-        String expressionValue = (String) expression.getValue();
+        String expressionValue = expression.getExpression();
+        PropertyInterface relevantEnvProperty = null;
         boolean found = false;
         int startIndex = expressionValue.indexOf("(");
         int endIndex = expressionValue.indexOf(")");
@@ -130,21 +156,24 @@ public class ActionFactory {
         for (PropertyInterface envProperty : NewXMLReader.envVariables) {
             if (envProperty.getName().equals(envVariableName)) {
                 if (!(envProperty.getPropertyType().equals(ReturnType.INT) || envProperty.getPropertyType().equals(ReturnType.DECIMAL))) {
-                    throw new XMLVariableTypeException("", expression.getReturnType(), envProperty.getPropertyType());
+                    throw new XMLVariableTypeException("", currentRuleName, currentAction, ReturnType.INT, envProperty.getPropertyType());
                 } else {
                     found = true;
+                    relevantEnvProperty = envProperty;
                     break;
                 }
             }
         }
         if (!found) {
             throw new XMLEnvPropertyNotFound("", expressionValue);
+        } else {
+            return relevantEnvProperty;
         }
     }
 
     public static void CheckArgumentsTypeForNumbers(Expression expression, String ruleName) {
         if (!(expression.getType().equals(Type.NUMBER))) {
-            String expressionValue = (String) expression.getValue();
+            String expressionValue = expression.getExpression();
             if (expressionValue.startsWith("environment(")) {
                 CheckIfEnvPropertyExistAndInTheCorrectType(expression);
             } else if (expressionValue.startsWith("random(")) {
@@ -157,10 +186,41 @@ public class ActionFactory {
             } else if (expressionValue.startsWith("percent(")) {
                 //TODO: handle
             } else {
+
                 throw new XMLVariableTypeException("", expressionValue, ReturnType.DECIMAL);
             }
         }
     }
+
+    public static void CheckArgumentsTypeForNumbers(Expression expression, String currentEntityName, String ruleName) {
+        if (!(expression.getType().equals(Type.NUMBER))) {
+            String expressionValue = expression.getExpression();
+            if (expressionValue.startsWith("environment(")) {
+                CheckIfEnvPropertyExistAndInTheCorrectType(expression);
+            } else if (expressionValue.startsWith("random(")) {
+                //Random function only produce numbers
+                return;
+            } else if (expressionValue.startsWith("evaluate(") || expressionValue.startsWith("ticks(")) {
+                String entityName = ExtractEntityName(expressionValue);
+                String propertyName = ExtractPropertyName(expressionValue);
+                CheckIfEntityAndPropertyExist(entityName, propertyName, ruleName);
+            } else if (expressionValue.startsWith("percent(")) {
+                //TODO: handle
+            } else {
+                for (EntityDefinition entity : NewXMLReader.entityDefinitionList) {
+                    for (PropertyInterface property : entity.getProps()) {
+                        if (property.getName().equals(expressionValue) && (property.getPropertyType().equals(ReturnType.INT) || property.getPropertyType().equals(ReturnType.DECIMAL))) {
+                            return;
+                        } else {
+                            throw new XMLVariableTypeException("", expressionValue, ReturnType.DECIMAL);
+                        }
+                    }
+                }
+                throw new XMLVariableTypeException("", expressionValue, ReturnType.DECIMAL);
+            }
+        }
+    }
+
 
     public static void CheckIfResultPropExistAndInTheCorrectType(String entityName, String entityProperty, String ruleName) {
         boolean found = false;
@@ -194,7 +254,7 @@ public class ActionFactory {
             }
         }
         if (!found) {
-            throw new XMLEntityNotFoundException("", ruleName, entityName);
+            throw new XMLEntityNotFoundException("", currentAction, currentRuleName, entityName);
         } else {
             return entityToReturn;
         }
@@ -235,11 +295,38 @@ public class ActionFactory {
                     double doubleValue = Double.parseDouble(value);
                     sameType = true;
                 } catch (NumberFormatException e) {
-                    sameType = false;
+                    if (value.startsWith("random(") || value.startsWith("ticks(") || value.startsWith("percent")) {
+                        sameType = true;
+                    } else {
+                        sameType = false;
+                    }
                 }
                 break;
             case BOOLEAN:
-                sameType = value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+                if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+                    sameType = true;
+                } else {
+                    if (value.startsWith("environment(")) {
+                        PropertyInterface envProperty = SearchEnvVariable(value);
+                        if (envProperty.getPropertyType().equals(ReturnType.BOOLEAN)) {
+                            sameType = true;
+                        } else {
+                            sameType = false;
+                        }
+                    } else if (value.startsWith("evaluate(")) {
+                        String entityName = ExtractEntityName(value);
+                        String propertyName = ExtractPropertyName(value);
+                        PropertyInterface entityProperty = CheckIfEntityAndPropertyExist(entityName, propertyName, currentRuleName);
+                        if (entityProperty.getPropertyType().equals(ReturnType.BOOLEAN)) {
+                            sameType = true;
+                        } else {
+                            sameType = false;
+                        }
+
+                    } else {
+                        sameType = false;
+                    }
+                }
                 break;
             default:
                 sameType = true;
@@ -249,22 +336,31 @@ public class ActionFactory {
         }
     }
 
-    public static void CheckIfEntityAndPropertyExist(String entityName, String propertyName, String ruleName) {
+    public static PropertyInterface CheckIfEntityAndPropertyExist(String entityName, String propertyName, String ruleName) {
         EntityDefinition currentEntity = SearchEntity(entityName, ruleName);
+        PropertyInterface relevantProperty = null;
         boolean found = false;
         for (PropertyInterface property : currentEntity.getProps()) {
             if (property.getName().equalsIgnoreCase(propertyName)) {
                 found = true;
+                relevantProperty = property;
                 break;
             }
         }
         if (!found) {
             throw new XMLEntityPropertyNotFound("", entityName, propertyName, ruleName);
+        } else {
+            return relevantProperty;
         }
+
     }
 
     public static void addSecondaryEntity(ActionInterface action, String entityName, String count, PRDCondition prdCondition) {
-        //TODO: add check if the second entity exist and throw exception in case it not
+          /*
+              TODO:
+                  1. add check if the second entity exist and throw exception in case it not
+          */
+        SearchEntity(entityName, currentRuleName);
         Condition condition = ConditionFactory.BuildCondition(prdCondition);
         action.addSecondEntity(entityName, count, condition);
     }
@@ -318,8 +414,54 @@ public class ActionFactory {
         Expression conditionValueExpression = new Expression(condition.getValue());
         if (!CheckConditionProperty(conditionPropertyExpression, ruleName)) {
             SearchEntityAndProperty(condition.getEntity(), condition.getProperty(), ruleName, condition.getValue());
+        } else {
+            if (conditionPropertyExpression.getType().equals(Type.TICKS) || conditionPropertyExpression.getType().equals(Type.PERCENT)) {
+                if (!CheckIfExpressionIsANumber(conditionValueExpression)) {
+                    throw new XMLVariableTypeException("", currentRuleName, currentAction, ReturnType.INT, conditionValueExpression.getReturnType());
+                }
+            }
         }
         //TODO: Check if the value is in the same type as the property in case it is a function property
+    }
+
+    public static boolean CheckIfExpressionIsANumber(Expression expression) {
+        if (!expression.getType().equals(Type.NUMBER)) {
+            switch (expression.getType()) {
+                case TICKS:
+                case PERCENT:
+                case RANDOM:
+                    return true;
+                case ENVVARIABLE:
+                    CheckIfEnvPropertyExistAndInTheCorrectType(expression);
+                    return true;
+                case EVALUATE:
+                    String entityName = ExtractEntityName(expression.getExpression());
+                    String propertyName = ExtractPropertyName(expression.getExpression());
+                    SearchEntityAndProperty(entityName, propertyName, currentRuleName, "1");
+                    return true;
+                default:
+                    return false;
+
+            }
+        } else {
+            return true;
+        }
+    }
+
+    public static PropertyInterface SearchEnvVariable(String name) {
+        String envVariableName = "";
+        int startIndex = name.indexOf("(");
+        int endIndex = name.indexOf(")");
+        if (startIndex != -1 && endIndex != -1 && endIndex > startIndex) {
+            envVariableName = name.substring(startIndex + 1, endIndex);
+        }
+        for (PropertyInterface envProperty : NewXMLReader.envVariables) {
+            if (envProperty.getName().equals(envVariableName)) {
+                return envProperty;
+
+            }
+        }
+        throw new XMLEnvPropertyNotFound("", name);
     }
 
 

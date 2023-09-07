@@ -11,10 +11,12 @@ import java.util.List;
 public class ConditionFactory{
     public static Condition BuildCondition (PRDCondition prdCondition) {
             if (prdCondition.getSingularity().equalsIgnoreCase("single")) {
+                ActionFactory.CheckSingleAction(prdCondition, ActionFactory.currentRuleName);
                 Expression conditionPropertyExpression = new Expression(prdCondition.getProperty());
                 Expression conditionValueExpression = new Expression(prdCondition.getValue());
                 return (new SingleCondition(prdCondition.getEntity(), conditionPropertyExpression, prdCondition.getOperator(), conditionValueExpression));
             } else if (prdCondition.getSingularity().equalsIgnoreCase("multiple")) {
+                ActionFactory.CheckMultipleCondition(prdCondition, ActionFactory.currentRuleName);
                 return new MultipleCondition(prdCondition.getLogical(), BuildConditionFromList(prdCondition.getPRDCondition()));
             }
             else {

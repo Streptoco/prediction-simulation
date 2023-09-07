@@ -17,12 +17,15 @@ public class Expression {
             this.expressionType = Type.ENVVARIABLE;
         } else if (expression.startsWith("random(")) {
             this.expressionType = Type.RANDOM;
+            this.returnType = ReturnType.DECIMAL;
         } else if (expression.startsWith("evaluate(")) {
             this.expressionType = Type.EVALUATE;
         } else if (expression.startsWith("ticks(")) {
             this.expressionType = Type.TICKS;
+            this.returnType = ReturnType.INT;
         } else if (expression.startsWith("percent(")) {
             this.expressionType = Type.PERCENT;
+            this.returnType = ReturnType.DECIMAL;
         } else if (expression.equalsIgnoreCase("true") || expression.equalsIgnoreCase("false")) {
             this.expressionType = Type.BOOLEAN;
             this.returnType = ReturnType.BOOLEAN;
@@ -144,6 +147,35 @@ public class Expression {
         }
     }
 
+    private void evaluatePercent(Context context) {
+        String wholePart = "", percentPart = "";
+        int wholePartStartIndex, wholePartEndIndex, percentPartStartIndex, percentPartEndIndex;
+        wholePartStartIndex = expression.indexOf("(");
+        wholePartEndIndex = expression.indexOf(",");
+        if (wholePartStartIndex != -1 && wholePartEndIndex != -1 && wholePartEndIndex > wholePartStartIndex) {
+            wholePart = expression.substring(wholePartStartIndex + 1, wholePartEndIndex);
+        }
+        percentPartStartIndex = wholePartEndIndex;
+        percentPartEndIndex = expression.lastIndexOf(")");
+        if (percentPartStartIndex != -1 && percentPartEndIndex != -1 && percentPartEndIndex > percentPartStartIndex) {
+            percentPart = expression.substring(percentPartStartIndex + 1, percentPartEndIndex);
+        }
+        Expression wholePartExpression = new Expression(wholePart);
+        Expression percentPartExpression = new Expression(percentPart);
+        wholePartExpression.evaluateExpression(context);
+        percentPartExpression.evaluateExpression(context);
+        if (wholePartExpression.returnType.equals(ReturnType.INT) || wholePartExpression.returnType.equals(ReturnType.DECIMAL)) {
+            if (percentPartExpression.returnType.equals(ReturnType.INT) || percentPartExpression.returnType.equals(ReturnType.DECIMAL)) {
+                double whole = (Double) wholePartExpression.getValue();
+                double percent = (Double) percentPartExpression.getValue();
+                castedValueOfExpression = (percent / 100) * whole;
+                this.returnType = ReturnType.DECIMAL;
+            }
+        }
+
+
+    }
+
     public void evaluateExpression(Context context) {
         switch (expressionType) {
             case ENVVARIABLE:
@@ -162,6 +194,7 @@ public class Expression {
                 castedValueOfExpression = new Double(expression);
                 break;
             case PERCENT:
+                evaluatePercent(context);
                 break;
             case BOOLEAN:
                 if (expression.equalsIgnoreCase("true")) {
