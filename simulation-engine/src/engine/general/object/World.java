@@ -46,39 +46,11 @@ public class World {
         }
     }
 
-    public void Run() {
-        int ticks = 0;
-        getAllInstances();
-        grid.assignSacks(this.allInstances);
-        grid.drawGrid();
-        this.currentTime = System.currentTimeMillis();
-        while (termination.getTermination(ticks, currentTime)) {
-            if (ticks != 0) {
-                grid.MoveSacks();
-                System.out.println("Move number " + ticks);
-                grid.drawGrid();
-            }
-            for (EntityDefinition currentEntity : entities) {
-                for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
-                    if (currentInstance.isAlive()) {
-                        ContextImpl context = new ContextImpl(currentInstance, this.managers, activeEnvironment, ticks);
-                        context.setGrid(this.grid);
-                        for (Rule rule : rules) {
-                            if (rule.activation(ticks)) {
-                                rule.invokeAction(context);
-                            }
-                        }
-                    }
-                }
-            }
-            removeSpecifiedEntities();
-            ticks++;
-        }
-    }
 
     public int getNumOfThreads() {
         return numOfThreads;
     }
+
     public int getRows() {
         return this.grid.getRows();
     }
@@ -133,6 +105,7 @@ public class World {
     public Map<String, EntityInstanceManager> getManagers() {
         return managers;
     }
+
     public List<Rule> getRules() {
         return rules;
     }
@@ -161,10 +134,22 @@ public class World {
         return managers.get(entityName);
     }
 
-    public void createPopulationOfEntity(EntityDefinition entity, int population) {
-        EntityInstance currentEntity;
-        for (int i = 0; i < population; i++) {
-            currentEntity = managers.get(entity.getName()).create(entity);
+    public void createPopulationOfEntity(String entityName, int population) {
+        EntityDefinition entityToCreate = null;
+        boolean found = false;
+        for (EntityDefinition currentEntity : entities) {
+            if (currentEntity.getName().equalsIgnoreCase(entityName)) {
+                entityToCreate = currentEntity;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            throw new RuntimeException("Couldn't find entity definition in the name: " + entityName);
+        } else {
+            for (int i = 0; i < population; i++) {
+                managers.get(entityToCreate.getName()).create(entityToCreate);
+            }
         }
     }
 
@@ -196,7 +181,6 @@ public class World {
     }
 
 
-
     public void NewRun() {
         int ticks = 0;
         this.currentTime = System.currentTimeMillis();
@@ -220,7 +204,7 @@ public class World {
         }
     }
 
-    synchronized public void doWhenTickIsOver()  {
+    synchronized public void doWhenTickIsOver() {
         removeSpecifiedEntities();
     }
 

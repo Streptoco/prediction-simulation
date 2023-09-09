@@ -40,7 +40,7 @@ public class SingleCondition implements Condition {
 
 
     public boolean evaluate(Context context) {
-        System.out.print("\t\tChecking if: " + property.getExpression() + " " + this.valueOperator + " " + valueExpression.getExpression() + "\n");
+        //System.out.print("\t\tChecking if: " + property.getExpression() + " " + this.valueOperator + " " + valueExpression.getExpression() + "\n");
         PropertyExpressionEvaluation result = null;
         property.evaluateExpression(context);
         if (property.getType().equals(Type.PROPERTY)) {
