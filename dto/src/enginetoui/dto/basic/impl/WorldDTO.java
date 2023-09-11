@@ -41,29 +41,52 @@ public class WorldDTO {
             this.instances.add(new InstancesDTO(entityManager.getCountInstances(), entityManager.getNumberOfAllInstances(), entityManager.getEntityName(), entityManager.getPropertiesName()));
         }
         for (Rule rule : rules) {
-            this.rules.add(new RuleDTO(rule.getName(),rule.getTick(),rule.getProbability(),rule.GetNumOfActions(), rule.getActions()));
+            this.rules.add(new RuleDTO(rule.getName(), rule.getTick(), rule.getProbability(), rule.GetNumOfActions(), rule.getActions()));
         }
-        for (EntityDefinition entity: entityDefinitions) {
-            this.entityDefinitions.add(new EntityDTO(entity.getName(),entity.getPopulation(),entity.getProps()));
+        for (EntityDefinition entity : entityDefinitions) {
+            this.entityDefinitions.add(new EntityDTO(entity.getName(), entity.getPopulation(), entity.getProps()));
         }
         this.termination = new TerminationDTO(termination.getAllTicks(), termination.getHowManySecondsToRun(), termination.getIsInteractive());
-        this.environment = new EnvironmentDTO(environment.GetAllEnvVariablesNames(),environment.GetAllEnvVariables());
-        this.gridDTO = new GridDTO(gridRows,gridCols);
+        this.environment = new EnvironmentDTO(environment.GetAllEnvVariablesNames(), environment.GetAllEnvVariables());
+        this.gridDTO = new GridDTO(gridRows, gridCols);
     }
 
-    public List<RuleDTO> getRules() {return this.rules;}
+    public List<RuleDTO> getRules() {
+        return this.rules;
+    }
 
-    public List<EntityDTO> getEntities() {return this.entityDefinitions;}
+    public List<EntityDTO> getEntities() {
+        return this.entityDefinitions;
+    }
 
     public String GetSimulationDateString() {
         return simulationDate.format(this.simDate);
+    }
+
+    public Map<String, Integer> getEntitiesAmountHistogram(int simId, Engine engine) {
+        Map<String, Integer> resultMap = new HashMap<>();
+                            Map<String, EntityInstanceManager> allEntities = new HashMap<>();
+                            // This should be the entity instance managers map, but is it the right option? maybe we need to use the relevant DTO?
+        for(Map.Entry<String, EntityInstanceManager> entry : allEntities.entrySet()) {
+            for(EntityInstance currentEntity : entry.getValue().getInstances()) {
+                if(currentEntity.isAlive()) {
+                    if(resultMap.containsKey(currentEntity.getEntityName())) {
+                        int val = resultMap.get(currentEntity.getEntityName()) + 1;
+                        resultMap.put(currentEntity.getEntityName(), val);
+                    } else {
+                        resultMap.put(currentEntity.getEntityName(), 1);
+                    }
+                }
+            }
+        }
+        return resultMap;
     }
 
     public Map<String, Integer> GetHistogram(String entityName, String propertyName, int simulationId, Engine engine) {
         Map<String, Integer> resultMap = new HashMap<>();
         EntityInstanceManager entity = engine.GetInstanceManager(entityName, simulationId);
         for (EntityInstance currentInstance : entity.getInstances()) {
-            if(!currentInstance.isAlive()) {
+            if (!currentInstance.isAlive()) {
                 continue;
             }
             PropertyInterface currentProperty = currentInstance.getPropertyByName(propertyName);

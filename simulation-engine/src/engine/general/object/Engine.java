@@ -155,8 +155,8 @@ public class Engine {
         }
     }
 
-    public WorldDTO getWorldDTO() {
-        return simulationManager.getWorldDTO(simulationManager.getLatestSimulation());
+    public WorldDTO getWorldDTO(int id) {
+        return simulationManager.getWorldDTO(id);
     }
 
     public EntityInstanceManager GetInstanceManager(String name, int id) {

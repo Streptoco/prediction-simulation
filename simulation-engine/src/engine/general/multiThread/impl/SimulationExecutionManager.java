@@ -23,7 +23,7 @@ public class SimulationExecutionManager {
         if (executor == null) {
             executor = Executors.newFixedThreadPool(world.getNumOfThreads());
         }
-        SimulationRunner currentSimulation = new SimulationRunner(world);
+        SimulationRunner currentSimulation = new SimulationRunner(world, simulationCounter);
         simulations.put(simulationCounter, currentSimulation);
         return simulationCounter++;
     }
@@ -49,10 +49,11 @@ public class SimulationExecutionManager {
 
     public WorldDTO getWorldDTO(int id) {
         Date date = new Date();
-        return new WorldDTO(id, simulations.get(id).getWorld().getSimulationDate(), simulations.get(id).getWorld().getAllInstancesManager(),
-                date, simulations.get(id).getWorld().getTermination(), simulations.get(id).getWorld().getRules(),
-                simulations.get(id).getWorld().GetEntities(), simulations.get(id).getWorld().getEnvironment(), simulations.get(id).getWorld().getRows(),
-                simulations.get(id).getWorld().getCols());
+        World world = simulations.get(id).getWorld();
+        return new WorldDTO(id, world.getSimulationDate(), world.getAllInstancesManager(),
+                date, world.getTermination(), world.getRules(),
+                world.GetEntities(), world.getEnvironment(),
+                world.getRows(), world.getCols());
     }
 
     public World getWorld(int id) {
@@ -64,7 +65,7 @@ public class SimulationExecutionManager {
     }
 
     public void pauseSimulation(int id) {
-       simulations.get(id).setStatus(Status.PAUSED);
+        simulations.get(id).setStatus(Status.PAUSED);
     }
 
     public void resumeSimulation(int id) {
@@ -76,9 +77,23 @@ public class SimulationExecutionManager {
     }
 
     public void simulationManualStep(int id) {
-        //simulations.get(id).simulationManualStep();
         executor.execute(simulations.get(id)::simulationManualStep);
     }
 
+    public Status getSimulationStatus(int id) {
+        return simulations.get(id).getStatus();
+    }
+
+    public void setSimulationStatus(Status status, int id) {
+        simulations.get(id).setStatus(status);
+    }
+
+    public int getSimulationTick(int id) {
+        return simulations.get(id).getTick();
+    }
+
+    public Map<String, Integer> getSimulationEntitiesAmount(int id) {
+        return simulations.get(id).getAllEntitiesAmount();
+    }
 
 }

@@ -76,7 +76,11 @@ public class MainController extends ResourceBundle implements Initializable {
         if (selectedFile != null) {
             selectedFile.set(file);
             engine.loadWorld(selectedFile.getValue().getAbsolutePath());
-            currentWorldDTO = engine.getWorldDTO();
+            {
+                //TODO: This piece of code shouldn't be here, this is the part of the XML reading and it should be on the start of the simulation
+                int simID = engine.setupSimulation();
+                currentWorldDTO = engine.getWorldDTO(simID);
+            }
             StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
             textField.textProperty().bind(labelTextBinding);
         }
