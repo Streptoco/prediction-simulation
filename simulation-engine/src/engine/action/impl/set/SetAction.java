@@ -24,8 +24,8 @@ public class SetAction extends AbstractAction {
 
     @Override
     public void invoke(Context context) {
-        System.out.println("\tPerforming the action: " + getActionType());
-        System.out.println("\t\tSetting: " + context.getInstance(this.getEntityOfTheAction()).getId() + "" +entityOfTheAction.charAt(0) +"." + propertyName + " to: " + valueExpression.getExpression());
+//        System.out.println("\tPerforming the action: " + getActionType());
+//        System.out.println("\t\tSetting: " + context.getInstance(this.getEntityOfTheAction()).getId() + "" +entityOfTheAction.charAt(0) +"." + propertyName + " to: " + valueExpression.getExpression());
         propertyInstance = context.getInstance(this.getEntityOfTheAction()).getPropertyByName(propertyName);
         ReturnType returnType = propertyInstance.getPropertyType();
         valueExpression.evaluateExpression(context);

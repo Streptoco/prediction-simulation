@@ -11,17 +11,19 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class World {
-    private Termination termination;
+    private final Termination termination;
     private final Map<String, EntityInstanceManager> managers;
     private final List<Rule> rules;
     private final List<EntityDefinition> entities;
     private final Environment activeEnvironment;
     private long currentTime;
     private final SimpleDateFormat simulationDate;
-    private int numOfThreads;
+    private final int numOfThreads;
     private final Date simDate;
-    private Grid grid;
+    private final Grid grid;
     private List<EntityInstance> allInstances;
+    private final int maxEntitiesAmount;
+    private int currentEntitiesAmount;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
@@ -35,6 +37,8 @@ public class World {
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
         this.grid = grid;
+        this.maxEntitiesAmount = grid.getRows() * grid.getCols();
+        this.currentEntitiesAmount = 0;
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());
@@ -46,34 +50,9 @@ public class World {
         }
     }
 
-    public void Run() {
-        int ticks = 0;
-        getAllInstances();
-        grid.assignSacks(this.allInstances);
-        grid.drawGrid();
-        this.currentTime = System.currentTimeMillis();
-        while (termination.getTermination(ticks, currentTime)) {
-            if (ticks != 0) {
-                grid.MoveSacks();
-                System.out.println("Move number " + ticks);
-                grid.drawGrid();
-            }
-            for (EntityDefinition currentEntity : entities) {
-                for (EntityInstance currentInstance : managers.get(currentEntity.getName()).getInstances()) {
-                    if (currentInstance.isAlive()) {
-                        ContextImpl context = new ContextImpl(currentInstance, this.managers, activeEnvironment, ticks);
-                        context.setGrid(this.grid);
-                        for (Rule rule : rules) {
-                            if (rule.activation(ticks)) {
-                                rule.invokeAction(context);
-                            }
-                        }
-                    }
-                }
-            }
-            removeSpecifiedEntities();
-            ticks++;
-        }
+
+    public int getNumOfThreads() {
+        return numOfThreads;
     }
 
     public int getRows() {
@@ -119,6 +98,18 @@ public class World {
         return this.entities;
     }
 
+    public Grid getGrid() {
+        return grid;
+    }
+
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public Map<String, EntityInstanceManager> getManagers() {
+        return managers;
+    }
+
     public List<Rule> getRules() {
         return rules;
     }
@@ -147,10 +138,27 @@ public class World {
         return managers.get(entityName);
     }
 
-    public void createPopulationOfEntity(EntityDefinition entity, int population) {
-        EntityInstance currentEntity;
-        for (int i = 0; i < population; i++) {
-            currentEntity = managers.get(entity.getName()).create(entity);
+    public void createPopulationOfEntity(String entityName, int population) {
+        if(currentEntitiesAmount + population <= maxEntitiesAmount) {
+            currentEntitiesAmount += population;
+            EntityDefinition entityToCreate = null;
+            boolean found = false;
+            for (EntityDefinition currentEntity : entities) {
+                if (currentEntity.getName().equalsIgnoreCase(entityName)) {
+                    entityToCreate = currentEntity;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                throw new RuntimeException("Couldn't find entity definition in the name: " + entityName);
+            } else {
+                for (int i = 0; i < population; i++) {
+                    managers.get(entityToCreate.getName()).create(entityToCreate);
+                }
+            }
+        } else {
+            throw new RuntimeException("The size of the population " + entityName + " exceeded the size on the grid");
         }
     }
 
@@ -162,15 +170,26 @@ public class World {
     }
 
     public void removeSpecifiedEntities() {
-        Iterator<EntityInstance> it = allInstances.iterator();
-        while (it.hasNext()) {
+        /*
+         while (it.hasNext()) {
             EntityInstance instance = it.next();
             if (!instance.isAlive()) {
-                managers.get(instance.getEntityName()).killEntity(instance);
                 it.remove();
             }
         }
+         */
+        allInstances.removeIf(instance -> !instance.isAlive());
     }
+
+    public void assignSacks() {
+        getAllInstances();
+        grid.assignSacks(this.allInstances);
+    }
+
+    public void setCurrentTime() {
+        this.currentTime = System.currentTimeMillis();
+    }
+
 
     public void NewRun() {
         int ticks = 0;
@@ -179,7 +198,6 @@ public class World {
         grid.assignSacks(this.allInstances);
         while (termination.getTermination(ticks, currentTime)) {
             if (ticks != 0) {
-                //grid.drawGrid();
                 grid.MoveSacks();
                 System.out.println("Move number " + ticks);
                 grid.drawGrid();
@@ -194,6 +212,10 @@ public class World {
             removeSpecifiedEntities();
             ticks++;
         }
+    }
+
+     public synchronized void doWhenTickIsOver() {
+        removeSpecifiedEntities();
     }
 
     public Termination getTermination() {

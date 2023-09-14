@@ -7,7 +7,6 @@ public class InstancesDTO {
     public final int numberOfRemainInstances;
     public final int numberOfInstances;
     public final String entityName;
-
     public final List<String> propertyNames;
 
     public InstancesDTO(int numberOfRemainInstances, int numberOfInstances, String entityName, List<String> properties) {

@@ -39,10 +39,10 @@ public class ProximityAction extends AbstractAction {
         this.depth.evaluateExpression(context);
         grid.getAllInstancesAroundMe(sourceEntity.getPosition(), sourceEntity.getPosition(), ((Double) depth.getValue()).intValue(), surroundEntitiesSet);
         List<EntityInstance> surroundEntities = new ArrayList<>(surroundEntitiesSet);
-        System.out.print("\tPerforming the action: " + getActionType());
-        System.out.print(" the entities around: " + sourceEntity.getId() + sourceEntity.getEntityName().charAt(0) + " are: ");
-        surroundEntities.forEach(currentEntity -> System.out.print(currentEntity.getId() + "" + currentEntity.getEntityName().charAt(0) + ", "));
-        System.out.print("\n");
+//        System.out.print("\tPerforming the action: " + getActionType());
+//        System.out.print(" the entities around: " + sourceEntity.getId() + sourceEntity.getEntityName().charAt(0) + " are: ");
+//        surroundEntities.forEach(currentEntity -> System.out.print(currentEntity.getId() + "" + currentEntity.getEntityName().charAt(0) + ", "));
+//        System.out.print("\n");
         // iterate over the surround entities that the function found
         for (EntityInstance currentEntity : surroundEntities) {
             if (currentEntity.getEntityName().equalsIgnoreCase(targetEntityName)) {

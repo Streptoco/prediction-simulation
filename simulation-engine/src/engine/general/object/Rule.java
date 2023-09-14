@@ -50,7 +50,7 @@ public class Rule {
                         if (action.getEntityOfTheAction().equalsIgnoreCase(entry.getValue().getEntityName()) && entity.isAlive()) {
                             Context context = new ContextImpl(entity, entityInstanceManager, env, currentTick);
                             context.setGrid(grid);
-                            System.out.println("Applying the rule: " + this.name + " on: " + entity.getId() + entity.getEntityName().charAt(0));
+//                            System.out.println("Applying the rule: " + this.name + " on: " + entity.getId() + entity.getEntityName().charAt(0));
                             if (!action.haveSecondaryEntity()) {
                                 action.invoke(context);
                             } else {
