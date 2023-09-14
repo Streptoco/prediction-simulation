@@ -22,8 +22,8 @@ public class KillAction extends AbstractAction {
         context.getGrid().removeFromGrid(context.getPrimaryEntityInstance().getPosition());
 
         EntityInstance entityToKill = context.getPrimaryEntityInstance();
-//        System.out.println("\t\tKilling: " + entityToKill.getId() + "" + entityToKill.getEntityName().charAt(0) + " Place on grid: (" + entityToKill.getPosition().getRow() +
-//                "," + entityToKill.getPosition().getCol() + ")");
+        System.out.println("\t\tKilling: " + entityToKill.getId() + "" + entityToKill.getEntityName().charAt(0) + " Place on grid: (" + entityToKill.getPosition().getRow() +
+                "," + entityToKill.getPosition().getCol() + ")");
     }
 
     @Override

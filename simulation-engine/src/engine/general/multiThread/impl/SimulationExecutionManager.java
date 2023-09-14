@@ -1,8 +1,10 @@
 package engine.general.multiThread.impl;
 
+import engine.entity.impl.EntityInstanceManager;
 import engine.general.multiThread.api.SimulationRunner;
 import engine.general.multiThread.api.Status;
 import engine.general.object.World;
+import enginetoui.dto.basic.impl.SimulationStatusDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 
 import java.util.*;
@@ -31,11 +33,6 @@ public class SimulationExecutionManager {
     public void StartSimulation(int id) {
         executor.execute(simulations.get(id));
     }
-
-    public int getLatestSimulation() {
-        return simulationCounter - 1;
-    }
-
     public List<WorldDTO> GetSimulations() {
         List<WorldDTO> resultList = new ArrayList<>();
         for (Map.Entry<Integer, SimulationRunner> entry : simulations.entrySet()) {
@@ -96,6 +93,18 @@ public class SimulationExecutionManager {
 
     public Map<String, Integer> getSimulationEntitiesAmount(int id) {
         return simulations.get(id).getAllEntitiesAmount();
+    }
+
+    public SimulationStatusDTO getSimulationDetails(int id) {
+        SimulationRunner currentSim = simulations.get(id);
+        SimulationStatusDTO resultDTO = new SimulationStatusDTO(id,currentSim.getStatus(), currentSim.getTick() ,currentSim.getSimulationRunningTimeInMillis());
+        World currentWorld = currentSim.getWorld();
+        for(Map.Entry<String, EntityInstanceManager> entry : currentWorld.getManagers().entrySet()) {
+            resultDTO.updateEntityAmount(entry.getKey(), entry.getValue().getCountInstances());
+        }
+        return resultDTO;
+
+
     }
 
 }

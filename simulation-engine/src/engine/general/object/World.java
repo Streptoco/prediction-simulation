@@ -22,6 +22,8 @@ public class World {
     private final Date simDate;
     private final Grid grid;
     private List<EntityInstance> allInstances;
+    private final int maxEntitiesAmount;
+    private int currentEntitiesAmount;
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,
@@ -35,6 +37,8 @@ public class World {
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
         this.grid = grid;
+        this.maxEntitiesAmount = grid.getRows() * grid.getCols();
+        this.currentEntitiesAmount = 0;
         managers = new HashMap<>();
         for (EntityDefinition entity : entities) {
             managers.put(entity.getName(), new EntityInstanceManager());
@@ -135,21 +139,26 @@ public class World {
     }
 
     public void createPopulationOfEntity(String entityName, int population) {
-        EntityDefinition entityToCreate = null;
-        boolean found = false;
-        for (EntityDefinition currentEntity : entities) {
-            if (currentEntity.getName().equalsIgnoreCase(entityName)) {
-                entityToCreate = currentEntity;
-                found = true;
-                break;
+        if(currentEntitiesAmount + population <= maxEntitiesAmount) {
+            currentEntitiesAmount += population;
+            EntityDefinition entityToCreate = null;
+            boolean found = false;
+            for (EntityDefinition currentEntity : entities) {
+                if (currentEntity.getName().equalsIgnoreCase(entityName)) {
+                    entityToCreate = currentEntity;
+                    found = true;
+                    break;
+                }
             }
-        }
-        if (!found) {
-            throw new RuntimeException("Couldn't find entity definition in the name: " + entityName);
+            if (!found) {
+                throw new RuntimeException("Couldn't find entity definition in the name: " + entityName);
+            } else {
+                for (int i = 0; i < population; i++) {
+                    managers.get(entityToCreate.getName()).create(entityToCreate);
+                }
+            }
         } else {
-            for (int i = 0; i < population; i++) {
-                managers.get(entityToCreate.getName()).create(entityToCreate);
-            }
+            throw new RuntimeException("The size of the population " + entityName + " exceeded the size on the grid");
         }
     }
 

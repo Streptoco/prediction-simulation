@@ -6,10 +6,7 @@ import engine.exception.XMLException;
 import engine.general.multiThread.impl.SimulationExecutionManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.NewXMLReader;
-import enginetoui.dto.basic.impl.EntityDTO;
-import enginetoui.dto.basic.impl.PropertyDTO;
-import enginetoui.dto.basic.impl.RuleDTO;
-import enginetoui.dto.basic.impl.WorldDTO;
+import enginetoui.dto.basic.impl.*;
 import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
 
@@ -179,5 +176,9 @@ public class Engine {
 
     public void simulationManualStep(int id) {
         simulationManager.simulationManualStep(id);
+    }
+
+    public SimulationStatusDTO getSimulationDetails(int id) {
+        return simulationManager.getSimulationDetails(id);
     }
 }

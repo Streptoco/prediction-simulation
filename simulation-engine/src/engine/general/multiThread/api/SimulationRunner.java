@@ -125,10 +125,14 @@ public class SimulationRunner implements Runnable {
             }
             for (Rule rule : world.getRules()) {
                 if (rule.CheckTicks(ticks)) {
-                    rule.NewInvokeAction(world.getManagers(), world.getEnvironment(), world.getGrid(), ticks);
+                    synchronized (this.world) {
+                        rule.NewInvokeAction(world.getManagers(), world.getEnvironment(), world.getGrid(), ticks);
+                    }
                 }
             }
-            world.doWhenTickIsOver();
+            synchronized (this.world) {
+                world.doWhenTickIsOver();
+            }
             checkIfNeedToPause();
             if (this.status.equals(Status.ABORTED)) {
                 System.out.println("Stopping " + "[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks);
