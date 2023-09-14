@@ -170,14 +170,15 @@ public class World {
     }
 
     public void removeSpecifiedEntities() {
-        Iterator<EntityInstance> it = allInstances.iterator();
-        while (it.hasNext()) {
+        /*
+         while (it.hasNext()) {
             EntityInstance instance = it.next();
             if (!instance.isAlive()) {
-                managers.get(instance.getEntityName()).killEntity(instance);
                 it.remove();
             }
         }
+         */
+        allInstances.removeIf(instance -> !instance.isAlive());
     }
 
     public void assignSacks() {

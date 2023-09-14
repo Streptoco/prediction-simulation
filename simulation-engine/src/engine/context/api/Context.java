@@ -14,7 +14,7 @@ public interface Context {
     EntityInstance getPrimaryEntityInstance();
     EntityInstance getSecondaryEntityInstance();
     EntityInstance getInstance(String entityName);
-    void removePrimaryEntity();
+    //void removePrimaryEntity();
     PropertyInterface getEnvironmentVariable(String name);
     EntityDefinition getPrimaryEntityDefinition();
     List<EntityInstance> getInstancesList();

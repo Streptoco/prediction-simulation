@@ -47,9 +47,9 @@ public class ContextImpl implements Context {
 
     @Override
     public EntityInstance getInstance(String entityName) {
-        if(entityName.equalsIgnoreCase(primaryEntityInstance.getEntityName())) {
+        if (entityName.equalsIgnoreCase(primaryEntityInstance.getEntityName())) {
             return primaryEntityInstance;
-        } else if(entityName.equalsIgnoreCase(secondaryEntityInstance.getEntityName())) {
+        } else if (entityName.equalsIgnoreCase(secondaryEntityInstance.getEntityName())) {
             return secondaryEntityInstance;
         } else {
             throw new RuntimeException("Entity name was not as the primary entity name or the secondary entity ");
@@ -73,14 +73,10 @@ public class ContextImpl implements Context {
         return this.secondaryEntityInstance.getEntityName();
     }
 
-    @Override
-    public void removePrimaryEntity() {
-        entityInstanceManager.get(primaryEntityInstance.getEntityName()).killEntity(primaryEntityInstance);
-    }
-
-    public void removeSecondaryEntity() {
-        entityInstanceManager.get(secondaryEntityInstance.getEntityName()).killEntity(secondaryEntityInstance);
-    }
+//    @Override
+//    public void removePrimaryEntity() {
+//        entityInstanceManager.get(primaryEntityInstance.getEntityName()).killEntity(primaryEntityInstance);
+//    }
 
     @Override
     public PropertyInterface getEnvironmentVariable(String name) {
@@ -136,6 +132,7 @@ public class ContextImpl implements Context {
             this.grid = grid;
         }
     }
+
     @Override
     public int getCurrentTick() {
         return this.currentTick;

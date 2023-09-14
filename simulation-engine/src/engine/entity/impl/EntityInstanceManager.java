@@ -66,9 +66,12 @@ public class EntityInstanceManager {
 
     public List<EntityInstance> getInstances() { return instances; }
 
-    public void killEntity(EntityInstance entityToKill) {
-        entityToKill.setDead();
-        countInstances--;
+//    public void killEntity(EntityInstance entityToKill) {
+//        entityToKill.setDead();
+//    }
+
+    public void decreaseCountInstances() {
+        --countInstances;
     }
 
     public int getNumberOfAllInstances() {
