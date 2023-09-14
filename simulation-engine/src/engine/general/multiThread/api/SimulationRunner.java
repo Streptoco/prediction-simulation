@@ -69,15 +69,15 @@ public class SimulationRunner implements Runnable {
         setStatus(Status.PAUSED);
     }
 
-    public void abortSimulation() { setStatus(Status.ABORTED);}
+    public void abortSimulation() {
+        setStatus(Status.ABORTED);
+    }
 
     private synchronized void checkIfNeedToPause() {
         if (this.status.equals(Status.PAUSED)) {
             try {
-                //while (this.status.equals(Status.PAUSED)) {
                 System.out.println("Waiting " + "[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks);
                 wait();
-                //}
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
@@ -117,17 +117,13 @@ public class SimulationRunner implements Runnable {
     public void run() {
         System.out.println("[Thread: " + Thread.currentThread().getName() + "] Starting the simulation" + " Sim ID: " + simID);
         this.currentTime = System.currentTimeMillis();
-        if(!this.status.equals(Status.ABORTED)) {
+        if (!this.status.equals(Status.ABORTED)) {
             this.status = Status.RUNNING;
         }
         world.assignSacks();
         while (world.getTermination().getTermination(ticks, this.currentTime) && !(this.status.equals(Status.ABORTED)) && !(this.status.equals(Status.DONE))) {
             if (ticks != 0) {
                 world.getGrid().MoveSacks();
-                //System.out.println("[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks);
-                //world.getGrid().drawGrid();
-            } else {
-                //world.getGrid().drawGrid();
             }
             for (Rule rule : world.getRules()) {
                 if (rule.CheckTicks(ticks)) {
