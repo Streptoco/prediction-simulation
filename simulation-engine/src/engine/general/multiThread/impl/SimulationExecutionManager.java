@@ -33,6 +33,7 @@ public class SimulationExecutionManager {
     public void StartSimulation(int id) {
         executor.execute(simulations.get(id));
     }
+
     public List<WorldDTO> GetSimulations() {
         List<WorldDTO> resultList = new ArrayList<>();
         for (Map.Entry<Integer, SimulationRunner> entry : simulations.entrySet()) {
@@ -108,6 +109,36 @@ public class SimulationExecutionManager {
         return resultDTO;
 
 
+    }
+
+    public int getNumberOfRunningSimulations() {
+        int count = 0;
+        for (Map.Entry<Integer, SimulationRunner> entry : simulations.entrySet()) {
+            if (entry.getValue().getStatus().equals(Status.RUNNING)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getNumberOfWaitingSimulations() {
+        int count = 0;
+        for (Map.Entry<Integer, SimulationRunner> entry : simulations.entrySet()) {
+            if (entry.getValue().getStatus().equals(Status.LOADING)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getNumberOfDoneSimulations() {
+        int count = 0;
+        for (Map.Entry<Integer, SimulationRunner> entry : simulations.entrySet()) {
+            if (entry.getValue().getStatus().equals(Status.DONE)) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }

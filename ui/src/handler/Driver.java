@@ -1,6 +1,5 @@
 package handler;
 
-import handler.controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +8,17 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
+/**
+ * Hi Roni Macaroni
+ * Hoped you enjoyed London and you are ready for Targil3
+ * There are a few things that I have noticed that need to be done and I don't think I will finish them
+ *      1. The ability to re-run a simulation -
+ *          Somehow we need to save the env properties and entities population in case we want to rerun the exact simulation,
+ *          but I couldn't figure out how to do it
+ *     2. All the statistic things -
+ *          I built the base of some things at screen 3 of the simulation result, but I couldn't figure out what the hell is the hell is consistency shit,
+ *          and we need to notify somehow the user that a simulation is done
+ **/
 public class Driver extends Application {
 
     @Override

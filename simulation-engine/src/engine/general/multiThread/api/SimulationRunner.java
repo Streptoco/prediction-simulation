@@ -13,7 +13,7 @@ public class SimulationRunner implements Runnable {
     private final World world;
     private Status status;
     private int ticks;
-    private int simID;
+    private final int simID;
     private long currentTime;
     private final Date simDate;
     private final SimpleDateFormat simulationDate;
