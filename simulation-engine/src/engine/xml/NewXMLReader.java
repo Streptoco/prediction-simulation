@@ -26,25 +26,17 @@ public class NewXMLReader {
     public NewXMLReader() {
     }
 
-    public World ReadXML(String filePath) throws JAXBException {
+    public World ReadXML(String filePath) throws JAXBException, XMLException {
         this.filePath = filePath;
         if (!(filePath.endsWith(".xml"))) {
             throw new XMLFileException(filePath);
         }
         File file = new File(filePath);
         JAXBContext jaxbContext;
-        try {
-            jaxbContext = JAXBContext.newInstance(PRDWorld.class);
-            Unmarshaller u = jaxbContext.createUnmarshaller();
-            PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
-            this.world = engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        } catch (XMLException e) {
-            System.out.println(e.getMessage() + "in the XML file " + filePath);
-        }
-
-
+        jaxbContext = JAXBContext.newInstance(PRDWorld.class);
+        Unmarshaller u = jaxbContext.createUnmarshaller();
+        PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
+        this.world = engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
         return world;
     }
 

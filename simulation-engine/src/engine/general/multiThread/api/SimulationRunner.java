@@ -53,35 +53,50 @@ public class SimulationRunner implements Runnable {
         return result;
     }
 
-    public void setStatus(Status status) {
+    private void setStatus(Status status) {
         this.status = status;
     }
 
     public synchronized void resumeSimulation() {
-        this.status = Status.RUNNING;
-        System.out.println("\t\t\twhoooooooooooo.... continuing " + Thread.currentThread().getName());
-        notifyAll();
+        if (this.status.equals(Status.PAUSED)) {
+            setStatus(Status.RUNNING);
+            System.out.println("Continuing " + "[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks);
+            notifyAll();
+        }
     }
+
+    public void pauseSimulation() {
+        setStatus(Status.PAUSED);
+    }
+
+    public void abortSimulation() { setStatus(Status.ABORTED);}
 
     private synchronized void checkIfNeedToPause() {
         if (this.status.equals(Status.PAUSED)) {
             try {
-                while (this.status.equals(Status.PAUSED)) {
-                    System.out.println("\t\t\twhoooooooooooo.... waiting " + Thread.currentThread().getName());
-                    wait();
-                }
+                //while (this.status.equals(Status.PAUSED)) {
+                System.out.println("Waiting " + "[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks);
+                wait();
+                //}
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    public void simulationManualStep() {
+    public void manualStopSimulation() {
+        if (this.status.equals(Status.RUNNING) || this.status.equals(Status.PAUSED)) {
+            setStatus(Status.DONE);
+        }
+    }
+
+
+    public synchronized void simulationManualStep() {
         if (this.status.equals(Status.PAUSED)) {
             if (world.getTermination().getTermination(ticks, world.getCurrentTime())) {
                 if (ticks != 0) {
                     world.getGrid().MoveSacks();
-                    System.out.println("[Manual Step]Thread: " + Thread.currentThread().getName() + "\nMove number " + ticks);
+                    System.out.println("[Thread: " + Thread.currentThread().getName() + "] Manual Step Tick number " + ticks);
                 }
             }
             for (Rule rule : world.getRules()) {
@@ -94,18 +109,16 @@ public class SimulationRunner implements Runnable {
         }
     }
 
-
     @Override
     public void run() {
+        System.out.println("[Thread: " + Thread.currentThread().getName() + "] Starting the simulation" + " Sim ID: " + simID);
         this.currentTime = System.currentTimeMillis();
         this.status = Status.RUNNING;
-        Thread.currentThread().setName("Simulation-Thread-ID-" + this.simID);
-        //world.setCurrentTime();this.currentTime = System.currentTimeMillis();
         world.assignSacks();
-        while (world.getTermination().getTermination(ticks, this.currentTime) && this.status.equals(Status.RUNNING)) {
+        while (world.getTermination().getTermination(ticks, this.currentTime) && !(this.status.equals(Status.ABORTED)) && !(this.status.equals(Status.DONE))) {
             if (ticks != 0) {
                 world.getGrid().MoveSacks();
-                System.out.println("Thread: " + Thread.currentThread().getName() + "\nMove number " + ticks);
+                //System.out.println("[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks);
                 //world.getGrid().drawGrid();
             } else {
                 //world.getGrid().drawGrid();
@@ -118,10 +131,15 @@ public class SimulationRunner implements Runnable {
             world.doWhenTickIsOver();
             checkIfNeedToPause();
             if (this.status.equals(Status.ABORTED)) {
+                System.out.println("Stopping " + "[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks);
                 break;
             }
             ticks++;
         }
+        if (!this.status.equals(Status.ABORTED)) {
+            this.status = Status.DONE;
+        }
+        System.out.println("[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks + " Simulation Done with status: " + this.status);
         /* TODO:
             1. If simulation is end, find a way to notify the user it ended successfully
             2. Find a way to somehow save all the relevant entites amount and env variable values for re-run of the simulation

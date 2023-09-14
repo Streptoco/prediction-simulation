@@ -2,7 +2,7 @@ package engine.general.object;
 
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
-import engine.general.multiThread.api.Status;
+import engine.exception.XMLException;
 import engine.general.multiThread.impl.SimulationExecutionManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.NewXMLReader;
@@ -15,8 +15,6 @@ import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import javax.xml.bind.JAXBException;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Engine {
     private final NewXMLReader reader;
@@ -33,12 +31,14 @@ public class Engine {
         this.filePath = filePath;
     }
 
-    public int setupSimulation() throws JAXBException {
+    public int setupSimulation() throws JAXBException, XMLException {
+        int simulationID = -1;
         if (!filePath.isEmpty()) {
             World aWholeNewworld = reader.ReadXML(filePath);
-            return simulationManager.CreateSimulation(aWholeNewworld);
+            simulationID =  simulationManager.CreateSimulation(aWholeNewworld);
+
         }
-        return -1;
+        return simulationID;
     }
 
     public void setupPopulation(EntityAmountDTO entityAmount, int id) {
@@ -71,10 +71,6 @@ public class Engine {
 
     public void setupEnvProperties(List<PropertyInitializeDTO> envProperties, int id) {
         envProperties.forEach(currentProperty -> setupEnvProperties(currentProperty, id));
-    }
-
-    public void runSimulation() {
-        simulationManager.StartSimulation(simulationManager.getLatestSimulation());
     }
 
     public void runSimulation(int id) {
@@ -169,6 +165,16 @@ public class Engine {
 
     public void resumeSimulation(int id) {
         simulationManager.resumeSimulation(id);
+    }
+
+    public void abortSimulation(int id) {
+        simulationManager.abortSimulation(id);
+    }
+
+    public void stopSimulation(int id) {
+        //This function is to stop a simulation which has a termination-by-user option
+        //Can check if the simulation has a termination by user or not
+        simulationManager.manualStopSimulation(id);
     }
 
     public void simulationManualStep(int id) {

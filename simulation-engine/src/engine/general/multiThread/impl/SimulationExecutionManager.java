@@ -65,15 +65,20 @@ public class SimulationExecutionManager {
     }
 
     public void pauseSimulation(int id) {
-        simulations.get(id).setStatus(Status.PAUSED);
+        executor.execute(simulations.get(id)::pauseSimulation);
     }
 
     public void resumeSimulation(int id) {
-        simulations.get(id).resumeSimulation();
+        executor.execute(simulations.get(id)::resumeSimulation);
     }
 
     public void abortSimulation(int id) {
-        simulations.get(id).setStatus(Status.ABORTED);
+        //executor.execute(simulations.get(id)::abortSimulation);
+        simulations.get(id).abortSimulation();
+    }
+
+    public void manualStopSimulation(int id) {
+        simulations.get(id).manualStopSimulation();
     }
 
     public void simulationManualStep(int id) {
@@ -84,9 +89,6 @@ public class SimulationExecutionManager {
         return simulations.get(id).getStatus();
     }
 
-    public void setSimulationStatus(Status status, int id) {
-        simulations.get(id).setStatus(status);
-    }
 
     public int getSimulationTick(int id) {
         return simulations.get(id).getTick();
