@@ -19,6 +19,7 @@ import java.net.URL;
  *          I built the base of some things at screen 3 of the simulation result, but I couldn't figure out what the hell is the hell is consistency shit,
  *          and we need to notify somehow the user that a simulation is done
  *     3. The EngineWrapper now is an example of using the api of engine, how to create and control the simulations, hope it's clear enough and if you have any questions don't hesitate asking
+ *     4. I added the xml files I worked with, you can try and modify them and see if the engine is working as expected
  *
  **/
 public class Driver extends Application {
