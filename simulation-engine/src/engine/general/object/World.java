@@ -214,7 +214,7 @@ public class World {
         }
     }
 
-    synchronized public void doWhenTickIsOver() {
+     public synchronized void doWhenTickIsOver() {
         removeSpecifiedEntities();
     }
 

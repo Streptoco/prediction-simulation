@@ -96,11 +96,14 @@ public class SimulationExecutionManager {
     }
 
     public SimulationStatusDTO getSimulationDetails(int id) {
-        SimulationRunner currentSim = simulations.get(id);
-        SimulationStatusDTO resultDTO = new SimulationStatusDTO(id,currentSim.getStatus(), currentSim.getTick() ,currentSim.getSimulationRunningTimeInMillis());
-        World currentWorld = currentSim.getWorld();
-        for(Map.Entry<String, EntityInstanceManager> entry : currentWorld.getManagers().entrySet()) {
-            resultDTO.updateEntityAmount(entry.getKey(), entry.getValue().getCountInstances());
+        SimulationStatusDTO resultDTO = null;
+        synchronized (simulations.get(id)) {
+            SimulationRunner currentSim = simulations.get(id);
+            resultDTO = new SimulationStatusDTO(id, currentSim.getStatus(), currentSim.getTick(), currentSim.getSimulationRunningTimeInMillis());
+            World currentWorld = currentSim.getWorld();
+            for (Map.Entry<String, EntityInstanceManager> entry : currentWorld.getManagers().entrySet()) {
+                resultDTO.updateEntityAmount(entry.getKey(), entry.getValue().getCountInstances());
+            }
         }
         return resultDTO;
 

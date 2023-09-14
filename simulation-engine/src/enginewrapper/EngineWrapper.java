@@ -26,32 +26,32 @@ public class EngineWrapper {
             engine.setupPopulation(new EntityAmountDTO("Healthy", 5), simID1);
             engine.setupPopulation(new EntityAmountDTO("Sick", 5), simID1);
             engine.setupEnvProperties(new PropertyInitializeDTO("infection-proximity", 1), simID1);
-//
-//            simID2 = engine.setupSimulation();
-//            engine.setupPopulation(new EntityAmountDTO("Healthy", 70), simID1);
-//            engine.setupPopulation(new EntityAmountDTO("Sick", 15), simID1);
-//            engine.setupEnvProperties(new PropertyInitializeDTO("infection-proximity", 1), simID1);
+
+            simID2 = engine.setupSimulation();
+            engine.setupPopulation(new EntityAmountDTO("Healthy", 70), simID2);
+            engine.setupPopulation(new EntityAmountDTO("Sick", 15), simID2);
+            engine.setupEnvProperties(new PropertyInitializeDTO("infection-proximity", 1), simID2);
             engine.runSimulation(simID0);
             engine.runSimulation(simID1);
-//            engine.runSimulation(simID2);
+            engine.runSimulation(simID2);
 
-            Thread.sleep(3000);
+//            Thread.sleep(2000);
 //            engine.abortSimulation(simID0);
-//
-//
-//            Thread.sleep(1000);
-//            engine.pauseSimulation(simID2);
-//
-//            engine.simulationManualStep(simID2);
-//            engine.simulationManualStep(simID2);
-//
-//            Thread.sleep(1000);
-//            engine.stopSimulation(simID1);
-//            engine.resumeSimulation(simID2);
+            Thread.sleep(1000);
+            SimulationStatusDTO sim01 = engine.getSimulationDetails(simID1);
+            engine.pauseSimulation(simID2);
+            //Thread.sleep(1000);
+            SimulationStatusDTO sim02 = engine.getSimulationDetails(simID2);
+            Thread.sleep(1000);
+            engine.simulationManualStep(simID2);
+            engine.simulationManualStep(simID2);
+            Thread.sleep(3000);
+            //engine.stopSimulation(simID1);
+            engine.resumeSimulation(simID2);
 //            Thread.sleep(3000);
 //            engine.stopSimulation(simID2);
+
             SimulationStatusDTO sim00 = engine.getSimulationDetails(simID0);
-            SimulationStatusDTO sim01 = engine.getSimulationDetails(simID1);
             System.out.println("hey lol");
         } catch (JAXBException | InterruptedException | RuntimeException e) {
             System.out.println(e.getMessage());

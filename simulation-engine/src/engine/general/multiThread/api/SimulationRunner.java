@@ -91,21 +91,25 @@ public class SimulationRunner implements Runnable {
     }
 
 
-    public synchronized void simulationManualStep() {
+    public void simulationManualStep() {
         if (this.status.equals(Status.PAUSED)) {
-            if (world.getTermination().getTermination(ticks, world.getCurrentTime())) {
+            if (world.getTermination().getTermination(ticks, this.currentTime)) {
+                System.out.println("[Thread: " + Thread.currentThread().getName() + "] Manual Step Tick number " + ticks);
                 if (ticks != 0) {
                     world.getGrid().MoveSacks();
-                    System.out.println("[Thread: " + Thread.currentThread().getName() + "] Manual Step Tick number " + ticks);
+
                 }
-            }
-            for (Rule rule : world.getRules()) {
-                if (rule.CheckTicks(ticks)) {
-                    rule.NewInvokeAction(world.getManagers(), world.getEnvironment(), world.getGrid(), ticks);
+
+                for (Rule rule : world.getRules()) {
+                    if (rule.CheckTicks(ticks)) {
+                        synchronized (this.world) {
+                            rule.NewInvokeAction(world.getManagers(), world.getEnvironment(), world.getGrid(), ticks);
+                        }
+                    }
                 }
+                world.doWhenTickIsOver();
+                ticks++;
             }
-            world.doWhenTickIsOver();
-            ticks++;
         }
     }
 
