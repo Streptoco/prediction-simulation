@@ -35,14 +35,13 @@ public class EngineWrapper {
             engine.runSimulation(simID1);
             engine.runSimulation(simID2);
 
-//            Thread.sleep(2000);
-//            engine.abortSimulation(simID0);
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             SimulationStatusDTO sim01 = engine.getSimulationDetails(simID1);
+            engine.abortSimulation(simID0);
+            Thread.sleep(1000);
             engine.pauseSimulation(simID2);
             //Thread.sleep(1000);
             SimulationStatusDTO sim02 = engine.getSimulationDetails(simID2);
-            Thread.sleep(1000);
             engine.simulationManualStep(simID2);
             engine.simulationManualStep(simID2);
             Thread.sleep(3000);

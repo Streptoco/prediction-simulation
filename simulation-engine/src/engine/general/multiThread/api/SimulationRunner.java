@@ -117,7 +117,9 @@ public class SimulationRunner implements Runnable {
     public void run() {
         System.out.println("[Thread: " + Thread.currentThread().getName() + "] Starting the simulation" + " Sim ID: " + simID);
         this.currentTime = System.currentTimeMillis();
-        this.status = Status.RUNNING;
+        if(!this.status.equals(Status.ABORTED)) {
+            this.status = Status.RUNNING;
+        }
         world.assignSacks();
         while (world.getTermination().getTermination(ticks, this.currentTime) && !(this.status.equals(Status.ABORTED)) && !(this.status.equals(Status.DONE))) {
             if (ticks != 0) {
