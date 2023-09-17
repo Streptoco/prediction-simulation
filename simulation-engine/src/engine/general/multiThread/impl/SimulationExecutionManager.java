@@ -16,6 +16,10 @@ public class SimulationExecutionManager {
     private int simulationCounter;
     private ExecutorService executor = null;
 
+    public int getSimulationCounter() {
+        return simulationCounter;
+    }
+
     public SimulationExecutionManager() {
         simulations = new HashMap<>();
         simulationCounter = 0;

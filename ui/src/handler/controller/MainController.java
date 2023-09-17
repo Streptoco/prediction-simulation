@@ -16,6 +16,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import uitoengine.filetransfer.EntityAmountDTO;
+import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -25,9 +27,7 @@ import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 public class MainController extends ResourceBundle implements Initializable {
-
-    NewXMLReader xmlReader = new NewXMLReader();
-
+    private int currentSimulation;
     @FXML
     private HBox currentSceneHolder;
     @FXML
@@ -96,13 +96,17 @@ public class MainController extends ResourceBundle implements Initializable {
         engine = new Engine();
 
         try {
-            engine.addSimulation("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\test-xml.xml");
-            engine.addSimulation(selectedFile.getValue().getAbsolutePath());
+            engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml");
+            currentSimulation = engine.setupSimulation();
+//            engine.setupPopulation(new EntityAmountDTO("Healthy", 30), 0);
+//            engine.setupPopulation(new EntityAmountDTO("Sick", 3), 0);
+//            engine.setupEnvProperties(new PropertyInitializeDTO("infection-proximity", 2), 0);
+            // TODO: setting up environment properties and also population through the UI.
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
 
-        currentWorldDTO = engine.getWorldDTO(); // need to throw in a number here..
+        currentWorldDTO = engine.getWorldDTO(currentSimulation); // need to throw in a number here...
 
         StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
         textField.textProperty().bind(labelTextBinding);

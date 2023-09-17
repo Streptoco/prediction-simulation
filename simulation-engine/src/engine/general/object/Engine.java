@@ -24,6 +24,10 @@ public class Engine {
         filePath = "";
     }
 
+    public SimulationExecutionManager getSimulationManager() {
+        return simulationManager;
+    }
+
     public void loadWorld(String filePath) {
         this.filePath = filePath;
     }
