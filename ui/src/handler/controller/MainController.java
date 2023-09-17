@@ -95,17 +95,17 @@ public class MainController extends ResourceBundle implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         engine = new Engine();
 
-//        try {
-//            //engine.addSimulation("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\test-xml.xml");
-//            engine.addSimulation(selectedFile.getValue().getAbsolutePath());
-//        } catch (JAXBException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        currentWorldDTO = engine.getWorldDTO();
-//
-//        StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
-//        textField.textProperty().bind(labelTextBinding);
+        try {
+            engine.addSimulation("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\tests\\ex2\\test-xml.xml");
+            engine.addSimulation(selectedFile.getValue().getAbsolutePath());
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+
+        currentWorldDTO = engine.getWorldDTO(); // need to throw in a number here..
+
+        StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
+        textField.textProperty().bind(labelTextBinding);
 //        // TODO: make this relevant lel
     }
 

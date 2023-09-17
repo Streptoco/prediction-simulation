@@ -7,9 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="dto" />
+    <orderEntry type="module" module-name="dto" exported="" />
     <orderEntry type="module" module-name="predictions-1" exported="" />
-    <orderEntry type="module" module-name="Predictions" exported="" />
+    <orderEntry type="module" module-name="Predictions" />
     <orderEntry type="library" name="ext" level="project" />
+    <orderEntry type="module" module-name="simulation-engine" />
   </component>
 </module>
