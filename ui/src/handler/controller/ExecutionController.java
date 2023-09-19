@@ -73,7 +73,15 @@ public class ExecutionController implements Initializable {
 
         entitySlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
             int intValue = newVal.intValue();
-            entityMaxPopulationLabel.setText(String.valueOf(intValue));
+            entityMaxPopulationLabel.setText("Population: " + String.valueOf(intValue));
+        });
+
+        entityComboBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()) {
+                entitySlider.setDisable(true);
+                entityComboBox.setDisable(true);
+//                setPopulation.setDisable(true);
+            }
         });
     }
 
@@ -92,5 +100,6 @@ public class ExecutionController implements Initializable {
         currentPopulation += (int)entitySlider.getValue();
         entitySlider.setDisable(true);
         entityComboBox.getItems().remove(entityComboBox.getSelectionModel().getSelectedItem());
+        // TODO: add even handler for when there's no longer things in the combobox.
     }
 }
