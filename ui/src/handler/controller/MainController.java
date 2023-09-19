@@ -56,6 +56,10 @@ public class MainController extends ResourceBundle implements Initializable {
         switch (key) {
             case "World":
                 return currentWorldDTO;
+            case "Engine":
+                return engine;
+            case "SimulationID":
+                return currentSimulation;
             default:
                 return null;
         }
