@@ -4,6 +4,7 @@ import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.EntityDTO;
 import enginetoui.dto.basic.impl.PropertyDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,6 +53,8 @@ public class ExecutionController implements Initializable {
         this.world = (WorldDTO) resources.getObject("World");
         this.engine = (Engine) resources.getObject("Engine");
         this.currentSimulationID = (int) resources.getObject("SimulationID");
+        runButton.setDisable(true);
+        entitySlider.setDisable(true);
 
         for (EntityDTO entityDTO : world.getEntities()) {
             entityComboBox.getItems().add(entityDTO); // add all entities to combo box
@@ -61,9 +64,6 @@ public class ExecutionController implements Initializable {
             propertyComboBox.getItems().add(propertyDTO); // add all properties to combo box
         }
 
-//        entityComboBoxLabel.textProperty().bind(entityComboBox.accessibleTextProperty()); // Don't know if right
-//        propertyComboBoxLabel.textProperty().bind(propertyComboBox.accessibleTextProperty());
-
         propertyComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 // Perform your desired action here with the selected DTO (newValue)
@@ -71,8 +71,10 @@ public class ExecutionController implements Initializable {
             }
         }); // LISTENER FOR WHEN PROPERTY VALUE CHANGES
 
-
-
+        entitySlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            int intValue = newVal.intValue();
+            entityMaxPopulationLabel.setText(String.valueOf(intValue));
+        });
     }
 
     public void selectEntity(ActionEvent actionEvent) {
@@ -81,15 +83,14 @@ public class ExecutionController implements Initializable {
         // TODO: handle exceedings of the population size (it currently breaks the whole shabang)
         entityComboBoxLabel.setText("Range: From " + 0 + " To " + ((world.gridDTO.cols * world.gridDTO.rows) - currentPopulation));
         entitySlider.setMax((world.gridDTO.cols * world.gridDTO.rows) - currentPopulation);
-    }
-
-    public void sliderValue(MouseEvent mouseEvent) {
-        entityMaxPopulationLabel.setText(String.valueOf((int)entitySlider.getValue()));
+        entitySlider.setDisable(false);
     }
 
     public void updatePopulation(ActionEvent actionEvent) {
         EntityAmountDTO entityAmountDTO = new EntityAmountDTO(entityComboBox.getSelectionModel().getSelectedItem().toString(),(int)entitySlider.getValue());
         engine.setupPopulation(entityAmountDTO,currentSimulationID);
         currentPopulation += (int)entitySlider.getValue();
+        entitySlider.setDisable(true);
+        entityComboBox.getItems().remove(entityComboBox.getSelectionModel().getSelectedItem());
     }
 }
