@@ -1,5 +1,6 @@
 package handler.controller;
 
+import engine.action.expression.ReturnType;
 import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.EntityDTO;
 import enginetoui.dto.basic.impl.PropertyDTO;
@@ -77,6 +78,10 @@ public class ExecutionController implements Initializable {
             amountOfProperties++;
         }
 
+//        PropertyDTO propertyDTO = new PropertyDTO("Name", ReturnType.DECIMAL, 0,19, false);
+//        propertyComboBox.getItems().add(propertyDTO);
+//        amountOfProperties++; // TODO: THIS IS A TEST
+
         propertyComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 // Perform your desired action here with the selected DTO (newValue)
@@ -106,9 +111,13 @@ public class ExecutionController implements Initializable {
     }
 
     public void selectProperty(ActionEvent actionEvent) {
-        propertySlider.setMin(propertyComboBox.getSelectionModel().getSelectedItem().from);
-        propertySlider.setMax(propertyComboBox.getSelectionModel().getSelectedItem().to);
-        statusLabel.setText("Now adjusting: " + propertyComboBox.getSelectionModel().getSelectedItem().getName() + ", you can always change this.");
+        if (propertyComboBox.getSelectionModel().getSelectedItem() != null) {
+            propertySlider.setMin(propertyComboBox.getSelectionModel().getSelectedItem().from);
+            propertySlider.setMax(propertyComboBox.getSelectionModel().getSelectedItem().to);
+            statusLabel.setText("Now adjusting: " + propertyComboBox.getSelectionModel().getSelectedItem().getName() + ", you can always change this.");
+            propertySlider.setDisable(false);
+            randomize.setDisable(false);
+        }
     }
 
     public void updatePopulation(ActionEvent actionEvent) {
@@ -149,7 +158,8 @@ public class ExecutionController implements Initializable {
         else {
             engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), propertySlider.getValue()),currentSimulationID);
         }
-        propertyComboBox.getItems().remove(propertyComboBox.getSelectionModel().getSelectedItem());
+        propertySlider.setDisable(true);
+        randomize.setDisable(true);
         if ((--amountOfProperties) == 0) {
             propertyComboBox.setDisable(true);
             propertySlider.setDisable(true);
@@ -159,5 +169,6 @@ public class ExecutionController implements Initializable {
         if (amountOfEntities == 0 && amountOfProperties == 0) {
             runButton.setDisable(false);
         }
+        propertyComboBox.getItems().remove(propertyComboBox.getSelectionModel().getSelectedItem());
     }
 }
