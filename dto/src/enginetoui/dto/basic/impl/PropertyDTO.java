@@ -33,6 +33,11 @@ public class PropertyDTO {
         return to;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public boolean isRandomlyGenerated() {
         return isRandomlyGenerated;
     }

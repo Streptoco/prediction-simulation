@@ -4,6 +4,8 @@ import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.EntityDTO;
 import enginetoui.dto.basic.impl.PropertyDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -23,8 +25,11 @@ public class ExecutionController implements Initializable {
     private Engine engine;
     private int currentSimulationID;
     private int currentPopulation = 0;
+    private int amountOfEntities = 0;
     @FXML
     Button setPopulation;
+    @FXML
+    Slider propertySlider;
     @FXML
     Label entityMaxPopulationLabel;
     @FXML
@@ -58,6 +63,7 @@ public class ExecutionController implements Initializable {
 
         for (EntityDTO entityDTO : world.getEntities()) {
             entityComboBox.getItems().add(entityDTO); // add all entities to combo box
+            amountOfEntities++;
         }
 
         for (PropertyDTO propertyDTO : world.environment.propertyDTOs) {
@@ -76,13 +82,11 @@ public class ExecutionController implements Initializable {
             entityMaxPopulationLabel.setText("Population: " + String.valueOf(intValue));
         });
 
-        entityComboBox.itemsProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                entitySlider.setDisable(true);
-                entityComboBox.setDisable(true);
-//                setPopulation.setDisable(true);
-            }
+        propertySlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+            int intValue = newVal.intValue();
+            propertyComboBoxLabel.setText("Value: " + String.valueOf(intValue));
         });
+
     }
 
     public void selectEntity(ActionEvent actionEvent) {
@@ -94,12 +98,27 @@ public class ExecutionController implements Initializable {
         entitySlider.setDisable(false);
     }
 
+    public void selectProperty(ActionEvent actionEvent) {
+        propertySlider.setMin(propertyComboBox.getSelectionModel().getSelectedItem().from);
+        propertySlider.setMax(propertyComboBox.getSelectionModel().getSelectedItem().to);
+        statusLabel.setText("Now adjusting: " + propertyComboBox.getSelectionModel().getSelectedItem().getName());
+    }
+
     public void updatePopulation(ActionEvent actionEvent) {
+        if (entityComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
         EntityAmountDTO entityAmountDTO = new EntityAmountDTO(entityComboBox.getSelectionModel().getSelectedItem().toString(),(int)entitySlider.getValue());
         engine.setupPopulation(entityAmountDTO,currentSimulationID);
         currentPopulation += (int)entitySlider.getValue();
         entitySlider.setDisable(true);
         entityComboBox.getItems().remove(entityComboBox.getSelectionModel().getSelectedItem());
+        if ((--amountOfEntities) == 0) {
+            entityComboBox.setDisable(true);
+            entitySlider.setDisable(true);
+            entityComboBoxLabel.setText("No more entities to define!");
+            entityMaxPopulationLabel.setText("Population: 0");
+        }
         // TODO: add even handler for when there's no longer things in the combobox.
     }
 }
