@@ -81,7 +81,7 @@ public class MainController extends ResourceBundle implements Initializable {
             selectedFile.set(file);
             engine.loadWorld(selectedFile.getValue().getAbsolutePath());
             {
-                //TODO: This piece of code shouldn't be here, this is the part of the XML reading and it should be on the start of the simulation
+                // TODO: This piece of code shouldn't be here, this is the part of the XML reading and it should be on the start of the simulation
                 int simID = engine.setupSimulation();
                 currentWorldDTO = engine.getWorldDTO(simID);
             }
@@ -105,7 +105,6 @@ public class MainController extends ResourceBundle implements Initializable {
 //            engine.setupPopulation(new EntityAmountDTO("Healthy", 30), 0);
 //            engine.setupPopulation(new EntityAmountDTO("Sick", 3), 0);
 //            engine.setupEnvProperties(new PropertyInitializeDTO("infection-proximity", 2), 0);
-            // TODO: setting up environment properties and also population through the UI.
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }

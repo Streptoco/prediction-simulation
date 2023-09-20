@@ -139,6 +139,7 @@ public class ExecutionController implements Initializable {
         // TODO: add even handler for when there's no longer things in the combobox.
         if (amountOfEntities == 0 && amountOfProperties == 0) {
             runButton.setDisable(false);
+            statusLabel.setText("Ready to launch simulation!");
         }
     }
 
@@ -165,10 +166,16 @@ public class ExecutionController implements Initializable {
             propertySlider.setDisable(true);
             propertyComboBoxLabel.setText("Value: 0");
             setChosenProperty.setDisable(true);
+            statusLabel.setText("All environment variables set!");
         }
         if (amountOfEntities == 0 && amountOfProperties == 0) {
             runButton.setDisable(false);
+            statusLabel.setText("Ready to launch simulation!");
         }
         propertyComboBox.getItems().remove(propertyComboBox.getSelectionModel().getSelectedItem());
+    }
+
+    public void runSimulation(ActionEvent actionEvent) {
+        engine.runSimulation(currentSimulationID);
     }
 }
