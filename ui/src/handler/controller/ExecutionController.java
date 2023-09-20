@@ -15,8 +15,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.FileTransferDTO;
+import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class ExecutionController implements Initializable {
@@ -26,8 +28,11 @@ public class ExecutionController implements Initializable {
     private int currentSimulationID;
     private int currentPopulation = 0;
     private int amountOfEntities = 0;
+    private int amountOfProperties = 0;
     @FXML
-    Button setPopulation;
+    Button setChosenProperty;
+    @FXML
+    Button setChosen;
     @FXML
     Slider propertySlider;
     @FXML
@@ -55,6 +60,7 @@ public class ExecutionController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.runButton.setDisable(true);
         this.world = (WorldDTO) resources.getObject("World");
         this.engine = (Engine) resources.getObject("Engine");
         this.currentSimulationID = (int) resources.getObject("SimulationID");
@@ -68,6 +74,7 @@ public class ExecutionController implements Initializable {
 
         for (PropertyDTO propertyDTO : world.environment.propertyDTOs) {
             propertyComboBox.getItems().add(propertyDTO); // add all properties to combo box
+            amountOfProperties++;
         }
 
         propertyComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -75,7 +82,7 @@ public class ExecutionController implements Initializable {
                 // Perform your desired action here with the selected DTO (newValue)
                 System.out.println("Selected DTO: " + newValue.getName());
             }
-        }); // LISTENER FOR WHEN PROPERTY VALUE CHANGES
+        }); // LISTENER FOR WHEN PROPERTY VALUE CHANGES -- THIS IS A TEST --
 
         entitySlider.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
             int intValue = newVal.intValue();
@@ -101,7 +108,7 @@ public class ExecutionController implements Initializable {
     public void selectProperty(ActionEvent actionEvent) {
         propertySlider.setMin(propertyComboBox.getSelectionModel().getSelectedItem().from);
         propertySlider.setMax(propertyComboBox.getSelectionModel().getSelectedItem().to);
-        statusLabel.setText("Now adjusting: " + propertyComboBox.getSelectionModel().getSelectedItem().getName());
+        statusLabel.setText("Now adjusting: " + propertyComboBox.getSelectionModel().getSelectedItem().getName() + ", you can always change this.");
     }
 
     public void updatePopulation(ActionEvent actionEvent) {
@@ -118,7 +125,39 @@ public class ExecutionController implements Initializable {
             entitySlider.setDisable(true);
             entityComboBoxLabel.setText("No more entities to define!");
             entityMaxPopulationLabel.setText("Population: 0");
+            setChosen.setDisable(true);
         }
         // TODO: add even handler for when there's no longer things in the combobox.
+        if (amountOfEntities == 0 && amountOfProperties == 0) {
+            runButton.setDisable(false);
+        }
+    }
+
+    public void updateProperty(ActionEvent actionEvent) {
+        if (propertyComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        if (randomize.isSelected()) {
+            Random random = new Random();
+            int max = (int)propertyComboBox.getSelectionModel().getSelectedItem().to;
+            int min = (int)propertyComboBox.getSelectionModel().getSelectedItem().from;
+            int randomNum = random.nextInt((max - min) + 1) + min;
+            propertyComboBoxLabel.setText("Value: " + String.valueOf(randomNum));
+            engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), randomNum),currentSimulationID);
+            randomize.setSelected(false);
+        }
+        else {
+            engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), propertySlider.getValue()),currentSimulationID);
+        }
+        propertyComboBox.getItems().remove(propertyComboBox.getSelectionModel().getSelectedItem());
+        if ((--amountOfProperties) == 0) {
+            propertyComboBox.setDisable(true);
+            propertySlider.setDisable(true);
+            propertyComboBoxLabel.setText("Value: 0");
+            setChosenProperty.setDisable(true);
+        }
+        if (amountOfEntities == 0 && amountOfProperties == 0) {
+            runButton.setDisable(false);
+        }
     }
 }
