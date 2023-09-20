@@ -6,6 +6,7 @@ import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.grid.api.Coordinate;
 import engine.grid.impl.Grid;
+import simulations.dto.SimulationDTO;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,6 +25,7 @@ public class World {
     private List<EntityInstance> allInstances;
     private final int maxEntitiesAmount;
     private int currentEntitiesAmount;
+
     //Constructors
 
     public World(Termination termination, List<EntityDefinition> entities, Environment environment,

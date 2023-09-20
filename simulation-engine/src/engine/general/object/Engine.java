@@ -3,10 +3,12 @@ package engine.general.object;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
 import engine.exception.XMLException;
+import engine.general.multiThread.api.Status;
 import engine.general.multiThread.impl.SimulationExecutionManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.NewXMLReader;
 import enginetoui.dto.basic.impl.*;
+import simulations.dto.SimulationDTO;
 import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
 
@@ -36,38 +38,22 @@ public class Engine {
         int simulationID = -1;
         if (!filePath.isEmpty()) {
             World aWholeNewworld = reader.ReadXML(filePath);
-            simulationID =  simulationManager.CreateSimulation(aWholeNewworld);
+            simulationID = simulationManager.CreateSimulation(aWholeNewworld);
 
         }
         return simulationID;
     }
 
     public void setupPopulation(EntityAmountDTO entityAmount, int id) {
-        /*
-         * TODO:
-         *  1. make sure that the size of the population isn't larger than the grid size
-         */
-
-        World currentWorld = simulationManager.getWorld(id);
-        if (currentWorld != null) {
-            currentWorld.createPopulationOfEntity(entityAmount.entityName, entityAmount.amountInPopulation);
-        }
+        this.simulationManager.setupPopulation(entityAmount, id);
     }
 
-    public void setupPopulation(List<EntityAmountDTO> entityAmount, int id) {
+    public void setupPopulations(List<EntityAmountDTO> entityAmount, int id) {
         entityAmount.forEach(currentEntity -> setupPopulation(currentEntity, id));
     }
 
     public void setupEnvProperties(PropertyInitializeDTO envProperty, int id) {
-        if (envProperty.value instanceof Integer) {
-            SetVariable(envProperty.propertyName, (Integer) envProperty.value, id);
-        } else if (envProperty.value instanceof Double) {
-            SetVariable(envProperty.propertyName, (Double) envProperty.value, id);
-        } else if (envProperty.value instanceof Boolean) {
-            SetVariable(envProperty.propertyName, String.valueOf(envProperty.value), id);
-        } else {
-            SetVariable(envProperty.propertyName, (String) envProperty.value, id);
-        }
+        this.simulationManager.setupEnvProperties(envProperty, id);
     }
 
     public void setupEnvProperties(List<PropertyInitializeDTO> envProperties, int id) {
@@ -112,46 +98,6 @@ public class Engine {
         return resultList;
     }
 
-    public void SetVariable(String variableName, int value, int id) {
-        if (simulationManager.getWorld(id) != null) {
-            double from = simulationManager.getWorld(id).getEnvironment().getProperty(variableName).getFrom();
-            double to = simulationManager.getWorld(id).getEnvironment().getProperty(variableName).getTo();
-            if (value < (int) from || value > (int) to) {
-                throw new RuntimeException("The value " + value + " is out of bound\n" +
-                        "The value should be between: " + (int) from + " to: " + (int) to);
-            }
-            simulationManager.getWorld(id).getEnvironment().updateProperty(variableName, value);
-        }
-    }
-
-    public void SetVariable(String variableName, double value, int id) {
-        if (simulationManager.getWorld(id) != null) {
-            double from = simulationManager.getWorld(id).getEnvironment().getProperty(variableName).getFrom();
-            double to = simulationManager.getWorld(id).getEnvironment().getProperty(variableName).getTo();
-            if (value < from || value > to) {
-                throw new RuntimeException("The value " + value + " is out of bound\n" +
-                        "The value should be between: " + from + " to: " + to);
-            }
-            simulationManager.getWorld(id).getEnvironment().updateProperty(variableName, value);
-        }
-    }
-
-    public void SetVariableBool(String variableName, String value, int id) {
-        if (simulationManager.getWorld(id) != null) {
-            if (!(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"))) {
-                throw new RuntimeException("The value " + value + " cannot be parsed to boolean\n" +
-                        "The value should be \"true\" or \"false\"");
-            }
-            simulationManager.getWorld(id).getEnvironment().updateProperty(variableName, Boolean.parseBoolean(value));
-        }
-    }
-
-    public void SetVariable(String variableName, String value, int id) {
-        if (simulationManager.getWorld(id) != null) {
-            simulationManager.getWorld(id).getEnvironment().updateProperty(variableName, value);
-        }
-    }
-
     public WorldDTO getWorldDTO(int id) {
         return simulationManager.getWorldDTO(id);
     }
@@ -184,5 +130,28 @@ public class Engine {
 
     public SimulationStatusDTO getSimulationDetails(int id) {
         return simulationManager.getSimulationDetails(id);
+    }
+
+    public int reRunSimulation(int id) throws JAXBException {
+        int newSimID = -1;
+        if(this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.DONE) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.ABORTED)) {
+            SimulationDTO currentSim = this.getSimulationManager().getSimulationDTO(id);
+            newSimID = setupSimulation();
+            Map<String, Object> envVariables = currentSim.getEnvProperties();
+            for(Map.Entry<String, Object> entry : envVariables.entrySet()) {
+                PropertyInitializeDTO currentProperty = new PropertyInitializeDTO(entry.getKey(), entry.getValue());
+                setupEnvProperties(currentProperty, newSimID);
+            }
+            Map<String, Integer> entities = currentSim.getPopulations();
+            for(Map.Entry<String, Integer> entry : entities.entrySet()) {
+                EntityAmountDTO currentEntity = new EntityAmountDTO(entry.getKey(), entry.getValue());
+                setupPopulation(currentEntity, newSimID);
+            }
+            return newSimID;
+        } else if (this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.RUNNING) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.PAUSED)){
+            throw new RuntimeException("The simulation is still running");
+        } else {
+            throw new RuntimeException("No such simulation ");
+        }
     }
 }

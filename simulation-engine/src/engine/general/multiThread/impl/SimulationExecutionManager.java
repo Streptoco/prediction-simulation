@@ -6,6 +6,9 @@ import engine.general.multiThread.api.Status;
 import engine.general.object.World;
 import enginetoui.dto.basic.impl.SimulationStatusDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
+import simulations.dto.SimulationDTO;
+import uitoengine.filetransfer.EntityAmountDTO;
+import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -32,6 +35,25 @@ public class SimulationExecutionManager {
         SimulationRunner currentSimulation = new SimulationRunner(world, simulationCounter);
         simulations.put(simulationCounter, currentSimulation);
         return simulationCounter++;
+    }
+
+    public void setupEnvProperties(PropertyInitializeDTO envProperty, int id) {
+        if (envProperty.value instanceof Integer) {
+            this.simulations.get(id).SetVariable(envProperty.propertyName, (Integer) envProperty.value);
+        } else if (envProperty.value instanceof Double) {
+            this.simulations.get(id).SetVariable(envProperty.propertyName, (Double) envProperty.value);
+        } else if (envProperty.value instanceof Boolean) {
+            this.simulations.get(id).SetVariable(envProperty.propertyName, String.valueOf(envProperty.value));
+        } else {
+            this.simulations.get(id).SetVariable(envProperty.propertyName, (String) envProperty.value);
+        }
+    }
+
+    public void setupPopulation(EntityAmountDTO entityAmount, int id) {
+        World currentWorld = this.simulations.get(id).getWorld();
+        if (currentWorld != null) {
+            this.simulations.get(id).SetPopulation(entityAmount.entityName, entityAmount.amountInPopulation);
+        }
     }
 
     public void StartSimulation(int id) {
@@ -66,6 +88,10 @@ public class SimulationExecutionManager {
         return getWorld(id);
     }
 
+    public SimulationRunner getSimulationRunner(int id) {
+        return simulations.get(id);
+    }
+
     public void pauseSimulation(int id) {
         executor.execute(simulations.get(id)::pauseSimulation);
     }
@@ -91,6 +117,9 @@ public class SimulationExecutionManager {
         return simulations.get(id).getStatus();
     }
 
+    public SimulationDTO getSimulationDTO(int id) {
+        return simulations.get(id).getSimulationDTO();
+    }
 
     public int getSimulationTick(int id) {
         return simulations.get(id).getTick();

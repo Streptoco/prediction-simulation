@@ -3,6 +3,7 @@ package engine.general.multiThread.api;
 import engine.entity.impl.EntityInstanceManager;
 import engine.general.object.Rule;
 import engine.general.object.World;
+import simulations.dto.SimulationDTO;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,6 +18,7 @@ public class SimulationRunner implements Runnable {
     private long currentTime;
     private final Date simDate;
     private final SimpleDateFormat simulationDate;
+    private SimulationDTO simulationDTO;
 
     public SimulationRunner(World world, int id) {
         this.world = world;
@@ -26,6 +28,59 @@ public class SimulationRunner implements Runnable {
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
+    }
+
+    public void SetVariable(String variableName, int value) {
+        if (this.world != null) {
+            double from = this.world.getEnvironment().getProperty(variableName).getFrom();
+            double to = this.world.getEnvironment().getProperty(variableName).getTo();
+            if (value < (int) from || value > (int) to) {
+                throw new RuntimeException("The value " + value + " is out of bound\n" +
+                        "The value should be between: " + (int) from + " to: " + (int) to);
+            }
+            this.world.getEnvironment().updateProperty(variableName, value);
+            this.simulationDTO.addEnvVariable(variableName, value);
+        }
+    }
+
+    public void SetVariable(String variableName, double value) {
+        if (this.world != null) {
+            double from = this.world.getEnvironment().getProperty(variableName).getFrom();
+            double to = this.world.getEnvironment().getProperty(variableName).getTo();
+            if (value < from || value > to) {
+                throw new RuntimeException("The value " + value + " is out of bound\n" +
+                        "The value should be between: " + from + " to: " + to);
+            }
+            this.world.getEnvironment().updateProperty(variableName, value);
+            this.simulationDTO.addEnvVariable(variableName, value);
+        }
+    }
+
+    private void SetVariableBool(String variableName, String value) {
+        if (this.world != null) {
+            if (!(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false"))) {
+                throw new RuntimeException("The value " + value + " cannot be parsed to boolean\n" +
+                        "The value should be \"true\" or \"false\"");
+            }
+            this.world.getEnvironment().updateProperty(variableName, Boolean.parseBoolean(value));
+            this.simulationDTO.addEnvVariable(variableName, Boolean.parseBoolean(value));
+        }
+    }
+
+    public void SetVariable(String variableName, String value) {
+        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+            SetVariableBool(variableName, value);
+        } else {
+            if (this.world != null) {
+                this.world.getEnvironment().updateProperty(variableName, value);
+                this.simulationDTO.addEnvVariable(variableName, value);
+            }
+        }
+    }
+
+    public void SetPopulation(String entityName, int population) {
+        this.world.createPopulationOfEntity(entityName, population);
+        this.simulationDTO.addPopulation(entityName, population);
     }
 
     public World getWorld() {
@@ -90,7 +145,6 @@ public class SimulationRunner implements Runnable {
         }
     }
 
-
     public void simulationManualStep() {
         if (this.status.equals(Status.PAUSED)) {
             if (world.getTermination().getTermination(ticks, this.currentTime)) {
@@ -112,6 +166,8 @@ public class SimulationRunner implements Runnable {
             }
         }
     }
+
+    public SimulationDTO getSimulationDTO() { return this.simulationDTO; }
 
     @Override
     public void run() {
