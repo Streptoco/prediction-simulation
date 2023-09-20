@@ -168,7 +168,9 @@ public class SimulationRunner implements Runnable {
         }
     }
 
-    public SimulationDTO getSimulationDTO() { return this.simulationDTO; }
+    public SimulationDTO getSimulationDTO() {
+        return this.simulationDTO;
+    }
 
     @Override
     public void run() {
