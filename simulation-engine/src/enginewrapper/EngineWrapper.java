@@ -12,7 +12,7 @@ public class EngineWrapper {
     public static void main(String[] args) {
         int simID0 = 0, simID1 = 1, simID2 = 2;
         Engine engine = new Engine();
-        engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml".trim());
+        engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\prediction-simulation\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml".trim());
         //engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified-2.xml".trim());
         //engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus.xml".trim());
         //engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\master-ex2.xml".trim());
@@ -52,6 +52,7 @@ public class EngineWrapper {
 
             SimulationStatusDTO sim00 = engine.getSimulationDetails(simID0);
             System.out.println("hey lol");
+            engine.reRunSimulation(simID0);
         } catch (JAXBException | InterruptedException | RuntimeException e) {
             System.out.println(e.getMessage());
         }

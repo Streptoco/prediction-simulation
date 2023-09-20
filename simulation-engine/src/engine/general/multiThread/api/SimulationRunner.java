@@ -28,6 +28,7 @@ public class SimulationRunner implements Runnable {
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
+        this.simulationDTO = new SimulationDTO();
     }
 
     public void SetVariable(String variableName, int value) {
