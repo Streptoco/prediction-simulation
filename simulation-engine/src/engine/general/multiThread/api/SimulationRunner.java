@@ -1,8 +1,11 @@
 package engine.general.multiThread.api;
 
+import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.general.object.Rule;
 import engine.general.object.World;
+import engine.property.api.PropertyInterface;
+import enginetoui.dto.basic.impl.WorldDTO;
 import simulations.dto.PopulationsDTO;
 import simulations.dto.SimulationDTO;
 
@@ -181,8 +184,26 @@ public class SimulationRunner implements Runnable {
         if (status.equals(Status.DONE) || status.equals(Status.ABORTED)) {
             return world.getConsistency(entityName, propertyName);
         } else {
-            throw new RuntimeException("The simulation is still running");
+            throw new RuntimeException("The simulation: " + simID + " is still running, so can't get consistency now");
         }
+    }
+
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName) {
+        Map<String, Integer> resultMap = new HashMap<>();
+        EntityInstanceManager entity = this.world.getManagers().get(entityName);
+        for (EntityInstance currentInstance : entity.getInstances()) {
+            if (!currentInstance.isAlive()) {
+                continue;
+            }
+            PropertyInterface currentProperty = currentInstance.getPropertyByName(propertyName);
+            if (resultMap.containsKey((currentProperty.getValue().toString()))) {
+                int val = (resultMap.get(currentProperty.getValue().toString())) + 1;
+                resultMap.put((currentInstance.getPropertyByName(propertyName).getValue().toString()), val);
+            } else {
+                resultMap.put(currentProperty.getValue().toString(), 1);
+            }
+        }
+        return resultMap;
     }
 
     @Override

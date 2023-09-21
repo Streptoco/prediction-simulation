@@ -49,21 +49,28 @@ public class EngineWrapper {
             Thread.sleep(1000);
             //engine.stopSimulation(simID1);
             engine.resumeSimulation(simID2);
+            Thread.sleep(1000);
 //            Thread.sleep(3000);
 //            engine.stopSimulation(simID2);
 
             SimulationStatusDTO sim00 = engine.getSimulationDetails(simID0);
-            System.out.println("hey lol");
-            System.out.println(engine.getConsistency("Sick", "vacinated", simID2));
-            Map<Integer, PopulationsDTO> amounts = engine.getEntitiesAmountPerTick(simID2);
-            for(Map.Entry<Integer, PopulationsDTO> entry : amounts.entrySet()) {
-                System.out.println(entry.getKey() + ". ");
-                for(Map.Entry<String, Integer> currentEntity : entry.getValue().getEntities().entrySet()) {
-                        System.out.println("\t" + currentEntity.getKey() + ": " + currentEntity.getValue());
-                }
-                System.out.println();
+//            System.out.println(engine.getConsistency("Sick", "vacinated", simID2));
+//            Map<Integer, PopulationsDTO> amounts = engine.getEntitiesAmountPerTick(simID2);
+//            for(Map.Entry<Integer, PopulationsDTO> entry : amounts.entrySet()) {
+//                System.out.println(entry.getKey() + ". ");
+//                for(Map.Entry<String, Integer> currentEntity : entry.getValue().getEntities().entrySet()) {
+//                        System.out.println("\t" + currentEntity.getKey() + ": " + currentEntity.getValue());
+//                }
+//                System.out.println();
+//            }
+//            engine.reRunSimulation(simID0);
+            Map<String, Integer> histogram = engine.GetHistogram("Sick", "age", simID2);
+            for (Map.Entry<String, Integer> entry : histogram.entrySet()) {
+                String key = entry.getKey();
+                Integer value = entry.getValue();
+                System.out.println("Value: " + key + ", Amount: " + value);
             }
-            engine.reRunSimulation(simID0);
+            System.out.println("hey lol");
         } catch (JAXBException | InterruptedException | RuntimeException e) {
             System.out.println(e.getMessage());
         }

@@ -165,6 +165,10 @@ public class SimulationExecutionManager {
         return simulations.get(id).getConsistency(entityName, propertyName);
     }
 
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName, int id) {
+        return this.simulations.get(id).GetHistogram(entityName, propertyName);
+    }
+
     public int getNumberOfRunningSimulations() {
         int count = 0;
         for (Map.Entry<Integer, SimulationRunner> entry : simulations.entrySet()) {

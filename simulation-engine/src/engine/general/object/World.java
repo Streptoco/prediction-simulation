@@ -207,28 +207,6 @@ public class World {
         this.currentTime = System.currentTimeMillis();
     }
 
-    public void NewRun() {
-        int ticks = 0;
-        this.currentTime = System.currentTimeMillis();
-        getAllInstances();
-        grid.assignSacks(this.allInstances);
-        while (termination.getTermination(ticks, currentTime)) {
-            if (ticks != 0) {
-                grid.MoveSacks();
-                System.out.println("Move number " + ticks);
-                grid.drawGrid();
-            } else {
-                grid.drawGrid();
-            }
-            for (Rule rule : rules) {
-                if (rule.CheckTicks(ticks)) {
-                    rule.NewInvokeAction(this.managers, this.activeEnvironment, this.grid, ticks);
-                }
-            }
-            removeSpecifiedEntities();
-            ticks++;
-        }
-    }
 
     public synchronized void doWhenTickIsOver(int currentTick) {
         removeSpecifiedEntities();

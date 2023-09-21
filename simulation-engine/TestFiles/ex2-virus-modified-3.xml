@@ -20,7 +20,7 @@
 		</PRD-entity>
 		<PRD-entity name="Sick">
 			<PRD-properties>
-				<PRD-property type="float">
+				<PRD-property type="decimal">
 					<PRD-name>age</PRD-name>
 					<PRD-range to="70" from="20"/>
 					<PRD-value random-initialize="true"/>

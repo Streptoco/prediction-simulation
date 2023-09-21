@@ -151,7 +151,7 @@ public class Engine {
             runSimulation(newSimID);
             return newSimID;
         } else if (this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.RUNNING) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.PAUSED)){
-            throw new RuntimeException("The simulation is still running");
+            throw new RuntimeException("The simulation: " + id + " is still running, so can't rerun the simulation");
         } else {
             throw new RuntimeException("No such simulation ");
         }
@@ -163,5 +163,9 @@ public class Engine {
 
     public double getConsistency(String entityName, String propertyName, int id) {
         return simulationManager.getConsistency(entityName, propertyName, id);
+    }
+
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName, int id) {
+        return this.simulationManager.GetHistogram(entityName, propertyName, id);
     }
 }
