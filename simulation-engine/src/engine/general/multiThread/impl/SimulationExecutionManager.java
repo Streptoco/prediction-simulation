@@ -6,6 +6,7 @@ import engine.general.multiThread.api.Status;
 import engine.general.object.World;
 import enginetoui.dto.basic.impl.SimulationStatusDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
+import simulations.dto.PopulationsDTO;
 import simulations.dto.SimulationDTO;
 import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
@@ -93,11 +94,19 @@ public class SimulationExecutionManager {
     }
 
     public void pauseSimulation(int id) {
-        executor.execute(simulations.get(id)::pauseSimulation);
+        if(this.simulations.get(id).getStatus().equals(Status.RUNNING)) {
+            executor.execute(simulations.get(id)::pauseSimulation);
+        } else {
+            throw new RuntimeException("The simulation: " + id + " isn't running, so pausing the simulation isn't possible");
+        }
     }
 
     public void resumeSimulation(int id) {
-        executor.execute(simulations.get(id)::resumeSimulation);
+        if(this.simulations.get(id).getStatus().equals(Status.PAUSED)) {
+            executor.execute(simulations.get(id)::resumeSimulation);
+        } else {
+            throw new RuntimeException("The simulation " + id + " isn't paused, so resuming the simulation isn't possible");
+        }
     }
 
     public void abortSimulation(int id) {
@@ -110,7 +119,11 @@ public class SimulationExecutionManager {
     }
 
     public void simulationManualStep(int id) {
-        executor.execute(simulations.get(id)::simulationManualStep);
+        if(this.simulations.get(id).getStatus().equals(Status.PAUSED)) {
+            executor.execute(simulations.get(id)::simulationManualStep);
+        } else {
+            throw new RuntimeException("The simulation: " + id + " isn't paused, so manual step isn't available");
+        }
     }
 
     public Status getSimulationStatus(int id) {
@@ -142,6 +155,14 @@ public class SimulationExecutionManager {
         return resultDTO;
 
 
+    }
+
+    public Map<Integer, PopulationsDTO> getEntitiesAmountPerTick(int id) {
+        return this.simulations.get(id).getEntitiesAmountPerTick();
+    }
+
+    public double getConsistency(String entityName, String propertyName, int id) {
+        return simulations.get(id).getConsistency(entityName, propertyName);
     }
 
     public int getNumberOfRunningSimulations() {

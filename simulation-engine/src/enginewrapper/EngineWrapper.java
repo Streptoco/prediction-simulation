@@ -3,10 +3,12 @@ package enginewrapper;
 import engine.exception.XMLException;
 import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.SimulationStatusDTO;
+import simulations.dto.PopulationsDTO;
 import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import javax.xml.bind.JAXBException;
+import java.util.Map;
 
 public class EngineWrapper {
     public static void main(String[] args) {
@@ -35,16 +37,16 @@ public class EngineWrapper {
             engine.runSimulation(simID1);
             engine.runSimulation(simID2);
 
-            Thread.sleep(2000);
-            SimulationStatusDTO sim01 = engine.getSimulationDetails(simID1);
+            Thread.sleep(90);
             engine.abortSimulation(simID0);
-            Thread.sleep(1000);
+            SimulationStatusDTO sim01 = engine.getSimulationDetails(simID1);
+            Thread.sleep(500);
             engine.pauseSimulation(simID2);
-            //Thread.sleep(1000);
+            Thread.sleep(500);
             SimulationStatusDTO sim02 = engine.getSimulationDetails(simID2);
             engine.simulationManualStep(simID2);
             engine.simulationManualStep(simID2);
-            Thread.sleep(3000);
+            Thread.sleep(1000);
             //engine.stopSimulation(simID1);
             engine.resumeSimulation(simID2);
 //            Thread.sleep(3000);
@@ -52,6 +54,15 @@ public class EngineWrapper {
 
             SimulationStatusDTO sim00 = engine.getSimulationDetails(simID0);
             System.out.println("hey lol");
+            System.out.println(engine.getConsistency("Sick", "vacinated", simID2));
+            Map<Integer, PopulationsDTO> amounts = engine.getEntitiesAmountPerTick(simID2);
+            for(Map.Entry<Integer, PopulationsDTO> entry : amounts.entrySet()) {
+                System.out.println(entry.getKey() + ". ");
+                for(Map.Entry<String, Integer> currentEntity : entry.getValue().getEntities().entrySet()) {
+                        System.out.println("\t" + currentEntity.getKey() + ": " + currentEntity.getValue());
+                }
+                System.out.println();
+            }
             engine.reRunSimulation(simID0);
         } catch (JAXBException | InterruptedException | RuntimeException e) {
             System.out.println(e.getMessage());

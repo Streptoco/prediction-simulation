@@ -3,6 +3,7 @@ package engine.general.multiThread.api;
 import engine.entity.impl.EntityInstanceManager;
 import engine.general.object.Rule;
 import engine.general.object.World;
+import simulations.dto.PopulationsDTO;
 import simulations.dto.SimulationDTO;
 
 import java.text.SimpleDateFormat;
@@ -162,7 +163,7 @@ public class SimulationRunner implements Runnable {
                         }
                     }
                 }
-                world.doWhenTickIsOver();
+                world.doWhenTickIsOver(this.ticks);
                 ticks++;
             }
         }
@@ -172,10 +173,23 @@ public class SimulationRunner implements Runnable {
         return this.simulationDTO;
     }
 
+    public Map<Integer, PopulationsDTO> getEntitiesAmountPerTick() {
+        return world.getEntitiesAmountPerTick();
+    }
+
+    public double getConsistency(String entityName, String propertyName) {
+        if (status.equals(Status.DONE) || status.equals(Status.ABORTED)) {
+            return world.getConsistency(entityName, propertyName);
+        } else {
+            throw new RuntimeException("The simulation is still running");
+        }
+    }
+
     @Override
     public void run() {
         System.out.println("[Thread: " + Thread.currentThread().getName() + "] Starting the simulation" + " Sim ID: " + simID);
         this.currentTime = System.currentTimeMillis();
+        world.initializeEntitiesAmount();
         if (!this.status.equals(Status.ABORTED)) {
             this.status = Status.RUNNING;
         }
@@ -192,7 +206,7 @@ public class SimulationRunner implements Runnable {
                 }
             }
             synchronized (this.world) {
-                world.doWhenTickIsOver();
+                world.doWhenTickIsOver(this.ticks);
             }
             checkIfNeedToPause();
             if (this.status.equals(Status.ABORTED)) {

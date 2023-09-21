@@ -33,7 +33,9 @@ public class BooleanProperty extends AbstractProperty {
 
     public void setValue(boolean newVal, int currentTick) {
         this.value = newVal;
+        this.sumOfConsistency += timeSinceLastChange(currentTick);
         this.lastChangedTick = currentTick;
+        this.countOfChanges++;
     }
 
     @Override

@@ -8,6 +8,7 @@ import engine.general.multiThread.impl.SimulationExecutionManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.NewXMLReader;
 import enginetoui.dto.basic.impl.*;
+import simulations.dto.PopulationsDTO;
 import simulations.dto.SimulationDTO;
 import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
@@ -154,5 +155,13 @@ public class Engine {
         } else {
             throw new RuntimeException("No such simulation ");
         }
+    }
+
+    public Map<Integer, PopulationsDTO> getEntitiesAmountPerTick(int id) {
+        return simulationManager.getEntitiesAmountPerTick(id);
+    }
+
+    public double getConsistency(String entityName, String propertyName, int id) {
+        return simulationManager.getConsistency(entityName, propertyName, id);
     }
 }

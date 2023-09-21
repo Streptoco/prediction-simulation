@@ -6,7 +6,9 @@ import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.grid.api.Coordinate;
 import engine.grid.impl.Grid;
+import simulations.dto.PopulationsDTO;
 import simulations.dto.SimulationDTO;
+import uitoengine.filetransfer.EntityAmountDTO;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -25,6 +27,7 @@ public class World {
     private List<EntityInstance> allInstances;
     private final int maxEntitiesAmount;
     private int currentEntitiesAmount;
+    private Map<Integer, PopulationsDTO> entitiesAmountPerTick;
 
     //Constructors
 
@@ -52,6 +55,14 @@ public class World {
         }
     }
 
+    public void initializeEntitiesAmount() {
+        this.entitiesAmountPerTick = new HashMap<>();
+        List<EntityAmountDTO> amounts = new ArrayList<>();
+        for (Map.Entry<String, EntityInstanceManager> entry : managers.entrySet()) {
+            amounts.add(new EntityAmountDTO(entry.getKey(), entry.getValue().getCountInstances()));
+        }
+        this.entitiesAmountPerTick.put(0, new PopulationsDTO(amounts));
+    }
 
     public int getNumOfThreads() {
         return numOfThreads;
@@ -63,6 +74,10 @@ public class World {
 
     public int getCols() {
         return this.grid.getCols();
+    }
+
+    public Map<Integer, PopulationsDTO> getEntitiesAmountPerTick() {
+        return entitiesAmountPerTick;
     }
 
     public static double NumberRandomGetter(double rangeMin, double rangeMax) {
@@ -141,7 +156,7 @@ public class World {
     }
 
     public void createPopulationOfEntity(String entityName, int population) {
-        if(currentEntitiesAmount + population <= maxEntitiesAmount) {
+        if (currentEntitiesAmount + population <= maxEntitiesAmount) {
             currentEntitiesAmount += population;
             EntityDefinition entityToCreate = null;
             boolean found = false;
@@ -192,7 +207,6 @@ public class World {
         this.currentTime = System.currentTimeMillis();
     }
 
-
     public void NewRun() {
         int ticks = 0;
         this.currentTime = System.currentTimeMillis();
@@ -216,8 +230,26 @@ public class World {
         }
     }
 
-     public synchronized void doWhenTickIsOver() {
+    public synchronized void doWhenTickIsOver(int currentTick) {
         removeSpecifiedEntities();
+        if(currentTick != 0) {
+            List<EntityAmountDTO> amounts = new ArrayList<>();
+            for (Map.Entry<String, EntityInstanceManager> entry : managers.entrySet()) {
+                amounts.add(new EntityAmountDTO(entry.getKey(), entry.getValue().getCountInstances()));
+            }
+            this.entitiesAmountPerTick.put(currentTick, new PopulationsDTO(amounts));
+        }
+    }
+
+    public double getConsistency(String entityName, String propertyName) {
+        double result = 0;
+        EntityInstanceManager currentManager = this.managers.get(entityName);
+        for(EntityInstance currentEntity : currentManager.getInstances()) {
+            if(currentEntity.isAlive()) {
+                result += currentEntity.getPropertyByName(propertyName).getAverageTimeOfChange();
+            }
+        }
+        return result / currentManager.getCountInstances();
     }
 
     public Termination getTermination() {

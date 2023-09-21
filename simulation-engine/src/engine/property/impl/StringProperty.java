@@ -33,7 +33,9 @@ public class StringProperty extends AbstractProperty {
 
     public void setValue(String newVal, int currentTick) {
         this.value = newVal;
+        this.sumOfConsistency += timeSinceLastChange(currentTick);
         this.lastChangedTick = currentTick;
+        this.countOfChanges++;
     }
 
     @Override

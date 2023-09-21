@@ -18,20 +18,26 @@ public class DecimalProperty extends AbstractProperty {
     public void increaseValue(double value, int currentTick) {
         if (super.getFrom() < (this.value + value) && super.getTo() > (this.value + value)) {
             this.value += value;
+            this.sumOfConsistency += timeSinceLastChange(currentTick);
             this.lastChangedTick = currentTick;
+            this.countOfChanges++;
         }
     }
 
     public void decreaseValue(double value, int currentTick) {
         if (super.getFrom() < (this.value - value) && super.getTo() > (this.value - value)) { // from: 10 to: 60 // 32 - 11.25
             this.value -= value;
+            this.sumOfConsistency += timeSinceLastChange(currentTick);
             this.lastChangedTick = currentTick;
+            this.countOfChanges++;
         }
     }
     public void setValue(double value, int currentTick) {
         if (super.getFrom() < value && super.getTo() > value) {
             this.value = value;
+            this.sumOfConsistency += timeSinceLastChange(currentTick);
             this.lastChangedTick = currentTick;
+            this.countOfChanges++;
         }
     }
 
