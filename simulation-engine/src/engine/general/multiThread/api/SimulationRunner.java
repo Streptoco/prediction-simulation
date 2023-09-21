@@ -206,6 +206,10 @@ public class SimulationRunner implements Runnable {
         return resultMap;
     }
 
+    public double averageValueOfProperty(String entityName, String propertyName) {
+        return this.world.averageValueOfProperty(entityName, propertyName);
+    }
+
     @Override
     public void run() {
         System.out.println("[Thread: " + Thread.currentThread().getName() + "] Starting the simulation" + " Sim ID: " + simID);

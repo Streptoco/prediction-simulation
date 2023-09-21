@@ -168,4 +168,8 @@ public class Engine {
     public Map<String, Integer> GetHistogram(String entityName, String propertyName, int id) {
         return this.simulationManager.GetHistogram(entityName, propertyName, id);
     }
+
+    public double averageValueOfProperty(String entityName, String propertyName, int id) {
+        return simulationManager.averageValueOfProperty(entityName, propertyName, id);
+    }
 }

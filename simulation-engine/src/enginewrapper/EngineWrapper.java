@@ -70,6 +70,7 @@ public class EngineWrapper {
                 Integer value = entry.getValue();
                 System.out.println("Value: " + key + ", Amount: " + value);
             }
+            System.out.println(engine.averageValueOfProperty("Sick", "age", simID2));
             System.out.println("hey lol");
         } catch (JAXBException | InterruptedException | RuntimeException e) {
             System.out.println(e.getMessage());

@@ -169,6 +169,10 @@ public class SimulationExecutionManager {
         return this.simulations.get(id).GetHistogram(entityName, propertyName);
     }
 
+    public double averageValueOfProperty(String entityName, String propertyName, int id) {
+        return simulations.get(id).averageValueOfProperty(entityName, propertyName);
+    }
+
     public int getNumberOfRunningSimulations() {
         int count = 0;
         for (Map.Entry<Integer, SimulationRunner> entry : simulations.entrySet()) {

@@ -1,11 +1,13 @@
 package engine.general.object;
 
+import engine.action.expression.ReturnType;
 import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.grid.api.Coordinate;
 import engine.grid.impl.Grid;
+import engine.property.api.PropertyInterface;
 import simulations.dto.PopulationsDTO;
 import simulations.dto.SimulationDTO;
 import uitoengine.filetransfer.EntityAmountDTO;
@@ -210,7 +212,7 @@ public class World {
 
     public synchronized void doWhenTickIsOver(int currentTick) {
         removeSpecifiedEntities();
-        if(currentTick != 0) {
+        if (currentTick != 0) {
             List<EntityAmountDTO> amounts = new ArrayList<>();
             for (Map.Entry<String, EntityInstanceManager> entry : managers.entrySet()) {
                 amounts.add(new EntityAmountDTO(entry.getKey(), entry.getValue().getCountInstances()));
@@ -222,12 +224,46 @@ public class World {
     public double getConsistency(String entityName, String propertyName) {
         double result = 0;
         EntityInstanceManager currentManager = this.managers.get(entityName);
-        for(EntityInstance currentEntity : currentManager.getInstances()) {
-            if(currentEntity.isAlive()) {
+        for (EntityInstance currentEntity : currentManager.getInstances()) {
+            if (currentEntity.isAlive()) {
                 result += currentEntity.getPropertyByName(propertyName).getAverageTimeOfChange();
             }
         }
         return result / currentManager.getCountInstances();
+    }
+
+    public double averageValueOfProperty(String entityName, String propertyName) {
+        double result = 0;
+        boolean found = false;
+        EntityInstanceManager currentManager = null;
+        for (EntityDefinition entity : entities) {
+            if (entity.getName().equalsIgnoreCase(entityName)) {
+                for (PropertyInterface property : entity.getProps()) {
+                    if (property.getName().equalsIgnoreCase(propertyName)) {
+                        if (property.getPropertyType().equals(ReturnType.DECIMAL) || property.getPropertyType().equals(ReturnType.INT)) {
+                            found = true;
+                            break;
+                        } else {
+                            throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " isn't a number");
+                        }
+                    } else {
+                        throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " didn't found");
+                    }
+                }
+
+            }
+        }
+        if (!found) {
+            throw new RuntimeException("The entity: " + entityName + " didn't found");
+        } else {
+            currentManager = this.managers.get(entityName);
+            for (EntityInstance currentEntity : currentManager.getInstances()) {
+                if (currentEntity.isAlive()) {
+                    result += (int) currentEntity.getPropertyByName(propertyName).getValue();
+                }
+            }
+            return result / currentManager.getCountInstances();
+        }
     }
 
     public Termination getTermination() {
