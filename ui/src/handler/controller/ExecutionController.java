@@ -31,6 +31,7 @@ public class ExecutionController implements Initializable {
     private int currentPopulation = 0;
     private int amountOfEntities = 0;
     private int amountOfProperties = 0;
+    boolean simulationStartedNoGoingBack = false;
     @FXML
     Button setChosenProperty;
     @FXML
@@ -67,11 +68,6 @@ public class ExecutionController implements Initializable {
 
 //        this.currentSimulationID = (int) resources.getObject("SimulationID");
         this.engine = (Engine) resources.getObject("Engine");
-        try {
-            this.currentSimulationID = engine.setupSimulation();
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
         this.world = engine.getWorldDTO(currentSimulationID);
 
         runButton.setDisable(true);
@@ -86,10 +82,6 @@ public class ExecutionController implements Initializable {
             propertyComboBox.getItems().add(propertyDTO); // add all properties to combo box
             amountOfProperties++;
         }
-
-//        PropertyDTO propertyDTO = new PropertyDTO("Name", ReturnType.DECIMAL, 0,19, false);
-//        propertyComboBox.getItems().add(propertyDTO);
-//        amountOfProperties++; // TODO: THIS IS A TEST
 
         propertyComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -111,13 +103,8 @@ public class ExecutionController implements Initializable {
     }
 
     public void customClearInitialize() {
-
+        simulationStartedNoGoingBack = false;
         this.runButton.setDisable(true);
-        try {
-            this.currentSimulationID = engine.setupSimulation();
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
         this.world = engine.getWorldDTO(currentSimulationID);
         runButton.setDisable(true);
         entitySlider.setDisable(true);
@@ -160,6 +147,14 @@ public class ExecutionController implements Initializable {
     }
 
     public void updatePopulation(ActionEvent actionEvent) {
+        if (!simulationStartedNoGoingBack) {
+            try {
+                this.currentSimulationID = engine.setupSimulation();
+            } catch (JAXBException e) {
+                throw new RuntimeException(e);
+            }
+            simulationStartedNoGoingBack = true;
+        }
         if (entityComboBox.getSelectionModel().getSelectedItem() == null) {
             return;
         }
@@ -183,6 +178,14 @@ public class ExecutionController implements Initializable {
     }
 
     public void updateProperty(ActionEvent actionEvent) {
+        if (!simulationStartedNoGoingBack) {
+            try {
+                this.currentSimulationID = engine.setupSimulation();
+            } catch (JAXBException e) {
+                throw new RuntimeException(e);
+            }
+            simulationStartedNoGoingBack = true;
+        }
         if (propertyComboBox.getSelectionModel().getSelectedItem() == null) {
             return;
         }
