@@ -99,17 +99,22 @@ public class MainController extends ResourceBundle implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         engine = new Engine();
 
+//        try {
+//            engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml");
+//            currentSimulation = engine.setupSimulation();
+//        } catch (JAXBException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        currentWorldDTO = engine.getWorldDTO(currentSimulation); // need to throw in a number here...
+        engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml");
         try {
-            engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml");
             currentSimulation = engine.setupSimulation();
-//            engine.setupPopulation(new EntityAmountDTO("Healthy", 30), 0);
-//            engine.setupPopulation(new EntityAmountDTO("Sick", 3), 0);
-//            engine.setupEnvProperties(new PropertyInitializeDTO("infection-proximity", 2), 0);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
-
-        currentWorldDTO = engine.getWorldDTO(currentSimulation); // need to throw in a number here...
+        currentWorldDTO = engine.getWorldDTO(currentSimulation);
+        // TODO: this is a test, don't touch
 
         StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
         textField.textProperty().bind(labelTextBinding);
@@ -139,11 +144,26 @@ public class MainController extends ResourceBundle implements Initializable {
         currentSceneHolder.getChildren().add(executionBox);
     }
 
+    private void ChangeDynamicResultsScreen() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL mainFXML = getClass().getResource("results-fxml.fxml");
+        fxmlLoader.setLocation(mainFXML);
+        fxmlLoader.setResources(this);
+        BorderPane resultsBox = fxmlLoader.load();
+        ResultsController resultsController = fxmlLoader.getController();
+        currentSceneHolder.getChildren().clear();
+        currentSceneHolder.getChildren().add(resultsBox);
+    }
+
     public void handleDetailsButton(ActionEvent actionEvent) throws IOException {
         ChangeDynamicDetailsScreen();
     }
 
     public void handleExecutionButton(ActionEvent actionEvent) throws IOException {
         ChangeDynamicExecutionScreen();
+    }
+
+    public void handleResultsButton(ActionEvent actionEvent) throws IOException {
+        ChangeDynamicResultsScreen();
     }
 }

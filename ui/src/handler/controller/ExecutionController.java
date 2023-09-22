@@ -18,6 +18,7 @@ import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.FileTransferDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
 
+import javax.xml.bind.JAXBException;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -62,9 +63,17 @@ public class ExecutionController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.runButton.setDisable(true);
-        this.world = (WorldDTO) resources.getObject("World");
+//        this.world = (WorldDTO) resources.getObject("World");
+
+//        this.currentSimulationID = (int) resources.getObject("SimulationID");
         this.engine = (Engine) resources.getObject("Engine");
-        this.currentSimulationID = (int) resources.getObject("SimulationID");
+        try {
+            this.currentSimulationID = engine.setupSimulation();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+        this.world = engine.getWorldDTO(currentSimulationID);
+
         runButton.setDisable(true);
         entitySlider.setDisable(true);
 
@@ -101,25 +110,35 @@ public class ExecutionController implements Initializable {
 
     }
 
-//    public void customClearInitialize(ResourceBundle resources) {
-//
-//        this.runButton.setDisable(true);
-//        this.world = (WorldDTO) resources.getObject("World");
-//        this.engine = (Engine) resources.getObject("Engine");
-//        this.currentSimulationID = (int) resources.getObject("SimulationID");
-//        runButton.setDisable(true);
-//        entitySlider.setDisable(true);
-//
-//        for (EntityDTO entityDTO : world.getEntities()) {
-//            entityComboBox.getItems().add(entityDTO); // add all entities to combo box
-//            amountOfEntities++;
-//        }
-//
-//        for (PropertyDTO propertyDTO : world.environment.propertyDTOs) {
-//            propertyComboBox.getItems().add(propertyDTO); // add all properties to combo box
-//            amountOfProperties++;
-//        }
-//    }
+    public void customClearInitialize() {
+
+        this.runButton.setDisable(true);
+        try {
+            this.currentSimulationID = engine.setupSimulation();
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+        this.world = engine.getWorldDTO(currentSimulationID);
+        runButton.setDisable(true);
+        entitySlider.setDisable(true);
+
+        for (EntityDTO entityDTO : world.getEntities()) {
+            entityComboBox.getItems().add(entityDTO); // add all entities to combo box
+            amountOfEntities++;
+        }
+
+        for (PropertyDTO propertyDTO : world.environment.propertyDTOs) {
+            propertyComboBox.getItems().add(propertyDTO); // add all properties to combo box
+            amountOfProperties++;
+        }
+        entityComboBox.setDisable(false);
+        propertyComboBox.setDisable(false);
+        entitySlider.setDisable(false);
+        propertySlider.setDisable(false);
+        setChosen.setDisable(false);
+        setChosenProperty.setDisable(false);
+        currentPopulation = 0;
+    }
 
     public void selectEntity(ActionEvent actionEvent) {
         // TODO: maybe in here we want to create a DTO to the engine OR use that API Afik made.
@@ -195,8 +214,9 @@ public class ExecutionController implements Initializable {
     }
 
     public void runSimulation(ActionEvent actionEvent) {
-        engine.runSimulation(currentSimulationID++);
+        engine.runSimulation(currentSimulationID);
         System.out.println("Sim number: " + currentSimulationID);
+        customClearInitialize();
     }
 
     public void clearSimulation(ActionEvent actionEvent) {

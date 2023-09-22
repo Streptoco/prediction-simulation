@@ -74,8 +74,9 @@ public class Engine {
         envProperties.forEach(currentProperty -> setupEnvProperties(currentProperty, id));
     }
 
-    public void runSimulation(int id) {
-        simulationManager.StartSimulation(id);
+    public int runSimulation(int id) {
+        simulationManager.StartSimulation(id++);
+        return id;
     }
 
     public List<EntityDTO> GetAllEntities(int id) {
