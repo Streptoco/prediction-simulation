@@ -15,6 +15,8 @@ public class SimulationTreeItem extends TreeItem<String> implements TreeItemEnab
     public SimulationTreeItem() {
 
     }
+
+    public SimulationStatusDTO getSimulationStatusDto() {return simulationStatusDTO;}
     @Override
     public void ApplyText(TextArea mainTextArea) {
 
