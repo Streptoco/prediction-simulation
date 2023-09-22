@@ -101,6 +101,26 @@ public class ExecutionController implements Initializable {
 
     }
 
+//    public void customClearInitialize(ResourceBundle resources) {
+//
+//        this.runButton.setDisable(true);
+//        this.world = (WorldDTO) resources.getObject("World");
+//        this.engine = (Engine) resources.getObject("Engine");
+//        this.currentSimulationID = (int) resources.getObject("SimulationID");
+//        runButton.setDisable(true);
+//        entitySlider.setDisable(true);
+//
+//        for (EntityDTO entityDTO : world.getEntities()) {
+//            entityComboBox.getItems().add(entityDTO); // add all entities to combo box
+//            amountOfEntities++;
+//        }
+//
+//        for (PropertyDTO propertyDTO : world.environment.propertyDTOs) {
+//            propertyComboBox.getItems().add(propertyDTO); // add all properties to combo box
+//            amountOfProperties++;
+//        }
+//    }
+
     public void selectEntity(ActionEvent actionEvent) {
         // TODO: maybe in here we want to create a DTO to the engine OR use that API Afik made.
         // TODO: get the information from the world DTO regarding limitations.
@@ -164,7 +184,6 @@ public class ExecutionController implements Initializable {
         if ((--amountOfProperties) == 0) {
             propertyComboBox.setDisable(true);
             propertySlider.setDisable(true);
-            propertyComboBoxLabel.setText("Value: 0");
             setChosenProperty.setDisable(true);
             statusLabel.setText("All environment variables set!");
         }
@@ -176,6 +195,12 @@ public class ExecutionController implements Initializable {
     }
 
     public void runSimulation(ActionEvent actionEvent) {
-        engine.runSimulation(currentSimulationID);
+        engine.runSimulation(currentSimulationID++);
+        System.out.println("Sim number: " + currentSimulationID);
+    }
+
+    public void clearSimulation(ActionEvent actionEvent) {
+        // TODO: clear all the data
+        statusLabel.setText("Data cleared!");
     }
 }
