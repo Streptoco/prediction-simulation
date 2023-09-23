@@ -9,12 +9,26 @@ public class Simulation {
     private LongProperty seconds;
     private IntegerProperty ticks;
     private StringProperty status;
+    private DoubleProperty progress;
 
     public Simulation() {
         simulationID = new SimpleIntegerProperty();
         seconds = new SimpleLongProperty();
         ticks = new SimpleIntegerProperty();
         status = new SimpleStringProperty();
+        progress = new SimpleDoubleProperty();
+    }
+
+    public double getProgress() {
+        return progress.get();
+    }
+
+    public DoubleProperty progressProperty() {
+        return progress;
+    }
+
+    public void setProgress(double progress) {
+        this.progress.set(progress);
     }
 
     public String getStatus() {
@@ -25,9 +39,8 @@ public class Simulation {
         return status;
     }
 
-    public void setStatus(Status status) {
-        String stringStatus = status.toString();
-        this.status.set(stringStatus);
+    public void setStatus(String status) {
+        this.status.set(status);
     }
 
     public int getSimulationID() {

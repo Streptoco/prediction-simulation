@@ -33,11 +33,12 @@ public class SimulationManager {
     public void update() {
         for(Simulation simulation : simulations) {
             SimulationStatusDTO simulationStatusDTO = engine.getSimulationDetails(simulation.getSimulationID());
-            if (!simulationStatusDTO.status.equals(Status.DONE)) {
+            if (!(simulationStatusDTO.status.equals(Status.DONE) || simulationStatusDTO.status.equals(Status.PAUSED))) {
                 simulation.setSeconds(simulationStatusDTO.simulationRunningTimeInMillis/1000);
                 simulation.setTicks(simulationStatusDTO.currentTick);
+                simulation.setProgress((double)(simulationStatusDTO.simulationRunningTimeInMillis / simulationStatusDTO.totalSecondsInMillis) * 0.001);
             }
-            simulation.setStatus(simulationStatusDTO.status);
+            simulation.setStatus("Simulation status: " + simulationStatusDTO.status.toString().toLowerCase());
         }
         // TODO: more info
     }

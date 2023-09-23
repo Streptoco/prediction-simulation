@@ -127,7 +127,7 @@ public class MainController extends ResourceBundle implements Initializable {
                     simulationManager.update();
                 });
             }
-        },0,200);
+        },0,100);
     }
 
 
