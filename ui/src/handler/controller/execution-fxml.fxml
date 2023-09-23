@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="executionController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/8.0.381" xmlns:fx="http://javafx.com/fxml/1" fx:controller="handler.controller.ExecutionController">
+   <center>
+      <HBox prefHeight="315.0" prefWidth="823.0" BorderPane.alignment="CENTER">
+         <children>
+            <Separator orientation="VERTICAL" prefHeight="403.0" prefWidth="0.0" />
+            <ScrollPane prefHeight="403.0" prefWidth="250.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="327.0" prefWidth="248.0">
+                     <children>
+                        <ComboBox fx:id="entityComboBox" layoutX="41.0" layoutY="42.0" onAction="#selectEntity" prefWidth="150.0" promptText="Choose entity..." />
+                        <Label fx:id="entityComboBoxLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" layoutX="58.0" layoutY="74.0" text="Range: From 0 to Max" />
+                        <Slider fx:id="entitySlider" layoutX="46.0" layoutY="97.0" showTickLabels="true" showTickMarks="true" />
+                        <Button fx:id="setChosen" layoutX="56.0" layoutY="164.0" mnemonicParsing="false" onAction="#updatePopulation" prefHeight="25.0" prefWidth="120.0" text="Set!" />
+                        <Label fx:id="entityMaxPopulationLabel" contentDisplay="CENTER" layoutX="82.0" layoutY="135.0" text="Population: 0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+               <HBox.margin>
+                  <Insets bottom="60.0" left="10.0" right="10.0" top="15.0" />
+               </HBox.margin>
+            </ScrollPane>
+            <VBox prefHeight="261.0" prefWidth="548.0">
+               <HBox.margin>
+                  <Insets bottom="60.0" right="15.0" top="15.0" />
+               </HBox.margin>
+               <children>
+                  <AnchorPane prefHeight="260.0" prefWidth="540.0">
+                     <children>
+                        <Label fx:id="propertyComboBoxLabel" layoutX="224.0" layoutY="135.0" text="Value: 0" />
+                        <Label fx:id="statusLabel" layoutX="77.0" layoutY="208.0" prefHeight="17.0" prefWidth="337.0" text="Please choose a variable." />
+                        <CheckBox fx:id="randomize" layoutX="204.0" layoutY="73.0" mnemonicParsing="false" text="Randomize" />
+                        <ComboBox fx:id="propertyComboBox" layoutX="174.0" layoutY="41.0" onAction="#selectProperty" prefHeight="25.0" prefWidth="143.0" promptText="Choose env variable..." />
+                        <Slider fx:id="propertySlider" layoutX="175.0" layoutY="97.0" showTickLabels="true" showTickMarks="true" />
+                        <Button fx:id="setChosenProperty" layoutX="185.0" layoutY="165.0" mnemonicParsing="false" onAction="#updateProperty" prefHeight="25.0" prefWidth="120.0" text="Set!" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="-20.0" />
+         </BorderPane.margin>
+      </HBox>
+   </center>
+   <bottom>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearSimulation" prefHeight="25.0" prefWidth="120.0" text="Clear" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="75.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="runButton" mnemonicParsing="false" onAction="#runSimulation" prefHeight="25.0" prefWidth="120.0" text="Run" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="75.0" />
+               </GridPane.margin>
+            </Button>
+         </children>
+      </GridPane>
+   </bottom>
+</BorderPane>
