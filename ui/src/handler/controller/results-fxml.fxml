@@ -49,7 +49,7 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="224.0">
                                        <children>
-                                          <TableView editable="true" layoutY="-1.0" prefHeight="155.0" prefWidth="226.0">
+                                          <TableView fx:id="tableView" editable="true" layoutY="-1.0" prefHeight="155.0" prefWidth="226.0">
                                             <columns>
                                               <TableColumn prefWidth="75.0" text="Entity" />
                                               <TableColumn prefWidth="75.0" text="Amount" />
