@@ -31,10 +31,6 @@ public class Engine {
         return simulationManager;
     }
 
-    public SimulationRunner getSimulationRunner(int id) {
-        return this.simulationManager.getSimulationRunner(id);
-    }
-
     public void loadWorld(String filePath) {
         this.filePath = filePath;
     }
