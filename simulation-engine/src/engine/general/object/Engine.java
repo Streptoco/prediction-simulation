@@ -3,6 +3,7 @@ package engine.general.object;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
 import engine.exception.XMLException;
+import engine.general.multiThread.api.SimulationRunner;
 import engine.general.multiThread.impl.SimulationExecutionManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.NewXMLReader;
@@ -26,6 +27,10 @@ public class Engine {
 
     public SimulationExecutionManager getSimulationManager() {
         return simulationManager;
+    }
+
+    public SimulationRunner getSimulationRunner(int id) {
+        return this.simulationManager.getSimulationRunner(id);
     }
 
     public void loadWorld(String filePath) {

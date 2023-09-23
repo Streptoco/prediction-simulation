@@ -25,6 +25,10 @@ public class SimulationExecutionManager {
         simulationCounter = 0;
     }
 
+    public SimulationRunner getSimulationRunner(int id) {
+        return this.simulations.get(id);
+    }
+
     public int CreateSimulation(World world) {
         if (executor == null) {
             executor = Executors.newFixedThreadPool(world.getNumOfThreads());

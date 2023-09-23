@@ -23,9 +23,10 @@ public class Termination {
         if(isUserInteractive) {
             return true;
         } else {
-            long currentTime = System.currentTimeMillis();
-            currentTime -= outerTimeInMillis;
-            return (currentTick <= this.ticks && currentTime <= this.howManySecondsToRun);
+            //long currentTime = System.currentTimeMillis();
+
+            //currentTime -= outerTimeInMillis;
+            return (currentTick <= this.ticks && outerTimeInMillis <= this.howManySecondsToRun);
         }
     }
 

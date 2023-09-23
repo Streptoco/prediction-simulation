@@ -3,8 +3,12 @@ package engine.general.multiThread.api;
 import engine.entity.impl.EntityInstanceManager;
 import engine.general.object.Rule;
 import engine.general.object.World;
+import javafx.application.Platform;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +22,7 @@ public class SimulationRunner implements Runnable {
     private final Date simDate;
     private final SimpleDateFormat simulationDate;
 
+    private long runningTime = 0;
     public SimulationRunner(World world, int id) {
         this.world = world;
         this.status = Status.LOADING;
@@ -41,7 +46,7 @@ public class SimulationRunner implements Runnable {
     }
 
     public long getSimulationRunningTimeInMillis() {
-        return System.currentTimeMillis() - simDate.getTime();
+        return this.runningTime;
     }
 
     public Map<String, Integer> getAllEntitiesAmount() {
@@ -90,7 +95,6 @@ public class SimulationRunner implements Runnable {
         }
     }
 
-
     public void simulationManualStep() {
         if (this.status.equals(Status.PAUSED)) {
             if (world.getTermination().getTermination(ticks, this.currentTime)) {
@@ -121,7 +125,8 @@ public class SimulationRunner implements Runnable {
             this.status = Status.RUNNING;
         }
         world.assignSacks();
-        while (world.getTermination().getTermination(ticks, this.currentTime) && !(this.status.equals(Status.ABORTED)) && !(this.status.equals(Status.DONE))) {
+        while (world.getTermination().getTermination(ticks, this.runningTime) && !(this.status.equals(Status.ABORTED)) && !(this.status.equals(Status.DONE))) {
+            LocalDateTime currenTime = LocalDateTime.now();
             if (ticks != 0) {
                 world.getGrid().MoveSacks();
             }
@@ -135,6 +140,7 @@ public class SimulationRunner implements Runnable {
             synchronized (this.world) {
                 world.doWhenTickIsOver();
             }
+            this.runningTime += Duration.between(currenTime, LocalDateTime.now()).toMillis();
             checkIfNeedToPause();
             if (this.status.equals(Status.ABORTED)) {
                 System.out.println("Stopping " + "[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks);
@@ -145,7 +151,7 @@ public class SimulationRunner implements Runnable {
         if (!this.status.equals(Status.ABORTED)) {
             this.status = Status.DONE;
         }
-        System.out.println("[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks + " Simulation Done with status: " + this.status);
+        System.out.println("[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks + " Simulation Done in " + this.getSimulationRunningTimeInMillis() / 1000 + " seconds with status: " + this.status);
         /* TODO:
             1. If simulation is end, find a way to notify the user it ended successfully
             2. Find a way to somehow save all the relevant entites amount and env variable values for re-run of the simulation
