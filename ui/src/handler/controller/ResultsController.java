@@ -54,8 +54,6 @@ public class ResultsController implements Initializable {
 
         listView.setItems(simulationManager.getSimulations());
 
-        listView.getSelectionModel().selectFirst();
-
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
             if (newValue != null){
@@ -66,16 +64,19 @@ public class ResultsController implements Initializable {
                 statusLabel.textProperty().bind(newValue.statusProperty());
 
                 progressBar.progressProperty().bind(newValue.progressProperty());
-
             }
 
         });
+
+        listView.getSelectionModel().selectFirst();
     }
 
     public void stopButtonAction(ActionEvent actionEvent) {
     }
 
     public void resumeButtonAction(ActionEvent actionEvent) {
+        Simulation selectedSimulation = listView.getSelectionModel().getSelectedItem();
+        simulationManager.engine.resumeSimulation(selectedSimulation.getSimulationID());
     }
 
     public void pauseButtonAction(ActionEvent actionEvent) {

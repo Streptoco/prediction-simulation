@@ -78,4 +78,9 @@ public class Simulation {
     public void setTicks(int ticks) {
         this.ticks.set(ticks);
     }
+
+    @Override
+    public String toString() {
+        return "Simulation " + getSimulationID();
+    }
 }
