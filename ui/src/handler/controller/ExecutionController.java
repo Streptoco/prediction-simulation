@@ -31,6 +31,7 @@ public class ExecutionController implements Initializable {
     private int currentPopulation = 0;
     private int amountOfEntities = 0;
     private int amountOfProperties = 0;
+    private SimulationManager simulationManager;
     boolean simulationStartedNoGoingBack = false;
     @FXML
     Button setChosenProperty;
@@ -68,6 +69,7 @@ public class ExecutionController implements Initializable {
 
 //        this.currentSimulationID = (int) resources.getObject("SimulationID");
         this.engine = (Engine) resources.getObject("Engine");
+        this.simulationManager = (SimulationManager) resources.getObject("SimulationManager");
         this.world = engine.getWorldDTO(currentSimulationID);
 
         runButton.setDisable(true);
@@ -219,6 +221,9 @@ public class ExecutionController implements Initializable {
     public void runSimulation(ActionEvent actionEvent) {
         engine.runSimulation(currentSimulationID);
         System.out.println("Sim number: " + currentSimulationID);
+        Simulation simulation = new Simulation();
+        simulation.setSimulationID(currentSimulationID);
+        simulationManager.addSimulation(simulation);
         customClearInitialize();
     }
 

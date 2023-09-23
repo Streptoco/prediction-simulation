@@ -25,6 +25,14 @@ public class SimulationExecutionManager {
         simulationCounter = 0;
     }
 
+    public SimulationRunner getSimulationRunner(int simID) {
+        return simulations.get(simID);
+    }
+
+    public long getSimulationRunningTimeInMillis(int simID) {
+        return simulations.get(simID).getSimulationRunningTimeInMillis();
+    }
+
     public int CreateSimulation(World world) {
         if (executor == null) {
             executor = Executors.newFixedThreadPool(world.getNumOfThreads());

@@ -36,6 +36,8 @@ public class SimulationRunner implements Runnable {
         return status;
     }
 
+    public long getCurrentTime() {return currentTime;}
+
     public int getTick() {
         return ticks;
     }

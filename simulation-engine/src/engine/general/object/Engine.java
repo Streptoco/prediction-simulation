@@ -3,6 +3,7 @@ package engine.general.object;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
 import engine.exception.XMLException;
+import engine.general.multiThread.api.SimulationRunner;
 import engine.general.multiThread.impl.SimulationExecutionManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.NewXMLReader;
@@ -23,7 +24,9 @@ public class Engine {
         simulationManager = new SimulationExecutionManager();
         filePath = "";
     }
-
+    public SimulationRunner getSimulationRunner(int simID) {
+        return getSimulationManager().getSimulationRunner(simID);
+    }
     public SimulationExecutionManager getSimulationManager() {
         return simulationManager;
     }

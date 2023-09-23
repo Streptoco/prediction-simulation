@@ -3,6 +3,7 @@ package handler.controller;
 import engine.general.object.Engine;
 import engine.xml.NewXMLReader;
 import enginetoui.dto.basic.impl.WorldDTO;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.ObjectProperty;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainController extends ResourceBundle implements Initializable {
     private int currentSimulation;
@@ -45,6 +48,7 @@ public class MainController extends ResourceBundle implements Initializable {
     @FXML
     private Label programLabel;
     private Engine engine;
+    private SimulationManager simulationManager;
     private WorldDTO currentWorldDTO;
 
     public MainController() throws JAXBException {
@@ -60,6 +64,8 @@ public class MainController extends ResourceBundle implements Initializable {
                 return engine;
             case "SimulationID":
                 return currentSimulation;
+            case "SimulationManager":
+                return simulationManager;
             default:
                 return null;
         }
@@ -98,15 +104,8 @@ public class MainController extends ResourceBundle implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         engine = new Engine();
+        simulationManager = new SimulationManager(engine);
 
-//        try {
-//            engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml");
-//            currentSimulation = engine.setupSimulation();
-//        } catch (JAXBException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        currentWorldDTO = engine.getWorldDTO(currentSimulation); // need to throw in a number here...
         engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml");
         try {
             currentSimulation = engine.setupSimulation();
@@ -119,6 +118,16 @@ public class MainController extends ResourceBundle implements Initializable {
         StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
         textField.textProperty().bind(labelTextBinding);
 //        // TODO: make this relevant lel
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    simulationManager.update();
+                });
+            }
+        },0,200);
     }
 
 
