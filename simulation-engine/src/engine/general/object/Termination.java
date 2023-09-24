@@ -14,8 +14,8 @@ public class Termination {
     }
 
     public Termination(boolean isUserInteractive) {
-        this.ticks = 0;
-        this.howManySecondsToRun = 0;
+        this.ticks = Integer.MAX_VALUE;
+        this.howManySecondsToRun = Integer.MAX_VALUE;
         this.isUserInteractive = true;
     }
 
