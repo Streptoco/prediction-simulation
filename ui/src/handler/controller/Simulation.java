@@ -1,7 +1,9 @@
 package handler.controller;
 
+import engine.entity.impl.EntityDefinition;
 import engine.general.multiThread.api.Status;
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
 
 public class Simulation {
 
@@ -12,6 +14,7 @@ public class Simulation {
     private DoubleProperty progress;
     private DoubleProperty tickProgress;
     private IntegerProperty entityAmount;
+    private ListProperty<EntityDefinition> entityList;
 
     public Simulation() {
         simulationID = new SimpleIntegerProperty();
@@ -21,6 +24,19 @@ public class Simulation {
         progress = new SimpleDoubleProperty();
         tickProgress = new SimpleDoubleProperty();
         entityAmount = new SimpleIntegerProperty();
+        entityList = new SimpleListProperty<>();
+    }
+
+    public ObservableList<EntityDefinition> getEntityList() {
+        return entityList.get();
+    }
+
+    public ListProperty<EntityDefinition> entityListProperty() {
+        return entityList;
+    }
+
+    public void setEntityList(ObservableList<EntityDefinition> entityList) {
+        this.entityList.set(entityList);
     }
 
     public void setEntityAmount(int entityAmount) {

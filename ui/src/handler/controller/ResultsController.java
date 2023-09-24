@@ -74,7 +74,7 @@ public class ResultsController implements Initializable {
 
                 tickProgress.progressProperty().bind(newValue.tickProgressProperty());
 
-                amountColumn.setCellValueFactory(new PropertyValueFactory<>(""));
+                entityName.setCellValueFactory(new PropertyValueFactory<Simulation, String>(""));
             }
 
         });

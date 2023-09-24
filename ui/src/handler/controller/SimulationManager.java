@@ -1,5 +1,6 @@
 package handler.controller;
 
+import engine.entity.impl.EntityDefinition;
 import engine.general.multiThread.api.Status;
 import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.SimulationStatusDTO;
@@ -38,10 +39,9 @@ public class SimulationManager {
                 simulation.setTicks(simulationStatusDTO.currentTick);
                 simulation.setProgress((double)(simulationStatusDTO.simulationRunningTimeInMillis / simulationStatusDTO.totalSecondsInMillis) * 0.001);
                 simulation.setTickProgress((double)simulationStatusDTO.currentTick / (double)simulationStatusDTO.totalTicks);
-
             }
             simulation.setStatus("Simulation status: " + simulationStatusDTO.status.toString().toLowerCase());
-
+            simulation.setEntityList(FXCollections.observableList(simulationStatusDTO.entityDefinitions));
         }
         // TODO: more info
     }
