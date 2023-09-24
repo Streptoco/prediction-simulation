@@ -37,6 +37,8 @@ public class ResultsController implements Initializable {
     @FXML
     private ProgressBar progressBar;
     @FXML
+    private ProgressBar tickProgress;
+    @FXML
     private Label secondsLabel;
     @FXML
     private Label tickLabel;
@@ -64,6 +66,8 @@ public class ResultsController implements Initializable {
                 statusLabel.textProperty().bind(newValue.statusProperty());
 
                 progressBar.progressProperty().bind(newValue.progressProperty());
+
+                tickProgress.progressProperty().bind(newValue.tickProgressProperty());
             }
 
         });

@@ -37,6 +37,8 @@ public class SimulationManager {
                 simulation.setSeconds(simulationStatusDTO.simulationRunningTimeInMillis/1000);
                 simulation.setTicks(simulationStatusDTO.currentTick);
                 simulation.setProgress((double)(simulationStatusDTO.simulationRunningTimeInMillis / simulationStatusDTO.totalSecondsInMillis) * 0.001);
+                simulation.setTickProgress((double)simulationStatusDTO.currentTick / (double)simulationStatusDTO.totalTicks);
+                System.out.println((double)simulationStatusDTO.currentTick / (double)simulationStatusDTO.totalTicks);
             }
             simulation.setStatus("Simulation status: " + simulationStatusDTO.status.toString().toLowerCase());
         }

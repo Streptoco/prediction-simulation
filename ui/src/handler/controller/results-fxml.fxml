@@ -37,19 +37,19 @@
                      <children>
                         <AnchorPane prefHeight="176.0" prefWidth="548.0">
                            <children>
-                              <ProgressBar fx:id="progressBar" layoutX="99.0" layoutY="25.0" prefHeight="18.0" prefWidth="188.0" progress="0.0" />
-                              <Label layoutX="29.0" layoutY="26.0" text="Progress:" />
-                              <Label fx:id="secondsLabel" layoutX="29.0" layoutY="64.0" text="Current second:" />
-                              <Label fx:id="tickLabel" layoutX="29.0" layoutY="98.0" text="Current tick:" />
+                              <ProgressBar fx:id="progressBar" layoutX="125.0" layoutY="25.0" prefHeight="18.0" prefWidth="162.0" progress="0.0" />
+                              <Label fx:id="secondProgress" layoutX="29.0" layoutY="26.0" text="Second progress" />
+                              <Label fx:id="secondsLabel" layoutX="29.0" layoutY="81.0" text="Current second:" />
+                              <Label fx:id="tickLabel" layoutX="31.0" layoutY="106.0" text="Current tick:" />
                               <Label fx:id="statusLabel" layoutX="31.0" layoutY="131.0" text="Simulation status:" />
                               <Button fx:id="pauseButton" layoutX="365.0" layoutY="22.0" mnemonicParsing="false" onAction="#pauseButtonAction" text="Pause" />
                               <Button fx:id="resumeButton" layoutX="296.0" layoutY="22.0" mnemonicParsing="false" onAction="#resumeButtonAction" text="Resume" />
                               <Button fx:id="stopButton" layoutX="425.0" layoutY="22.0" mnemonicParsing="false" onAction="#stopButtonAction" text="Stop simulation" />
-                              <ScrollPane layoutX="283.0" layoutY="63.0" prefHeight="87.0" prefWidth="241.0">
+                              <ScrollPane layoutX="296.0" layoutY="63.0" prefHeight="87.0" prefWidth="241.0">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="224.0">
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="237.0">
                                        <children>
-                                          <TableView fx:id="tableView" editable="true" layoutY="-1.0" prefHeight="155.0" prefWidth="226.0">
+                                          <TableView fx:id="tableView" editable="true" layoutX="-2.0" layoutY="-1.0" prefHeight="155.0" prefWidth="228.0">
                                             <columns>
                                               <TableColumn prefWidth="75.0" text="Entity" />
                                               <TableColumn prefWidth="75.0" text="Amount" />
@@ -62,6 +62,8 @@
                                     </AnchorPane>
                                 </content>
                               </ScrollPane>
+                              <ProgressBar fx:id="tickProgress" layoutX="109.0" layoutY="54.0" prefHeight="18.0" prefWidth="178.0" progress="0.0" />
+                              <Label fx:id="tickProgressLabel" layoutX="29.0" layoutY="55.0" text="Tick progress" />
                            </children>
                         </AnchorPane>
                      </children>

@@ -86,11 +86,12 @@ public class MainController extends ResourceBundle implements Initializable {
         if (selectedFile != null) {
             selectedFile.set(file);
             engine.loadWorld(selectedFile.getValue().getAbsolutePath());
-            {
-                // TODO: This piece of code shouldn't be here, this is the part of the XML reading and it should be on the start of the simulation
-                int simID = engine.setupSimulation();
-                currentWorldDTO = engine.getWorldDTO(simID);
+            try {
+                currentSimulation = engine.setupSimulation();
+            } catch (JAXBException e) {
+                throw new RuntimeException(e);
             }
+            currentWorldDTO = engine.getWorldDTO(currentSimulation);
             StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
             textField.textProperty().bind(labelTextBinding);
         }
@@ -106,13 +107,13 @@ public class MainController extends ResourceBundle implements Initializable {
         engine = new Engine();
         simulationManager = new SimulationManager(engine);
 
-        engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml");
-        try {
-            currentSimulation = engine.setupSimulation();
-        } catch (JAXBException e) {
-            throw new RuntimeException(e);
-        }
-        currentWorldDTO = engine.getWorldDTO(currentSimulation);
+//        engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\master-ex2.xml");
+//        try {
+//            currentSimulation = engine.setupSimulation();
+//        } catch (JAXBException e) {
+//            throw new RuntimeException(e);
+//        }
+//        currentWorldDTO = engine.getWorldDTO(currentSimulation);
         // TODO: this is a test, don't touch
 
         StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());

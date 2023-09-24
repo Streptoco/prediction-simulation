@@ -10,6 +10,7 @@ public class Simulation {
     private IntegerProperty ticks;
     private StringProperty status;
     private DoubleProperty progress;
+    private DoubleProperty tickProgress;
 
     public Simulation() {
         simulationID = new SimpleIntegerProperty();
@@ -17,8 +18,19 @@ public class Simulation {
         ticks = new SimpleIntegerProperty();
         status = new SimpleStringProperty();
         progress = new SimpleDoubleProperty();
+        tickProgress = new SimpleDoubleProperty();
+    }
+    public double getTickProgress() {
+        return tickProgress.get();
     }
 
+    public DoubleProperty tickProgressProperty() {
+        return tickProgress;
+    }
+
+    public void setTickProgress(double tickProgress) {
+        this.tickProgress.set(tickProgress);
+    }
     public double getProgress() {
         return progress.get();
     }
