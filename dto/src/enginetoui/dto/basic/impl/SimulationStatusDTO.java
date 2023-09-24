@@ -16,7 +16,6 @@ public class SimulationStatusDTO {
     public final long simulationRunningTimeInMillis;
     public final int totalTicks;
     public final Map<String, Integer> entitiesAmount;
-
     public final List<EntityDefinition> entityDefinitions;
 
 

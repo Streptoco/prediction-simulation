@@ -1,14 +1,20 @@
 package handler.controller;
 
 import engine.entity.impl.EntityDefinition;
+import engine.general.multiThread.api.SimulationRunner;
 import engine.general.multiThread.api.Status;
 import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.SimulationStatusDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ScatterChart;
+import javafx.scene.chart.XYChart;
+import simulation.dto.PopulationsDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SimulationManager {
     Engine engine; // TODO: maybe change idk
@@ -42,7 +48,63 @@ public class SimulationManager {
             }
             simulation.setStatus("Simulation status: " + simulationStatusDTO.status.toString().toLowerCase());
             simulation.setEntityList(FXCollections.observableList(simulationStatusDTO.entityDefinitions)); // We're trying to take a regular list, and make it an observable list so that it could fit the PropertyList we have in the Simulation class.
+
         }
         // TODO: more info
+    }
+
+    public ScatterChart<Number, Number> getEntitiesAmountPerTickWhenSimulationIsDone(int id) {
+        SimulationRunner currentSim = engine.getSimulationRunner(id);
+        NumberAxis xAxisTick = new NumberAxis();
+        xAxisTick.setLabel("Tick");
+        xAxisTick.setAutoRanging(false);
+        xAxisTick.setTickUnit(1);
+        NumberAxis yAxisAmount = new NumberAxis();
+        yAxisAmount.setLabel("Amount");
+        ScatterChart<Number, Number> resultChart = new ScatterChart<>(xAxisTick, yAxisAmount);
+        resultChart.setTitle("Entities Amount per Tick");
+        resultChart.setVisible(false);
+        List<XYChart.Series<Number, Number>> seriesList = new ArrayList<>();
+        if(currentSim.getStatus().equals(Status.DONE)) {
+            for(EntityDefinition currentEntity : currentSim.getWorld().GetEntities()) {
+                XYChart.Series<Number, Number> series = new XYChart.Series<>();
+                series.setName(currentEntity.getName());
+                seriesList.add(series);
+
+            }
+            Map<Integer, PopulationsDTO> entitiesAmount = currentSim.getEntitiesAmountPerTick();
+            for(Map.Entry<Integer, PopulationsDTO> currentTick : entitiesAmount.entrySet()) {
+                for(Map.Entry<String, Integer> currentEntityDef : currentTick.getValue().getEntities().entrySet()) {
+                    for(XYChart.Series<Number, Number> currentSeries : seriesList) {
+                        if(currentSeries.getName().equalsIgnoreCase(currentEntityDef.getKey())) {
+                            currentSeries.getData().add(new XYChart.Data<>(currentTick.getKey(),currentEntityDef.getValue()));
+                        }
+                    }
+                }
+            }
+            for(XYChart.Series<Number, Number> currentSeries : seriesList) {
+                resultChart.getData().add(currentSeries);
+            }
+            resultChart.setVisible(true);
+        }
+        for(Simulation simulation : simulations) {
+            if(simulation.getSimulationID() == id) {
+                simulation.setEntitiesAmountScatter(resultChart);
+            }
+        }
+        return resultChart;
+    }
+
+    public ScatterChart<Number, Number> getScatter(int id) {
+        ScatterChart<Number, Number> result = null;
+        for(Simulation simulation : simulations) {
+            if(simulation.getSimulationID() == id) {
+                result = simulation.getEntitesAmountScatter();
+                if(result == null && simulation.getStatus().contains("done")) {
+                    result = getEntitiesAmountPerTickWhenSimulationIsDone(id);
+                }
+            }
+        }
+        return result;
     }
 }

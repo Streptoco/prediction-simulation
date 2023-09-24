@@ -1,13 +1,17 @@
 package handler.controller;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,17 +44,18 @@ public class ResultsController implements Initializable {
     private Button pauseButton;
     @FXML
     private Button stopButton;
+    @FXML
+    private VBox resultBox;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.simulationManager = (SimulationManager) resources.getObject("SimulationManager");
 
         listView.setItems(simulationManager.getSimulations());
 
-
-
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
-            if (newValue != null){
+            if (newValue != null) {
                 secondsLabel.textProperty().bind(Bindings.concat("Current second: ", newValue.secondsProperty().asString()));
 
                 tickLabel.textProperty().bind(Bindings.concat("Current tick: ", newValue.ticksProperty().asString()));
@@ -67,11 +72,14 @@ public class ResultsController implements Initializable {
 
                 tableView.setItems(tableView.getItems()); // set the tableview. none of this works and requires attention.
 
+
             }
 
         });
 
         listView.getSelectionModel().selectFirst();
+        onStatusLabelChange();
+        onChooseSimulation();
     }
 
     public void stopButtonAction(ActionEvent actionEvent) {
@@ -88,4 +96,42 @@ public class ResultsController implements Initializable {
         Simulation selectedSimulation = listView.getSelectionModel().getSelectedItem();
         simulationManager.engine.pauseSimulation(selectedSimulation.getSimulationID());
     }
+
+    public void onStatusLabelChange() {
+        statusLabel.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (statusLabel.textProperty().get().contains("done")) {
+                    if (!resultBox.getChildren().isEmpty()) {
+                        Platform.runLater(() -> {
+                            resultBox.getChildren().set(0, simulationManager.getEntitiesAmountPerTickWhenSimulationIsDone(listView.getSelectionModel().getSelectedIndex() + 1));
+                        });
+                    } else {
+                        Platform.runLater(() -> {
+                            resultBox.getChildren().add(simulationManager.getEntitiesAmountPerTickWhenSimulationIsDone(listView.getSelectionModel().getSelectedIndex() + 1));
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    public void onChooseSimulation() {
+        listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (!resultBox.getChildren().isEmpty()) {
+                if (simulationManager.getScatter(listView.getSelectionModel().getSelectedIndex() + 1) != null) {
+                    resultBox.getChildren().set(0, simulationManager.getScatter(listView.getSelectionModel().getSelectedIndex() + 1));
+                } else {
+                    resultBox.getChildren().remove(0);
+                }
+            } else {
+                if (simulationManager.getScatter(listView.getSelectionModel().getSelectedIndex() + 1) != null) {
+                    resultBox.getChildren().add(simulationManager.getScatter(listView.getSelectionModel().getSelectedIndex() + 1));
+                }
+
+            }
+        });
+    }
+
+
 }

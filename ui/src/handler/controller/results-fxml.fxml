@@ -58,7 +58,7 @@
                   </VBox>
                   <VBox prefHeight="193.0" prefWidth="548.0">
                      <children>
-                        <VBox prefHeight="189.0" prefWidth="548.0" />
+                        <VBox fx:id="resultBox" prefHeight="189.0" prefWidth="548.0" />
                      </children>
                   </VBox>
                </children>

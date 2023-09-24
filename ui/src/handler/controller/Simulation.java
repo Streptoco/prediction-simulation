@@ -1,9 +1,9 @@
 package handler.controller;
 
 import engine.entity.impl.EntityDefinition;
-import engine.general.multiThread.api.Status;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.ScatterChart;
 
 public class Simulation {
 
@@ -15,6 +15,8 @@ public class Simulation {
     private DoubleProperty tickProgress;
     private IntegerProperty entityAmount;
     private ListProperty<EntityDefinition> entityList;
+    private ScatterChart<Number, Number> entitiesAmountScatter;
+
     // this is used for getting a list of <EntityDefinition> from the DTO.
 
     public Simulation() {
@@ -26,6 +28,7 @@ public class Simulation {
         tickProgress = new SimpleDoubleProperty();
         entityAmount = new SimpleIntegerProperty();
         entityList = new SimpleListProperty<>();
+        entitiesAmountScatter = null;
     }
 
     public ObservableList<EntityDefinition> getEntityList() {
@@ -113,6 +116,14 @@ public class Simulation {
 
     public void setTicks(int ticks) {
         this.ticks.set(ticks);
+    }
+
+    public ScatterChart<Number, Number> getEntitesAmountScatter() {
+        return entitiesAmountScatter;
+    }
+
+    public void setEntitiesAmountScatter(ScatterChart<Number, Number> entitiesAmountScatter) {
+        this.entitiesAmountScatter = entitiesAmountScatter;
     }
 
     @Override
