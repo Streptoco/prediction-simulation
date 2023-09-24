@@ -82,11 +82,18 @@ public class SimulationRunner implements Runnable {
     }
 
     public void pauseSimulation() {
-        setStatus(Status.PAUSED);
+        if (this.status.equals(Status.RUNNING)) {
+            setStatus(Status.PAUSED);
+        }
     }
 
-    public void abortSimulation() {
-        setStatus(Status.ABORTED);
+    public synchronized void abortSimulation() {
+        if(this.status.equals(Status.RUNNING)) {
+            setStatus(Status.ABORTED);
+        } else if (this.status.equals(Status.PAUSED)) {
+            setStatus(Status.ABORTED);
+            notifyAll();
+        }
     }
 
     private synchronized void checkIfNeedToPause() {

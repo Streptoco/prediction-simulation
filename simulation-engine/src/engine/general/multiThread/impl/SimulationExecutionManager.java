@@ -85,8 +85,8 @@ public class SimulationExecutionManager {
     }
 
     public void abortSimulation(int id) {
-        //executor.execute(simulations.get(id)::abortSimulation);
-        simulations.get(id).abortSimulation();
+        executor.execute(simulations.get(id)::abortSimulation);
+        //simulations.get(id).abortSimulation();
     }
 
     public void manualStopSimulation(int id) {

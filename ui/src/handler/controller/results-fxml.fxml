@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="resultsController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/8.0.381" xmlns:fx="http://javafx.com/fxml/1" fx:controller="handler.controller.ResultsController">
+<BorderPane fx:id="resultsController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="handler.controller.ResultsController">
    <center>
       <HBox prefHeight="315.0" prefWidth="823.0" BorderPane.alignment="CENTER">
          <children>
@@ -49,7 +40,7 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="237.0">
                                        <children>
-                                          <TableView prefHeight="238.0" prefWidth="291.0">
+                                          <TableView fx:id="tableView" prefHeight="238.0" prefWidth="291.0">
                                             <columns>
                                               <TableColumn fx:id="entityName" prefWidth="116.0" text="C1" />
                                               <TableColumn fx:id="entityAmount" prefWidth="110.0" text="C2" />
