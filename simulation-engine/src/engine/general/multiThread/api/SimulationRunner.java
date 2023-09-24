@@ -1,17 +1,20 @@
 package engine.general.multiThread.api;
 
+import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.general.object.Rule;
 import engine.general.object.World;
-import javafx.application.Platform;
+import engine.property.api.PropertyInterface;
+import simulation.dto.PopulationsDTO;
+import simulation.dto.SimulationDTO;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class SimulationRunner implements Runnable {
     private final World world;
@@ -22,7 +25,10 @@ public class SimulationRunner implements Runnable {
     private final Date simDate;
     private final SimpleDateFormat simulationDate;
 
+    private SimulationDTO simulationDTO;
+
     private long runningTime = 0;
+
     public SimulationRunner(World world, int id) {
         this.world = world;
         this.status = Status.LOADING;
@@ -31,6 +37,7 @@ public class SimulationRunner implements Runnable {
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
+        this.simulationDTO = new SimulationDTO();
     }
 
     public World getWorld() {
@@ -115,16 +122,56 @@ public class SimulationRunner implements Runnable {
                         }
                     }
                 }
-                world.doWhenTickIsOver();
+                world.doWhenTickIsOver(this.ticks);
                 ticks++;
             }
         }
     }
 
+    public SimulationDTO getSimulationDTO() {
+        return this.simulationDTO;
+    }
+
+    public Map<Integer, PopulationsDTO> getEntitiesAmountPerTick() {
+        return world.getEntitiesAmountPerTick();
+    }
+
+    public double getConsistency(String entityName, String propertyName) {
+        if (status.equals(Status.DONE) || status.equals(Status.ABORTED)) {
+            return world.getConsistency(entityName, propertyName);
+        } else {
+            throw new RuntimeException("The simulation: " + simID + " is still running, so can't get consistency now");
+        }
+    }
+
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName) {
+        Map<String, Integer> resultMap = new HashMap<>();
+        EntityInstanceManager entity = this.world.getManagers().get(entityName);
+        for (EntityInstance currentInstance : entity.getInstances()) {
+            if (!currentInstance.isAlive()) {
+                continue;
+            }
+            PropertyInterface currentProperty = currentInstance.getPropertyByName(propertyName);
+            if (resultMap.containsKey((currentProperty.getValue().toString()))) {
+                int val = (resultMap.get(currentProperty.getValue().toString())) + 1;
+                resultMap.put((currentInstance.getPropertyByName(propertyName).getValue().toString()), val);
+            } else {
+                resultMap.put(currentProperty.getValue().toString(), 1);
+            }
+        }
+        return resultMap;
+    }
+
+    public double averageValueOfProperty(String entityName, String propertyName) {
+        return this.world.averageValueOfProperty(entityName, propertyName);
+    }
+
+
     @Override
     public void run() {
         System.out.println("[Thread: " + Thread.currentThread().getName() + "] Starting the simulation" + " Sim ID: " + simID);
         this.currentTime = System.currentTimeMillis();
+        this.world.initializeEntitiesAmount();
         if (!this.status.equals(Status.ABORTED)) {
             this.status = Status.RUNNING;
         }
@@ -142,7 +189,7 @@ public class SimulationRunner implements Runnable {
                 }
             }
             synchronized (this.world) {
-                world.doWhenTickIsOver();
+                world.doWhenTickIsOver(this.ticks);
             }
             this.runningTime += Duration.between(currenTime, LocalDateTime.now()).toMillis();
             checkIfNeedToPause();
@@ -156,9 +203,5 @@ public class SimulationRunner implements Runnable {
             this.status = Status.DONE;
         }
         System.out.println("[Thread: " + Thread.currentThread().getName() + "]" + " Sim ID: " + simID + " Tick: " + ticks + " Simulation Done in " + this.getSimulationRunningTimeInMillis() / 1000 + " seconds with status: " + this.status);
-        /* TODO:
-            1. If simulation is end, find a way to notify the user it ended successfully
-            2. Find a way to somehow save all the relevant entites amount and env variable values for re-run of the simulation
-         */
     }
 }

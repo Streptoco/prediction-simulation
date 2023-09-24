@@ -6,6 +6,8 @@ import engine.general.multiThread.api.Status;
 import engine.general.object.World;
 import enginetoui.dto.basic.impl.SimulationStatusDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
+import simulation.dto.PopulationsDTO;
+import simulation.dto.SimulationDTO;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -99,6 +101,9 @@ public class SimulationExecutionManager {
         return simulations.get(id).getStatus();
     }
 
+    public SimulationDTO getSimulationDTO(int id) {
+        return simulations.get(id).getSimulationDTO();
+    }
 
     public int getSimulationTick(int id) {
         return simulations.get(id).getTick();
@@ -106,6 +111,22 @@ public class SimulationExecutionManager {
 
     public Map<String, Integer> getSimulationEntitiesAmount(int id) {
         return simulations.get(id).getAllEntitiesAmount();
+    }
+
+    public Map<Integer, PopulationsDTO> getEntitiesAmountPerTick(int id) {
+        return this.simulations.get(id).getEntitiesAmountPerTick();
+    }
+
+    public double getConsistency(String entityName, String propertyName, int id) {
+        return simulations.get(id).getConsistency(entityName, propertyName);
+    }
+
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName, int id) {
+        return this.simulations.get(id).GetHistogram(entityName, propertyName);
+    }
+
+    public double averageValueOfProperty(String entityName, String propertyName, int id) {
+        return simulations.get(id).averageValueOfProperty(entityName, propertyName);
     }
 
     public SimulationStatusDTO getSimulationDetails(int id) {

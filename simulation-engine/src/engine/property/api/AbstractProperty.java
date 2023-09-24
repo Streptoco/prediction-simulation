@@ -10,6 +10,9 @@ public abstract class AbstractProperty implements PropertyInterface {
     protected ReturnType propertyType;
     protected int lastChangedTick;
 
+    protected int countOfChanges;
+    protected int sumOfConsistency;
+
     public AbstractProperty(String name, double rangeFrom, double rangeTo, boolean isRandomlyGenerated, ReturnType propertyType) {
         this.name = name;
         this.rangeFrom = rangeFrom;
@@ -17,6 +20,8 @@ public abstract class AbstractProperty implements PropertyInterface {
         this.isRandomlyGenerated = isRandomlyGenerated;
         this.propertyType = propertyType;
         this.lastChangedTick = 0;
+        this.countOfChanges = 0;
+        this.sumOfConsistency = 0;
     }
 
     public String getName() { return name; }
@@ -30,6 +35,15 @@ public abstract class AbstractProperty implements PropertyInterface {
     public ReturnType getPropertyType() { return propertyType; }
 
     public abstract Object getValue();
+    @Override
+    public double getAverageTimeOfChange() {
+        if(countOfChanges != 0) {
+            return (double) sumOfConsistency / countOfChanges;
+        } else {
+            return 0;
+        }
+    }
+
     @Override
     public int timeSinceLastChange(int currentTick) {
         return currentTick - this.lastChangedTick;

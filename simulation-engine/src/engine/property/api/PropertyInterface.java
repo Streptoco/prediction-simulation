@@ -22,4 +22,5 @@ public interface PropertyInterface {
     PropertyExpressionEvaluation evaluate(Expression expression);
     void setPropertyValue(Object value, int currentTick);
     int timeSinceLastChange(int currentTick);
+    double getAverageTimeOfChange();
 }

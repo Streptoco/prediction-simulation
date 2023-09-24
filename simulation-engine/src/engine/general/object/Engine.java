@@ -4,15 +4,20 @@ import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
 import engine.exception.XMLException;
 import engine.general.multiThread.api.SimulationRunner;
+import engine.general.multiThread.api.Status;
 import engine.general.multiThread.impl.SimulationExecutionManager;
 import engine.property.api.PropertyInterface;
 import engine.xml.NewXMLReader;
 import enginetoui.dto.basic.impl.*;
+import simulation.dto.PopulationsDTO;
+import simulation.dto.SimulationDTO;
 import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import javax.xml.bind.JAXBException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Engine {
     private final NewXMLReader reader;
@@ -188,5 +193,45 @@ public class Engine {
 
     public SimulationStatusDTO getSimulationDetails(int id) {
         return simulationManager.getSimulationDetails(id);
+    }
+
+    public int reRunSimulation(int id) throws JAXBException {
+        int newSimID = -1;
+        if(this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.DONE) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.ABORTED)) {
+            SimulationDTO currentSim = this.getSimulationManager().getSimulationDTO(id);
+            newSimID = setupSimulation();
+            Map<String, Object> envVariables = currentSim.getEnvProperties();
+            for(Map.Entry<String, Object> entry : envVariables.entrySet()) {
+                PropertyInitializeDTO currentProperty = new PropertyInitializeDTO(entry.getKey(), entry.getValue());
+                setupEnvProperties(currentProperty, newSimID);
+            }
+            Map<String, Integer> entities = currentSim.getPopulations();
+            for(Map.Entry<String, Integer> entry : entities.entrySet()) {
+                EntityAmountDTO currentEntity = new EntityAmountDTO(entry.getKey(), entry.getValue());
+                setupPopulation(currentEntity, newSimID);
+            }
+            runSimulation(newSimID);
+            return newSimID;
+        } else if (this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.RUNNING) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.PAUSED)){
+            throw new RuntimeException("The simulation: " + id + " is still running, so can't rerun the simulation");
+        } else {
+            throw new RuntimeException("No such simulation ");
+        }
+    }
+
+    public Map<Integer, PopulationsDTO> getEntitiesAmountPerTick(int id) {
+        return simulationManager.getEntitiesAmountPerTick(id);
+    }
+
+    public double getConsistency(String entityName, String propertyName, int id) {
+        return simulationManager.getConsistency(entityName, propertyName, id);
+    }
+
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName, int id) {
+        return this.simulationManager.GetHistogram(entityName, propertyName, id);
+    }
+
+    public double averageValueOfProperty(String entityName, String propertyName, int id) {
+        return simulationManager.averageValueOfProperty(entityName, propertyName, id);
     }
 }

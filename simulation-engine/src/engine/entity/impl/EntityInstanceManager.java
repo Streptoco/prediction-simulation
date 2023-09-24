@@ -9,7 +9,6 @@ import engine.property.impl.StringProperty;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class EntityInstanceManager {
     private int countInstances;
@@ -24,7 +23,7 @@ public class EntityInstanceManager {
     }
 
     public EntityInstance create(EntityDefinition entityDefinition) {
-        countInstances++;
+        ++countInstances;
         this.entityDefinition = entityDefinition;
         //EntityInstance newInstance = new EntityInstance(entityDefinition, countInstances);
         EntityInstance newInstance = new EntityInstance(entityDefinition, instances.size() + 1);

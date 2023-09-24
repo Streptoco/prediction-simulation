@@ -19,21 +19,27 @@ public class IntProperty extends AbstractProperty {
     public void increaseValue(int value, int currentTick) {
         if (rangeFrom.intValue() < (this.value + value) && rangeTo.intValue() > (this.value + value)) {
             this.value += value;
+            this.sumOfConsistency += timeSinceLastChange(currentTick);
             this.lastChangedTick = currentTick;
+            this.countOfChanges++;
         }
     }
 
     public void decreaseValue(int value, int currentTick) {
         if (super.getFrom() < (this.value - value) && super.getTo() > (this.value - value)) {
             this.value -= value;
+            this.sumOfConsistency += timeSinceLastChange(currentTick);
             this.lastChangedTick = currentTick;
+            this.countOfChanges++;
         }
     }
 
     public void setValue(int value, int currentTick) {
         if (super.getFrom() < value && super.getTo() > value) {
             this.value = value;
+            this.sumOfConsistency += timeSinceLastChange(currentTick);
             this.lastChangedTick = currentTick;
+            this.countOfChanges++;
         }
     }
 
