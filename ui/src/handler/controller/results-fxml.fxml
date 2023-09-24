@@ -49,14 +49,11 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="237.0">
                                        <children>
-                                          <TableView fx:id="tableView" editable="true" layoutX="-2.0" layoutY="-1.0" prefHeight="155.0" prefWidth="228.0">
+                                          <TableView prefHeight="238.0" prefWidth="291.0">
                                             <columns>
-                                              <TableColumn prefWidth="75.0" text="Entity" />
-                                              <TableColumn prefWidth="75.0" text="Amount" />
+                                              <TableColumn fx:id="entityName" prefWidth="116.0" text="C1" />
+                                              <TableColumn fx:id="entityAmount" prefWidth="110.0" text="C2" />
                                             </columns>
-                                             <columnResizePolicy>
-                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                             </columnResizePolicy>
                                           </TableView>
                                        </children>
                                     </AnchorPane>

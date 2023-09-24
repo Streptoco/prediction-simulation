@@ -11,6 +11,7 @@ public class Simulation {
     private StringProperty status;
     private DoubleProperty progress;
     private DoubleProperty tickProgress;
+    private IntegerProperty entityAmount;
 
     public Simulation() {
         simulationID = new SimpleIntegerProperty();
@@ -19,7 +20,13 @@ public class Simulation {
         status = new SimpleStringProperty();
         progress = new SimpleDoubleProperty();
         tickProgress = new SimpleDoubleProperty();
+        entityAmount = new SimpleIntegerProperty();
     }
+
+    public void setEntityAmount(int entityAmount) {
+        this.entityAmount.set(entityAmount);
+    }
+
     public double getTickProgress() {
         return tickProgress.get();
     }

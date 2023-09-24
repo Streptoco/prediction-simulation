@@ -8,10 +8,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -19,11 +16,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import org.w3c.dom.css.Counter;
 import tree.item.impl.*;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import static java.lang.Thread.sleep;
@@ -34,6 +33,12 @@ public class ResultsController implements Initializable {
     private SimulationManager simulationManager;
     @FXML
     private ListView<Simulation> listView;
+    @FXML
+    private TableColumn<Simulation, IntegerProperty> entityAmount;
+    @FXML
+    private TableColumn<Simulation, String> entityName;
+    @FXML
+    private TableView<Simulation> tableView;
     @FXML
     private ProgressBar progressBar;
     @FXML
@@ -68,6 +73,8 @@ public class ResultsController implements Initializable {
                 progressBar.progressProperty().bind(newValue.progressProperty());
 
                 tickProgress.progressProperty().bind(newValue.tickProgressProperty());
+
+                amountColumn.setCellValueFactory(new PropertyValueFactory<>(""));
             }
 
         });

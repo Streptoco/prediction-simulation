@@ -113,7 +113,8 @@ public class SimulationExecutionManager {
         synchronized (simulations.get(id)) {
             SimulationRunner currentSim = simulations.get(id);
             resultDTO = new SimulationStatusDTO(id, currentSim.getStatus(), currentSim.getTick(),
-                    currentSim.getSimulationRunningTimeInMillis(), currentSim.getWorld().GetSimulationTotalTime(), currentSim.getWorld().getTermination().getAllTicks());
+                    currentSim.getSimulationRunningTimeInMillis(), currentSim.getWorld().GetSimulationTotalTime(),
+                    currentSim.getWorld().getTermination().getAllTicks(), currentSim.getWorld().GetEntities());
             World currentWorld = currentSim.getWorld();
             for (Map.Entry<String, EntityInstanceManager> entry : currentWorld.getManagers().entrySet()) {
                 resultDTO.updateEntityAmount(entry.getKey(), entry.getValue().getCountInstances());
