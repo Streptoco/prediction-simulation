@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import org.w3c.dom.css.Counter;
 import tree.item.impl.*;
@@ -61,6 +62,8 @@ public class ResultsController implements Initializable {
 
         listView.setItems(simulationManager.getSimulations());
 
+
+
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
             if (newValue != null){
@@ -74,7 +77,12 @@ public class ResultsController implements Initializable {
 
                 tickProgress.progressProperty().bind(newValue.tickProgressProperty());
 
-                entityName.setCellValueFactory(new PropertyValueFactory<Simulation, String>(""));
+                entityName.setCellValueFactory(new PropertyValueFactory<Simulation, String>("entityAmount")); // add "simulation" type to column. this needs to be changed
+
+                tableView.getItems().add(newValue); // add an item to the table view
+
+                tableView.setItems(tableView.getItems()); // set the tableview. none of this works and requires attention.
+
             }
 
         });

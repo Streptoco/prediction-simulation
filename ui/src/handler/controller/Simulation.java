@@ -15,6 +15,7 @@ public class Simulation {
     private DoubleProperty tickProgress;
     private IntegerProperty entityAmount;
     private ListProperty<EntityDefinition> entityList;
+    // this is used for getting a list of <EntityDefinition> from the DTO.
 
     public Simulation() {
         simulationID = new SimpleIntegerProperty();
