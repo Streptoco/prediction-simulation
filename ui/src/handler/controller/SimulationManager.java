@@ -41,7 +41,7 @@ public class SimulationManager {
                 simulation.setTickProgress((double)simulationStatusDTO.currentTick / (double)simulationStatusDTO.totalTicks);
             }
             simulation.setStatus("Simulation status: " + simulationStatusDTO.status.toString().toLowerCase());
-            simulation.setEntityList(FXCollections.observableList(simulationStatusDTO.entityDefinitions));
+            simulation.setEntityList(FXCollections.observableList(simulationStatusDTO.entityDefinitions)); // We're trying to take a regular list, and make it an observable list so that it could fit the PropertyList we have in the Simulation class.
         }
         // TODO: more info
     }
