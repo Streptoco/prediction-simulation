@@ -5,15 +5,11 @@ import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.EntityDTO;
 import enginetoui.dto.basic.impl.PropertyDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.FileTransferDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
@@ -61,6 +57,10 @@ public class ExecutionController implements Initializable {
     CheckBox randomize;
     @FXML
     Label statusLabel;
+    @FXML
+    CheckBox trueFalseCheckBox;
+    @FXML
+    TextField stringPropertyTextField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -140,11 +140,19 @@ public class ExecutionController implements Initializable {
 
     public void selectProperty(ActionEvent actionEvent) {
         if (propertyComboBox.getSelectionModel().getSelectedItem() != null) {
-            propertySlider.setMin(propertyComboBox.getSelectionModel().getSelectedItem().from);
-            propertySlider.setMax(propertyComboBox.getSelectionModel().getSelectedItem().to);
-            statusLabel.setText("Now adjusting: " + propertyComboBox.getSelectionModel().getSelectedItem().getName() + ", you can always change this.");
-            propertySlider.setDisable(false);
-            randomize.setDisable(false);
+            if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.DECIMAL) || propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.INT)) {
+                propertySlider.setMin(propertyComboBox.getSelectionModel().getSelectedItem().from);
+                propertySlider.setMax(propertyComboBox.getSelectionModel().getSelectedItem().to);
+                propertySlider.setVisible(true);
+                propertyComboBoxLabel.setVisible(true);
+                statusLabel.setText("Now adjusting: " + propertyComboBox.getSelectionModel().getSelectedItem().getName() + ", you can always change this.");
+                propertySlider.setDisable(false);
+                randomize.setDisable(false);
+            } else if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.BOOLEAN)) {
+                trueFalseCheckBox.setVisible(true);
+            } else {
+                stringPropertyTextField.setVisible(true);
+            }
         }
     }
 
@@ -201,7 +209,18 @@ public class ExecutionController implements Initializable {
             randomize.setSelected(false);
         }
         else {
-            engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), propertySlider.getValue()),currentSimulationID);
+            if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.DECIMAL) || propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.INT)) {
+                engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), propertySlider.getValue()), currentSimulationID);
+                propertySlider.setVisible(false);
+                propertyComboBoxLabel.setVisible(false);
+
+            } else if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.BOOLEAN)) {
+                engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), trueFalseCheckBox.isSelected()), currentSimulationID);
+                trueFalseCheckBox.setVisible(false);
+            } else {
+                engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), stringPropertyTextField.getText()), currentSimulationID);
+                stringPropertyTextField.setVisible(false);
+            }
         }
         propertySlider.setDisable(true);
         randomize.setDisable(true);
@@ -230,5 +249,13 @@ public class ExecutionController implements Initializable {
     public void clearSimulation(ActionEvent actionEvent) {
         // TODO: clear all the data
         statusLabel.setText("Data cleared!");
+    }
+
+    public void onTrueFalseChange(ActionEvent actionEvent) {
+        if(trueFalseCheckBox.isSelected()) {
+            trueFalseCheckBox.setText("True");
+        } else {
+            trueFalseCheckBox.setText("False");
+        }
     }
 }
