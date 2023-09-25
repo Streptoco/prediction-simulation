@@ -244,9 +244,6 @@ public class World {
                         } else {
                             throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " isn't a number");
                         }
-                    } else {
-                        //throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " didn't found");
-                        throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " isn't a number");
                     }
                 }
 

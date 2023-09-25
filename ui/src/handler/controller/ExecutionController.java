@@ -144,6 +144,7 @@ public class ExecutionController implements Initializable {
     public void selectProperty(ActionEvent actionEvent) {
         if (propertyComboBox.getSelectionModel().getSelectedItem() != null) {
             randomize.setSelected(false);
+            randomize.setDisable(false);
             if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.DECIMAL) || propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.INT)) {
                 propertySlider.setMin(propertyComboBox.getSelectionModel().getSelectedItem().from);
                 propertySlider.setMax(propertyComboBox.getSelectionModel().getSelectedItem().to);
