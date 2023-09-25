@@ -56,6 +56,12 @@ public class ResultsController implements Initializable {
     private ComboBox<String> propertyMenu;
     @FXML
     private ComboBox<String> methodMenu;
+    @FXML
+    private Button sumbitStatisticButton;
+    @FXML
+    private Label resultLabel;
+    @FXML
+    private Label statisticsLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,6 +85,16 @@ public class ResultsController implements Initializable {
                 entityName.setCellValueFactory(new PropertyValueFactory<Simulation, String>("entityAmount")); // add "simulation" type to column. this needs to be changed
 
                 rerunButton.visibleProperty().bind(newValue.isSimulationDoneProperty());
+
+                statisticsLabel.visibleProperty().bind(newValue.isSimulationDoneProperty());
+
+                entityMenu.visibleProperty().bind(newValue.isSimulationDoneProperty());
+
+                propertyMenu.visibleProperty().bind(entityMenu.visibleProperty());
+
+                methodMenu.visibleProperty().bind(propertyMenu.visibleProperty());
+
+                sumbitStatisticButton.visibleProperty().bind(methodMenu.visibleProperty());
 
                 tableView.getItems().add(newValue); // add an item to the table view
 
@@ -135,6 +151,10 @@ public class ResultsController implements Initializable {
     public void onChooseSimulation() {
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             showGraph();
+            entityMenu.getSelectionModel().clearSelection();
+            propertyMenu.getSelectionModel().clearSelection();
+            methodMenu.getSelectionModel().clearSelection();
+            resultLabel.setVisible(false);
         });
     }
 
@@ -166,7 +186,6 @@ public class ResultsController implements Initializable {
     }
 
     public void createEntityMenu(Simulation selectedSimulation) {
-        entityMenu.setVisible(true);
         entityMenu.getItems().clear();
         selectedSimulation.getEntityList().forEach(currentEntity -> {
             entityMenu.getItems().add(currentEntity.getName());
@@ -175,8 +194,6 @@ public class ResultsController implements Initializable {
 
     public void createPropertyMenu(ActionEvent event) {
         Simulation selectedSimulation = listView.getSelectionModel().getSelectedItem();
-        propertyMenu.setDisable(false);
-        propertyMenu.setVisible(true);
         propertyMenu.getItems().clear();
         String chosenEntity = entityMenu.getSelectionModel().getSelectedItem();
         for (EntityDefinition entity : selectedSimulation.getEntityList()) {
@@ -189,7 +206,38 @@ public class ResultsController implements Initializable {
     }
 
     public void createMethodMenu(ActionEvent event) {
+        methodMenu.getItems().clear();
+        methodMenu.getItems().add("Histogram");
+        methodMenu.getItems().add("Consistency");
+        methodMenu.getItems().add("Average");
+    }
 
+    public void showSubmitButton(ActionEvent event) {
+        return;
+    }
+
+    public void submitCalc(ActionEvent event) {
+        String chosenEntity = entityMenu.getSelectionModel().getSelectedItem();
+        String chosenProperty = propertyMenu.getSelectionModel().getSelectedItem();
+        int id = listView.getSelectionModel().getSelectedIndex() + 1;
+        switch (methodMenu.getSelectionModel().getSelectedItem()) {
+            case "Histogram":
+                break;
+            case "Consistency":
+                resultLabel.setText("Consistency: " + String.valueOf(simulationManager.getConsistency(chosenEntity, chosenProperty, id)));
+                resultLabel.setVisible(true);
+                break;
+            case "Average":
+                try {
+                    resultLabel.setText("Average: " + String.valueOf(simulationManager.getAverage(chosenEntity, chosenProperty, id)));
+                    resultLabel.setVisible(true);
+                } catch (RuntimeException e) {
+                    resultLabel.setText(e.getMessage());
+                    resultLabel.setVisible(true);
+                }
+                break;
+
+        }
     }
 
 

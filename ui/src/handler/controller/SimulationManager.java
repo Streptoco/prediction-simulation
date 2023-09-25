@@ -117,5 +117,13 @@ public class SimulationManager {
         return result;
     }
 
+    public double getConsistency(String entityName, String propertyName, int id) {
+        return engine.getConsistency(entityName, propertyName, id);
+    }
+
+    public double getAverage(String entityName, String propertyName, int id) {
+        return engine.averageValueOfProperty(entityName, propertyName, id);
+    }
+
 
 }

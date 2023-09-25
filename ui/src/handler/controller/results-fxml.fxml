@@ -71,17 +71,30 @@
       </HBox>
    </center>
    <bottom>
-      <HBox alignment="BOTTOM_CENTER" spacing="8.0" BorderPane.alignment="BOTTOM_RIGHT">
+      <HBox alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="799.0" spacing="8.0" BorderPane.alignment="BOTTOM_RIGHT">
          <children>
-            <ComboBox fx:id="entityMenu" maxWidth="78.0" onAction="#createPropertyMenu" prefHeight="25.0" prefWidth="78.0" promptText="Entity" visible="false" />
-            <ComboBox fx:id="propertyMenu" disable="true" layoutX="333.0" layoutY="10.0" maxWidth="78.0" prefHeight="25.0" prefWidth="78.0" promptText="Property" visible="false" />
-            <ComboBox fx:id="methodMenu" disable="true" layoutX="376.0" layoutY="10.0" maxWidth="78.0" prefHeight="25.0" prefWidth="78.0" promptText="Method" visible="false" />
+            <Label fx:id="statisticsLabel" alignment="CENTER" prefHeight="17.0" prefWidth="83.0" text="Statistics:" visible="false">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <ComboBox fx:id="entityMenu" onAction="#createPropertyMenu" prefWidth="110.0" promptText="Entity" visible="false" />
+            <ComboBox fx:id="propertyMenu" layoutX="333.0" layoutY="10.0" onAction="#createMethodMenu" prefWidth="110.0" promptText="Property" visible="false" />
+            <ComboBox fx:id="methodMenu" layoutX="376.0" layoutY="10.0" onAction="#showSubmitButton" prefWidth="110.0" promptText="Method" visible="false" />
+            <Button fx:id="sumbitStatisticButton" mnemonicParsing="false" onAction="#submitCalc" text="Submit" visible="false" />
+            <Label fx:id="resultLabel" prefHeight="24.0" prefWidth="340.0" text="Result" visible="false">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Label>
          </children>
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <padding>
-            <Insets bottom="15.0" right="100.0" />
+            <Insets bottom="15.0" left="25.0" />
          </padding>
       </HBox>
    </bottom>

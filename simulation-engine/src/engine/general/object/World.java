@@ -245,7 +245,8 @@ public class World {
                             throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " isn't a number");
                         }
                     } else {
-                        throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " didn't found");
+                        //throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " didn't found");
+                        throw new RuntimeException("The property: " + propertyName + " of the entity: " + entityName + " isn't a number");
                     }
                 }
 
@@ -257,7 +258,7 @@ public class World {
             currentManager = this.managers.get(entityName);
             for (EntityInstance currentEntity : currentManager.getInstances()) {
                 if (currentEntity.isAlive()) {
-                    result += (int) currentEntity.getPropertyByName(propertyName).getValue();
+                    result += (double) currentEntity.getPropertyByName(propertyName).getValue();
                 }
             }
             return result / currentManager.getCountInstances();

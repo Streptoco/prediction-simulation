@@ -14,7 +14,6 @@ public class Simulation {
     private DoubleProperty progress;
     private DoubleProperty tickProgress;
     private IntegerProperty entityAmount;
-
     private BooleanProperty isSimulationDone;
     private ListProperty<EntityDefinition> entityList;
     private ScatterChart<Number, Number> entitiesAmountScatter;
