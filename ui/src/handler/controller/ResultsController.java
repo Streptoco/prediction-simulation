@@ -32,11 +32,7 @@ public class ResultsController implements Initializable {
     @FXML
     private ListView<Simulation> listView;
     @FXML
-    private TableColumn<Simulation, IntegerProperty> entityAmount;
-    @FXML
-    private TableColumn<Simulation, String> entityName;
-    @FXML
-    private TableView<Simulation> tableView;
+    private ListView<EntityDefinition> entityList;
     @FXML
     private ProgressBar progressBar;
     @FXML
@@ -69,6 +65,8 @@ public class ResultsController implements Initializable {
     private TextArea resultLabel;
     @FXML
     private Label statisticsLabel;
+    @FXML
+    private Label entityAmountLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,6 +77,14 @@ public class ResultsController implements Initializable {
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
             if (newValue != null) {
+                entityList.setItems(newValue.getEntityList());
+
+                entityList.getSelectionModel().selectedItemProperty().addListener((observableNew, oldValueNew, newValueNew) -> {
+                    if (newValueNew != null) {
+                        entityAmountLabel.textProperty().bind(Bindings.concat("Amount: ", newValueNew.populationPropertyProperty().asString()));
+                    }
+                });
+
                 secondsLabel.textProperty().bind(Bindings.concat("Current second: ", newValue.secondsProperty().asString()));
 
                 tickLabel.textProperty().bind(Bindings.concat("Current tick: ", newValue.ticksProperty().asString()));
@@ -88,8 +94,6 @@ public class ResultsController implements Initializable {
                 progressBar.progressProperty().bind(newValue.progressProperty());
 
                 tickProgress.progressProperty().bind(newValue.tickProgressProperty());
-
-                entityName.setCellValueFactory(new PropertyValueFactory<Simulation, String>("entityAmount")); // add "simulation" type to column. this needs to be changed
 
                 rerunButton.visibleProperty().bind(newValue.isSimulationDoneProperty());
 
@@ -102,12 +106,6 @@ public class ResultsController implements Initializable {
                 methodMenu.visibleProperty().bind(propertyMenu.visibleProperty());
 
                 sumbitStatisticButton.visibleProperty().bind(methodMenu.visibleProperty());
-
-                tableView.getItems().add(newValue); // add an item to the table view
-
-                tableView.setItems(tableView.getItems()); // set the tableview. none of this works and requires attention.
-
-
             }
 
         });

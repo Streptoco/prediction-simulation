@@ -52,8 +52,7 @@ public class SimulationManager {
             simulation.setStatus("Simulation status: " + simulationStatusDTO.status.toString().toLowerCase());
             simulation.setEntityList(FXCollections.observableList(simulationStatusDTO.entityDefinitions)); // We're trying to take a regular list, and make it an observable list so that it could fit the PropertyList we have in the Simulation class.
             for (EntityDefinition entityDefinition : simulation.getEntityList()) {
-                entityDefinition.setPopulation(simulationStatusDTO.entitiesAmount.get(entityDefinition.getName()));
-                System.out.println(entityDefinition);
+                entityDefinition.setPopulationProperty(simulationStatusDTO.entitiesAmount.get(entityDefinition.getName()));
             }
             if ((simulationStatusDTO.status.equals(Status.DONE)) || simulationStatusDTO.status.equals(Status.ABORTED)) {
                 simulation.setIsSimulationDone(true);

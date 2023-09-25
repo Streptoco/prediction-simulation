@@ -36,23 +36,15 @@
                               <Button fx:id="pauseButton" layoutX="365.0" layoutY="22.0" mnemonicParsing="false" onAction="#pauseButtonAction" text="Pause" />
                               <Button fx:id="resumeButton" layoutX="296.0" layoutY="22.0" mnemonicParsing="false" onAction="#resumeButtonAction" text="Resume" />
                               <Button fx:id="stopButton" layoutX="425.0" layoutY="22.0" mnemonicParsing="false" onAction="#stopButtonAction" text="Stop simulation" />
-                              <ScrollPane layoutX="296.0" layoutY="63.0" prefHeight="87.0" prefWidth="241.0">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="237.0">
-                                       <children>
-                                          <TableView fx:id="tableView" prefHeight="238.0" prefWidth="291.0">
-                                            <columns>
-                                              <TableColumn fx:id="entityName" prefWidth="116.0" text="C1" />
-                                              <TableColumn fx:id="entityAmount" prefWidth="110.0" text="C2" />
-                                            </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
-                                </content>
+                              <ScrollPane layoutX="366.0" layoutY="55.0" prefHeight="87.0" prefWidth="160.0">
+                                 <content>
+                                    <ListView fx:id="entityList" prefHeight="135.0" prefWidth="210.0" />
+                                 </content>
                               </ScrollPane>
                               <ProgressBar fx:id="tickProgress" layoutX="109.0" layoutY="54.0" prefHeight="18.0" prefWidth="178.0" progress="0.0" />
                               <Label fx:id="tickProgressLabel" layoutX="29.0" layoutY="55.0" text="Tick progress" />
                               <Button fx:id="rerunButton" layoutX="206.0" layoutY="127.0" mnemonicParsing="false" onAction="#rerunButtonAction" text="Rerun" visible="false" />
+                              <Label fx:id="entityAmountLabel" layoutX="241.0" layoutY="81.0" text="Amount:" />
                            </children>
                         </AnchorPane>
                      </children>
