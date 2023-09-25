@@ -19,15 +19,16 @@ public class SimulationStatusDTO {
     public final List<EntityDefinition> entityDefinitions;
 
 
-    public SimulationStatusDTO(int simID, Status status, int currentTick, long simulationRunningTimeInMillis, long totalSecondsInMillis, int totalTicks, List<EntityDefinition> entityDefinitions) {
+    public SimulationStatusDTO(int simID, Status status, int currentTick, long simulationRunningTimeInMillis,
+                               long totalSecondsInMillis, int totalTicks, List<EntityDefinition> entityDefinitions, Map<String, Integer> entitiesAmount) {
         this.simID = simID;
         this.status = status;
         this.currentTick = currentTick;
         this.simulationRunningTimeInMillis = simulationRunningTimeInMillis;
-        this.entitiesAmount = new HashMap<>();
         this.totalSecondsInMillis = totalSecondsInMillis;
         this.totalTicks = totalTicks;
         this.entityDefinitions = entityDefinitions;
+        this.entitiesAmount = entitiesAmount;
     }
     public void updateEntityAmount(String entityName, int amount) {
         this.entitiesAmount.put(entityName, amount);

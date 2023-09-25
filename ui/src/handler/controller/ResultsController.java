@@ -133,7 +133,11 @@ public class ResultsController implements Initializable {
     }
 
     public void rerunButtonAction(ActionEvent actionEvent) throws JAXBException {
-        simulationManager.engine.reRunSimulation(listView.getSelectionModel().getSelectedItem().getSimulationID());
+        int simulationID = simulationManager.engine.reRunSimulation(listView.getSelectionModel().getSelectedItem().getSimulationID());
+        Simulation simulation = new Simulation();
+        simulation.setSimulationID(simulationID);
+        simulationManager.addSimulation(simulation);
+        simulationManager.engine.runSimulation(simulationID);
     }
 
     public void onStatusLabelChange() {

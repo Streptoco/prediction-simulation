@@ -30,4 +30,13 @@ public class EntityDefinition implements EntityDefinitionInterface {
     public void addProperty(PropertyInterface newProperty) {
         propertyList.add(newProperty);
     }
+
+    @Override
+    public String toString() {
+        return "EntityDefinition{" +
+                "name='" + name + '\'' +
+                ", population=" + population +
+                ", propertyList=" + propertyList +
+                '}';
+    }
 }

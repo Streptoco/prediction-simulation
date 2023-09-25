@@ -210,7 +210,7 @@ public class Engine {
                 EntityAmountDTO currentEntity = new EntityAmountDTO(entry.getKey(), entry.getValue());
                 setupPopulation(currentEntity, newSimID);
             }
-            runSimulation(newSimID);
+//            runSimulation(newSimID);
             return newSimID;
         } else if (this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.RUNNING) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.PAUSED)){
             throw new RuntimeException("The simulation: " + id + " is still running, so can't rerun the simulation");
