@@ -52,6 +52,7 @@
                               </ScrollPane>
                               <ProgressBar fx:id="tickProgress" layoutX="109.0" layoutY="54.0" prefHeight="18.0" prefWidth="178.0" progress="0.0" />
                               <Label fx:id="tickProgressLabel" layoutX="29.0" layoutY="55.0" text="Tick progress" />
+                              <Button fx:id="rerunButton" layoutX="206.0" layoutY="127.0" mnemonicParsing="false" onAction="#pauseButtonAction" text="Rerun" visible="false" />
                            </children>
                         </AnchorPane>
                      </children>

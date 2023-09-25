@@ -9,6 +9,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
@@ -46,6 +47,8 @@ public class ResultsController implements Initializable {
     private Button stopButton;
     @FXML
     private VBox resultBox;
+    @FXML
+    private Button rerunButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,6 +70,8 @@ public class ResultsController implements Initializable {
                 tickProgress.progressProperty().bind(newValue.tickProgressProperty());
 
                 entityName.setCellValueFactory(new PropertyValueFactory<Simulation, String>("entityAmount")); // add "simulation" type to column. this needs to be changed
+
+                rerunButton.visibleProperty().bind(newValue.isSimulationDoneProperty());
 
                 tableView.getItems().add(newValue); // add an item to the table view
 
@@ -102,14 +107,13 @@ public class ResultsController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if (statusLabel.textProperty().get().contains("done")) {
-                    if (!resultBox.getChildren().isEmpty()) {
-                        Platform.runLater(() -> {
-                            resultBox.getChildren().set(0, simulationManager.getEntitiesAmountPerTickWhenSimulationIsDone(listView.getSelectionModel().getSelectedIndex() + 1));
-                        });
+                    int currentSelection = listView.getSelectionModel().getSelectedIndex() + 1;
+                    if (listView.getSelectionModel().getSelectedIndex() + 1 == currentSelection) {
+                        showGraph();
                     } else {
-                        Platform.runLater(() -> {
-                            resultBox.getChildren().add(simulationManager.getEntitiesAmountPerTickWhenSimulationIsDone(listView.getSelectionModel().getSelectedIndex() + 1));
-                        });
+                        ResultGraphTask entitiesGraph = new ResultGraphTask(simulationManager, currentSelection);
+                        Thread thread = new Thread(entitiesGraph);
+                        thread.start();
                     }
                 }
             }
@@ -118,18 +122,29 @@ public class ResultsController implements Initializable {
 
     public void onChooseSimulation() {
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (!resultBox.getChildren().isEmpty()) {
-                if (simulationManager.getScatter(listView.getSelectionModel().getSelectedIndex() + 1) != null) {
-                    resultBox.getChildren().set(0, simulationManager.getScatter(listView.getSelectionModel().getSelectedIndex() + 1));
-                } else {
-                    resultBox.getChildren().remove(0);
-                }
-            } else {
-                if (simulationManager.getScatter(listView.getSelectionModel().getSelectedIndex() + 1) != null) {
-                    resultBox.getChildren().add(simulationManager.getScatter(listView.getSelectionModel().getSelectedIndex() + 1));
-                }
+            showGraph();
+        });
+    }
 
-            }
+    public void showGraph() {
+        ResultGraphTask entitiesGraph = new ResultGraphTask(simulationManager, listView.getSelectionModel().getSelectedIndex() + 1);
+        Thread thread = new Thread(entitiesGraph);
+        thread.start();
+        entitiesGraph.setOnSucceeded(event -> {
+            ScatterChart<Number, Number> resultGraph = entitiesGraph.getValue();
+            Platform.runLater(() -> {
+                if (resultBox.getChildren().isEmpty()) {
+                    if (resultGraph != null) {
+                        resultBox.getChildren().add(resultGraph);
+                    }
+                } else {
+                    if (resultGraph == null) {
+                        resultBox.getChildren().clear();
+                    } else {
+                        resultBox.getChildren().set(0, resultGraph);
+                    }
+                }
+            });
         });
     }
 

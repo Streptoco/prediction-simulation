@@ -14,6 +14,8 @@ public class Simulation {
     private DoubleProperty progress;
     private DoubleProperty tickProgress;
     private IntegerProperty entityAmount;
+
+    private BooleanProperty isSimulationDone;
     private ListProperty<EntityDefinition> entityList;
     private ScatterChart<Number, Number> entitiesAmountScatter;
 
@@ -27,6 +29,7 @@ public class Simulation {
         progress = new SimpleDoubleProperty();
         tickProgress = new SimpleDoubleProperty();
         entityAmount = new SimpleIntegerProperty();
+        isSimulationDone = new SimpleBooleanProperty();
         entityList = new SimpleListProperty<>();
         entitiesAmountScatter = null;
     }
@@ -58,6 +61,7 @@ public class Simulation {
     public void setTickProgress(double tickProgress) {
         this.tickProgress.set(tickProgress);
     }
+
     public double getProgress() {
         return progress.get();
     }
@@ -118,7 +122,11 @@ public class Simulation {
         this.ticks.set(ticks);
     }
 
-    public ScatterChart<Number, Number> getEntitesAmountScatter() {
+    public BooleanProperty isSimulationDoneProperty() { return isSimulationDone; }
+
+    public void setIsSimulationDone(Boolean status) { this.isSimulationDone.set(status); }
+
+    public ScatterChart<Number, Number> getEntitiesAmountScatter() {
         return entitiesAmountScatter;
     }
 

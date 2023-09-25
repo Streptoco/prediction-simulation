@@ -7,6 +7,7 @@ import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.SimulationStatusDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Side;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -38,16 +39,19 @@ public class SimulationManager {
     }
 
     public void update() {
-        for(Simulation simulation : simulations) {
+        for (Simulation simulation : simulations) {
             SimulationStatusDTO simulationStatusDTO = engine.getSimulationDetails(simulation.getSimulationID());
             if (!(simulationStatusDTO.status.equals(Status.DONE) || simulationStatusDTO.status.equals(Status.PAUSED))) {
-                simulation.setSeconds(simulationStatusDTO.simulationRunningTimeInMillis/1000);
+                simulation.setSeconds(simulationStatusDTO.simulationRunningTimeInMillis / 1000);
                 simulation.setTicks(simulationStatusDTO.currentTick);
-                simulation.setProgress((double)(simulationStatusDTO.simulationRunningTimeInMillis / simulationStatusDTO.totalSecondsInMillis) * 0.001);
-                simulation.setTickProgress((double)simulationStatusDTO.currentTick / (double)simulationStatusDTO.totalTicks);
+                simulation.setProgress((double) (simulationStatusDTO.simulationRunningTimeInMillis / simulationStatusDTO.totalSecondsInMillis) * 0.001);
+                simulation.setTickProgress((double) simulationStatusDTO.currentTick / (double) simulationStatusDTO.totalTicks);
             }
             simulation.setStatus("Simulation status: " + simulationStatusDTO.status.toString().toLowerCase());
             simulation.setEntityList(FXCollections.observableList(simulationStatusDTO.entityDefinitions)); // We're trying to take a regular list, and make it an observable list so that it could fit the PropertyList we have in the Simulation class.
+            if ((simulationStatusDTO.status.equals(Status.DONE)) || simulationStatusDTO.status.equals(Status.ABORTED)) {
+                simulation.setIsSimulationDone(true);
+            }
 
         }
         // TODO: more info
@@ -58,49 +62,54 @@ public class SimulationManager {
         NumberAxis xAxisTick = new NumberAxis();
         xAxisTick.setLabel("Tick");
         xAxisTick.setAutoRanging(false);
-        xAxisTick.setTickUnit(1);
+        xAxisTick.setTickUnit((double) currentSim.getTick() / 50);
         NumberAxis yAxisAmount = new NumberAxis();
         yAxisAmount.setLabel("Amount");
         ScatterChart<Number, Number> resultChart = new ScatterChart<>(xAxisTick, yAxisAmount);
         resultChart.setTitle("Entities Amount per Tick");
         resultChart.setVisible(false);
         List<XYChart.Series<Number, Number>> seriesList = new ArrayList<>();
-        if(currentSim.getStatus().equals(Status.DONE)) {
-            for(EntityDefinition currentEntity : currentSim.getWorld().GetEntities()) {
+        if (currentSim.getStatus().equals(Status.DONE)) {
+            for (EntityDefinition currentEntity : currentSim.getWorld().GetEntities()) {
                 XYChart.Series<Number, Number> series = new XYChart.Series<>();
+                series.getData().add(new XYChart.Data<>(0,0)); // Dummy data in order to make the legend appear, but it doesn't
                 series.setName(currentEntity.getName());
                 seriesList.add(series);
 
             }
             Map<Integer, PopulationsDTO> entitiesAmount = currentSim.getEntitiesAmountPerTick();
-            for(Map.Entry<Integer, PopulationsDTO> currentTick : entitiesAmount.entrySet()) {
-                for(Map.Entry<String, Integer> currentEntityDef : currentTick.getValue().getEntities().entrySet()) {
-                    for(XYChart.Series<Number, Number> currentSeries : seriesList) {
-                        if(currentSeries.getName().equalsIgnoreCase(currentEntityDef.getKey())) {
-                            currentSeries.getData().add(new XYChart.Data<>(currentTick.getKey(),currentEntityDef.getValue()));
+            for (Map.Entry<Integer, PopulationsDTO> currentTick : entitiesAmount.entrySet()) {
+                for (Map.Entry<String, Integer> currentEntityDef : currentTick.getValue().getEntities().entrySet()) {
+                    for (XYChart.Series<Number, Number> currentSeries : seriesList) {
+                        if (currentSeries.getName().equalsIgnoreCase(currentEntityDef.getKey())) {
+                            currentSeries.getData().add(new XYChart.Data<>(currentTick.getKey(), currentEntityDef.getValue()));
                         }
                     }
                 }
             }
-            for(XYChart.Series<Number, Number> currentSeries : seriesList) {
-                resultChart.getData().add(currentSeries);
-            }
-            resultChart.setVisible(true);
+            resultChart.getData().addAll(seriesList);
         }
-        for(Simulation simulation : simulations) {
-            if(simulation.getSimulationID() == id) {
+        for (Simulation simulation : simulations) {
+            if (simulation.getSimulationID() == id) {
                 simulation.setEntitiesAmountScatter(resultChart);
             }
         }
+
+        resultChart.setVisible(true);
+        resultChart.setPrefWidth(300);
+        resultChart.setPrefHeight(190);
+        resultChart.setLegendVisible(true);
+        resultChart.setLegendSide(Side.BOTTOM);
+        resultChart.setStyle("-fx-legend-side: bottom;");
         return resultChart;
     }
 
     public ScatterChart<Number, Number> getScatter(int id) {
         ScatterChart<Number, Number> result = null;
-        for(Simulation simulation : simulations) {
-            if(simulation.getSimulationID() == id) {
-                result = simulation.getEntitesAmountScatter();
-                if(result == null && simulation.getStatus().contains("done")) {
+        for (Simulation simulation : simulations) {
+            if (simulation.getSimulationID() == id) {
+                result = simulation.getEntitiesAmountScatter();
+                if (result == null && simulation.getStatus().contains("done")) {
                     result = getEntitiesAmountPerTickWhenSimulationIsDone(id);
                 }
             }
