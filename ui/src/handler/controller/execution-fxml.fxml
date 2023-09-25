@@ -40,6 +40,7 @@
                         <Button fx:id="setChosenProperty" layoutX="185.0" layoutY="193.0" mnemonicParsing="false" onAction="#updateProperty" prefHeight="25.0" prefWidth="120.0" text="Set!" />
                         <TextField fx:id="stringPropertyTextField" layoutX="170.0" layoutY="160.0" visible="false" />
                         <CheckBox fx:id="trueFalseCheckBox" layoutX="203.0" layoutY="135.0" mnemonicParsing="false" onAction="#onTrueFalseChange" selected="true" text="True" visible="false" />
+                        <Label fx:id="randomValueLabel" layoutX="76.0" layoutY="244.0" prefHeight="17.0" prefWidth="337.0" text="Please choose a variable." visible="false" />
                      </children>
                   </AnchorPane>
                </children>

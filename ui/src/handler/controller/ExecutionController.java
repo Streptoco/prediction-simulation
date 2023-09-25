@@ -2,6 +2,7 @@ package handler.controller;
 
 import engine.action.expression.ReturnType;
 import engine.general.object.Engine;
+import engine.general.object.World;
 import enginetoui.dto.basic.impl.EntityDTO;
 import enginetoui.dto.basic.impl.PropertyDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
@@ -61,6 +62,8 @@ public class ExecutionController implements Initializable {
     CheckBox trueFalseCheckBox;
     @FXML
     TextField stringPropertyTextField;
+    @FXML
+    Label randomValueLabel;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -140,18 +143,27 @@ public class ExecutionController implements Initializable {
 
     public void selectProperty(ActionEvent actionEvent) {
         if (propertyComboBox.getSelectionModel().getSelectedItem() != null) {
+            randomize.setSelected(false);
             if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.DECIMAL) || propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.INT)) {
                 propertySlider.setMin(propertyComboBox.getSelectionModel().getSelectedItem().from);
                 propertySlider.setMax(propertyComboBox.getSelectionModel().getSelectedItem().to);
                 propertySlider.setVisible(true);
                 propertyComboBoxLabel.setVisible(true);
+                trueFalseCheckBox.setVisible(false);
+                stringPropertyTextField.setVisible(false);
                 statusLabel.setText("Now adjusting: " + propertyComboBox.getSelectionModel().getSelectedItem().getName() + ", you can always change this.");
                 propertySlider.setDisable(false);
                 randomize.setDisable(false);
             } else if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.BOOLEAN)) {
                 trueFalseCheckBox.setVisible(true);
+                propertySlider.setVisible(false);
+                propertyComboBoxLabel.setVisible(false);
+                stringPropertyTextField.setVisible(false);
             } else {
                 stringPropertyTextField.setVisible(true);
+                trueFalseCheckBox.setVisible(false);
+                propertySlider.setVisible(false);
+                propertyComboBoxLabel.setVisible(false);
             }
         }
     }
@@ -168,9 +180,9 @@ public class ExecutionController implements Initializable {
         if (entityComboBox.getSelectionModel().getSelectedItem() == null) {
             return;
         }
-        EntityAmountDTO entityAmountDTO = new EntityAmountDTO(entityComboBox.getSelectionModel().getSelectedItem().toString(),(int)entitySlider.getValue());
-        engine.setupPopulation(entityAmountDTO,currentSimulationID);
-        currentPopulation += (int)entitySlider.getValue();
+        EntityAmountDTO entityAmountDTO = new EntityAmountDTO(entityComboBox.getSelectionModel().getSelectedItem().toString(), (int) entitySlider.getValue());
+        engine.setupPopulation(entityAmountDTO, currentSimulationID);
+        currentPopulation += (int) entitySlider.getValue();
         entitySlider.setDisable(true);
         entityComboBox.getItems().remove(entityComboBox.getSelectionModel().getSelectedItem());
         if ((--amountOfEntities) == 0) {
@@ -201,14 +213,31 @@ public class ExecutionController implements Initializable {
         }
         if (randomize.isSelected()) {
             Random random = new Random();
-            int max = (int)propertyComboBox.getSelectionModel().getSelectedItem().to;
-            int min = (int)propertyComboBox.getSelectionModel().getSelectedItem().from;
-            int randomNum = random.nextInt((max - min) + 1) + min;
-            propertyComboBoxLabel.setText("Value: " + String.valueOf(randomNum));
-            engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), randomNum),currentSimulationID);
-            randomize.setSelected(false);
-        }
-        else {
+            if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.DECIMAL) || propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.INT)) {
+                int max = (int) propertyComboBox.getSelectionModel().getSelectedItem().to;
+                int min = (int) propertyComboBox.getSelectionModel().getSelectedItem().from;
+                int randomNum = random.nextInt((max - min) + 1) + min;
+                propertyComboBoxLabel.setText("Value: " + String.valueOf(randomNum));
+                randomValueLabel.setText("Property: " + propertyComboBox.getSelectionModel().getSelectedItem().toString() + " Value: " + String.valueOf(randomNum));
+                randomValueLabel.setVisible(true);
+                engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), randomNum), currentSimulationID);
+                randomize.setSelected(false);
+                propertySlider.setVisible(false);
+                propertyComboBoxLabel.setVisible(false);
+            } else if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.BOOLEAN)) {
+                boolean randomBoolean = random.nextBoolean();
+                randomValueLabel.setText("Property: " + propertyComboBox.getSelectionModel().getSelectedItem().toString() + " Value: " + String.valueOf(randomBoolean));
+                randomValueLabel.setVisible(true);
+                engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), randomBoolean), currentSimulationID);
+                trueFalseCheckBox.setVisible(false);
+            } else {
+                String randomString = World.StringRandomGetter();
+                engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), randomString), currentSimulationID);
+                randomValueLabel.setText("Property: " + propertyComboBox.getSelectionModel().getSelectedItem().toString() + " Value: " + String.valueOf(randomString));
+                randomValueLabel.setVisible(true);
+                stringPropertyTextField.setVisible(false);
+            }
+        } else {
             if (propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.DECIMAL) || propertyComboBox.getSelectionModel().getSelectedItem().type.equals(ReturnType.INT)) {
                 engine.setupEnvProperties(new PropertyInitializeDTO(propertyComboBox.getSelectionModel().getSelectedItem().toString(), propertySlider.getValue()), currentSimulationID);
                 propertySlider.setVisible(false);
@@ -252,7 +281,7 @@ public class ExecutionController implements Initializable {
     }
 
     public void onTrueFalseChange(ActionEvent actionEvent) {
-        if(trueFalseCheckBox.isSelected()) {
+        if (trueFalseCheckBox.isSelected()) {
             trueFalseCheckBox.setText("True");
         } else {
             trueFalseCheckBox.setText("False");

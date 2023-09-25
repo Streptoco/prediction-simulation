@@ -139,7 +139,7 @@ public class ResultsController implements Initializable {
         statusLabel.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (statusLabel.textProperty().get().contains("done")) {
+                if (statusLabel.textProperty().get().contains("done") || statusLabel.textProperty().get().contains("aborted")) {
                     int currentSelection = listView.getSelectionModel().getSelectedIndex() + 1;
                     if (listView.getSelectionModel().getSelectedIndex() + 1 == currentSelection) {
                         showGraph();

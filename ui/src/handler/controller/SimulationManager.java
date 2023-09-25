@@ -19,13 +19,12 @@ import java.util.Map;
 
 public class SimulationManager {
     Engine engine; // TODO: maybe change idk
+    private ObservableList<Simulation> simulations;
+    private List<Simulation> runningSimulations;
 
     public ObservableList<Simulation> getSimulations() {
         return simulations;
     }
-
-    private ObservableList<Simulation> simulations;
-    private List<Simulation> runningSimulations;
 
     public SimulationManager(Engine engine) {
         this.engine = engine;
@@ -57,7 +56,7 @@ public class SimulationManager {
         // TODO: more info
     }
 
-    public ScatterChart<Number, Number> getEntitiesAmountPerTickWhenSimulationIsDone(int id) {
+    private ScatterChart<Number, Number> getEntitiesAmountPerTickWhenSimulationIsDone(int id) {
         SimulationRunner currentSim = engine.getSimulationRunner(id);
         NumberAxis xAxisTick = new NumberAxis();
         xAxisTick.setLabel("Tick");
@@ -69,10 +68,10 @@ public class SimulationManager {
         resultChart.setTitle("Entities Amount per Tick");
         resultChart.setVisible(false);
         List<XYChart.Series<Number, Number>> seriesList = new ArrayList<>();
-        if (currentSim.getStatus().equals(Status.DONE)) {
+        if (currentSim.getStatus().equals(Status.DONE) || currentSim.getStatus().equals(Status.ABORTED)) {
             for (EntityDefinition currentEntity : currentSim.getWorld().GetEntities()) {
                 XYChart.Series<Number, Number> series = new XYChart.Series<>();
-                series.getData().add(new XYChart.Data<>(0,0)); // Dummy data in order to make the legend appear, but it doesn't
+                series.getData().add(new XYChart.Data<>(0, 0)); // Dummy data in order to make the legend appear, but it doesn't
                 series.setName(currentEntity.getName());
                 seriesList.add(series);
 
@@ -109,7 +108,7 @@ public class SimulationManager {
         for (Simulation simulation : simulations) {
             if (simulation.getSimulationID() == id) {
                 result = simulation.getEntitiesAmountScatter();
-                if (result == null && simulation.getStatus().contains("done")) {
+                if (result == null && (simulation.getStatus().contains("done") || simulation.getStatus().contains("aborted"))) {
                     result = getEntitiesAmountPerTickWhenSimulationIsDone(id);
                 }
             }
