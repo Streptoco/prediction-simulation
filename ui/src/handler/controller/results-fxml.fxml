@@ -52,7 +52,7 @@
                               </ScrollPane>
                               <ProgressBar fx:id="tickProgress" layoutX="109.0" layoutY="54.0" prefHeight="18.0" prefWidth="178.0" progress="0.0" />
                               <Label fx:id="tickProgressLabel" layoutX="29.0" layoutY="55.0" text="Tick progress" />
-                              <Button fx:id="rerunButton" layoutX="206.0" layoutY="127.0" mnemonicParsing="false" onAction="#pauseButtonAction" text="Rerun" visible="false" />
+                              <Button fx:id="rerunButton" layoutX="206.0" layoutY="127.0" mnemonicParsing="false" onAction="#rerunButtonAction" text="Rerun" visible="false" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -70,4 +70,19 @@
          </BorderPane.margin>
       </HBox>
    </center>
+   <bottom>
+      <HBox alignment="BOTTOM_CENTER" spacing="8.0" BorderPane.alignment="BOTTOM_RIGHT">
+         <children>
+            <ComboBox fx:id="entityMenu" maxWidth="78.0" onAction="#createPropertyMenu" prefHeight="25.0" prefWidth="78.0" promptText="Entity" visible="false" />
+            <ComboBox fx:id="propertyMenu" disable="true" layoutX="333.0" layoutY="10.0" maxWidth="78.0" prefHeight="25.0" prefWidth="78.0" promptText="Property" visible="false" />
+            <ComboBox fx:id="methodMenu" disable="true" layoutX="376.0" layoutY="10.0" maxWidth="78.0" prefHeight="25.0" prefWidth="78.0" promptText="Method" visible="false" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="15.0" right="100.0" />
+         </padding>
+      </HBox>
+   </bottom>
 </BorderPane>

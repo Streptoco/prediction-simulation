@@ -1,7 +1,6 @@
 package handler.controller;
 
 import engine.general.object.Engine;
-import engine.xml.NewXMLReader;
 import enginetoui.dto.basic.impl.WorldDTO;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -12,13 +11,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import uitoengine.filetransfer.EntityAmountDTO;
-import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -128,9 +127,8 @@ public class MainController extends ResourceBundle implements Initializable {
                     simulationManager.update();
                 });
             }
-        },0,100);
+        }, 0, 100);
     }
-
 
     private void ChangeDynamicDetailsScreen() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -176,4 +174,6 @@ public class MainController extends ResourceBundle implements Initializable {
     public void handleResultsButton(ActionEvent actionEvent) throws IOException {
         ChangeDynamicResultsScreen();
     }
+
+
 }

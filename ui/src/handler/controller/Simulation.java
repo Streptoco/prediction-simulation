@@ -122,9 +122,13 @@ public class Simulation {
         this.ticks.set(ticks);
     }
 
-    public BooleanProperty isSimulationDoneProperty() { return isSimulationDone; }
+    public BooleanProperty isSimulationDoneProperty() {
+        return isSimulationDone;
+    }
 
-    public void setIsSimulationDone(Boolean status) { this.isSimulationDone.set(status); }
+    public void setIsSimulationDone(Boolean status) {
+        this.isSimulationDone.set(status);
+    }
 
     public ScatterChart<Number, Number> getEntitiesAmountScatter() {
         return entitiesAmountScatter;

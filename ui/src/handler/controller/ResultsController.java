@@ -1,5 +1,6 @@
 package handler.controller;
 
+import engine.entity.impl.EntityDefinition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
@@ -49,6 +50,12 @@ public class ResultsController implements Initializable {
     private VBox resultBox;
     @FXML
     private Button rerunButton;
+    @FXML
+    private ComboBox<String> entityMenu;
+    @FXML
+    private ComboBox<String> propertyMenu;
+    @FXML
+    private ComboBox<String> methodMenu;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -102,6 +109,10 @@ public class ResultsController implements Initializable {
         simulationManager.engine.pauseSimulation(selectedSimulation.getSimulationID());
     }
 
+    public void rerunButtonAction(ActionEvent actionEvent) {
+
+    }
+
     public void onStatusLabelChange() {
         statusLabel.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -115,6 +126,7 @@ public class ResultsController implements Initializable {
                         Thread thread = new Thread(entitiesGraph);
                         thread.start();
                     }
+                    createStatisticMenu();
                 }
             }
         });
@@ -146,6 +158,38 @@ public class ResultsController implements Initializable {
                 }
             });
         });
+    }
+
+    public void createStatisticMenu() {
+        Simulation selectedSimulation = listView.getSelectionModel().getSelectedItem();
+        createEntityMenu(selectedSimulation);
+    }
+
+    public void createEntityMenu(Simulation selectedSimulation) {
+        entityMenu.setVisible(true);
+        entityMenu.getItems().clear();
+        selectedSimulation.getEntityList().forEach(currentEntity -> {
+            entityMenu.getItems().add(currentEntity.getName());
+        });
+    }
+
+    public void createPropertyMenu(ActionEvent event) {
+        Simulation selectedSimulation = listView.getSelectionModel().getSelectedItem();
+        propertyMenu.setDisable(false);
+        propertyMenu.setVisible(true);
+        propertyMenu.getItems().clear();
+        String chosenEntity = entityMenu.getSelectionModel().getSelectedItem();
+        for (EntityDefinition entity : selectedSimulation.getEntityList()) {
+            if (entity.getName().equalsIgnoreCase(chosenEntity)) {
+                entity.getProps().forEach(currentProperty -> {
+                    propertyMenu.getItems().add(currentProperty.getName());
+                });
+            }
+        }
+    }
+
+    public void createMethodMenu(ActionEvent event) {
+
     }
 
 
