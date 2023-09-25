@@ -9,13 +9,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ResultsController implements Initializable {
@@ -216,12 +222,21 @@ public class ResultsController implements Initializable {
         return;
     }
 
-    public void submitCalc(ActionEvent event) {
+    public void submitCalc(ActionEvent event) throws IOException {
         String chosenEntity = entityMenu.getSelectionModel().getSelectedItem();
         String chosenProperty = propertyMenu.getSelectionModel().getSelectedItem();
         int id = listView.getSelectionModel().getSelectedIndex() + 1;
         switch (methodMenu.getSelectionModel().getSelectedItem()) {
             case "Histogram":
+                Stage popupStage = new Stage();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("histogram.fxml"));
+                Parent root = loader.load();
+                popupStage.setScene(new Scene(root, 500, 500));
+                HistogramController histogramController = loader.getController();
+                Map<String, Integer> dataMap = simulationManager.GetHistogram(chosenEntity, chosenProperty, id);
+                histogramController.setStage(popupStage, dataMap);
+                popupStage.setResizable(false);
+                popupStage.show();
                 break;
             case "Consistency":
                 resultLabel.setText("Consistency: " + String.valueOf(simulationManager.getConsistency(chosenEntity, chosenProperty, id)));

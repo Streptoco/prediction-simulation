@@ -125,5 +125,9 @@ public class SimulationManager {
         return engine.averageValueOfProperty(entityName, propertyName, id);
     }
 
+    public Map<String, Integer> GetHistogram(String entityName, String propertyName, int id) {
+        return this.engine.GetHistogram(entityName, propertyName, id);
+    }
+
 
 }
