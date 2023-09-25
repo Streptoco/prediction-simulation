@@ -19,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -131,8 +132,8 @@ public class ResultsController implements Initializable {
         simulationManager.engine.pauseSimulation(selectedSimulation.getSimulationID());
     }
 
-    public void rerunButtonAction(ActionEvent actionEvent) {
-
+    public void rerunButtonAction(ActionEvent actionEvent) throws JAXBException {
+        simulationManager.engine.reRunSimulation(listView.getSelectionModel().getSelectedItem().getSimulationID());
     }
 
     public void onStatusLabelChange() {

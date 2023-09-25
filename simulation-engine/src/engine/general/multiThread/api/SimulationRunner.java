@@ -24,7 +24,6 @@ public class SimulationRunner implements Runnable {
     private long currentTime;
     private final Date simDate;
     private final SimpleDateFormat simulationDate;
-
     private SimulationDTO simulationDTO;
 
     private long runningTime = 0;
@@ -88,7 +87,7 @@ public class SimulationRunner implements Runnable {
     }
 
     public synchronized void abortSimulation() {
-        if(this.status.equals(Status.RUNNING)) {
+        if (this.status.equals(Status.RUNNING)) {
             setStatus(Status.ABORTED);
         } else if (this.status.equals(Status.PAUSED)) {
             setStatus(Status.ABORTED);
@@ -136,6 +135,12 @@ public class SimulationRunner implements Runnable {
     }
 
     public SimulationDTO getSimulationDTO() {
+        for(Map.Entry<String,EntityInstanceManager> entry : world.getManagers().entrySet()) {
+            this.simulationDTO.addPopulation(entry.getKey(), entry.getValue().getCountInstances());
+        }
+        for(PropertyInterface property : world.getEnvironment().GetAllEnvVariables()) {
+            this.simulationDTO.addEnvVariable(property.getName(), property.getValue());
+        }
         return this.simulationDTO;
     }
 

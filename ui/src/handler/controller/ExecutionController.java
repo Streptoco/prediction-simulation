@@ -129,6 +129,9 @@ public class ExecutionController implements Initializable {
         propertySlider.setDisable(false);
         setChosen.setDisable(false);
         setChosenProperty.setDisable(false);
+        trueFalseCheckBox.setVisible(false);
+        stringPropertyTextField.setVisible(false);
+        randomValueLabel.setVisible(false);
         currentPopulation = 0;
     }
 
@@ -277,7 +280,7 @@ public class ExecutionController implements Initializable {
     }
 
     public void clearSimulation(ActionEvent actionEvent) {
-        // TODO: clear all the data
+        customClearInitialize();
         statusLabel.setText("Data cleared!");
     }
 
