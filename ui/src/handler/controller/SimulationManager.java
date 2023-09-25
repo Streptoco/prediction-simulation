@@ -5,6 +5,7 @@ import engine.general.multiThread.api.SimulationRunner;
 import engine.general.multiThread.api.Status;
 import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.SimulationStatusDTO;
+import enginetoui.dto.basic.impl.ThreadQueueDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
@@ -22,6 +23,8 @@ public class SimulationManager {
     private ObservableList<Simulation> simulations;
     private List<Simulation> runningSimulations;
 
+    public ThreadQueueDTO threadQueueDTO;
+
     public ObservableList<Simulation> getSimulations() {
         return simulations;
     }
@@ -30,6 +33,7 @@ public class SimulationManager {
         this.engine = engine;
         simulations = FXCollections.observableArrayList();
         runningSimulations = new ArrayList<>();
+        threadQueueDTO = new ThreadQueueDTO();
     }
 
     public void addSimulation(Simulation simulationToAdd) {
@@ -65,8 +69,9 @@ public class SimulationManager {
         NumberAxis yAxisAmount = new NumberAxis();
         yAxisAmount.setLabel("Amount");
         ScatterChart<Number, Number> resultChart = new ScatterChart<>(xAxisTick, yAxisAmount);
+        resultChart.setLegendVisible(true);
         resultChart.setTitle("Entities Amount per Tick");
-        resultChart.setVisible(false);
+        resultChart.setPrefSize(200,200);
         List<XYChart.Series<Number, Number>> seriesList = new ArrayList<>();
         if (currentSim.getStatus().equals(Status.DONE) || currentSim.getStatus().equals(Status.ABORTED)) {
             for (EntityDefinition currentEntity : currentSim.getWorld().GetEntities()) {
@@ -97,7 +102,6 @@ public class SimulationManager {
         resultChart.setVisible(true);
         resultChart.setPrefWidth(300);
         resultChart.setPrefHeight(190);
-        resultChart.setLegendVisible(true);
         resultChart.setLegendSide(Side.BOTTOM);
         resultChart.setStyle("-fx-legend-side: bottom;");
         return resultChart;

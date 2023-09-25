@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -175,5 +177,14 @@ public class MainController extends ResourceBundle implements Initializable {
         ChangeDynamicResultsScreen();
     }
 
-
+    public void showQueue(ActionEvent event) throws IOException {
+        Stage popupStage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/handler/controller/threadQueue.fxml"));
+        Parent root = loader.load();
+        popupStage.setScene(new Scene(root, 500, 500));
+        ThreadQueueController threadController = loader.getController();
+        threadController.setStage(popupStage, simulationManager);
+        popupStage.setResizable(false);
+        popupStage.show();
+    }
 }
