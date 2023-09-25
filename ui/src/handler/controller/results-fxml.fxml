@@ -85,10 +85,7 @@
             <ComboBox fx:id="propertyMenu" layoutX="333.0" layoutY="10.0" onAction="#createMethodMenu" prefWidth="110.0" promptText="Property" visible="false" />
             <ComboBox fx:id="methodMenu" layoutX="376.0" layoutY="10.0" onAction="#showSubmitButton" prefWidth="110.0" promptText="Method" visible="false" />
             <Button fx:id="sumbitStatisticButton" mnemonicParsing="false" onAction="#submitCalc" text="Submit" visible="false" />
-            <Label fx:id="resultLabel" prefHeight="24.0" prefWidth="340.0" text="Result" visible="false">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin></Label>
+            <TextArea fx:id="resultLabel" editable="false" prefHeight="49.0" prefWidth="253.0" visible="false" />
          </children>
          <opaqueInsets>
             <Insets />

@@ -59,7 +59,7 @@ public class ResultsController implements Initializable {
     @FXML
     private Button sumbitStatisticButton;
     @FXML
-    private Label resultLabel;
+    private TextArea resultLabel;
     @FXML
     private Label statisticsLabel;
 
