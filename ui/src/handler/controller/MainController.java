@@ -1,5 +1,6 @@
 package handler.controller;
 
+import engine.exception.XMLException;
 import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.WorldDTO;
 import javafx.application.Platform;
@@ -48,6 +49,7 @@ public class MainController extends ResourceBundle implements Initializable {
     private TextField textField;
     @FXML
     private Label programLabel;
+    private boolean failedAttempt;
     private Engine engine;
     private SimulationManager simulationManager;
     private WorldDTO currentWorldDTO;
@@ -81,19 +83,37 @@ public class MainController extends ResourceBundle implements Initializable {
 
     @FXML
     public void openFileChooser(ActionEvent event) throws JAXBException {
+        failedAttempt = false;
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(new Stage());
+        StringExpression labelTextBinding = null;
 
         if (selectedFile != null) {
             selectedFile.set(file);
             engine.loadWorld(selectedFile.getValue().getAbsolutePath());
             try {
                 currentSimulation = engine.setupSimulation();
-            } catch (JAXBException e) {
-                throw new RuntimeException(e);
+            } catch (JAXBException | XMLException e) {
+                failedAttempt = true;
+                labelTextBinding = Bindings.concat(e.getMessage());
+                textField.textProperty().bind(labelTextBinding);
+                detailsButton.setDisable(true);
+                newExecutionButton.setDisable(true);
+                resultsButton.setDisable(true);
+                queueManagementButton.setDisable(true);
+                textField.setDisable(true);
+                return;
             }
             currentWorldDTO = engine.getWorldDTO(currentSimulation);
-            StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
+            if (!failedAttempt) {
+                labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
+                detailsButton.setDisable(false);
+                newExecutionButton.setDisable(false);
+                resultsButton.setDisable(false);
+                queueManagementButton.setDisable(false);
+                textField.setDisable(false);
+                loadFileButton.setDisable(true);
+            }
             textField.textProperty().bind(labelTextBinding);
         }
     }
@@ -105,19 +125,11 @@ public class MainController extends ResourceBundle implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        failedAttempt = false;
         engine = new Engine();
         simulationManager = new SimulationManager(engine);
 
-//        engine.loadWorld("D:\\MISC\\תואר\\Java\\ex1\\predictions-1\\simulation-engine\\TestFiles\\master-ex2.xml");
-//        try {
-//            currentSimulation = engine.setupSimulation();
-//        } catch (JAXBException e) {
-//            throw new RuntimeException(e);
-//        }
-//        currentWorldDTO = engine.getWorldDTO(currentSimulation);
-        // TODO: this is a test, don't touch
-
-        StringExpression labelTextBinding = Bindings.concat("Chosen file: ", selectedFile.asString());
+        StringExpression labelTextBinding = Bindings.concat("Please load a file.");
         textField.textProperty().bind(labelTextBinding);
 //        // TODO: make this relevant lel
 
