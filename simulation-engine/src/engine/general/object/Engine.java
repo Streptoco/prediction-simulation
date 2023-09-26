@@ -50,6 +50,10 @@ public class Engine {
         return simulationID;
     }
 
+    public int clearSimulation(int id) {
+        return simulationManager.clearSimulation(id);
+    }
+
     public void setupPopulation(EntityAmountDTO entityAmount, int id) {
         /*
          * TODO:

@@ -27,6 +27,12 @@ public class SimulationExecutionManager {
         simulationCounter = 0;
     }
 
+    public int clearSimulation(int id) {
+        simulations.remove(id);
+        --simulationCounter;
+        return simulationCounter;
+    }
+
     public SimulationRunner getSimulationRunner(int simID) {
         return simulations.get(simID);
     }

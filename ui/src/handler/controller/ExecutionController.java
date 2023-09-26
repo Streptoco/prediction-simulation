@@ -110,9 +110,13 @@ public class ExecutionController implements Initializable {
     public void customClearInitialize() {
         simulationStartedNoGoingBack = false;
         this.runButton.setDisable(true);
-        this.world = engine.getWorldDTO(currentSimulationID);
+//        this.world = engine.getWorldDTO(currentSimulationID);
         runButton.setDisable(true);
         entitySlider.setDisable(true);
+
+        entityComboBox.getItems().clear();
+        propertyComboBox.getItems().clear();
+        amountOfProperties = amountOfEntities = 0;
 
         for (EntityDTO entityDTO : world.getEntities()) {
             entityComboBox.getItems().add(entityDTO); // add all entities to combo box
@@ -272,7 +276,6 @@ public class ExecutionController implements Initializable {
 
     public void runSimulation(ActionEvent actionEvent) {
         engine.runSimulation(currentSimulationID);
-        System.out.println("Sim number: " + currentSimulationID);
         Simulation simulation = new Simulation();
         simulation.setSimulationID(currentSimulationID);
         simulationManager.addSimulation(simulation);
@@ -280,6 +283,10 @@ public class ExecutionController implements Initializable {
     }
 
     public void clearSimulation(ActionEvent actionEvent) {
+        if (simulationStartedNoGoingBack) {
+            currentSimulationID = engine.clearSimulation(currentSimulationID);
+        }
+        simulationStartedNoGoingBack = false;
         customClearInitialize();
         statusLabel.setText("Data cleared!");
     }
