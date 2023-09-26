@@ -22,7 +22,7 @@ public class ThreadQueueController {
         this.stage = stage;
         numOfRunning.setText("Number of running simulations: " + manager.engine.getSimulationManager().getNumberOfRunningSimulations());
         numOfDone.setText("Number of done simulations: " + manager.engine.getSimulationManager().getNumberOfDoneSimulations());
-        numOfWaiting.setText("Number of waiting simulations: " + manager.engine.getSimulationManager().getNumberOfWaitingSimulations());
+        numOfWaiting.setText("Number of waiting simulations: " + (manager.engine.getSimulationManager().getNumberOfWaitingSimulations() - 1));
     }
 
     private void closeQueue(ActionEvent event) {
