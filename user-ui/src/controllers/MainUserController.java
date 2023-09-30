@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-public class MainClientController extends ResourceBundle implements Initializable {
+public class MainUserController extends ResourceBundle implements Initializable {
     @FXML
     private VBox currentSceneHolder;
 
@@ -49,22 +49,22 @@ public class MainClientController extends ResourceBundle implements Initializabl
 
     private void changeDynamicDetailsScreen() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL mainFXML = getClass().getResource("client-details-component.fxml");
+        URL mainFXML = getClass().getResource("user-details-component.fxml");
         fxmlLoader.setLocation(mainFXML);
         fxmlLoader.setResources(this);
         VBox detailBox = fxmlLoader.load();
-        ClientDetailsController clientDetailsController = fxmlLoader.getController();
+        UserDetailsController userDetailsController = fxmlLoader.getController();
         currentSceneHolder.getChildren().clear();
         currentSceneHolder.getChildren().add(detailBox);
     }
 
     private void changeDynamicRequestScreen() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL mainFXML = getClass().getResource("client-request-component.fxml");
+        URL mainFXML = getClass().getResource("user-request-component.fxml");
         fxmlLoader.setLocation(mainFXML);
         fxmlLoader.setResources(this);
         VBox detailBox = fxmlLoader.load();
-        ClientRequestController clientRequestController = fxmlLoader.getController();
+        UserRequestController userRequestController = fxmlLoader.getController();
         currentSceneHolder.getChildren().clear();
         currentSceneHolder.getChildren().add(detailBox);
     }

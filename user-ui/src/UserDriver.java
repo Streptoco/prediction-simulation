@@ -6,12 +6,12 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
-public class ClientDriver extends Application {
+public class UserDriver extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Prediction - Client Panel");
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url = getClass().getResource("client.fxml");
+        URL url = getClass().getResource("user.fxml");
         fxmlLoader.setLocation(url);
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
