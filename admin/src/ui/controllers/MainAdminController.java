@@ -1,5 +1,6 @@
-package controllers;
+package ui.controllers;
 
+import client.AdminClient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,8 @@ public class MainAdminController extends ResourceBundle implements Initializable
     private Label titleLabel;
     @FXML
     private VBox currentSceneHolder;
+    private final AdminClient client = new AdminClient();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,7 +38,12 @@ public class MainAdminController extends ResourceBundle implements Initializable
 
     @Override
     protected Object handleGetObject(String key) {
-        return null;
+        switch (key) {
+            case "client":
+                return client;
+            default:
+                return null;
+        }
     }
 
     @Override

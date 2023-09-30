@@ -1,3 +1,5 @@
+package client;
+
 import okhttp3.OkHttpClient;
 
 public class UserClient {

@@ -1,3 +1,5 @@
+package client;
+
 import okhttp3.*;
 
 import java.io.File;
@@ -5,7 +7,8 @@ import java.io.IOException;
 
 public class AdminClient {
     private final OkHttpClient adminClient;
-    private final String BASE_URL = "localhost:8080";
+    private final String BASE_URL = "http://localhost:8080";
+
 
     public AdminClient() {
         adminClient = new OkHttpClient();
@@ -25,5 +28,6 @@ public class AdminClient {
         Call call = adminClient.newCall(request);
 
         Response response = call.execute();
+        System.out.println(f.getName());
     }
 }
