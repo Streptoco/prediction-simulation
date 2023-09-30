@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainAdminController">
+   <children>
+      <ScrollPane>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <content>
+            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="600.0" spacing="30.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="257.0" prefWidth="100.0">
+                     <children>
+                        <Button fx:id="mngButton" mnemonicParsing="false" onAction="#handleManagementButton" prefWidth="100.0" text="Management" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="48.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="107.0" text=" Admin" textAlignment="CENTER" />
+                        <Button fx:id="allocationsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAllocationButton" prefWidth="100.0" text="Allocations" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets top="15.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="100.0">
+                     <children>
+                        <Button fx:id="historyButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="100.0" text="History" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="48.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+         </content>
+      </ScrollPane>
+      <ScrollPane>
+         <content>
+            <VBox fx:id="currentSceneHolder" prefHeight="323.0" prefWidth="600.0" />
+         </content>
+      </ScrollPane>
+   </children>
+</VBox>
