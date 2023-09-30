@@ -58,7 +58,24 @@ public class MainClientController extends ResourceBundle implements Initializabl
         currentSceneHolder.getChildren().add(detailBox);
     }
 
+    private void changeDynamicRequestScreen() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL mainFXML = getClass().getResource("client-request-component.fxml");
+        fxmlLoader.setLocation(mainFXML);
+        fxmlLoader.setResources(this);
+        VBox detailBox = fxmlLoader.load();
+        ClientRequestController clientRequestController = fxmlLoader.getController();
+        currentSceneHolder.getChildren().clear();
+        currentSceneHolder.getChildren().add(detailBox);
+    }
+
+
     public void handleSimDetailsButton(ActionEvent event) throws IOException {
         changeDynamicDetailsScreen();
+
+    }
+
+    public void handleRequestButton(ActionEvent event) throws IOException {
+        changeDynamicRequestScreen();
     }
 }
