@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class NewXMLReader {
-    private String filePath;
+    private File filePath;
     private World world;
 
     public static List<PropertyInterface> envVariables = null;
@@ -26,16 +26,15 @@ public class NewXMLReader {
     public NewXMLReader() {
     }
 
-    public World ReadXML(String filePath) throws JAXBException, XMLException {
+    public World ReadXML(File filePath) throws JAXBException, XMLException {
         this.filePath = filePath;
-        if (!(filePath.endsWith(".xml"))) {
-            throw new XMLFileException(filePath);
+        if (!(filePath.getName().endsWith(".xml"))) {
+            throw new XMLFileException(filePath.getName());
         }
-        File file = new File(filePath);
         JAXBContext jaxbContext;
         jaxbContext = JAXBContext.newInstance(PRDWorld.class);
         Unmarshaller u = jaxbContext.createUnmarshaller();
-        PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(file);
+        PRDWorld aWholeNewWorld = (PRDWorld) u.unmarshal(filePath);
         this.world = engine.worldbuilder.factory.WorldFactory.BuildWorld(aWholeNewWorld);
         return world;
     }

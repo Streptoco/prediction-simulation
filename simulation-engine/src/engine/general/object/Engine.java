@@ -15,24 +15,21 @@ import uitoengine.filetransfer.EntityAmountDTO;
 import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import javax.xml.bind.JAXBException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Engine {
     private final NewXMLReader reader;
-    private String filePath;
+    private File filePath;
     private final SimulationExecutionManager simulationManager;
 
     public Engine() {
         reader = new NewXMLReader();
         simulationManager = new SimulationExecutionManager();
-        filePath = "";
     }
 
-    public String getFilePath() {
-        return filePath;
-    }
 
     public SimulationRunner getSimulationRunner(int simID) {
         return getSimulationManager().getSimulationRunner(simID);
@@ -42,13 +39,13 @@ public class Engine {
         return simulationManager;
     }
 
-    public void loadWorld(String filePath) {
+    public void loadWorld(File filePath) {
         this.filePath = filePath;
     }
 
     public int setupSimulation() throws JAXBException, XMLException {
         int simulationID = -1;
-        if (!filePath.isEmpty()) {
+        if (filePath != null) {
             World aWholeNewworld = reader.ReadXML(filePath);
             simulationID = simulationManager.CreateSimulation(aWholeNewworld);
 

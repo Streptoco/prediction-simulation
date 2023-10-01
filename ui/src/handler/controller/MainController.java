@@ -90,7 +90,7 @@ public class MainController extends ResourceBundle implements Initializable {
 
         if (selectedFile != null) {
             selectedFile.set(file);
-            engine.loadWorld(selectedFile.getValue().getAbsolutePath());
+            engine.loadWorld(file);
             try {
                 currentSimulation = engine.setupSimulation();
             } catch (JAXBException | XMLException e) {

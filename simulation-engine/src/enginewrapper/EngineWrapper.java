@@ -12,7 +12,7 @@ public class EngineWrapper {
     public static void main(String[] args) {
         int simID0 = 0, simID1 = 1, simID2 = 2;
         Engine engine = new Engine();
-        engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\prediction-simulation\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml".trim());
+//        engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\prediction-simulation\\simulation-engine\\TestFiles\\ex2-virus-modified-3.xml".trim());
         //engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus-modified-2.xml".trim());
         //engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\ex2-virus.xml".trim());
         //engine.loadWorld("C:\\Users\\AfikAtias\\Desktop\\Personal\\MTA\\Java\\Predictions\\master-ex2.xml".trim());

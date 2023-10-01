@@ -99,4 +99,20 @@ public class WorldDTO {
         }
         return resultMap;
     }
+
+    @Override
+    public String toString() {
+        return "WorldDTO{" +
+                "simulationId=" + simulationId +
+                ", simulationDate=" + simulationDate +
+                ", gridDTO=" + gridDTO +
+                ", environment=" + environment +
+                ", entityDefinitions=" + entityDefinitions +
+                ", rules=" + rules +
+                ", instances=" + instances +
+                ", managerList=" + managerList +
+                ", simDate=" + simDate +
+                ", termination=" + termination +
+                '}';
+    }
 }
