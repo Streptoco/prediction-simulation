@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="dto" />
     <orderEntry type="module" module-name="predictions-1" />
+    <orderEntry type="module" module-name="server" />
   </component>
 </module>
