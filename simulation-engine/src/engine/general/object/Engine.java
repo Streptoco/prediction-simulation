@@ -29,9 +29,15 @@ public class Engine {
         simulationManager = new SimulationExecutionManager();
         filePath = "";
     }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
     public SimulationRunner getSimulationRunner(int simID) {
         return getSimulationManager().getSimulationRunner(simID);
     }
+
     public SimulationExecutionManager getSimulationManager() {
         return simulationManager;
     }
@@ -44,7 +50,7 @@ public class Engine {
         int simulationID = -1;
         if (!filePath.isEmpty()) {
             World aWholeNewworld = reader.ReadXML(filePath);
-            simulationID =  simulationManager.CreateSimulation(aWholeNewworld);
+            simulationID = simulationManager.CreateSimulation(aWholeNewworld);
 
         }
         return simulationID;
@@ -201,22 +207,22 @@ public class Engine {
 
     public int reRunSimulation(int id) throws JAXBException {
         int newSimID = -1;
-        if(this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.DONE) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.ABORTED)) {
+        if (this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.DONE) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.ABORTED)) {
             SimulationDTO currentSim = this.getSimulationManager().getSimulationDTO(id);
             newSimID = setupSimulation();
             Map<String, Object> envVariables = currentSim.getEnvProperties();
-            for(Map.Entry<String, Object> entry : envVariables.entrySet()) {
+            for (Map.Entry<String, Object> entry : envVariables.entrySet()) {
                 PropertyInitializeDTO currentProperty = new PropertyInitializeDTO(entry.getKey(), entry.getValue());
                 setupEnvProperties(currentProperty, newSimID);
             }
             Map<String, Integer> entities = currentSim.getPopulations();
-            for(Map.Entry<String, Integer> entry : entities.entrySet()) {
+            for (Map.Entry<String, Integer> entry : entities.entrySet()) {
                 EntityAmountDTO currentEntity = new EntityAmountDTO(entry.getKey(), entry.getValue());
                 setupPopulation(currentEntity, newSimID);
             }
 //            runSimulation(newSimID);
             return newSimID;
-        } else if (this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.RUNNING) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.PAUSED)){
+        } else if (this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.RUNNING) || this.simulationManager.getSimulationRunner(id).getStatus().equals(Status.PAUSED)) {
             throw new RuntimeException("The simulation: " + id + " is still running, so can't rerun the simulation");
         } else {
             throw new RuntimeException("No such simulation ");

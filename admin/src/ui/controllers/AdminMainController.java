@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-public class MainAdminController extends ResourceBundle implements Initializable {
+public class AdminMainController extends ResourceBundle implements Initializable {
     @FXML
     private Button allocationsButton;
 
@@ -57,7 +57,7 @@ public class MainAdminController extends ResourceBundle implements Initializable
         fxmlLoader.setLocation(mainFXML);
         fxmlLoader.setResources(this);
         VBox executionBox = fxmlLoader.load();
-        ChooseAdminController chooseAdminController = fxmlLoader.getController();
+        AdminChooseController adminChooseController = fxmlLoader.getController();
         currentSceneHolder.getChildren().clear();
         currentSceneHolder.getChildren().add(executionBox);
     }
@@ -68,7 +68,7 @@ public class MainAdminController extends ResourceBundle implements Initializable
         fxmlLoader.setLocation(mainFXML);
         fxmlLoader.setResources(this);
         VBox executionBox = fxmlLoader.load();
-        AllocationController allocationController = fxmlLoader.getController();
+        AdminAllocationController adminAllocationController = fxmlLoader.getController();
         currentSceneHolder.getChildren().clear();
         currentSceneHolder.getChildren().add(executionBox);
     }

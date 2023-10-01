@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
-public class MainUserController extends ResourceBundle implements Initializable {
+public class UserMainController extends ResourceBundle implements Initializable {
     @FXML
     private VBox currentSceneHolder;
 

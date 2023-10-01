@@ -20,5 +20,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 10.0.11" level="application_server_libraries" />
+    <orderEntry type="module" module-name="Predictions" exported="" />
+    <orderEntry type="module" module-name="dto" exported="" />
   </component>
 </module>

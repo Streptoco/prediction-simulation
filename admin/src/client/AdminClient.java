@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class AdminClient {
     private final OkHttpClient adminClient;
-    private final String BASE_URL = "http://localhost:8080";
+    private final String BASE_URL = "http://localhost:8080/server";
 
 
     public AdminClient() {
@@ -26,8 +26,6 @@ public class AdminClient {
                 .post(body)
                 .build();
         Call call = adminClient.newCall(request);
-
         Response response = call.execute();
-        System.out.println(f.getName());
     }
 }
