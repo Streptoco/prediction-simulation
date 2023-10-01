@@ -12,5 +12,6 @@
     <orderEntry type="library" name="kotlin-stdlib-common-1.4.10" level="project" />
     <orderEntry type="library" name="okhttp-4.9.1" level="project" />
     <orderEntry type="library" name="okio-2.8.0" level="project" />
+    <orderEntry type="module" module-name="Predictions" />
   </component>
 </module>
