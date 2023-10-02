@@ -1,5 +1,6 @@
 package engine.general.object;
 
+import com.sun.xml.internal.ws.wsdl.writer.document.Part;
 import engine.entity.impl.EntityDefinition;
 import engine.entity.impl.EntityInstanceManager;
 import engine.exception.XMLException;
@@ -41,6 +42,10 @@ public class Engine {
 
     public void loadWorld(File filePath) {
         this.filePath = filePath;
+    }
+
+    public void testWorldLoad(Part file) {
+
     }
 
     public int setupSimulation() throws JAXBException, XMLException {
