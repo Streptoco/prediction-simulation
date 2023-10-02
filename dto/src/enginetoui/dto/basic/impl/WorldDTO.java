@@ -46,7 +46,7 @@ public class WorldDTO {
         for (EntityDefinition entity : entityDefinitions) {
             this.entityDefinitions.add(new EntityDTO(entity.getName(), entity.getPopulation(), entity.getProps()));
         }
-        this.termination = new TerminationDTO(termination.getAllTicks(), termination.getHowManySecondsToRun(), termination.getIsInteractive());
+        //this.termination = new TerminationDTO(termination.getAllTicks(), termination.getHowManySecondsToRun(), termination.getIsInteractive());
         this.environment = new EnvironmentDTO(environment.GetAllEnvVariablesNames(), environment.GetAllEnvVariables());
         this.gridDTO = new GridDTO(gridRows, gridCols);
     }
@@ -84,7 +84,7 @@ public class WorldDTO {
 
     public Map<String, Integer> GetHistogram(String entityName, String propertyName, int simulationId, Engine engine) {
         Map<String, Integer> resultMap = new HashMap<>();
-        EntityInstanceManager entity = engine.GetInstanceManager(entityName, simulationId);
+        EntityInstanceManager entity = engine.GetInstanceManager(entityName, simulationId, "virus");
         for (EntityInstance currentInstance : entity.getInstances()) {
             if (!currentInstance.isAlive()) {
                 continue;

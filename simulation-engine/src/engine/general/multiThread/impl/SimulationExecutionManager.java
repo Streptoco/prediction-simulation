@@ -43,7 +43,10 @@ public class SimulationExecutionManager {
 
     public int CreateSimulation(World world) {
         if (executor == null) {
-            executor = Executors.newFixedThreadPool(world.getNumOfThreads());
+//            executor = Executors.newFixedThreadPool(world.getNumOfThreads());
+            //TODO:
+                // need to be decided by the admin
+            executor = Executors.newFixedThreadPool(3);
         }
         SimulationRunner currentSimulation = new SimulationRunner(world, simulationCounter);
         simulations.put(simulationCounter, currentSimulation);

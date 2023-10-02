@@ -14,14 +14,15 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class World {
-    private final Termination termination;
+    private final String worldName;
+    //private final Termination termination;
     private final Map<String, EntityInstanceManager> managers;
     private final List<Rule> rules;
     private final List<EntityDefinition> entities;
     private final Environment activeEnvironment;
     private long currentTime;
     private final SimpleDateFormat simulationDate;
-    private final int numOfThreads;
+    //private final int numOfThreads;
     private final Date simDate;
     private final Grid grid;
     private List<EntityInstance> allInstances;
@@ -31,13 +32,14 @@ public class World {
 
     //Constructors
 
-    public World(Termination termination, List<EntityDefinition> entities, Environment environment,
-                 List<Rule> rules, int numOfThreads, Grid grid) {
-        this.termination = termination;
+    public World(List<EntityDefinition> entities, Environment environment,
+                 List<Rule> rules, Grid grid, String name) {
+        this.worldName = name;
+        //this.termination = termination;
         this.entities = entities;
         this.rules = rules;
         this.activeEnvironment = environment;
-        this.numOfThreads = numOfThreads;
+        //this.numOfThreads = numOfThreads;
         this.simulationDate = new SimpleDateFormat("dd-MM-yyyy | HH.mm.ss");
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
@@ -65,7 +67,8 @@ public class World {
     }
 
     public int getNumOfThreads() {
-        return numOfThreads;
+        //return numOfThreads;
+        return 0;
     }
 
     public int getRows() {
@@ -132,11 +135,14 @@ public class World {
     }
 
     public int GetSimulationTotalTicks() {
-        return this.termination.getAllTicks();
+
+        //return this.termination.getAllTicks();
+        return 0;
     }
 
     public long GetSimulationTotalTime() {
-        return this.termination.getHowManySecondsToRun();
+        //return this.termination.getHowManySecondsToRun();
+        return 0;
     }
 
     public SimpleDateFormat getSimulationDate() {
@@ -263,9 +269,13 @@ public class World {
     }
 
     public Termination getTermination() {
-        return this.termination;
+        //return this.termination;
+        return null;
     }
 
+    public String getWorldName() {
+        return worldName;
+    }
 
     //=============================================================================================
 

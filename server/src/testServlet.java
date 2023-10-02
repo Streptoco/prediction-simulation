@@ -1,6 +1,5 @@
 import engine.general.object.Engine;
 import enginetoui.dto.basic.impl.WorldDTO;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,9 +7,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+
 import javax.xml.bind.JAXBException;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 @WebServlet(name = "Test Servlet", urlPatterns = "/upload-file")
 @MultipartConfig
@@ -27,16 +27,15 @@ public class testServlet extends HttpServlet {
         resp.getWriter().println(fileName);
         System.out.println("New Engine created");
         Engine engine = (Engine)this.getServletContext().getAttribute("engine");
+        InputStream fileContent = filePart.getInputStream();
         try {
-            engine.loadWorld(filePart);
-            int j = engine.setupSimulation();
-            System.out.println(j);
-            WorldDTO blyat = engine.getWorldDTO(0);
-            System.out.println(blyat);
-            System.out.println();
+            engine.setupSimulation(fileContent);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
+        WorldDTO blyat = engine.getWorldDTO(0, "virus");
+        System.out.println(blyat);
+        System.out.println();
     }
 
     private String getSubmittedFileName(Part part) {

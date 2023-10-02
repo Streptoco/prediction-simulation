@@ -14,33 +14,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorldFactory {
-     public static World BuildWorld(PRDWorld prdWorld) {
-         int numOfThreads = prdWorld.getPRDThreadCount();
-         Environment environment = EnvironmentFactory.BuildEnvironment(prdWorld.getPRDEnvironment());
-         NewXMLReader.envVariables = environment.GetAllEnvVariables();
+    public static World BuildWorld(PRDWorld prdWorld) {
+        Environment environment = EnvironmentFactory.BuildEnvironment(prdWorld.getPRDEnvironment());
+        NewXMLReader.envVariables = environment.GetAllEnvVariables();
 
-         List<EntityDefinition> entities = new ArrayList<>();
-         for(PRDEntity entity : prdWorld.getPRDEntities().getPRDEntity()) {
-             entities.add(EntityFactory.BuildEntity(entity));
-         }
-         NewXMLReader.entityDefinitionList = entities;
-         // entities
-         
-         List<Rule> rules = new ArrayList<>();
-         for(PRDRule rule : prdWorld.getPRDRules().getPRDRule()) {
-             Rule currentRule = RuleFactory.BuildRule(rule);
-             rules.add(currentRule);
-         }
-         // rules
+        List<EntityDefinition> entities = new ArrayList<>();
+        for (PRDEntity entity : prdWorld.getPRDEntities().getPRDEntity()) {
+            entities.add(EntityFactory.BuildEntity(entity));
+        }
+        NewXMLReader.entityDefinitionList = entities;
+        // entities
 
-         Termination termination = TerminationFactory.BuildTermination(prdWorld.getPRDTermination());
-         // termination
-         // TODO: termination has to be bound dynamically upon the creation of the world
+        List<Rule> rules = new ArrayList<>();
+        for (PRDRule rule : prdWorld.getPRDRules().getPRDRule()) {
+            Rule currentRule = RuleFactory.BuildRule(rule);
+            rules.add(currentRule);
+        }
+        // rules
 
-         // TODO: add all the new shit that popped up.
+        //Termination termination = TerminationFactory.BuildTermination(prdWorld.getPRDTermination());
+        // termination
+        // TODO: termination has to be bound dynamically upon the creation of the world
 
-         Grid grid = GridFactory.BuildGrid(prdWorld.getPRDGrid());
-
-         return new World(termination,entities,environment,rules, numOfThreads, grid);
-     }
+        // TODO: add all the new shit that popped up.
+        String name = prdWorld.getName();
+        Grid grid = GridFactory.BuildGrid(prdWorld.getPRDGrid());
+        return new World(entities, environment, rules, grid, name);
+    }
 }
