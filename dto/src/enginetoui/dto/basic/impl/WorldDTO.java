@@ -53,6 +53,20 @@ public class WorldDTO {
         this.gridDTO = new GridDTO(gridRows, gridCols);
     }
 
+    public WorldDTO(String worldName, int simulationId, SimpleDateFormat simulationDate, GridDTO gridDTO, EnvironmentDTO environment, List<EntityDTO> entityDefinitions, List<RuleDTO> rules, List<InstancesDTO> instances, List<EntityInstanceManager> managerList, Date simDate, TerminationDTO termination) {
+        this.worldName = worldName;
+        this.simulationId = simulationId;
+        this.simulationDate = simulationDate;
+        this.gridDTO = gridDTO;
+        this.environment = environment;
+        this.entityDefinitions = entityDefinitions;
+        this.rules = rules;
+        this.instances = instances;
+        this.managerList = managerList;
+        this.simDate = simDate;
+        this.termination = termination;
+    }
+
     public List<RuleDTO> getRules() {
         return this.rules;
     }

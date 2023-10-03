@@ -45,5 +45,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="gson-2.8.8-sources" level="project" />
   </component>
 </module>

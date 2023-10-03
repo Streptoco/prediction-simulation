@@ -8,7 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="predictions-1" exported="" />
-    <orderEntry type="module" module-name="Predictions" />
     <orderEntry type="module" module-name="simulation-engine" />
+    <orderEntry type="library" name="gson-2.8.8-sources" level="project" />
   </component>
 </module>
