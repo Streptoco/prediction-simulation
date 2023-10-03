@@ -5,6 +5,7 @@ import engine.action.impl.calculation.CalculationAction;
 import engine.action.impl.condition.impl.ConditionAction;
 import engine.action.impl.condition.impl.MultipleConditionAction;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
+import engine.action.impl.proximity.ProximityAction;
 import enginetoui.dto.basic.api.AbstractActionDTO;
 
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ public class RuleDTO {
                                     actionHandleSingle.getValueExpression()));
                         }
                         break;
+                    case PROXIMITY:
+                        ProximityAction proximityAction = (ProximityAction) action;
+                        actionNames.add(new ProximityActionDTO(action.getActionType(),proximityAction.getSourceEntity().getEntityName(), proximityAction.getTargetEntity().getEntityName(), (int)proximityAction.getDepth().getValue()));
+
                 }
             }
         }
