@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AdminChooseController">
+<VBox xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AdminChooseController">
    <children>
       <VBox prefHeight="323.0" prefWidth="600.0">
          <children>
@@ -26,7 +32,9 @@
             </HBox>
             <HBox prefHeight="263.0" prefWidth="600.0">
                <children>
-                  <TreeView fx:id="simulationsTreeView" prefHeight="263.0" prefWidth="407.0" />
+                  <TreeView fx:id="simulationsTreeView" prefHeight="258.0" prefWidth="195.0" />
+                  <Separator layoutX="403.0" layoutY="10.0" orientation="VERTICAL" prefHeight="263.0" prefWidth="7.0" />
+                  <TextArea disable="true" prefHeight="200.0" prefWidth="200.0" />
                   <Separator orientation="VERTICAL" prefHeight="263.0" prefWidth="7.0" />
                   <ListView fx:id="threadListView" prefHeight="200.0" prefWidth="200.0" />
                </children>
