@@ -34,7 +34,7 @@
                <children>
                   <TreeView fx:id="simulationsTreeView" prefHeight="258.0" prefWidth="195.0" />
                   <Separator layoutX="403.0" layoutY="10.0" orientation="VERTICAL" prefHeight="263.0" prefWidth="7.0" />
-                  <TextArea disable="true" prefHeight="200.0" prefWidth="200.0" />
+                  <TextArea fx:id="mainTextArea" disable="true" prefHeight="200.0" prefWidth="200.0" />
                   <Separator orientation="VERTICAL" prefHeight="263.0" prefWidth="7.0" />
                   <ListView fx:id="threadListView" prefHeight="200.0" prefWidth="200.0" />
                </children>
