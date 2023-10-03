@@ -25,14 +25,16 @@ public class WorldTreeItem extends TreeItem<String> {
 
         this.getChildren().setAll(ruleTreeFatherItem, entitiesTreeFatherItem, environmentTreeItem, terminationTreeItem, gridTreeItem);
 
+        for (EntityDTO entity : worldDTO.getEntities()) {
+            EntityTreeItem newEntity = new EntityTreeItem(entity);
+            entitiesTreeFatherItem.getChildren().add(newEntity);
+        }
+
         for (RuleDTO ruleDTO : worldDTO.getRules()) {
             RuleTreeItem newRule = new RuleTreeItem(ruleDTO);
             ruleTreeFatherItem.getChildren().add(newRule);
         }
 
-        for (EntityDTO entity : worldDTO.getEntities()) {
-            EntityTreeItem newEntity = new EntityTreeItem(entity);
-            entitiesTreeFatherItem.getChildren().add(newEntity);
-        }
+
     }
 }

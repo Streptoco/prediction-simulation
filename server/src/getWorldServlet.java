@@ -18,12 +18,9 @@ public class getWorldServlet extends HttpServlet {
         Engine engine = (Engine)this.getServletContext().getAttribute("engine");
         Gson gson = new Gson();
         WorldDTO currentWorld = engine.getLastWorld();
-        System.out.println(currentWorld);
         String json = gson.toJson(currentWorld);
-        // Set the response content type to JSON
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        // Send the JSON response
         resp.getWriter().write(json);
     }
 }

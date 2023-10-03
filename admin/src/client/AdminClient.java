@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import enginetoui.dto.basic.DesirializeWorldDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.*;
-import simulation.dto.SimulationDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +45,7 @@ public class AdminClient {
         Call call = adminClient.newCall(request);
         Response response = call.execute();
         String jsonObject = response.body().string();
+        System.out.println(jsonObject);
         return gson.fromJson(jsonObject, WorldDTO.class);
     }
 }
