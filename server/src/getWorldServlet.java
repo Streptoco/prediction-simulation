@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import engine.general.object.Engine;
+import enginetoui.dto.basic.impl.WorldDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,14 +16,14 @@ public class getWorldServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("hey lol");
         Engine engine = (Engine)this.getServletContext().getAttribute("engine");
-        System.out.println(engine);
         Gson gson = new Gson();
-        String json = gson.toJson(engine.getLastWorld());
+        WorldDTO currentWorld = engine.getLastWorld();
+        System.out.println(currentWorld);
+        String json = gson.toJson(currentWorld);
         // Set the response content type to JSON
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         // Send the JSON response
-        System.out.println(json);
         resp.getWriter().write(json);
     }
 }
