@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="engine">
+    <output-path>$PROJECT_DIR$/out/artifacts/engine</output-path>
+    <root id="archive" name="unnamed.jar">
+      <element id="module-output" name="simulation-engine" />
+      <element id="module-output" name="dto" />
+      <element id="library" level="project" name="Java EE 6-Java EE 6" />
+      <element id="javaee-facet-resources" facet="server/web/Web" />
+    </root>
+  </artifact>
+</component>

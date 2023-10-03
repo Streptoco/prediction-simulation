@@ -63,7 +63,7 @@ public class SimulationExecutionManager {
             resultList.add(new WorldDTO(entry.getKey(), entry.getValue().getWorld().getSimulationDate(), entry.getValue().getWorld().getAllInstancesManager(),
                     entry.getValue().getWorld().getSimDate(), entry.getValue().getWorld().getTermination(),
                     entry.getValue().getWorld().getRules(), entry.getValue().getWorld().GetEntities(), entry.getValue().getWorld().getEnvironment(),
-                    entry.getValue().getWorld().getRows(), entry.getValue().getWorld().getCols()));
+                    entry.getValue().getWorld().getRows(), entry.getValue().getWorld().getCols(), entry.getValue().getWorld().getWorldName()));
         }
         return resultList;
     }
@@ -74,7 +74,7 @@ public class SimulationExecutionManager {
         return new WorldDTO(id, world.getSimulationDate(), world.getAllInstancesManager(),
                 date, world.getTermination(), world.getRules(),
                 world.GetEntities(), world.getEnvironment(),
-                world.getRows(), world.getCols());
+                world.getRows(), world.getCols(), world.getWorldName());
     }
 
     public World getWorld(int id) {

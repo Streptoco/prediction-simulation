@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class WorldDTO {
+    public final String worldName;
     public final int simulationId;
     public final SimpleDateFormat simulationDate;
     public final GridDTO gridDTO;
@@ -29,7 +30,7 @@ public class WorldDTO {
 
     public WorldDTO(int simulationId, SimpleDateFormat simulationDate, List<EntityInstanceManager> entities,
                     Date date, Termination termination, List<Rule> rules,
-                    List<EntityDefinition> entityDefinitions, Environment environment, int gridRows, int gridCols) {
+                    List<EntityDefinition> entityDefinitions, Environment environment, int gridRows, int gridCols, String worldName) {
         this.rules = new ArrayList<>();
         this.entityDefinitions = new ArrayList<>();
         this.simulationId = simulationId;
@@ -37,6 +38,7 @@ public class WorldDTO {
         this.simDate = date;
         this.instances = new ArrayList<>();
         this.managerList = entities;
+        this.worldName = worldName;
 //        for (EntityInstanceManager entityManager : entities) { // TODO: no need for this since it will be later defined once properties are set.
 //            this.instances.add(new InstancesDTO(entityManager.getCountInstances(), entityManager.getNumberOfAllInstances(), entityManager.getEntityName(), entityManager.getPropertiesName()));
 //        }

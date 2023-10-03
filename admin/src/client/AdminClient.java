@@ -1,5 +1,7 @@
 package client;
 
+import com.google.gson.Gson;
+import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.*;
 
 import java.io.File;
@@ -19,7 +21,6 @@ public class AdminClient {
         RequestBody body =
                 new MultipartBody.Builder()
                         .addFormDataPart("file", f.getName(), RequestBody.create(f, MediaType.parse("text/plain")))
-                        //.addFormDataPart("key1", "value1") // you can add multiple, different parts as needed
                         .build();
         Request request = new Request.Builder()
                 .url(BASE_URL + RESOURCE)

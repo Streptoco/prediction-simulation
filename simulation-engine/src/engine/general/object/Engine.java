@@ -105,6 +105,18 @@ public class Engine {
         return resultList;
     }
 
+    public WorldDTO getLastWorld() {
+        Map.Entry<String, SimulationExecutionManager> lastEntry = null;
+        for(Map.Entry<String, SimulationExecutionManager> entry : simulationManager.entrySet()) {
+            lastEntry = entry;
+        }
+
+        if (lastEntry != null) {
+            return lastEntry.getValue().getWorldDTO(0);
+        }
+        return null;
+    }
+
 //    public int GetSimulationTotalTicks(int id) {
 //        return simulationManager.getSimulation(id).GetSimulationTotalTicks();
 //    }
