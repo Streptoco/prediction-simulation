@@ -33,9 +33,6 @@ public class testServlet extends HttpServlet {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
-        WorldDTO blyat = engine.getWorldDTO(0, "virus");
-        System.out.println(blyat);
-        System.out.println();
     }
 
     private String getSubmittedFileName(Part part) {

@@ -29,4 +29,17 @@ public class AdminClient {
         Call call = adminClient.newCall(request);
         Response response = call.execute();
     }
+
+    public WorldDTO getWorld() throws IOException {
+        Gson gson = new Gson();
+        String RESOURCE = "/get-world";
+        Request request = new Request.Builder()
+                .url(BASE_URL + RESOURCE)
+                .get()
+                .build();
+        Call call = adminClient.newCall(request);
+        Response response = call.execute();
+        String jsonObject = response.body().string();
+        return gson.fromJson(jsonObject, WorldDTO.class);
+    }
 }

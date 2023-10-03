@@ -14,10 +14,7 @@ import uitoengine.filetransfer.PropertyInitializeDTO;
 
 import javax.xml.bind.JAXBException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Engine {
     private final NewXMLReader reader;
@@ -25,9 +22,8 @@ public class Engine {
 
     public Engine() {
         reader = new NewXMLReader();
-        simulationManager = new HashMap<>();
+        simulationManager = new LinkedHashMap<>();
     }
-
 
     public SimulationRunner getSimulationRunner(int simID, String worldName) {
         return getSimulationManager(worldName).getSimulationRunner(simID);
