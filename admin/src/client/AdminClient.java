@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import enginetoui.dto.basic.DesirializeWorldDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.*;
+import simulation.dto.SimulationDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,10 @@ public class AdminClient {
     }
 
     public WorldDTO getWorld() throws IOException {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(WorldDTO.class, new DesirializeWorldDTO())
+                .setPrettyPrinting()
+                .create();
         String RESOURCE = "/get-world";
         Request request = new Request.Builder()
                 .url(BASE_URL + RESOURCE)
