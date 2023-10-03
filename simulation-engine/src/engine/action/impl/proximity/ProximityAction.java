@@ -1,6 +1,5 @@
 package engine.action.impl.proximity;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionInterface;
 import engine.action.api.ActionType;
@@ -9,7 +8,6 @@ import engine.context.api.Context;
 import engine.context.impl.ContextImpl;
 import engine.entity.impl.EntityInstance;
 import engine.grid.impl.Grid;
-import engine.property.impl.BooleanProperty;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -57,6 +55,18 @@ public class ProximityAction extends AbstractAction {
             }
         }
 
+    }
+
+    public EntityInstance getSourceEntity() {
+        return sourceEntity;
+    }
+
+    public EntityInstance getTargetEntity() {
+        return targetEntity;
+    }
+
+    public Expression getDepth() {
+        return depth;
     }
 
     @Override
