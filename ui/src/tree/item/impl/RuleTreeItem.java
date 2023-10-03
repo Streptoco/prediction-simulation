@@ -1,5 +1,6 @@
 package tree.item.impl;
 
+import enginetoui.dto.basic.api.AbstractActionDTO;
 import enginetoui.dto.basic.api.ActionDTOInterface;
 import enginetoui.dto.basic.impl.RuleDTO;
 import javafx.scene.control.TextArea;
@@ -13,7 +14,7 @@ public class RuleTreeItem extends TreeItem<String> implements TreeItemEnabled {
     public RuleTreeItem(RuleDTO rule) {
         super(rule.name);
         this.rule = rule;
-        for (ActionDTOInterface actionDTO : rule.actionNames) {
+        for (AbstractActionDTO actionDTO : rule.actionNames) {
             ActionTreeItem actionTreeItem = new ActionTreeItem(actionDTO);
             this.getChildren().add(actionTreeItem);
         }

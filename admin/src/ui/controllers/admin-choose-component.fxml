@@ -16,7 +16,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="600.0" spacing="15.0">
                <children>
-                  <TextField fx:id="filaPathField" prefHeight="25.0" prefWidth="335.0" />
+                  <TextField fx:id="filePathField" prefHeight="25.0" prefWidth="335.0" />
                   <Button fx:id="loadFileButton" mnemonicParsing="false" onAction="#onFileLoad" prefHeight="25.0" prefWidth="73.0" text="Load File" textAlignment="CENTER" />
                   <Button fx:id="threadCountButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="147.0" text="Set Thread count" textAlignment="CENTER" />
                </children>

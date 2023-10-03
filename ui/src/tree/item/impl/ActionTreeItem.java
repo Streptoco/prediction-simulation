@@ -1,6 +1,7 @@
 package tree.item.impl;
 
 import com.sun.org.apache.xpath.internal.operations.Mult;
+import enginetoui.dto.basic.api.AbstractActionDTO;
 import enginetoui.dto.basic.api.ActionDTOInterface;
 import enginetoui.dto.basic.impl.CalculationActionDTO;
 import enginetoui.dto.basic.impl.ConditionActionDTO;
@@ -12,9 +13,9 @@ import tree.item.api.TreeItemEnabled;
 
 public class ActionTreeItem extends TreeItem<String> implements TreeItemEnabled {
 
-    public ActionDTOInterface actionDTO;
+    public AbstractActionDTO actionDTO;
 
-    public ActionTreeItem(ActionDTOInterface actionDTO) {
+    public ActionTreeItem(AbstractActionDTO actionDTO) {
         super(actionDTO.getType().toString());
         this.actionDTO = actionDTO;
     }

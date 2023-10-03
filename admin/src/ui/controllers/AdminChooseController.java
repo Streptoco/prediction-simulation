@@ -1,10 +1,13 @@
 package ui.controllers;
 
 import client.AdminClient;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringExpression;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,17 +25,20 @@ public class AdminChooseController implements Initializable {
     private File xmlFile;
     private List<WorldTreeItem> worldTreeItemList = new ArrayList<>();
     private WorldFatherTreeItem worldFatherTreeItem = new WorldFatherTreeItem();
-
+    private StringExpression labelTextBinding = null;
     @FXML
     private TreeView simulationsTreeView;
     @FXML
     private TextArea mainTextArea;
+    @FXML
+    private TextField filePathField;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (AdminClient) resources.getObject("client");
         // listener for tree view
         simulationsTreeView.setShowRoot(false);
         simulationsTreeView.setRoot(worldFatherTreeItem);
+        labelTextBinding = Bindings.concat("Please upload a file.");
 
         simulationsTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             mainTextArea.clear();
@@ -65,5 +71,9 @@ public class AdminChooseController implements Initializable {
         WorldTreeItem worldTreeItem = new WorldTreeItem(client.getWorld());
         worldTreeItemList.add(worldTreeItem);
         worldFatherTreeItem.getChildren().add(worldTreeItem);
+        System.out.println(labelTextBinding);
+        System.out.println(xmlFile.getName());
+        labelTextBinding = Bindings.concat("Chosen file: ", xmlFile.getAbsolutePath());
+        filePathField.textProperty().bind(labelTextBinding);
     }
 }

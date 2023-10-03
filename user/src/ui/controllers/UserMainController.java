@@ -1,5 +1,7 @@
 package ui.controllers;
 
+import client.UserClient;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class UserMainController extends ResourceBundle implements Initializable {
     @FXML
@@ -31,6 +35,7 @@ public class UserMainController extends ResourceBundle implements Initializable 
 
     @FXML
     private Label usernameLabel;
+    private final UserClient client = new UserClient();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -39,7 +44,12 @@ public class UserMainController extends ResourceBundle implements Initializable 
 
     @Override
     protected Object handleGetObject(String key) {
-        return null;
+        switch (key) {
+            case "client":
+                return client;
+            default:
+                return null;
+        }
     }
 
     @Override
