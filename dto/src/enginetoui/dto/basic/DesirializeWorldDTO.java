@@ -25,6 +25,6 @@ public class DesirializeWorldDTO implements JsonDeserializer<WorldDTO> {
         Type managersDTO = new TypeToken<List<EntityInstanceManager>>() {}.getType();
         List<EntityInstanceManager> managersDTOList = context.deserialize(json.getAsJsonObject().get("managerList"), managersDTO);
 
-        return new WorldDTO(worldName,simulationId,null,gridDTO,environmentDTO,entityDTOList,null,null,null,null,terminationDTO);
+        return new WorldDTO(worldName,simulationId,gridDTO,environmentDTO,entityDTOList,ruleDTOList,instancesDTOList,managersDTOList,null,terminationDTO);
     }
 }

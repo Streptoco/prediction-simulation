@@ -1,12 +1,11 @@
 package enginetoui.dto.basic.impl;
 
 import engine.action.api.ActionInterface;
-import engine.action.api.ActionType;
 import engine.action.impl.calculation.CalculationAction;
 import engine.action.impl.condition.impl.ConditionAction;
 import engine.action.impl.condition.impl.MultipleConditionAction;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
-import enginetoui.dto.basic.api.ActionDTOInterface;
+import enginetoui.dto.basic.api.AbstractActionDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public class RuleDTO {
     public final int tick;
     public final double probability;
     public final int numOfActions;
-    public final List<ActionDTOInterface> actionNames;
+    public final List<AbstractActionDTO> actionNames;
 
     public RuleDTO(String name, int tick, double probability, int numOfActions, List<ActionInterface> actions) {
         this.name = name;
