@@ -39,9 +39,6 @@ public class WorldDTO {
         this.instances = new ArrayList<>();
         this.managerList = entities;
         this.worldName = worldName;
-//        for (EntityInstanceManager entityManager : entities) { // TODO: no need for this since it will be later defined once properties are set.
-//            this.instances.add(new InstancesDTO(entityManager.getCountInstances(), entityManager.getNumberOfAllInstances(), entityManager.getEntityName(), entityManager.getPropertiesName()));
-//        }
         for (Rule rule : rules) {
             this.rules.add(new RuleDTO(rule.getName(), rule.getTick(), rule.getProbability(), rule.GetNumOfActions(), rule.getActions()));
         }

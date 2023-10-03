@@ -2,6 +2,7 @@ package enginetoui.dto.basic;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import engine.entity.impl.EntityInstanceManager;
 import enginetoui.dto.basic.impl.*;
 
 import java.lang.reflect.Type;
@@ -17,6 +18,12 @@ public class DesirializeWorldDTO implements JsonDeserializer<WorldDTO> {
         TerminationDTO terminationDTO = context.deserialize(json.getAsJsonObject().get("termination"), TerminationDTO.class);
         Type entityDTO = new TypeToken<List<EntityDTO>>() {}.getType();
         List<EntityDTO> entityDTOList = context.deserialize(json.getAsJsonObject().get("entityDefinitions"), entityDTO);
+        Type ruleDTO = new TypeToken<List<RuleDTO>>() {}.getType();
+        List<RuleDTO> ruleDTOList = context.deserialize(json.getAsJsonObject().get("rules"), ruleDTO);
+        Type instanceDTO = new TypeToken<List<InstancesDTO>>() {}.getType();
+        List<InstancesDTO> instancesDTOList = context.deserialize(json.getAsJsonObject().get("instances"), instanceDTO);
+        Type managersDTO = new TypeToken<List<EntityInstanceManager>>() {}.getType();
+        List<EntityInstanceManager> managersDTOList = context.deserialize(json.getAsJsonObject().get("managerList"), managersDTO);
 
         return new WorldDTO(worldName,simulationId,null,gridDTO,environmentDTO,entityDTOList,null,null,null,null,terminationDTO);
     }
