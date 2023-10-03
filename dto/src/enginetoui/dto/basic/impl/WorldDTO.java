@@ -56,7 +56,6 @@ public class WorldDTO {
     public WorldDTO(String worldName, int simulationId, SimpleDateFormat simulationDate, GridDTO gridDTO, EnvironmentDTO environment, List<EntityDTO> entityDefinitions, List<RuleDTO> rules, List<InstancesDTO> instances, List<EntityInstanceManager> managerList, Date simDate, TerminationDTO termination) {
         this.worldName = worldName;
         this.simulationId = simulationId;
-        this.simulationDate = simulationDate;
         this.gridDTO = gridDTO;
         this.environment = environment;
         this.entityDefinitions = entityDefinitions;
