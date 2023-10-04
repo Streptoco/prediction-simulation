@@ -1,6 +1,8 @@
 package ui.controllers;
 
 import client.AdminClient;
+import enginetoui.dto.basic.impl.WorldDTO;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringExpression;
 import javafx.event.ActionEvent;
@@ -16,15 +18,14 @@ import tree.item.impl.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AdminChooseController implements Initializable {
     private AdminClient client;
     private File xmlFile;
     private List<WorldTreeItem> worldTreeItemList = new ArrayList<>();
     private WorldFatherTreeItem worldFatherTreeItem = new WorldFatherTreeItem();
+    private WorldTreeItem worldTreeItem;
     private StringExpression labelTextBinding = null;
     @FXML
     private TreeView simulationsTreeView;
@@ -32,9 +33,64 @@ public class AdminChooseController implements Initializable {
     private TextArea mainTextArea;
     @FXML
     private TextField filePathField;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (AdminClient) resources.getObject("client");
+        List<WorldDTO> worldDTOList;
+        try {
+            worldDTOList = client.getAllWorlds();
+            worldDTOList.forEach(worldDTO -> {
+                worldTreeItem = new WorldTreeItem(worldDTO);
+                worldTreeItemList.add(worldTreeItem);
+                worldFatherTreeItem.getChildren().add(worldTreeItem);
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    boolean changed = false, toDelete = false;
+                    WorldTreeItem objectToRemove = null;
+                    try {
+                        WorldDTO currentDTO = client.getWorld();
+                        if (currentDTO != null) {
+                            worldTreeItem = new WorldTreeItem(currentDTO);
+                            if (worldTreeItemList.isEmpty()) {
+                                worldTreeItemList.add(worldTreeItem);
+                                worldFatherTreeItem.getChildren().add(worldTreeItem);
+                            } else {
+                                for (WorldTreeItem treeItem : worldTreeItemList) {
+                                    if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
+                                        changed = true;
+                                        if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
+                                            objectToRemove = treeItem;
+                                            toDelete = true;
+                                            worldTreeItemList.add(worldTreeItem);
+                                            worldFatherTreeItem.getChildren().add(worldTreeItem);
+                                        }
+                                    }
+                                }
+                                if (toDelete) {
+                                    //worldFatherTreeItem.getChildren().remove(objectToRemove);
+                                    worldTreeItemList.remove(objectToRemove);
+                                }
+                                if (!changed) {
+                                    worldTreeItemList.add(worldTreeItem);
+                                    worldFatherTreeItem.getChildren().add(worldTreeItem);
+                                }
+
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+        }, 0, 2000);
         // listener for tree view
         simulationsTreeView.setShowRoot(false);
         simulationsTreeView.setRoot(worldFatherTreeItem);
@@ -68,11 +124,9 @@ public class AdminChooseController implements Initializable {
         xmlFile = fileChooser.showOpenDialog(new Stage());
         client.uploadFile(xmlFile);
         // set up fictitious simulation
-        WorldTreeItem worldTreeItem = new WorldTreeItem(client.getWorld());
-        worldTreeItemList.add(worldTreeItem);
-        worldFatherTreeItem.getChildren().add(worldTreeItem);
-        System.out.println(labelTextBinding);
-        System.out.println(xmlFile.getName());
+//        WorldTreeItem worldTreeItem = new WorldTreeItem(client.getWorld());
+//        worldTreeItemList.add(worldTreeItem);
+//        worldFatherTreeItem.getChildren().add(worldTreeItem);
         labelTextBinding = Bindings.concat("Chosen file: ", xmlFile.getAbsolutePath());
         filePathField.textProperty().bind(labelTextBinding);
     }

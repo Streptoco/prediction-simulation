@@ -45,26 +45,29 @@ public class UserDetailsController implements Initializable {
                 Platform.runLater(() -> {
                     boolean changed = false;
                     try {
-                        worldTreeItem = new WorldTreeItem(client.getWorld());
-                        if(worldTreeItemList.isEmpty()) {
-                            worldTreeItemList.add(worldTreeItem);
-                            worldFatherTreeItem.getChildren().add(worldTreeItem);
-                        } else {
-                            Iterator<WorldTreeItem> it = worldTreeItemList.iterator();
-                            while (it.hasNext()) {
-                                WorldTreeItem treeItem = it.next();
-                                if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
-                                    changed = true;
-                                    if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
-                                        it.remove();
-                                        worldTreeItemList.add(worldTreeItem);
-                                        worldFatherTreeItem.getChildren().add(worldTreeItem);
-                                    }
-                                }
-                            }
-                            if(!changed) {
+                        WorldDTO currentDTO = client.getWorld();
+                        if(currentDTO != null) {
+                            worldTreeItem = new WorldTreeItem(currentDTO);
+                            if (worldTreeItemList.isEmpty()) {
                                 worldTreeItemList.add(worldTreeItem);
                                 worldFatherTreeItem.getChildren().add(worldTreeItem);
+                            } else {
+                                Iterator<WorldTreeItem> it = worldTreeItemList.iterator();
+                                while (it.hasNext()) {
+                                    WorldTreeItem treeItem = it.next();
+                                    if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
+                                        changed = true;
+                                        if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
+                                            it.remove();
+                                            worldTreeItemList.add(worldTreeItem);
+                                            worldFatherTreeItem.getChildren().add(worldTreeItem);
+                                        }
+                                    }
+                                }
+                                if (!changed) {
+                                    worldTreeItemList.add(worldTreeItem);
+                                    worldFatherTreeItem.getChildren().add(worldTreeItem);
+                                }
                             }
                         }
                     } catch (IOException e) {
