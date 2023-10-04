@@ -1,5 +1,4 @@
 import engine.general.object.Engine;
-import enginetoui.dto.basic.impl.WorldDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,11 +14,6 @@ import java.io.InputStream;
 @WebServlet(name = "Test Servlet", urlPatterns = "/upload-file")
 @MultipartConfig
 public class testServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println("hey lol");
-    }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Part filePart = req.getPart("file");

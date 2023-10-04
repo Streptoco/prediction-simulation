@@ -2,7 +2,7 @@ package client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import enginetoui.dto.basic.DesirializeWorldDTO;
+import enginetoui.dto.basic.DeserializeWorldDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.*;
 
@@ -34,7 +34,7 @@ public class AdminClient {
 
     public WorldDTO getWorld() throws IOException {
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(WorldDTO.class, new DesirializeWorldDTO())
+                .registerTypeAdapter(WorldDTO.class, new DeserializeWorldDTO())
                 .setPrettyPrinting()
                 .create();
         String RESOURCE = "/get-world";

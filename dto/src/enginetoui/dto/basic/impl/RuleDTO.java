@@ -49,7 +49,7 @@ public class RuleDTO {
                         break;
                     case PROXIMITY:
                         ProximityAction proximityAction = (ProximityAction) action;
-                        actionNames.add(new ProximityActionDTO(action.getActionType(),proximityAction.getSourceEntity().getEntityName(), proximityAction.getTargetEntity().getEntityName(), (int)proximityAction.getDepth().getValue()));
+                        actionNames.add(new ProximityActionDTO(action.getActionType(),proximityAction.getEntityOfTheAction(), proximityAction.getSecondEntityName(), proximityAction.getDepth().getName()));
 
                 }
             }

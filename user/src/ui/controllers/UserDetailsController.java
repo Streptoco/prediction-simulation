@@ -1,8 +1,6 @@
 package ui.controllers;
 
 import client.UserClient;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -11,7 +9,9 @@ import tree.item.impl.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class UserDetailsController implements Initializable {
 
@@ -27,20 +27,28 @@ public class UserDetailsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (UserClient) resources.getObject("client");
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    worldTreeItem = new WorldTreeItem(client.getWorld());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }, 0, 100);
-
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                Platform.runLater(() -> {
+//                    try {
+//                        worldTreeItem = new WorldTreeItem(client.getWorld());
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                });
+//            }
+//        }, 0, 500);
+        //if (worldTreeItemList.isEmpty() || !(worldTreeItem.getWorldName().equals(worldTreeItemList.get(worldTreeItemList.size() - 1).getWorldName()))) {
+        try {
+            worldTreeItem = new WorldTreeItem(client.getWorld());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         worldTreeItemList.add(worldTreeItem);
         worldFatherTreeItem.getChildren().add(worldTreeItem);
+        //}
 
         // listener for tree view
         simulationsTreeView.setShowRoot(false);

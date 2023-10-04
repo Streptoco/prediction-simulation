@@ -8,7 +8,7 @@ import enginetoui.dto.basic.impl.*;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class DesirializeWorldDTO implements JsonDeserializer<WorldDTO> {
+public class DeserializeWorldDTO implements JsonDeserializer<WorldDTO> {
     @Override
     public WorldDTO deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         String worldName = json.getAsJsonObject().get("worldName").getAsString();

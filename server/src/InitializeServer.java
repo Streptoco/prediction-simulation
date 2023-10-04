@@ -7,7 +7,6 @@ import jakarta.servlet.annotation.WebListener;
 public class InitializeServer implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-//        Engine engine = new Engine();
         System.out.println("Starting Predictions Server");
         sce.getServletContext().setAttribute("engine", new Engine());
     }

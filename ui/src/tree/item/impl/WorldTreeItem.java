@@ -37,4 +37,8 @@ public class WorldTreeItem extends TreeItem<String> {
 
 
     }
+
+    public String getWorldName() {
+        return worldDTO.worldName;
+    }
 }

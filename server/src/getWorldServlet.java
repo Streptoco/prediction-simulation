@@ -14,7 +14,7 @@ public class getWorldServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("hey lol");
+        log("hey lol");
         Engine engine = (Engine)this.getServletContext().getAttribute("engine");
         Gson gson = new Gson();
         WorldDTO currentWorld = engine.getLastWorld();

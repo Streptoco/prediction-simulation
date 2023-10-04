@@ -92,7 +92,7 @@ public class WorldDTO {
 
     public Map<String, Integer> GetHistogram(String entityName, String propertyName, int simulationId, Engine engine) {
         Map<String, Integer> resultMap = new HashMap<>();
-        EntityInstanceManager entity = engine.GetInstanceManager(entityName, simulationId, "virus");
+        EntityInstanceManager entity = engine.GetInstanceManager(entityName, simulationId, worldName);
         for (EntityInstance currentInstance : entity.getInstances()) {
             if (!currentInstance.isAlive()) {
                 continue;

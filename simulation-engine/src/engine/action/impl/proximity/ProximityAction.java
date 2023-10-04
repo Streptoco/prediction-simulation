@@ -16,7 +16,6 @@ import java.util.Set;
 
 public class ProximityAction extends AbstractAction {
     private EntityInstance sourceEntity;
-    private EntityInstance targetEntity;
     private String targetEntityName;
     private Expression depth;
     private final List<ActionInterface> actionList;
@@ -56,15 +55,6 @@ public class ProximityAction extends AbstractAction {
         }
 
     }
-
-    public EntityInstance getSourceEntity() {
-        return sourceEntity;
-    }
-
-    public EntityInstance getTargetEntity() {
-        return targetEntity;
-    }
-
     public Expression getDepth() {
         return depth;
     }

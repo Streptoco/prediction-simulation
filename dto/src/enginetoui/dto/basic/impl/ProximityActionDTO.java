@@ -7,12 +7,12 @@ public class ProximityActionDTO extends AbstractActionDTO {
 
     public String sourceEntity;
     public String targetEntity;
-    public int depth;
+    public String depth;
 
     //TODO:
     // need to add the actions of proximity action and for conditions
 
-    public ProximityActionDTO(ActionType type, String sourceEntity, String targetEntity, int depth) {
+    public ProximityActionDTO(ActionType type, String sourceEntity, String targetEntity, String depth) {
         super(type);
         this.sourceEntity = sourceEntity;
         this.targetEntity = targetEntity;

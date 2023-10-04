@@ -9,7 +9,6 @@ import engine.action.impl.calculation.CalculationAction;
 import engine.action.impl.condition.impl.Condition;
 import engine.action.impl.condition.impl.ConditionAction;
 import engine.action.impl.condition.impl.MultipleConditionAction;
-import engine.action.impl.condition.impl.SingleCondition;
 import engine.action.impl.increasedecrease.IncreaseDecreaseAction;
 import engine.action.impl.kill.KillAction;
 import engine.action.impl.proximity.ProximityAction;
@@ -17,13 +16,13 @@ import engine.action.impl.replace.ReplaceAction;
 import engine.action.impl.replace.ReplaceMode;
 import engine.action.impl.set.SetAction;
 import engine.entity.impl.EntityDefinition;
-import engine.entity.impl.EntityInstance;
-import engine.exception.*;
+import engine.exception.XMLEntityNotFoundException;
+import engine.exception.XMLEntityPropertyNotFound;
+import engine.exception.XMLEnvPropertyNotFound;
+import engine.exception.XMLVariableTypeException;
 import engine.property.api.PropertyInterface;
 import engine.worldbuilder.prdobjects.PRDAction;
-import engine.worldbuilder.prdobjects.PRDActions;
 import engine.worldbuilder.prdobjects.PRDCondition;
-import engine.worldbuilder.prdobjects.PRDDivide;
 import engine.xml.NewXMLReader;
 
 import java.util.ArrayList;
@@ -297,6 +296,10 @@ public class ActionFactory {
                 } catch (NumberFormatException e) {
                     if (value.startsWith("random(") || value.startsWith("ticks(") || value.startsWith("percent")) {
                         sameType = true;
+                    } else if (value.startsWith("environment(")) {
+                        PropertyInterface envProperty = SearchEnvVariable(value);
+                        sameType = envProperty.getPropertyType().equals(ReturnType.DECIMAL) || envProperty.getPropertyType().equals(ReturnType.INT);
+
                     } else {
                         sameType = false;
                     }

@@ -2,7 +2,7 @@ package client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import enginetoui.dto.basic.DesirializeWorldDTO;
+import enginetoui.dto.basic.DeserializeWorldDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class UserClient {
     private final OkHttpClient userClient;
-    private final String BASE_URL = "localhost:8080/server";
+    private final String BASE_URL = "http://localhost:8080/server";
 
     public UserClient() {
         userClient = new OkHttpClient();
@@ -21,7 +21,7 @@ public class UserClient {
 
     public WorldDTO getWorld() throws IOException {
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(WorldDTO.class, new DesirializeWorldDTO())
+                .registerTypeAdapter(WorldDTO.class, new DeserializeWorldDTO())
                 .setPrettyPrinting()
                 .create();
         String RESOURCE = "/get-world";

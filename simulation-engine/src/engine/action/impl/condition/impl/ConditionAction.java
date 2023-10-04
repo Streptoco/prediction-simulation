@@ -37,13 +37,6 @@ public class ConditionAction extends AbstractAction {
         }
     }
 
-    public ConditionAction(String propertyName, String operator, Expression valueExpression) {
-        //IS THIS CTOR IN USE?
-        super(ActionType.CONDITION, null);
-        this.valueExpression = valueExpression;
-        this.valueOperator = operator;
-        //this.propertyName = propertyName;
-    }
 
     public String getValueExpression() {
         return this.valueExpression.getName();
@@ -54,7 +47,8 @@ public class ConditionAction extends AbstractAction {
     }
 
     public String getProperty() {
-        return this.propertyInstance.getName();
+        //return this.propertyInstance.getName();
+        return this.property.getExpression();
     }
 
 
