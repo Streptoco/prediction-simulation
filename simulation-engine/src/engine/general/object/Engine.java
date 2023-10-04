@@ -38,8 +38,16 @@ public class Engine {
         if (fileContent != null) {
             World aWholeNewworld = reader.ReadXMLFromStream(fileContent);
             if (!(simulationManager.containsKey(aWholeNewworld.getWorldName()))) {
+                aWholeNewworld.setWorldVersion(1);
                 simulationManager.put(aWholeNewworld.getWorldName(), new SimulationExecutionManager());
                 simulationID = simulationManager.get(aWholeNewworld.getWorldName()).CreateSimulation(aWholeNewworld);
+            } else {
+                // WHY 0 ?
+                int newWorldVersion = simulationManager.get(aWholeNewworld.getWorldName()).getWorld(0).getWorldVersion() + 1;
+                aWholeNewworld.setWorldVersion(newWorldVersion);
+                simulationManager.put(aWholeNewworld.getWorldName(), new SimulationExecutionManager());
+                simulationID = simulationManager.get(aWholeNewworld.getWorldName()).CreateSimulation(aWholeNewworld);
+                System.out.println("The new world version is: " + newWorldVersion);
             }
 
 
@@ -111,6 +119,14 @@ public class Engine {
             return lastEntry.getValue().getWorldDTO(0);
         }
         return null;
+    }
+
+    public List<WorldDTO> getAllWorlds() {
+        List<WorldDTO> resultList = new ArrayList<>();
+        simulationManager.values().forEach(manager -> {
+            resultList.add(manager.getWorldDTO(0));
+        });
+        return resultList;
     }
 
 //    public int GetSimulationTotalTicks(int id) {

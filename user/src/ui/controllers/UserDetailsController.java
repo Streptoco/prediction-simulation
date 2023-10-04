@@ -1,6 +1,8 @@
 package ui.controllers;
 
 import client.UserClient;
+import enginetoui.dto.basic.impl.WorldDTO;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -9,9 +11,7 @@ import tree.item.impl.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class UserDetailsController implements Initializable {
 
@@ -27,28 +27,61 @@ public class UserDetailsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (UserClient) resources.getObject("client");
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                Platform.runLater(() -> {
-//                    try {
-//                        worldTreeItem = new WorldTreeItem(client.getWorld());
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                });
-//            }
-//        }, 0, 500);
-        //if (worldTreeItemList.isEmpty() || !(worldTreeItem.getWorldName().equals(worldTreeItemList.get(worldTreeItemList.size() - 1).getWorldName()))) {
+        List<WorldDTO> worldDTOList;
         try {
-            worldTreeItem = new WorldTreeItem(client.getWorld());
+            worldDTOList = client.getAllWorlds();
+            worldDTOList.forEach(worldDTO -> {
+                worldTreeItem = new WorldTreeItem(worldDTO);
+                worldTreeItemList.add(worldTreeItem);
+                worldFatherTreeItem.getChildren().add(worldTreeItem);
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        worldTreeItemList.add(worldTreeItem);
-        worldFatherTreeItem.getChildren().add(worldTreeItem);
-        //}
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    boolean changed = false;
+                    try {
+                        worldTreeItem = new WorldTreeItem(client.getWorld());
+                        if(worldTreeItemList.isEmpty()) {
+                            worldTreeItemList.add(worldTreeItem);
+                            worldFatherTreeItem.getChildren().add(worldTreeItem);
+                        } else {
+                            Iterator<WorldTreeItem> it = worldTreeItemList.iterator();
+                            while (it.hasNext()) {
+                                WorldTreeItem treeItem = it.next();
+                                if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
+                                    changed = true;
+                                    if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
+                                        it.remove();
+                                        worldTreeItemList.add(worldTreeItem);
+                                        worldFatherTreeItem.getChildren().add(worldTreeItem);
+                                    }
+                                }
+                            }
+                            if(!changed) {
+                                worldTreeItemList.add(worldTreeItem);
+                                worldFatherTreeItem.getChildren().add(worldTreeItem);
+                            }
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+        }, 0, 500);
+//        try {
+//            worldTreeItem = new WorldTreeItem(client.getWorld());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        if (worldTreeItemList.isEmpty() || (worldTreeItem.getWorldVersion() != worldTreeItemList.get(worldTreeItemList.size() - 1).getWorldVersion())) {
+//            worldTreeItemList.add(worldTreeItem);
+//            worldFatherTreeItem.getChildren().add(worldTreeItem);
+//        }
 
         // listener for tree view
         simulationsTreeView.setShowRoot(false);

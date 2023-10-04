@@ -15,7 +15,6 @@ import java.util.*;
 public class WorldDTO {
     public final String worldName;
     public final int simulationId;
-    //public final SimpleDateFormat simulationDate;
     public final GridDTO gridDTO;
 
     public final EnvironmentDTO environment;
@@ -27,10 +26,11 @@ public class WorldDTO {
     private final Date simDate;
 
     public TerminationDTO termination;
+    public int worldVersion;
 
     public WorldDTO(int simulationId, SimpleDateFormat simulationDate, List<EntityInstanceManager> entities,
                     Date date, Termination termination, List<Rule> rules,
-                    List<EntityDefinition> entityDefinitions, Environment environment, int gridRows, int gridCols, String worldName) {
+                    List<EntityDefinition> entityDefinitions, Environment environment, int gridRows, int gridCols, String worldName, int worldVersion) {
         this.rules = new ArrayList<>();
         this.entityDefinitions = new ArrayList<>();
         this.simulationId = simulationId;
@@ -39,6 +39,7 @@ public class WorldDTO {
         this.instances = new ArrayList<>();
         this.managerList = entities;
         this.worldName = worldName;
+        this.worldVersion = worldVersion;
         for (Rule rule : rules) {
             this.rules.add(new RuleDTO(rule.getName(), rule.getTick(), rule.getProbability(), rule.GetNumOfActions(), rule.getActions()));
         }
@@ -50,7 +51,7 @@ public class WorldDTO {
         this.gridDTO = new GridDTO(gridRows, gridCols);
     }
 
-    public WorldDTO(String worldName, int simulationId, GridDTO gridDTO, EnvironmentDTO environment, List<EntityDTO> entityDefinitions, List<RuleDTO> rules, List<InstancesDTO> instances, List<EntityInstanceManager> managerList, Date simDate, TerminationDTO termination) {
+    public WorldDTO(String worldName, int simulationId, GridDTO gridDTO, EnvironmentDTO environment, List<EntityDTO> entityDefinitions, List<RuleDTO> rules, List<InstancesDTO> instances, List<EntityInstanceManager> managerList, Date simDate, TerminationDTO termination, int worldVersion) {
         this.worldName = worldName;
         this.simulationId = simulationId;
         this.gridDTO = gridDTO;
@@ -61,6 +62,7 @@ public class WorldDTO {
         this.managerList = managerList;
         this.simDate = simDate;
         this.termination = termination;
+        this.worldVersion = worldVersion;
     }
 
     public List<RuleDTO> getRules() {

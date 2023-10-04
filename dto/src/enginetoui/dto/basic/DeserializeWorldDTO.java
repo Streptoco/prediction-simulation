@@ -13,6 +13,7 @@ public class DeserializeWorldDTO implements JsonDeserializer<WorldDTO> {
     public WorldDTO deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         String worldName = json.getAsJsonObject().get("worldName").getAsString();
         int simulationId = json.getAsJsonObject().get("simulationId").getAsInt();
+        int worldVersion = json.getAsJsonObject().get("worldVersion").getAsInt();
         GridDTO gridDTO = context.deserialize(json.getAsJsonObject().get("gridDTO"), GridDTO.class);
         EnvironmentDTO environmentDTO = context.deserialize(json.getAsJsonObject().get("environment"), EnvironmentDTO.class);
         TerminationDTO terminationDTO = context.deserialize(json.getAsJsonObject().get("termination"), TerminationDTO.class);
@@ -25,6 +26,6 @@ public class DeserializeWorldDTO implements JsonDeserializer<WorldDTO> {
         Type managersDTO = new TypeToken<List<EntityInstanceManager>>() {}.getType();
         List<EntityInstanceManager> managersDTOList = context.deserialize(json.getAsJsonObject().get("managerList"), managersDTO);
 
-        return new WorldDTO(worldName,simulationId,gridDTO,environmentDTO,entityDTOList,ruleDTOList,instancesDTOList,managersDTOList,null,terminationDTO);
+        return new WorldDTO(worldName,simulationId,gridDTO,environmentDTO,entityDTOList,ruleDTOList,instancesDTOList,managersDTOList,null,terminationDTO, worldVersion);
     }
 }

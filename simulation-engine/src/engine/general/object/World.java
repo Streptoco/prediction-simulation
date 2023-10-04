@@ -29,6 +29,7 @@ public class World {
     private final int maxEntitiesAmount;
     private int currentEntitiesAmount;
     private Map<Integer, PopulationsDTO> entitiesAmountPerTick;
+    private int worldVersion;
 
     //Constructors
 
@@ -66,9 +67,12 @@ public class World {
         this.entitiesAmountPerTick.put(0, new PopulationsDTO(amounts));
     }
 
-    public int getNumOfThreads() {
-        //return numOfThreads;
-        return 0;
+    public int getWorldVersion() {
+        return worldVersion;
+    }
+
+    public void setWorldVersion(int worldVersion) {
+        this.worldVersion = worldVersion;
     }
 
     public int getRows() {

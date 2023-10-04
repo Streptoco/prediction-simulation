@@ -8,16 +8,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet(name = "Get World Servlet", urlPatterns = "/get-world")
-public class getWorldServlet extends HttpServlet {
-
+@WebServlet(name = "Get All Worlds Servlet", urlPatterns = "/get-worlds-list")
+public class getAllWorldsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Engine engine = (Engine)this.getServletContext().getAttribute("engine");
         Gson gson = new Gson();
-        WorldDTO currentWorld = engine.getLastWorld();
-        String json = gson.toJson(currentWorld);
+        List<WorldDTO> resultList = engine.getAllWorlds();
+        String json = gson.toJson(resultList);
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(json);
