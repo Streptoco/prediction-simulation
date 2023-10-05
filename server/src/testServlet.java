@@ -19,11 +19,11 @@ public class testServlet extends HttpServlet {
         Part filePart = req.getPart("file");
         String fileName = getSubmittedFileName(filePart);
         resp.getWriter().println(fileName);
-        System.out.println("New Engine created");
         Engine engine = (Engine)this.getServletContext().getAttribute("engine");
         InputStream fileContent = filePart.getInputStream();
         try {
             engine.setupSimulation(fileContent);
+            System.out.println("New World Loaded " + engine.getLastWorld().worldName);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
