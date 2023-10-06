@@ -1,7 +1,6 @@
 package ui.controllers;
 
 import client.UserClient;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,13 +8,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import tree.item.impl.WorldTreeItem;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class UserMainController extends ResourceBundle implements Initializable {
     @FXML
@@ -37,6 +37,8 @@ public class UserMainController extends ResourceBundle implements Initializable 
     private Label usernameLabel;
     private final UserClient client = new UserClient();
 
+    private List<WorldTreeItem> worldTreeItemList = new ArrayList<>();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -47,6 +49,8 @@ public class UserMainController extends ResourceBundle implements Initializable 
         switch (key) {
             case "client":
                 return client;
+            case "treeList":
+                return worldTreeItemList;
             default:
                 return null;
         }

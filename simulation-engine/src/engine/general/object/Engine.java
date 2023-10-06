@@ -37,20 +37,9 @@ public class Engine {
         int simulationID = -1;
         if (fileContent != null) {
             World aWholeNewworld = reader.ReadXMLFromStream(fileContent);
-            if (!(simulationManager.containsKey(aWholeNewworld.getWorldName()))) {
-                aWholeNewworld.setWorldVersion(1);
-                simulationManager.put(aWholeNewworld.getWorldName(), new SimulationExecutionManager());
-                simulationID = simulationManager.get(aWholeNewworld.getWorldName()).CreateSimulation(aWholeNewworld);
-            } else {
-                // WHY 0 ?
-                int newWorldVersion = simulationManager.get(aWholeNewworld.getWorldName()).getWorld(0).getWorldVersion() + 1;
-                aWholeNewworld.setWorldVersion(newWorldVersion);
-                simulationManager.put(aWholeNewworld.getWorldName(), new SimulationExecutionManager());
-                simulationID = simulationManager.get(aWholeNewworld.getWorldName()).CreateSimulation(aWholeNewworld);
-                System.out.println("The new world version is: " + newWorldVersion);
-            }
-
-
+            aWholeNewworld.setWorldVersion(1);
+            simulationManager.put(aWholeNewworld.getWorldName(), new SimulationExecutionManager());
+            simulationID = simulationManager.get(aWholeNewworld.getWorldName()).CreateSimulation(aWholeNewworld);
         }
         return simulationID;
     }
@@ -111,7 +100,7 @@ public class Engine {
 
     public WorldDTO getLastWorld() {
         Map.Entry<String, SimulationExecutionManager> lastEntry = null;
-        for(Map.Entry<String, SimulationExecutionManager> entry : simulationManager.entrySet()) {
+        for (Map.Entry<String, SimulationExecutionManager> entry : simulationManager.entrySet()) {
             lastEntry = entry;
         }
 

@@ -4,11 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import enginetoui.dto.basic.DeserializeWorldDTO;
+import enginetoui.dto.basic.RequestDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -54,6 +52,20 @@ public class UserClient {
         Type listDTO = new TypeToken<List<WorldDTO>>() {
         }.getType();
         return gson.fromJson(jsonObject, listDTO);
+    }
+
+    public void newRequest(RequestDTO request) throws IOException {
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        Gson gson = new Gson();
+        String json = gson.toJson(request);
+        RequestBody body = RequestBody.create(json, JSON);
+        String RESOURCE = "/new-request";
+        Request httpRequest = new Request.Builder()
+                .url(BASE_URL + RESOURCE)
+                .post(body)
+                .build();
+        Call call = userClient.newCall(httpRequest);
+        Response response = call.execute();
     }
 
 }

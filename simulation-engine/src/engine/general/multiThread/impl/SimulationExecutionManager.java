@@ -49,6 +49,7 @@ public class SimulationExecutionManager {
             executor = Executors.newFixedThreadPool(3);
         }
         SimulationRunner currentSimulation = new SimulationRunner(world, simulationCounter);
+        //currentSimulation.setTermination();
         simulations.put(simulationCounter, currentSimulation);
         return simulationCounter++;
     }

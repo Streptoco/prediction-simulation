@@ -2,9 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -19,7 +18,10 @@
                <children>
                   <VBox spacing="18.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Simulation Name:" />
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Simulation Name:">
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding></Label>
                         <Label alignment="CENTER" prefHeight="17.0" prefWidth="101.0" text="Amount of runs:" />
                      </children>
                      <padding>
@@ -28,7 +30,7 @@
                   </VBox>
                   <VBox fillWidth="false" spacing="10.0">
                      <children>
-                        <TextField fx:id="simNameField" prefWidth="127.0" />
+                        <ComboBox fx:id="simulationChooseMenu" onAction="#setSimulations" prefHeight="25.0" prefWidth="162.0" promptText="Choose Simulation" />
                         <TextField fx:id="amountRunField" prefHeight="25.0" prefWidth="47.0" />
                      </children>
                      <padding>
@@ -37,17 +39,10 @@
                   </VBox>
                   <VBox prefHeight="77.0" prefWidth="237.0">
                      <children>
-                        <HBox>
+                        <HBox prefHeight="80.0" prefWidth="237.0">
                            <children>
                               <Label prefHeight="24.0" prefWidth="81.0" text="Termination:" />
-                              <MenuButton fx:id="terminationMenu" mnemonicParsing="false" text="Termination">
-                                <items>
-                                  <MenuItem mnemonicParsing="false" text="Tick" />
-                                  <MenuItem mnemonicParsing="false" text="Time" />
-                                    <MenuItem mnemonicParsing="false" text="Tick and Time" />
-                                    <MenuItem mnemonicParsing="false" text="By user" />
-                                </items>
-                              </MenuButton>
+                              <ComboBox fx:id="terminationMenu" onAction="#setComboMenuItemTermination" prefHeight="34.0" prefWidth="135.0" promptText="Termination" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
@@ -57,12 +52,15 @@
                               <Label prefHeight="17.0" prefWidth="30.0" text="Time:" />
                               <TextField fx:id="timeField" prefHeight="25.0" prefWidth="47.0" />
                            </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
                         </HBox>
                      </children>
                   </VBox>
                   <VBox spacing="15.0">
                      <children>
-                        <Button fx:id="submitButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Submit" />
+                        <Button fx:id="submitButton" alignment="CENTER" mnemonicParsing="false" onAction="#createNewRequest" prefHeight="25.0" prefWidth="64.0" text="Submit" />
                         <Button fx:id="executeButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Execute" />
                      </children>
                   </VBox>

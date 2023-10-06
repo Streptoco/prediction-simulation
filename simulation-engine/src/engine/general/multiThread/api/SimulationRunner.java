@@ -3,6 +3,7 @@ package engine.general.multiThread.api;
 import engine.entity.impl.EntityInstance;
 import engine.entity.impl.EntityInstanceManager;
 import engine.general.object.Rule;
+import engine.general.object.Termination;
 import engine.general.object.World;
 import engine.property.api.PropertyInterface;
 import simulation.dto.PopulationsDTO;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 public class SimulationRunner implements Runnable {
     private final World world;
+    private Termination termination;
     private Status status;
     private int ticks;
     private final int simID;
@@ -25,7 +27,6 @@ public class SimulationRunner implements Runnable {
     private final Date simDate;
     private final SimpleDateFormat simulationDate;
     private SimulationDTO simulationDTO;
-
     private long runningTime = 0;
 
     public SimulationRunner(World world, int id) {
@@ -37,6 +38,10 @@ public class SimulationRunner implements Runnable {
         this.simDate = new Date();
         this.simulationDate.format(this.simDate);
         this.simulationDTO = new SimulationDTO();
+    }
+
+    public void setTermination(Termination termination) {
+        this.termination = termination;
     }
 
     public World getWorld() {

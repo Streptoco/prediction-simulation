@@ -15,14 +15,12 @@ import java.util.*;
 
 public class World {
     private final String worldName;
-    //private final Termination termination;
     private final Map<String, EntityInstanceManager> managers;
     private final List<Rule> rules;
     private final List<EntityDefinition> entities;
     private final Environment activeEnvironment;
     private long currentTime;
     private final SimpleDateFormat simulationDate;
-    //private final int numOfThreads;
     private final Date simDate;
     private final Grid grid;
     private List<EntityInstance> allInstances;

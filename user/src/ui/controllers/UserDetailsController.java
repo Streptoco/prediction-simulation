@@ -16,7 +16,6 @@ import java.util.*;
 public class UserDetailsController implements Initializable {
 
     private UserClient client;
-    private List<WorldTreeItem> worldTreeItemList = new ArrayList<>();
     private WorldFatherTreeItem worldFatherTreeItem = new WorldFatherTreeItem();
     private WorldTreeItem worldTreeItem;
     @FXML
@@ -26,6 +25,7 @@ public class UserDetailsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        List<WorldTreeItem> worldTreeItemList = (List<WorldTreeItem>) resources.getObject("treeList");
         client = (UserClient) resources.getObject("client");
         List<WorldDTO> worldDTOList;
         try {

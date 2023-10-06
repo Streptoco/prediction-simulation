@@ -1,11 +1,8 @@
 package engine.general.object;
 
-import java.sql.Time;
-
 public class Termination {
     private final int ticks;
     private final long howManySecondsToRun;
-
     private boolean isUserInteractive = false;
 
     public Termination(int ticks, int howManySecondsToRun) {
@@ -20,7 +17,7 @@ public class Termination {
     }
 
     public boolean getTermination(int currentTick, long outerTimeInMillis) {
-        if(isUserInteractive) {
+        if (isUserInteractive) {
             return true;
         } else {
             //long currentTime = System.currentTimeMillis();
@@ -30,13 +27,15 @@ public class Termination {
         }
     }
 
-    public boolean getIsInteractive() { return this.isUserInteractive;}
+    public boolean getIsInteractive() {
+        return this.isUserInteractive;
+    }
 
     public int getAllTicks() {
         return ticks;
     }
 
     public long getHowManySecondsToRun() {
-        return howManySecondsToRun/1000L;
+        return howManySecondsToRun / 1000L;
     }
 }

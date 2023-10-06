@@ -2,6 +2,9 @@ import engine.general.object.Engine;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import request.impl.AllocationRequest;
+
+import java.util.PriorityQueue;
 
 @WebListener
 public class InitializeServer implements ServletContextListener {
@@ -9,6 +12,7 @@ public class InitializeServer implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("Starting Predictions Server");
         sce.getServletContext().setAttribute("engine", new Engine());
+        sce.getServletContext().setAttribute("requestQueue", new PriorityQueue<AllocationRequest>());
     }
 
     @Override
