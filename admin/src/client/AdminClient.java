@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import enginetoui.dto.basic.DeserializeWorldDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.*;
+import request.impl.AllocationRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,5 +68,18 @@ public class AdminClient {
         Type listDTO = new TypeToken<List<WorldDTO>>() {
         }.getType();
         return gson.fromJson(jsonObject, listDTO);
+    }
+
+    public AllocationRequest getLatestRequest() throws IOException {
+        String RESOURCE = "/get-requests";
+        Gson gson = new Gson();
+        Request request = new Request.Builder()
+                .url(BASE_URL + RESOURCE)
+                .get()
+                .build();
+        Call call = adminClient.newCall(request);
+        Response response = call.execute();
+        String jsonObject = response.body().string();
+        return gson.fromJson(jsonObject, AllocationRequest.class);
     }
 }

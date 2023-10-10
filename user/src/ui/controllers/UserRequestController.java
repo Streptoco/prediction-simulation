@@ -2,12 +2,12 @@ package ui.controllers;
 
 import client.UserClient;
 import enginetoui.dto.basic.RequestDTO;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import tree.item.impl.WorldTreeItem;
 
 import java.io.IOException;
@@ -37,11 +37,26 @@ public class UserRequestController implements Initializable {
     @FXML
     private TextField timeField;
 
+    @FXML
+    private TableView requestTable;
+
+    @FXML
+    private TableColumn<RequestDTO, String> nameColumn;
+
+    @FXML
+    private TableColumn<RequestDTO, String> statusColumn;
+
+    private ObservableList<RequestDTO> TableData;
+
     private UserClient client;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (UserClient) resources.getObject("client");
+        TableData = (ObservableList<RequestDTO>) resources.getObject("requestList");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("simulationName"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        requestTable.setItems(TableData);
         terminationMenu.getItems().clear();
         terminationMenu.getItems().add("Tick");
         terminationMenu.getItems().add("Time");
@@ -64,7 +79,7 @@ public class UserRequestController implements Initializable {
         } else if (terminationMenu.getSelectionModel().getSelectedItem().equals("Time")) {
             timeField.setDisable(false);
             tickField.setDisable(true);
-                    } else if (terminationMenu.getSelectionModel().getSelectedItem().equals("By user")) {
+        } else if (terminationMenu.getSelectionModel().getSelectedItem().equals("By user")) {
             timeField.setDisable(true);
             tickField.setDisable(true);
         } else {
@@ -79,10 +94,29 @@ public class UserRequestController implements Initializable {
 
     public void createNewRequest(ActionEvent event) throws IOException {
         String worldName = (String) simulationChooseMenu.getSelectionModel().getSelectedItem();
-        int numOfRuns = Integer.parseInt(amountRunField.getText());
-        int ticks = Integer.parseInt(tickField.getText());
-        int seconds = Integer.parseInt(timeField.getText());
+        int seconds, ticks, numOfRuns;
+        try {
+            numOfRuns = Integer.parseInt(amountRunField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println(e.getMessage());
+            numOfRuns = 0;
+        }
+        try {
+            ticks = Integer.parseInt(tickField.getText());
+        } catch (NumberFormatException e) {
+            ticks = Integer.MAX_VALUE;
+        }
+        try {
+            seconds = Integer.parseInt(timeField.getText());
+        } catch (NumberFormatException e) {
+            seconds = Integer.MAX_VALUE;
+        }
         RequestDTO requestDTO = new RequestDTO(worldName, numOfRuns, ticks, seconds);
         client.newRequest(requestDTO);
+        TableData.add(requestDTO);
+        requestTable.setItems(TableData);
+        amountRunField.setText("");
+        timeField.setText("");
+        tickField.setText("");
     }
 }

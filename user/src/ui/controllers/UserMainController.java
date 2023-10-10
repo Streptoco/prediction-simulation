@@ -1,6 +1,9 @@
 package ui.controllers;
 
 import client.UserClient;
+import enginetoui.dto.basic.RequestDTO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,8 +39,9 @@ public class UserMainController extends ResourceBundle implements Initializable 
     @FXML
     private Label usernameLabel;
     private final UserClient client = new UserClient();
-
     private List<WorldTreeItem> worldTreeItemList = new ArrayList<>();
+
+    private ObservableList<RequestDTO> TableData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,6 +54,8 @@ public class UserMainController extends ResourceBundle implements Initializable 
                 return client;
             case "treeList":
                 return worldTreeItemList;
+            case "requestList":
+                return TableData;
             default:
                 return null;
         }

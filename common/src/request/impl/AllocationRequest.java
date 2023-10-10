@@ -1,10 +1,12 @@
 package request.impl;
 
-public class AllocationRequest {
+import request.api.RequestStatus;
+
+public class AllocationRequest implements Comparable<AllocationRequest> {
     private int requestID;
     private final String simulationName;
     private final int numOfRuns;
-    private String status;
+    private RequestStatus status;
     private int secondsToRun;
     private int ticksToRun;
 
@@ -12,7 +14,7 @@ public class AllocationRequest {
         this.requestID = -1;
         this.simulationName = simulationName;
         this.numOfRuns = numOfRuns;
-        this.status = "loading";
+        this.status = RequestStatus.WAITING;
         this.ticksToRun = amountTick;
         this.secondsToRun = amountTime;
 
@@ -22,5 +24,29 @@ public class AllocationRequest {
         if (this.requestID == -1) {
             this.requestID = requestID;
         }
+    }
+
+    @Override
+    public int compareTo(AllocationRequest o) {
+        return this.requestID - o.requestID;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder()
+                .append("Simulation Name: " + simulationName)
+                .append("\nRequest ID: " + requestID)
+                .append("\nNumber of runs: " + numOfRuns);
+        if(secondsToRun == Integer.MAX_VALUE && ticksToRun == Integer.MAX_VALUE) {
+            result.append("\nTermination: By User");
+        } else if (secondsToRun == Integer.MAX_VALUE) {
+            result.append("\nTermination: By ").append(ticksToRun).append(" Ticks");
+        } else if (ticksToRun == Integer.MAX_VALUE) {
+            result.append("\nTermination: By ").append(secondsToRun).append(" Seconds");
+        } else {
+            result.append("\nTermination: By ").append(ticksToRun).append(" Ticks and ").append(secondsToRun).append(" Seconds");
+        }
+        return String.valueOf(result);
+
     }
 }

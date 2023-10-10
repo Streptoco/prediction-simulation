@@ -71,6 +71,8 @@ public class UserClient {
                 .build();
         Call call = userClient.newCall(httpRequest);
         Response response = call.execute();
+        String jsonObject = response.body().string();
+        System.out.println(jsonObject);
     }
 
 }

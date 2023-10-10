@@ -48,5 +48,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="okio-2.8.0" level="project" />
+    <orderEntry type="module" module-name="common" />
   </component>
 </module>

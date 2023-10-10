@@ -48,7 +48,7 @@ public class UserDetailsController implements Initializable {
                         WorldDTO currentDTO = client.getWorld();
                         if(currentDTO != null) {
                             worldTreeItem = new WorldTreeItem(currentDTO);
-                            System.out.println("Get the world: " + currentDTO.worldName + " in version" + currentDTO.worldVersion);
+                            //System.out.println("Get the world: " + currentDTO.worldName + " in version" + currentDTO.worldVersion);
                             if (worldTreeItemList.isEmpty()) {
                                 worldTreeItemList.add(worldTreeItem);
                                 worldFatherTreeItem.getChildren().add(worldTreeItem);
@@ -76,7 +76,7 @@ public class UserDetailsController implements Initializable {
                     }
                 });
             }
-        }, 0, 500);
+        }, 0, 1000);
         // listener for tree view
         simulationsTreeView.setShowRoot(false);
         simulationsTreeView.setRoot(worldFatherTreeItem);

@@ -11,5 +11,6 @@
     <orderEntry type="module" module-name="simulation-engine" />
     <orderEntry type="library" name="gson-2.8.8-sources" level="project" />
     <orderEntry type="module" module-name="Predictions" />
+    <orderEntry type="module" module-name="common" />
   </component>
 </module>

@@ -13,9 +13,9 @@
          <children>
             <HBox alignment="CENTER" prefHeight="315.0" prefWidth="600.0" spacing="5.0">
                <children>
-                  <ListView fx:id="threadListView" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="requestListView" prefHeight="200.0" prefWidth="200.0" />
                   <Separator orientation="VERTICAL" prefHeight="298.0" prefWidth="11.0" />
-                  <TextArea prefHeight="298.0" prefWidth="349.0" />
+                  <TextArea fx:id="requestTextArea" prefHeight="298.0" prefWidth="349.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
