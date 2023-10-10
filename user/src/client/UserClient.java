@@ -11,6 +11,8 @@ import okhttp3.*;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserClient {
     private final OkHttpClient userClient;
@@ -18,6 +20,9 @@ public class UserClient {
 
     public UserClient() {
         userClient = new OkHttpClient();
+
+        /** This piece of code relevant only for dev phase in order to  detect memory leaks in unclosed connection **/
+        Logger.getLogger(OkHttpClient.class.getName()).setLevel(Level.FINE);
     }
 
     public WorldDTO getWorld() throws IOException {
