@@ -49,6 +49,7 @@ public class UserRequestController implements Initializable {
     private ObservableList<RequestDTO> TableData;
 
     private UserClient client;
+    private List<WorldTreeItem> worldTreeItemList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -63,7 +64,7 @@ public class UserRequestController implements Initializable {
         terminationMenu.getItems().add("Tick and Time");
         terminationMenu.getItems().add("By user");
         simulationChooseMenu.getItems().clear();
-        List<WorldTreeItem> worldTreeItemList = (List<WorldTreeItem>) resources.getObject("treeList");
+        worldTreeItemList = (List<WorldTreeItem>) resources.getObject("treeList");
         for (WorldTreeItem treeItem : worldTreeItemList) {
             simulationChooseMenu.getItems().add(treeItem.getWorldName());
         }
