@@ -1,13 +1,18 @@
 package request.impl;
 
+import com.google.gson.annotations.Expose;
 import request.api.RequestStatus;
 
 public class AllocationRequest implements Comparable<AllocationRequest> {
     private int requestID;
-    private final String simulationName;
-    private final int numOfRuns;
+    @Expose
+    private String simulationName;
+    @Expose
+    private int numOfRuns;
     private RequestStatus status;
+    @Expose
     private int secondsToRun;
+    @Expose
     private int ticksToRun;
 
     public AllocationRequest(String simulationName, int numOfRuns, int amountTick, int amountTime) {
@@ -21,8 +26,18 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
     }
 
     public void setRequestID(int requestID) {
-        if (this.requestID == -1) {
-            this.requestID = requestID;
+        this.requestID = requestID;
+    }
+
+    public void approveRequest() {
+        if (this.status.equals(RequestStatus.WAITING)) {
+            this.status = RequestStatus.APPROVED;
+        }
+    }
+
+    public void denyRequest() {
+        if (this.status.equals(RequestStatus.WAITING)) {
+            this.status = RequestStatus.DENIED;
         }
     }
 
@@ -37,7 +52,7 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
                 .append("Simulation Name: " + simulationName)
                 .append("\nRequest ID: " + requestID)
                 .append("\nNumber of runs: " + numOfRuns);
-        if(secondsToRun == Integer.MAX_VALUE && ticksToRun == Integer.MAX_VALUE) {
+        if (secondsToRun == Integer.MAX_VALUE && ticksToRun == Integer.MAX_VALUE) {
             result.append("\nTermination: By User");
         } else if (secondsToRun == Integer.MAX_VALUE) {
             result.append("\nTermination: By ").append(ticksToRun).append(" Ticks");
@@ -48,5 +63,29 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
         }
         return String.valueOf(result);
 
+    }
+
+    public int getRequestID() {
+        return requestID;
+    }
+
+    public String getSimulationName() {
+        return simulationName;
+    }
+
+    public int getNumOfRuns() {
+        return numOfRuns;
+    }
+
+    public RequestStatus getStatus() {
+        return status;
+    }
+
+    public int getSecondsToRun() {
+        return secondsToRun;
+    }
+
+    public int getTicksToRun() {
+        return ticksToRun;
     }
 }

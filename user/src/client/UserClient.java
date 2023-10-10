@@ -72,7 +72,7 @@ public class UserClient {
         Call call = userClient.newCall(httpRequest);
         Response response = call.execute();
         String jsonObject = response.body().string();
-        System.out.println(jsonObject);
+        System.out.println("[UserClient] - [newRequest]: " + jsonObject);
     }
 
 }

@@ -13,6 +13,7 @@ public class InitializeServer implements ServletContextListener {
         System.out.println("Starting Predictions Server");
         sce.getServletContext().setAttribute("engine", new Engine());
         sce.getServletContext().setAttribute("requestQueue", new PriorityQueue<AllocationRequest>());
+        sce.getServletContext().setAttribute("requestID", 1);
     }
 
     @Override

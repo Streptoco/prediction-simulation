@@ -23,7 +23,7 @@ public class testServlet extends HttpServlet {
         InputStream fileContent = filePart.getInputStream();
         try {
             engine.setupSimulation(fileContent);
-            System.out.println("New World Loaded " + engine.getLastWorld().worldName);
+            System.out.println("[testServlet] - [doPost]: New World Loaded " + engine.getLastWorld().worldName);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }

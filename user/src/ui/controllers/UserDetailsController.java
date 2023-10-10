@@ -76,7 +76,7 @@ public class UserDetailsController implements Initializable {
                     }
                 });
             }
-        }, 0, 1000);
+        }, 0, 500);
         // listener for tree view
         simulationsTreeView.setShowRoot(false);
         simulationsTreeView.setRoot(worldFatherTreeItem);

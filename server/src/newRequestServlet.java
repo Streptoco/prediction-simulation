@@ -1,4 +1,6 @@
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import enginetoui.dto.basic.DeserializeAllocationRequest;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +19,14 @@ public class newRequestServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PriorityQueue<AllocationRequest> requests = (PriorityQueue<AllocationRequest>) this.getServletContext().getAttribute("requestQueue");
-        Gson gson = new Gson();
+        Integer requestID = (Integer) this.getServletContext().getAttribute("requestID");
+        this.getServletContext().setAttribute("requestID", requestID + 1);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(AllocationRequest.class, new DeserializeAllocationRequest())
+                .excludeFieldsWithoutExposeAnnotation()
+                .setPrettyPrinting()
+                .create();
+        //Gson gson = new Gson();
         InputStream stream = req.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         StringBuilder requestBody = new StringBuilder();
@@ -27,9 +36,9 @@ public class newRequestServlet extends HttpServlet {
         }
         String jsonData = requestBody.toString();
         AllocationRequest newRequest = gson.fromJson(jsonData, AllocationRequest.class);
+        newRequest.setRequestID(requestID);
         requests.add(newRequest);
-
-        System.out.println(jsonData);
+        System.out.println("[newRequestServlet] - [doPost]: " + newRequest);
         resp.getWriter().println(jsonData);
     }
 }

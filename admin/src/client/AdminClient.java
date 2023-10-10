@@ -71,7 +71,7 @@ public class AdminClient {
     }
 
     public AllocationRequest getLatestRequest() throws IOException {
-        String RESOURCE = "/get-requests";
+        String RESOURCE = "/get-last-request";
         Gson gson = new Gson();
         Request request = new Request.Builder()
                 .url(BASE_URL + RESOURCE)
@@ -81,5 +81,20 @@ public class AdminClient {
         Response response = call.execute();
         String jsonObject = response.body().string();
         return gson.fromJson(jsonObject, AllocationRequest.class);
+    }
+
+    public List<AllocationRequest> getAllRequests() throws IOException {
+        String RESOURCE = "/get-all-requests";
+        Gson gson = new Gson();
+        Request request = new Request.Builder()
+                .url(BASE_URL + RESOURCE)
+                .get()
+                .build();
+        Call call = adminClient.newCall(request);
+        Response response = call.execute();
+        String jsonObject = response.body().string();
+        Type requestList = new TypeToken<List<AllocationRequest>>() {
+        }.getType();
+        return gson.fromJson(jsonObject, requestList);
     }
 }
