@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import request.api.RequestStatus;
 import request.impl.AllocationRequest;
 
 import java.io.BufferedReader;
@@ -14,13 +15,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 
-@WebServlet(name = "New Request", urlPatterns = "/new-request")
-public class newRequestServlet extends HttpServlet {
+@WebServlet (name = "Change request status", urlPatterns = "/approve-deny-status")
+public class changeRequestStatusServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PriorityQueue<AllocationRequest> requests = (PriorityQueue<AllocationRequest>) this.getServletContext().getAttribute("requestQueue");
-        Integer requestID = (Integer) this.getServletContext().getAttribute("requestID");
-        this.getServletContext().setAttribute("requestID", requestID + 1);
+        PriorityQueue<AllocationRequest> copyQueue = new PriorityQueue<>(requests);
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(AllocationRequest.class, new DeserializeAllocationRequest())
                 .excludeFieldsWithoutExposeAnnotation()
@@ -34,10 +34,21 @@ public class newRequestServlet extends HttpServlet {
             requestBody.append(line);
         }
         String jsonData = requestBody.toString();
-        AllocationRequest newRequest = gson.fromJson(jsonData, AllocationRequest.class);
-        newRequest.setRequestID(requestID);
-        requests.add(newRequest);
-        System.out.println("[newRequestServlet] - [doPost]: " + newRequest);
-        resp.getWriter().println(jsonData);
+        AllocationRequest requestToChange = gson.fromJson(jsonData, AllocationRequest.class);
+        for (AllocationRequest currentRequest : copyQueue) {
+            if (currentRequest.getRequestID() == requestToChange.getRequestID()) {
+                System.out.println("[changeRequestStatusServlet] - [doPost]: Status of requestID: " + currentRequest.getRequestID()
+                        + " is changed from: " + currentRequest.getStatus()
+                        + " to: " + requestToChange.getStatus());
+                if (requestToChange.getStatus().equals(RequestStatus.APPROVED)) {
+                    currentRequest.approveRequest();
+                } else {
+                    currentRequest.denyRequest();
+                }
+                return;
+            }
+
+        }
+
     }
 }

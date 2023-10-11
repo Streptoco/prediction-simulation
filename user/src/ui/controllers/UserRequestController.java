@@ -45,11 +45,11 @@ public class UserRequestController implements Initializable {
 
     @FXML
     private TableColumn<RequestDTO, String> statusColumn;
-
     private ObservableList<RequestDTO> TableData;
-
     private UserClient client;
     private List<WorldTreeItem> worldTreeItemList;
+    private boolean isChooseSim;
+    private boolean isChooseTermination;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -68,12 +68,13 @@ public class UserRequestController implements Initializable {
         for (WorldTreeItem treeItem : worldTreeItemList) {
             simulationChooseMenu.getItems().add(treeItem.getWorldName());
         }
+        isChooseSim = isChooseTermination = false;
     }
 
 
     public void setComboMenuItemTermination(ActionEvent event) {
         timeField.setDisable(false);
-        timeField.setDisable(false);
+        tickField.setDisable(false);
         if (terminationMenu.getSelectionModel().getSelectedItem().toString().equalsIgnoreCase("Tick")) {
             timeField.setDisable(true);
             tickField.setDisable(false);
@@ -87,10 +88,17 @@ public class UserRequestController implements Initializable {
             timeField.setDisable(false);
             tickField.setDisable(false);
         }
+        isChooseTermination = true;
+        if (isChooseSim) {
+            submitButton.setDisable(false);
+        }
     }
 
     public void setSimulations(ActionEvent event) {
-
+        isChooseSim = true;
+        if (isChooseTermination) {
+            submitButton.setDisable(false);
+        }
     }
 
     public void createNewRequest(ActionEvent event) throws IOException {
@@ -116,8 +124,15 @@ public class UserRequestController implements Initializable {
         client.newRequest(requestDTO);
         TableData.add(requestDTO);
         requestTable.setItems(TableData);
+
         amountRunField.setText("");
         timeField.setText("");
         tickField.setText("");
+        simulationChooseMenu.getSelectionModel().clearSelection();
+        terminationMenu.getSelectionModel().clearSelection();
+        timeField.setDisable(true);
+        tickField.setDisable(true);
+        isChooseSim = isChooseTermination = false;
+        submitButton.setDisable(true);
     }
 }

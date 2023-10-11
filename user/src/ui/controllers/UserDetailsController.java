@@ -46,9 +46,8 @@ public class UserDetailsController implements Initializable {
                     boolean changed = false;
                     try {
                         WorldDTO currentDTO = client.getWorld();
-                        if(currentDTO != null) {
+                        if (currentDTO != null) {
                             worldTreeItem = new WorldTreeItem(currentDTO);
-                            //System.out.println("Get the world: " + currentDTO.worldName + " in version" + currentDTO.worldVersion);
                             if (worldTreeItemList.isEmpty()) {
                                 worldTreeItemList.add(worldTreeItem);
                                 worldFatherTreeItem.getChildren().add(worldTreeItem);

@@ -2,10 +2,11 @@ package ui.controllers;
 
 import client.AdminClient;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import request.impl.AllocationRequest;
@@ -19,19 +20,24 @@ import java.util.TimerTask;
 
 public class AdminAllocationController implements Initializable {
     private AdminClient client;
+    private ObservableList<AllocationRequest> data;
     @FXML
     private ListView<AllocationRequest> requestListView;
     @FXML
     private TextArea requestTextArea;
+    @FXML
+    private Button approveButton;
+    @FXML
+    private Button denyButton;
 
-    private ObservableList<AllocationRequest> data = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (AdminClient) resources.getObject("client");
+        data = (ObservableList<AllocationRequest>) resources.getObject("AllocationData");
         try {
-            List<AllocationRequest> ltsRequest = client.getAllRequests();
-            data.addAll(ltsRequest);
+            List<AllocationRequest> allRequests = client.getAllRequests();
+            data.addAll(allRequests);
             requestListView.setItems(data);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -46,7 +52,7 @@ public class AdminAllocationController implements Initializable {
                     if (newRequest != null) {
                         Platform.runLater(() -> {
                             data.add(newRequest);
-                            System.out.println(newRequest);
+                            System.out.println("[AdminAllocationController] - [initialize]: " + newRequest);
                         });
                     }
                 } catch (IOException e) {
@@ -58,7 +64,9 @@ public class AdminAllocationController implements Initializable {
 
         requestListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    System.out.println("Selected: " + newValue);
+                    System.out.println("[AdminAllocationController] - [initialize]: Selected: " + newValue);
+                    approveButton.setDisable(false);
+                    denyButton.setDisable(false);
                     requestTextArea.setText(newValue.toString());
                     ;
                 }
@@ -67,4 +75,19 @@ public class AdminAllocationController implements Initializable {
     }
 
 
+    public void approveRequest(ActionEvent event) throws IOException {
+        requestListView.getSelectionModel().getSelectedItem().approveRequest();
+        client.changeRequestStatus(requestListView.getSelectionModel().getSelectedItem());
+        //requestListView.getSelectionModel().clearSelection();
+        approveButton.setDisable(true);
+        denyButton.setDisable(true);
+    }
+
+    public void denyRequest(ActionEvent event) throws IOException {
+        requestListView.getSelectionModel().getSelectedItem().denyRequest();
+        client.changeRequestStatus(requestListView.getSelectionModel().getSelectedItem());
+        //requestListView.getSelectionModel().clearSelection();
+        approveButton.setDisable(true);
+        denyButton.setDisable(true);
+    }
 }

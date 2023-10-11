@@ -34,6 +34,7 @@ public class AdminClient {
                 .build();
         Call call = adminClient.newCall(request);
         Response response = call.execute();
+        //response.body().string();
     }
 
     public WorldDTO getWorld() throws IOException {
@@ -96,5 +97,20 @@ public class AdminClient {
         Type requestList = new TypeToken<List<AllocationRequest>>() {
         }.getType();
         return gson.fromJson(jsonObject, requestList);
+    }
+
+    public void changeRequestStatus(AllocationRequest request) throws IOException {
+        String RESOURCE = "/approve-deny-status";
+        Gson gson = new Gson();
+        RequestBody body =  RequestBody.create(MediaType.parse("application/json"),
+                gson.toJson(request)
+        );
+        Request httpRequest = new Request.Builder()
+                .url(BASE_URL + RESOURCE)
+                .post(body)
+                .build();
+        Call call = adminClient.newCall(httpRequest);
+        Response response = call.execute();
+        //response.body().string();
     }
 }

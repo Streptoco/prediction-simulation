@@ -54,8 +54,8 @@
                   </VBox>
                   <VBox spacing="15.0">
                      <children>
-                        <Button fx:id="submitButton" alignment="CENTER" mnemonicParsing="false" onAction="#createNewRequest" prefHeight="25.0" prefWidth="64.0" text="Submit" />
-                        <Button fx:id="executeButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Execute" />
+                        <Button fx:id="submitButton" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#createNewRequest" prefHeight="25.0" prefWidth="64.0" text="Submit" />
+                        <Button fx:id="executeButton" alignment="CENTER" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Execute" />
                      </children>
                   </VBox>
                </children>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
@@ -19,6 +20,15 @@
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <HBox prefHeight="55.0" prefWidth="600.0" spacing="20.0">
+               <children>
+                  <Button fx:id="approveButton" disable="true" mnemonicParsing="false" onAction="#approveRequest" prefWidth="63.0" text="Approve" />
+                  <Button fx:id="denyButton" disable="true" mnemonicParsing="false" onAction="#denyRequest" prefWidth="63.0" text="Deny" />
+               </children>
+               <padding>
+                  <Insets left="45.0" top="3.0" />
                </padding>
             </HBox>
          </children>

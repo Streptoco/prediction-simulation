@@ -1,6 +1,8 @@
 package ui.controllers;
 
 import client.AdminClient;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import request.impl.AllocationRequest;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +33,8 @@ public class AdminMainController extends ResourceBundle implements Initializable
     private VBox currentSceneHolder;
     private final AdminClient client = new AdminClient();
 
+    private ObservableList<AllocationRequest> AllocationData = FXCollections.observableArrayList();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,6 +46,8 @@ public class AdminMainController extends ResourceBundle implements Initializable
         switch (key) {
             case "client":
                 return client;
+            case "AllocationData":
+                return AllocationData;
             default:
                 return null;
         }

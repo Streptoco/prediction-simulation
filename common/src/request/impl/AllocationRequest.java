@@ -61,6 +61,7 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
         } else {
             result.append("\nTermination: By ").append(ticksToRun).append(" Ticks and ").append(secondsToRun).append(" Seconds");
         }
+        result.append("\nStatus: " + this.status);
         return String.valueOf(result);
 
     }
