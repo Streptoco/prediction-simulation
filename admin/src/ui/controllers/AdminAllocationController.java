@@ -37,6 +37,7 @@ public class AdminAllocationController implements Initializable {
         data = (ObservableList<AllocationRequest>) resources.getObject("AllocationData");
         try {
             List<AllocationRequest> allRequests = client.getAllRequests();
+            data.clear();
             data.addAll(allRequests);
             requestListView.setItems(data);
         } catch (IOException e) {
@@ -67,7 +68,7 @@ public class AdminAllocationController implements Initializable {
                     System.out.println("[AdminAllocationController] - [initialize]: Selected: " + newValue);
                     approveButton.setDisable(false);
                     denyButton.setDisable(false);
-                    requestTextArea.setText(newValue.toString());
+                    requestTextArea.setText(newValue.describeRequest());
                     ;
                 }
         );

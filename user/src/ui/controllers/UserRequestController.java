@@ -129,7 +129,7 @@ public class UserRequestController implements Initializable {
         timeField.setText("");
         tickField.setText("");
         simulationChooseMenu.getSelectionModel().clearSelection();
-        terminationMenu.getSelectionModel().clearSelection();
+        //terminationMenu.getSelectionModel().clearSelection();
         timeField.setDisable(true);
         tickField.setDisable(true);
         isChooseSim = isChooseTermination = false;

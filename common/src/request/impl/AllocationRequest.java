@@ -48,6 +48,10 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
 
     @Override
     public String toString() {
+        return "Request ID: " + requestID;
+
+    }
+    public String describeRequest() {
         StringBuilder result = new StringBuilder()
                 .append("Simulation Name: " + simulationName)
                 .append("\nRequest ID: " + requestID)
@@ -63,7 +67,6 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
         }
         result.append("\nStatus: " + this.status);
         return String.valueOf(result);
-
     }
 
     public int getRequestID() {
