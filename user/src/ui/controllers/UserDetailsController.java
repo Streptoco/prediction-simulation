@@ -38,28 +38,40 @@ public class UserDetailsController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+
+        Thread timerWorldCheckThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean changed = false;
-                try {
-                    WorldDTO currentDTO = client.getWorld();
-                    if (currentDTO != null) {
-                        worldTreeItem = new WorldTreeItem(currentDTO);
-                        if (worldTreeItemList.isEmpty()) {
-                            Platform.runLater(() -> {
-                                worldTreeItemList.add(worldTreeItem);
-                                worldFatherTreeItem.getChildren().add(worldTreeItem);
-                            });
-                        } else {
-                            Iterator<WorldTreeItem> it = worldTreeItemList.iterator();
-                            while (it.hasNext()) {
-                                WorldTreeItem treeItem = it.next();
-                                if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
-                                    changed = true;
-                                    if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
-                                        it.remove();
+                Timer timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        boolean changed = false;
+                        try {
+                            WorldDTO currentDTO = client.getWorld();
+                            if (currentDTO != null) {
+                                worldTreeItem = new WorldTreeItem(currentDTO);
+                                if (worldTreeItemList.isEmpty()) {
+                                    Platform.runLater(() -> {
+                                        worldTreeItemList.add(worldTreeItem);
+                                        worldFatherTreeItem.getChildren().add(worldTreeItem);
+                                    });
+                                } else {
+                                    Iterator<WorldTreeItem> it = worldTreeItemList.iterator();
+                                    while (it.hasNext()) {
+                                        WorldTreeItem treeItem = it.next();
+                                        if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
+                                            changed = true;
+                                            if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
+                                                it.remove();
+                                                Platform.runLater(() -> {
+                                                    worldTreeItemList.add(worldTreeItem);
+                                                    worldFatherTreeItem.getChildren().add(worldTreeItem);
+                                                });
+                                            }
+                                        }
+                                    }
+                                    if (!changed) {
                                         Platform.runLater(() -> {
                                             worldTreeItemList.add(worldTreeItem);
                                             worldFatherTreeItem.getChildren().add(worldTreeItem);
@@ -67,19 +79,16 @@ public class UserDetailsController implements Initializable {
                                     }
                                 }
                             }
-                            if (!changed) {
-                                Platform.runLater(() -> {
-                                    worldTreeItemList.add(worldTreeItem);
-                                    worldFatherTreeItem.getChildren().add(worldTreeItem);
-                                });
-                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                }, 0, 500);
             }
-        }, 0, 500);
+        });
+        timerWorldCheckThread.setName("Timer - Check new world thread");
+        timerWorldCheckThread.start();
+
         // listener for tree view
         simulationsTreeView.setShowRoot(false);
         simulationsTreeView.setRoot(worldFatherTreeItem);

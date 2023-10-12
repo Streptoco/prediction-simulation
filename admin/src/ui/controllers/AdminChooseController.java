@@ -38,47 +38,6 @@ public class AdminChooseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (AdminClient) resources.getObject("client");
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                Platform.runLater(() -> {
-//                    List<WorldDTO> worldDTOList;
-//                    List<WorldTreeItem> objectToRemove = new ArrayList<>();
-//                    List<WorldTreeItem> itemsToAdd = new ArrayList<>();
-//                    try {
-//                        worldDTOList = client.getAllWorlds();
-//                        for (WorldDTO currentDTO : worldDTOList) {
-//                            worldTreeItem = new WorldTreeItem(currentDTO);
-//                            if (worldTreeItemList.isEmpty()) {
-//                                worldTreeItemList.add(worldTreeItem);
-//                                worldFatherTreeItem.getChildren().add(worldTreeItem);
-//                            } else {
-//                                for (WorldTreeItem treeItem : worldTreeItemList) {
-//                                    if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
-//                                        if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
-//                                            objectToRemove.add(treeItem);
-//                                            itemsToAdd.add(worldTreeItem);
-//                                        } else if (worldTreeItem.getWorldVersion() == 1) {
-//                                            itemsToAdd.add(worldTreeItem);
-//                                        }
-//                                    }
-//                                }
-//
-//                            }
-//                        }
-//                        worldTreeItemList.removeAll(objectToRemove);
-//                        worldFatherTreeItem.getChildren().removeAll(objectToRemove);
-//                        worldTreeItemList.addAll(itemsToAdd);
-//                        worldFatherTreeItem.getChildren().addAll(itemsToAdd);
-//                        itemsToAdd.clear();
-//                        objectToRemove.clear();
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                });
-//            }
-//        }, 0, 1000);
         List<WorldDTO> worldDTOList = null;
         try {
             worldDTOList = client.getAllWorlds();

@@ -38,29 +38,40 @@ public class AdminAllocationController implements Initializable {
         try {
             List<AllocationRequest> allRequests = client.getAllRequests();
             data.clear();
-            data.addAll(allRequests);
-            requestListView.setItems(data);
+            if (allRequests != null) {
+                data.addAll(allRequests);
+                requestListView.setItems(data);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        Thread timerGetLastRequestThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    AllocationRequest newRequest = client.getLatestRequest();
-                    if(data.isEmpty() ||!(newRequest.equals(data.get(data.size() - 1)))) {
-                        Platform.runLater(() -> {
-                            data.add(newRequest);
-                        });
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                Timer timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            AllocationRequest newRequest = client.getLatestRequest();
+                            if (data.isEmpty() || !(newRequest.equals(data.get(data.size() - 1)))) {
+                                Platform.runLater(() -> {
+                                    if (newRequest != null) {
+                                        data.add(newRequest);
+                                    }
+                                });
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
 
+                    }
+                }, 0, 500);
             }
-        }, 0, 500);
+        });
+        timerGetLastRequestThread.setName("Timer - Get last request Thread");
+        timerGetLastRequestThread.start();
 
         requestListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {

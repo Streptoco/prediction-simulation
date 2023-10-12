@@ -71,6 +71,13 @@ public class UserRequestController implements Initializable {
             simulationChooseMenu.getItems().add(treeItem.getWorldName());
         }
         isChooseSim = isChooseTermination = false;
+
+        Thread TimerCheckUpdateInRequests = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        })
     }
 
 

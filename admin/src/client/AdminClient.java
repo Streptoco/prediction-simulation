@@ -39,7 +39,7 @@ public class AdminClient {
                 .build();
         Call call = adminClient.newCall(request);
         Response response = call.execute();
-        //response.body().string();
+        response.body().string();
     }
 
     public WorldDTO getWorld() throws IOException {
@@ -116,6 +116,6 @@ public class AdminClient {
                 .build();
         Call call = adminClient.newCall(httpRequest);
         Response response = call.execute();
-        //response.body().string();
+        response.body().string();
     }
 }

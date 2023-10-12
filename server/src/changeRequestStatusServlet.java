@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 
-@WebServlet (name = "Change request status", urlPatterns = "/approve-deny-status")
+@WebServlet(name = "Change request status", urlPatterns = "/approve-deny-status")
 public class changeRequestStatusServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,9 +35,17 @@ public class changeRequestStatusServlet extends HttpServlet {
         }
         String jsonData = requestBody.toString();
         AllocationRequest requestToChange = gson.fromJson(jsonData, AllocationRequest.class);
+        int indexBegin = jsonData.indexOf("D") + 3;
+        int indexEnd = jsonData.indexOf(",\"s");
+        if (indexEnd != -1) {
+            String requestIDAsString = jsonData.substring(indexBegin, indexEnd);
+            int requestID = Integer.parseInt(requestIDAsString);
+            requestToChange.setRequestID(requestID);
+        }
+
         for (AllocationRequest currentRequest : copyQueue) {
             if (currentRequest.getRequestID() == requestToChange.getRequestID()) {
-                System.out.println("[changeRequestStatusServlet] - [doPost]: Status of requestID: " + currentRequest.getRequestID()
+                System.out.println("[" + Thread.currentThread().getName() + "] [changeRequestStatusServlet] - [doPost]: Status of requestID: " + currentRequest.getRequestID()
                         + " is changed from: " + currentRequest.getStatus()
                         + " to: " + requestToChange.getStatus());
                 if (requestToChange.getStatus().equals(RequestStatus.APPROVED)) {
