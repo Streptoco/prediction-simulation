@@ -22,7 +22,7 @@ public class getLastRequestServlet extends HttpServlet {
         }
         latestRequest = currentRequest;
         String jsonObject = gson.toJson(latestRequest);
-        System.out.println("[getLastRequestServlet] - [doGet]: " + jsonObject);
+        //System.out.println("[getLastRequestServlet] - [doGet]: " + jsonObject);
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(jsonObject);

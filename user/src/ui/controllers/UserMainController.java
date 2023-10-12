@@ -1,7 +1,6 @@
 package ui.controllers;
 
 import client.UserClient;
-import enginetoui.dto.basic.RequestDTO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -16,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import request.impl.AllocationRequest;
 import tree.item.impl.WorldTreeItem;
 
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class UserMainController extends ResourceBundle implements Initializable 
     private StringProperty userNameProperty;
     private final UserClient client = new UserClient();
     private List<WorldTreeItem> worldTreeItemList = new ArrayList<>();
-    private ObservableList<RequestDTO> TableData = FXCollections.observableArrayList();
+    private ObservableList<AllocationRequest> TableData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

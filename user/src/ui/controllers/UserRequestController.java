@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import request.impl.AllocationRequest;
 import tree.item.impl.WorldTreeItem;
 
 import java.io.IOException;
@@ -43,11 +44,11 @@ public class UserRequestController implements Initializable {
     private TableView requestTable;
 
     @FXML
-    private TableColumn<RequestDTO, String> nameColumn;
+    private TableColumn<AllocationRequest, String> nameColumn;
 
     @FXML
-    private TableColumn<RequestDTO, String> statusColumn;
-    private ObservableList<RequestDTO> TableData;
+    private TableColumn<AllocationRequest, String> statusColumn;
+    private ObservableList<AllocationRequest> TableData;
     private UserClient client;
     private List<WorldTreeItem> worldTreeItemList;
     private boolean isSimulationChosen;
@@ -57,7 +58,7 @@ public class UserRequestController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (UserClient) resources.getObject("client");
-        TableData = (ObservableList<RequestDTO>) resources.getObject("requestList");
+        TableData = (ObservableList<AllocationRequest>) resources.getObject("requestList");
         username = (String) resources.getObject("username");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("simulationName"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -74,11 +75,16 @@ public class UserRequestController implements Initializable {
                 timer.scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
-
+                        try {
+                            TableData.addAll(client.getAllRequests());
+                            requestTable.setItems(TableData);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 },0,500);
             }
-        })
+        });
     }
 
     private void setTerminationMenu() {
