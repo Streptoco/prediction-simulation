@@ -13,8 +13,8 @@ public class DeserializeAllocationRequest implements JsonDeserializer<Allocation
     public AllocationRequest deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         String simulationName = json.getAsJsonObject().get("simulationName").getAsString();
         int numOfRuns = json.getAsJsonObject().get("numOfRuns").getAsInt();
-        int secondsToRun = json.getAsJsonObject().get("seconds").getAsInt();
-        int ticksToRun = json.getAsJsonObject().get("ticks").getAsInt();
+        int secondsToRun = json.getAsJsonObject().get("secondsToRun").getAsInt();
+        int ticksToRun = json.getAsJsonObject().get("ticksToRun").getAsInt();
         String username = json.getAsJsonObject().get("username").getAsString();
         return new AllocationRequest(simulationName, numOfRuns, ticksToRun, secondsToRun, username);
     }

@@ -42,38 +42,42 @@ public class UserDetailsController implements Initializable {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Platform.runLater(() -> {
-                    boolean changed = false;
-                    try {
-                        WorldDTO currentDTO = client.getWorld();
-                        if (currentDTO != null) {
-                            worldTreeItem = new WorldTreeItem(currentDTO);
-                            if (worldTreeItemList.isEmpty()) {
+                boolean changed = false;
+                try {
+                    WorldDTO currentDTO = client.getWorld();
+                    if (currentDTO != null) {
+                        worldTreeItem = new WorldTreeItem(currentDTO);
+                        if (worldTreeItemList.isEmpty()) {
+                            Platform.runLater(() -> {
                                 worldTreeItemList.add(worldTreeItem);
                                 worldFatherTreeItem.getChildren().add(worldTreeItem);
-                            } else {
-                                Iterator<WorldTreeItem> it = worldTreeItemList.iterator();
-                                while (it.hasNext()) {
-                                    WorldTreeItem treeItem = it.next();
-                                    if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
-                                        changed = true;
-                                        if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
-                                            it.remove();
+                            });
+                        } else {
+                            Iterator<WorldTreeItem> it = worldTreeItemList.iterator();
+                            while (it.hasNext()) {
+                                WorldTreeItem treeItem = it.next();
+                                if (treeItem.getWorldName().equalsIgnoreCase(worldTreeItem.getWorldName())) {
+                                    changed = true;
+                                    if (worldTreeItem.getWorldVersion() > treeItem.getWorldVersion()) {
+                                        it.remove();
+                                        Platform.runLater(() -> {
                                             worldTreeItemList.add(worldTreeItem);
                                             worldFatherTreeItem.getChildren().add(worldTreeItem);
-                                        }
+                                        });
                                     }
                                 }
-                                if (!changed) {
+                            }
+                            if (!changed) {
+                                Platform.runLater(() -> {
                                     worldTreeItemList.add(worldTreeItem);
                                     worldFatherTreeItem.getChildren().add(worldTreeItem);
-                                }
+                                });
                             }
                         }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
                     }
-                });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }, 0, 500);
         // listener for tree view

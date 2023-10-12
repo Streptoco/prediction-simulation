@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AdminAllocationController">
+<VBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.AdminAllocationController">
    <children>
       <VBox alignment="CENTER" prefHeight="323.0" prefWidth="600.0">
          <children>
@@ -16,7 +12,7 @@
                <children>
                   <ListView fx:id="requestListView" prefHeight="200.0" prefWidth="200.0" />
                   <Separator orientation="VERTICAL" prefHeight="298.0" prefWidth="11.0" />
-                  <TextArea fx:id="requestTextArea" prefHeight="298.0" prefWidth="349.0" />
+                  <TextArea fx:id="requestTextArea" editable="false" prefHeight="298.0" prefWidth="349.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

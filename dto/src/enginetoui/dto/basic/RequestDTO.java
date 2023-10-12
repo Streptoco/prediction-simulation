@@ -5,8 +5,8 @@ import request.api.RequestStatus;
 public class RequestDTO {
     private final String simulationName;
     public final int numOfRuns;
-    public final int ticks;
-    public final int seconds;
+    public final int ticksToRun;
+    public final int secondsToRun;
 
     public final String username;
     private RequestStatus status;
@@ -14,8 +14,8 @@ public class RequestDTO {
     public RequestDTO(String simulationName, int numOfRuns, int ticks, int seconds, String username) {
         this.simulationName = simulationName;
         this.numOfRuns = numOfRuns;
-        this.ticks = ticks;
-        this.seconds = seconds;
+        this.ticksToRun = ticks;
+        this.secondsToRun = seconds;
         this.username = username;
         this.status = RequestStatus.WAITING;
     }
@@ -31,5 +31,21 @@ public class RequestDTO {
 
     public void setStatus(RequestStatus status) {
         this.status = status;
+    }
+
+    public int getNumOfRuns() {
+        return numOfRuns;
+    }
+
+    public int getTicksToRun() {
+        return ticksToRun;
+    }
+
+    public int getSecondsToRun() {
+        return secondsToRun;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
