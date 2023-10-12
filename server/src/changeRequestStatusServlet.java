@@ -25,23 +25,9 @@ public class changeRequestStatusServlet extends HttpServlet {
                 .excludeFieldsWithoutExposeAnnotation()
                 .setPrettyPrinting()
                 .create();
-        InputStream stream = req.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        StringBuilder requestBody = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            requestBody.append(line);
-        }
-        String jsonData = requestBody.toString();
+        String jsonData = getJSONData(req.getInputStream());
         AllocationRequest requestToChange = gson.fromJson(jsonData, AllocationRequest.class);
-        int indexBegin = jsonData.indexOf("D") + 3;
-        int indexEnd = jsonData.indexOf(",\"s");
-        if (indexEnd != -1) {
-            String requestIDAsString = jsonData.substring(indexBegin, indexEnd);
-            int requestID = Integer.parseInt(requestIDAsString);
-            requestToChange.setRequestID(requestID);
-        }
-
+        setRequestID(jsonData, requestToChange);
         for (AllocationRequest currentRequest : copyQueue) {
             if (currentRequest.getRequestID() == requestToChange.getRequestID()) {
                 System.out.println("[" + Thread.currentThread().getName() + "] [changeRequestStatusServlet] - [doPost]: Status of requestID: " + currentRequest.getRequestID()
@@ -54,8 +40,25 @@ public class changeRequestStatusServlet extends HttpServlet {
                 }
                 return;
             }
-
         }
+    }
 
+    private String getJSONData(InputStream stream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuilder requestBody = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            requestBody.append(line);
+        }
+        return requestBody.toString();
+    }
+    private void setRequestID(String jsonData, AllocationRequest requestToChange) {
+        int indexBegin = jsonData.indexOf("D") + 3;
+        int indexEnd = jsonData.indexOf(",\"s");
+        if (indexEnd != -1) {
+            String requestIDAsString = jsonData.substring(indexBegin, indexEnd);
+            int requestID = Integer.parseInt(requestIDAsString);
+            requestToChange.setRequestID(requestID);
+        }
     }
 }
