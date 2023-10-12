@@ -1,6 +1,6 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import enginetoui.dto.basic.DeserializeAllocationRequest;
+import deserializer.DeserializeAllocationRequest;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,7 +22,7 @@ public class newRequestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PriorityQueue<AllocationRequest> requests = (PriorityQueue<AllocationRequest>) this.getServletContext().getAttribute("requestQueue");
         Integer requestID = (Integer) this.getServletContext().getAttribute("requestID");
-        req.getSession(true).setAttribute("userRequestsID", new ArrayList<>());
+        req.getSession(true).setAttribute("userRequestsID", new ArrayList<Integer>());
         ((List<Integer>)(req.getSession().getAttribute("userRequestsID"))).add(requestID);
         this.getServletContext().setAttribute("requestID", requestID + 1);
         Gson gson = new GsonBuilder()

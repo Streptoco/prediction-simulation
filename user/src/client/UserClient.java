@@ -3,10 +3,11 @@ package client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import enginetoui.dto.basic.DeserializeWorldDTO;
+import deserializer.DeserializeWorldDTO;
 import enginetoui.dto.basic.RequestDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.*;
+import request.impl.AllocationRequest;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -73,6 +74,21 @@ public class UserClient {
         Response response = call.execute();
         String jsonObject = response.body().string();
         System.out.println("[UserClient] - [newRequest]: " + jsonObject);
+    }
+
+    public List<AllocationRequest> getAllRequests() throws IOException {
+        String RESOURCE = "/get-requests";
+        Gson gson = new Gson();
+        Request request = new Request.Builder()
+                .url(BASE_URL + RESOURCE)
+                .get()
+                .build();
+        Call call = userClient.newCall(request);
+        Response response = call.execute();
+        String jsonObject = response.body().string();
+        Type requestList = new TypeToken<List<AllocationRequest>>() {
+        }.getType();
+        return gson.fromJson(jsonObject, requestList);
     }
 
 }

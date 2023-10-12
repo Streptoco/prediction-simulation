@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class UserRequestController implements Initializable {
     @FXML
@@ -48,8 +50,8 @@ public class UserRequestController implements Initializable {
     private ObservableList<RequestDTO> TableData;
     private UserClient client;
     private List<WorldTreeItem> worldTreeItemList;
-    private boolean isChooseSim;
-    private boolean isChooseTermination;
+    private boolean isSimulationChosen;
+    private boolean isTerminationChosen;
     private String username;
 
     @Override
@@ -60,26 +62,39 @@ public class UserRequestController implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("simulationName"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         requestTable.setItems(TableData);
+        setTerminationMenu();
+        worldTreeItemList = (List<WorldTreeItem>) resources.getObject("treeList");
+        setSimulationChooseMenu();
+        isSimulationChosen = isTerminationChosen = false;
+
+        Thread TimerCheckUpdateInRequests = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Timer timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+
+                    }
+                },0,500);
+            }
+        })
+    }
+
+    private void setTerminationMenu() {
         terminationMenu.getItems().clear();
         terminationMenu.getItems().add("Tick");
         terminationMenu.getItems().add("Time");
         terminationMenu.getItems().add("Tick and Time");
         terminationMenu.getItems().add("By user");
+    }
+
+    private void setSimulationChooseMenu() {
         simulationChooseMenu.getItems().clear();
-        worldTreeItemList = (List<WorldTreeItem>) resources.getObject("treeList");
         for (WorldTreeItem treeItem : worldTreeItemList) {
             simulationChooseMenu.getItems().add(treeItem.getWorldName());
         }
-        isChooseSim = isChooseTermination = false;
-
-//        Thread TimerCheckUpdateInRequests = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        })
     }
-
 
     public void setComboMenuItemTermination(ActionEvent event) {
         timeField.setDisable(false);
@@ -97,15 +112,15 @@ public class UserRequestController implements Initializable {
             timeField.setDisable(false);
             tickField.setDisable(false);
         }
-        isChooseTermination = true;
-        if (isChooseSim) {
+        isTerminationChosen = true;
+        if (isSimulationChosen) {
             submitButton.setDisable(false);
         }
     }
 
     public void setSimulations(ActionEvent event) {
-        isChooseSim = true;
-        if (isChooseTermination) {
+        isSimulationChosen = true;
+        if (isTerminationChosen) {
             submitButton.setDisable(false);
         }
     }
@@ -131,8 +146,8 @@ public class UserRequestController implements Initializable {
         }
         RequestDTO requestDTO = new RequestDTO(worldName, numOfRuns, ticks, seconds, username);
         client.newRequest(requestDTO);
-        TableData.add(requestDTO);
-        requestTable.setItems(TableData);
+//        TableData.add(requestDTO);
+//        requestTable.setItems(TableData);
 
         amountRunField.setText("");
         timeField.setText("");
@@ -141,7 +156,7 @@ public class UserRequestController implements Initializable {
         //terminationMenu.getSelectionModel().clearSelection();
         timeField.setDisable(true);
         tickField.setDisable(true);
-        isChooseSim = isChooseTermination = false;
+        isSimulationChosen = isTerminationChosen = false;
         submitButton.setDisable(true);
     }
 }

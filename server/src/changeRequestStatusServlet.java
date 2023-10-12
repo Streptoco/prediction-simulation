@@ -1,6 +1,6 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import enginetoui.dto.basic.DeserializeAllocationRequest;
+import deserializer.DeserializeAllocationRequest;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

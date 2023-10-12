@@ -3,7 +3,7 @@ package client;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import enginetoui.dto.basic.DeserializeWorldDTO;
+import deserializer.DeserializeWorldDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.*;
 import request.api.RequestStatus;
