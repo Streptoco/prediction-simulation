@@ -50,19 +50,10 @@ public class AdminAllocationController implements Initializable {
             public void run() {
                 try {
                     AllocationRequest newRequest = client.getLatestRequest();
-                    if (newRequest != null) {
-                        boolean found = false;
-                        for (AllocationRequest request : data) {
-                            if(request.equals(newRequest)) {
-                                found = true;
-                            }
-                        }
-                        if(!found) {
-                            Platform.runLater(() -> {
-                                data.add(newRequest);
-                                System.out.println("[AdminAllocationController] - [initialize]: " + newRequest);
-                            });
-                        }
+                    if(data.isEmpty() ||!(newRequest.equals(data.get(data.size() - 1)))) {
+                        Platform.runLater(() -> {
+                            data.add(newRequest);
+                        });
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
