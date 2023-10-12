@@ -50,11 +50,13 @@ public class UserRequestController implements Initializable {
     private List<WorldTreeItem> worldTreeItemList;
     private boolean isChooseSim;
     private boolean isChooseTermination;
+    private String username;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = (UserClient) resources.getObject("client");
         TableData = (ObservableList<RequestDTO>) resources.getObject("requestList");
+        username = (String) resources.getObject("username");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("simulationName"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         requestTable.setItems(TableData);
@@ -120,7 +122,7 @@ public class UserRequestController implements Initializable {
         } catch (NumberFormatException e) {
             seconds = Integer.MAX_VALUE;
         }
-        RequestDTO requestDTO = new RequestDTO(worldName, numOfRuns, ticks, seconds);
+        RequestDTO requestDTO = new RequestDTO(worldName, numOfRuns, ticks, seconds, username);
         client.newRequest(requestDTO);
         TableData.add(requestDTO);
         requestTable.setItems(TableData);

@@ -51,10 +51,18 @@ public class AdminAllocationController implements Initializable {
                 try {
                     AllocationRequest newRequest = client.getLatestRequest();
                     if (newRequest != null) {
-                        Platform.runLater(() -> {
-                            data.add(newRequest);
-                            System.out.println("[AdminAllocationController] - [initialize]: " + newRequest);
-                        });
+                        boolean found = false;
+                        for (AllocationRequest request : data) {
+                            if(request.equals(newRequest)) {
+                                found = true;
+                            }
+                        }
+                        if(!found) {
+                            Platform.runLater(() -> {
+                                data.add(newRequest);
+                                System.out.println("[AdminAllocationController] - [initialize]: " + newRequest);
+                            });
+                        }
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -68,7 +76,11 @@ public class AdminAllocationController implements Initializable {
                     System.out.println("[AdminAllocationController] - [initialize]: Selected: " + newValue);
                     approveButton.setDisable(false);
                     denyButton.setDisable(false);
-                    requestTextArea.setText(newValue.describeRequest());
+                    if (newValue != null) {
+                        requestTextArea.setText(newValue.describeRequest());
+                    } else {
+                        requestTextArea.clear();
+                    }
                     ;
                 }
         );

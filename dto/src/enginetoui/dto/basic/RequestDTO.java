@@ -7,13 +7,16 @@ public class RequestDTO {
     public final int numOfRuns;
     public final int ticks;
     public final int seconds;
+
+    public final String username;
     private RequestStatus status;
 
-    public RequestDTO(String simulationName, int numOfRuns, int ticks, int seconds) {
+    public RequestDTO(String simulationName, int numOfRuns, int ticks, int seconds, String username) {
         this.simulationName = simulationName;
         this.numOfRuns = numOfRuns;
         this.ticks = ticks;
         this.seconds = seconds;
+        this.username = username;
         this.status = RequestStatus.WAITING;
     }
 

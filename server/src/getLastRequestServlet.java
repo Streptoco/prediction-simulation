@@ -14,8 +14,13 @@ public class getLastRequestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PriorityQueue<AllocationRequest> requests = (PriorityQueue<AllocationRequest>) this.getServletContext().getAttribute("requestQueue");
+        PriorityQueue<AllocationRequest> copyQueue = new PriorityQueue<>(requests);
+        AllocationRequest currentRequest = requests.peek(), latestRequest;
         Gson gson = new Gson();
-        AllocationRequest latestRequest = requests.peek();
+        while (!(copyQueue.isEmpty())) {
+            currentRequest = copyQueue.poll();
+        }
+        latestRequest = currentRequest;
         String jsonObject = gson.toJson(latestRequest);
         System.out.println("[getRequestServlet] - [doGet]: " + jsonObject);
         resp.setContentType("application/json");

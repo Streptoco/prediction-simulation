@@ -101,7 +101,8 @@ public class UserMainController extends ResourceBundle implements Initializable 
         if (userNameProperty != null) {
             int beginIndex = userNameProperty.getValue().indexOf(":");
             if (beginIndex != -1) {
-                userName = userNameProperty.getValue().substring(beginIndex + 1);
+                //Plus 2 because of the space after ":"
+                userName = userNameProperty.getValue().substring(beginIndex + 2);
             }
         }
         return userName;

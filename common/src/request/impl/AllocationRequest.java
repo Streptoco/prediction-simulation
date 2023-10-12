@@ -14,14 +14,17 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
     private int secondsToRun;
     @Expose
     private int ticksToRun;
+    @Expose
+    private String username;
 
-    public AllocationRequest(String simulationName, int numOfRuns, int amountTick, int amountTime) {
+    public AllocationRequest(String simulationName, int numOfRuns, int amountTick, int amountTime, String username) {
         this.requestID = -1;
         this.simulationName = simulationName;
         this.numOfRuns = numOfRuns;
         this.status = RequestStatus.WAITING;
         this.ticksToRun = amountTick;
         this.secondsToRun = amountTime;
+        this.username = username;
 
     }
 
@@ -66,6 +69,7 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
             result.append("\nTermination: By ").append(ticksToRun).append(" Ticks and ").append(secondsToRun).append(" Seconds");
         }
         result.append("\nStatus: " + this.status);
+        result.append("\nRequested by: " + this.username);
         return String.valueOf(result);
     }
 
@@ -91,5 +95,16 @@ public class AllocationRequest implements Comparable<AllocationRequest> {
 
     public int getTicksToRun() {
         return ticksToRun;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof AllocationRequest) {
+            AllocationRequest other = (AllocationRequest) obj;
+            if(this.username.equalsIgnoreCase(other.username)) {
+                return this.requestID == other.requestID;
+            }
+        }
+        return false;
     }
 }

@@ -15,6 +15,7 @@ public class DeserializeAllocationRequest implements JsonDeserializer<Allocation
         int numOfRuns = json.getAsJsonObject().get("numOfRuns").getAsInt();
         int secondsToRun = json.getAsJsonObject().get("seconds").getAsInt();
         int ticksToRun = json.getAsJsonObject().get("ticks").getAsInt();
-        return new AllocationRequest(simulationName, numOfRuns, ticksToRun, secondsToRun);
+        String username = json.getAsJsonObject().get("username").getAsString();
+        return new AllocationRequest(simulationName, numOfRuns, ticksToRun, secondsToRun, username);
     }
 }

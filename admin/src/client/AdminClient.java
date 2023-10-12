@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AdminClient {
     private final OkHttpClient adminClient;
@@ -20,6 +22,9 @@ public class AdminClient {
 
     public AdminClient() {
         adminClient = new OkHttpClient();
+
+        /** This piece of code relevant only for dev phase in order to  detect memory leaks in unclosed connection **/
+        Logger.getLogger(OkHttpClient.class.getName()).setLevel(Level.FINE);
     }
 
     public void uploadFile(File f) throws IOException {
