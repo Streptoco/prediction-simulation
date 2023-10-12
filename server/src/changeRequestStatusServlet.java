@@ -6,7 +6,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import request.api.RequestStatus;
 import request.impl.AllocationRequest;
 
 import java.io.BufferedReader;
@@ -48,7 +47,7 @@ public class changeRequestStatusServlet extends HttpServlet {
                 System.out.println("[" + Thread.currentThread().getName() + "] [changeRequestStatusServlet] - [doPost]: Status of requestID: " + currentRequest.getRequestID()
                         + " is changed from: " + currentRequest.getStatus()
                         + " to: " + requestToChange.getStatus());
-                if (requestToChange.getStatus().equals(RequestStatus.APPROVED)) {
+                if (req.getParameter("status").equalsIgnoreCase("approved")) {
                     currentRequest.approveRequest();
                 } else {
                     currentRequest.denyRequest();

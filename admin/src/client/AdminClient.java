@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import enginetoui.dto.basic.DeserializeWorldDTO;
 import enginetoui.dto.basic.impl.WorldDTO;
 import okhttp3.*;
+import request.api.RequestStatus;
 import request.impl.AllocationRequest;
 
 import java.io.File;
@@ -106,12 +107,18 @@ public class AdminClient {
 
     public void changeRequestStatus(AllocationRequest request) throws IOException {
         String RESOURCE = "/approve-deny-status";
+        HttpUrl.Builder url = HttpUrl.parse(BASE_URL + RESOURCE).newBuilder();
+        if (request.getStatus().equals(RequestStatus.APPROVED)) {
+            url.addQueryParameter("status", "approved");
+        } else {
+            url.addQueryParameter("status", "denied");
+        }
         Gson gson = new Gson();
         RequestBody body =  RequestBody.create(MediaType.parse("application/json"),
                 gson.toJson(request)
         );
         Request httpRequest = new Request.Builder()
-                .url(BASE_URL + RESOURCE)
+                .url(url.build().toString())
                 .post(body)
                 .build();
         Call call = adminClient.newCall(httpRequest);

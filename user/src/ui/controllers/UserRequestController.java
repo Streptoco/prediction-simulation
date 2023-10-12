@@ -72,12 +72,12 @@ public class UserRequestController implements Initializable {
         }
         isChooseSim = isChooseTermination = false;
 
-        Thread TimerCheckUpdateInRequests = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        })
+//        Thread TimerCheckUpdateInRequests = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        })
     }
 
 

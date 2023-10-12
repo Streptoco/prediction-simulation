@@ -12,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 @WebServlet(name = "New Request", urlPatterns = "/new-request")
@@ -20,6 +22,8 @@ public class newRequestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PriorityQueue<AllocationRequest> requests = (PriorityQueue<AllocationRequest>) this.getServletContext().getAttribute("requestQueue");
         Integer requestID = (Integer) this.getServletContext().getAttribute("requestID");
+        req.getSession(true).setAttribute("userRequestsID", new ArrayList<>());
+        ((List<Integer>)(req.getSession().getAttribute("userRequestsID"))).add(requestID);
         this.getServletContext().setAttribute("requestID", requestID + 1);
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(AllocationRequest.class, new DeserializeAllocationRequest())

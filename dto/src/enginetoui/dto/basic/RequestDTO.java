@@ -7,7 +7,6 @@ public class RequestDTO {
     public final int numOfRuns;
     public final int ticksToRun;
     public final int secondsToRun;
-
     public final String username;
     private RequestStatus status;
 
@@ -23,7 +22,6 @@ public class RequestDTO {
     public String getSimulationName() {
         return simulationName;
     }
-
 
     public RequestStatus getStatus() {
         return status;
